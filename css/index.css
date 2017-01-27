@@ -1,3 +1,26 @@
 html {
   color: blue;
 }
+
+body {
+		font-size: 100%;
+}
+
+h1 {
+	  background: url("../img/alchemyoverlord2.png");
+		background-size: 7.0em auto;
+		background-attachment: fixed;
+		background-repeat: repeat-x;
+    color: black;
+    text-align: left;
+		text-indent: 0.80em;
+		font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+		font-style: italic;
+		font-size: 3.0em;
+		font-weight: bold;
+}
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+}

@@ -4,7 +4,6 @@
 // element.appendChild(text);
 // document.body.appendChild(element);
 
-
 //
 // Item prototype
 //
@@ -24,9 +23,16 @@ var item = $$({}, '<li><span data-bind="content"/> <button>x</button></li>', '& 
 //
 var list = $$({}, '<div> <button id="new">New item</button> <ul></ul> </div>', {
   'click #new': function(){
-    var newItem = $$(item, {content:'Click to edit'});
-    this.append(newItem, 'ul'); // add to container, appending at <ul>
+  var newItem = $$(item, {content:'Click to edit'});
+  this.append(newItem, 'ul'); // add to container, appending at <ul>
   }
 });
 
 $$.document.append(list);
+
+// bogus does not work:
+// var head = document.createElement("h1");
+// var text = document.createTextNode("HEADER");
+// head.appendChild(text);
+// document.body.appendChild(element);
+
