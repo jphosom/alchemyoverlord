@@ -1,8 +1,9 @@
 html {
-  color: blue;
+  color: black;
 }
 
 body {
+  /* margin: 0; */
 	font-size: 100%;
   font-family: verdana;
 }
@@ -25,7 +26,7 @@ body {
 		border-width: 1;
 		border-top-style: solid;
 		border-left-style: solid;
-		border-right-style: solid;
+		border-right-style: solid;	
 }
 
 #subbanner {
@@ -45,26 +46,26 @@ body {
 
 /* define horizontal menu */
 
-ul {
+#horizontalMenuList {
 	  font-size: 0.8em;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-		background-color:  #283747;
+		background-color:  #2e4053;
 }
 
-li {
+#horizontalMenuItem {
     float: left;
     border-right:1px solid  #cacfd2;
 }
 
-li:last-child {
+#horizontalMenuItem:last-child {
     border-right: none;
 		border-left:1px solid #cacfd2;
 }
 
-li a {
+#horizontalMenuItem a {
     display: block;
     color: white;
     text-align: center;
@@ -72,13 +73,49 @@ li a {
     text-decoration: none;
 }
 
-li a:hover:not(.active) {
+#horizontalMenuItem a:hover:not(.active) {
     background-color: black;
 }
 
-/* ----- */
+/* define left-hand vertical menu */
+
+#verticalMenuList {
+    list-style-type: none;
+    margin: 0;
+    padding-top: 2ex;
+    padding-left: 0;
+    padding-right: 0;
+    width: 14ex;
+    background-color: #eff2f8;
+    position: absolute;
+    height: 100%;
+    overflow: auto;
+}
+
+#verticalMenuItem {
+    display: block;
+    padding: 1ex 2ex;
+}
+
+#verticalMenuItem a {
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+#verticalMenuItem a:hover:not(.active) {
+    background-color: #2e4053;
+    color: white;
+}
+
+/* define content */
+
+#content {
+	margin-left:14ex;
+	padding:1ex 3ex;
+  }
+
 
 p {
     font-family: verdana;
-    font-size: 20px;
 }
