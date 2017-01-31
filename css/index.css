@@ -100,7 +100,7 @@ body {
     width: 14ex;
     background-color: #eff2f8;
     position: absolute;
-    height: 100%;
+    height: cals(100% - 9em);
     overflow: auto;
 }
 
@@ -124,11 +124,11 @@ body {
 /* define iframe properties */
 
 #iframe {
-	width: calc(100% - 17ex);
+	width: calc(100% - 14ex);
 	margin-left:14ex;
-	padding:1ex 3ex;
+	padding:1ex 0;
   border:0px;
-  height: calc(100% - 8em);
+  height: calc(100% - 9em);
   overflow:hidden;
   }
 
