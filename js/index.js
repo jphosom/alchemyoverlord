@@ -29,12 +29,23 @@ var list = $$({}, '<div id="content"> <button id="new">New item</button> <ul></u
 });
 
 $$.document.append(list);
-// $$.document.getElementById("output").innerHTML = list;
-
-// bogus does not work:
-// var head = document.createElement("h1");
-// var text = document.createTextNode("HEADER");
-// head.appendChild(text);
-// document.body.appendChild(element);
 
 
+
+// From: http://www.webdeveloper.com/forum/showthread.php?266743-Switch-Div-Content-Using-Javascript&p=1229155#post1229155
+
+// function showDiv(idInfo) {
+  // var sel = document.getElementById('divLinks').getElementsByTagName('div');
+  // for (var i=0; i<sel.length; i++) { sel[i].style.display = 'none'; }
+  // document.getElementById('container'+idInfo).style.display = 'block';
+  // return false;
+// }
+// 
+// function compute() {
+	// var x = 5;
+	// var y = 4;
+	// var z = x * y;
+	// var text = "hello : ";
+	// document.getElementById('answer').innerHTML = text + z;
+	// return text + z;
+// }

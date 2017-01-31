@@ -1,3 +1,12 @@
+/*----------------------------------------------------------------------------*/
+/* index.css : CSS for AlchemyOverlord web page                               */
+/* Written by John-Paul Hosom                                                 */
+/* Version 1.0 : January 30, 2017                                             */
+/*----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*/
+/* top-level definitions */
+
 html {
   color: black;
 }
@@ -8,6 +17,7 @@ body {
   font-family: verdana;
 }
 
+/*----------------------------------------------------------------------------*/
 /* define entire banner, composed of banner (name with background) and */
 /* subbanner (tag line) */
 
@@ -44,6 +54,7 @@ body {
 }
 
 
+/*----------------------------------------------------------------------------*/
 /* define horizontal menu */
 
 #horizontalMenuList {
@@ -77,6 +88,7 @@ body {
     background-color: black;
 }
 
+/*----------------------------------------------------------------------------*/
 /* define left-hand vertical menu */
 
 #verticalMenuList {
@@ -108,14 +120,15 @@ body {
     color: white;
 }
 
-/* define content */
+/*----------------------------------------------------------------------------*/
+/* define iframe properties */
 
-#content {
+#iframe {
+	width: calc(100% - 17ex);
 	margin-left:14ex;
 	padding:1ex 3ex;
+  border:0px;
+  height: calc(100% - 8em);
+  overflow:hidden;
   }
 
-
-p {
-    font-family: verdana;
-}
