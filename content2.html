@@ -5,16 +5,50 @@
 	<body>
 
 <div id="content">
-  <h2>BLAH BLAH BLAH</h2>
-  <h3>bippidy bop</h3>
-  <p>Notice.</p>
-  <p>Also </p>
-  <p>Some text..</p>
-  <p>Some text..</p>
-	<p>Some text..</p>
-    <p>Hello world!</p>
-lkjsflkjsdfdf
+  <h2>Tinseth IBU Calculator</h2>
+	<p>This page provides a calculator for predicting IBUs using the Tinseth formula.  
+	This formula is provided on Glenn Tinseth's 
+	<a href="http://realbeer.com/hops/research.html" target="_parent">web site</a>.  
+	He has a similar JavaScript IBU calculator.</p>
+  <h3>Inputs:</h3>
+	<p>Input Units:
+	<input type="radio" id="unitsMetric" name="units" onclick=setUnits() autocomplete="off">metric or 
+	<input type="radio" id="unitsImperial" name="units" onclick=setUnits() autocomplete="off" checked>imperial (gallons, oz)
+	</p>
+
+	<table>
+	<tbody>
+	<tr>
+		<td>Post-Boil Volume (<span id="volumeUnits">G</span>):</td>
+		<td><input type="text" value="0.0" autocomplete="off" id="volume"></td>
+	</tr>
+	<tr>
+		<td>Average Specific Gravity: </td>
+		<td><input type="text" value="1.055" autocomplete="off" id="SG"></td>
+	</tr>
+	<tr>
+		<td>Number of Hop Additions: </td>
+		<td><input type="text" value="1" autocomplete="off" id="numAdd" onchange="hopAdditionsSet()"></td>
+	</tr>
+	</tbody>
+	</table>
+
+	<br>
+
+	<div id="hopsAdditionsTableDiv">
+	</div>
+
+	<h3>Outputs:</h3>
+	<div id="outputTableDiv">
+	</div>
 </div>
+
+<script type="text/javascript" src="js/index.js" charset="utf-8">
+</script>
+
+<script>
+hopAdditionsSet();
+</script>
 
 	</body>
 </html>

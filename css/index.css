@@ -100,7 +100,7 @@ body {
     width: 14ex;
     background-color: #eff2f8;
     position: absolute;
-    height: cals(100% - 9em);
+    height: calc(100% - 9em);
     overflow: auto;
 }
 
@@ -132,3 +132,26 @@ body {
   overflow:hidden;
   }
 
+/*----------------------------------------------------------------------------*/
+/* define table of hops additions */
+
+#hopsAdditionsTable {
+}
+
+/*----------------------------------------------------------------------------*/
+/* define table of outputs */
+
+.outputTableCellName {
+	width:15ex;
+}
+.outputTableCellValue {
+	width:11.5ex;
+	background:lightgray;
+}
+.outputTableTotalName {
+	width:15ex;
+}
+.outputTableTotalValue {
+	width:11.5ex;
+	background:lightgray;
+}

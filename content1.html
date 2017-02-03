@@ -19,12 +19,20 @@
 	  <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/agility.min.js" type="text/javascript" charset="utf-8"></script>	
     <script type="text/javascript" src="js/index.js"></script>
+		<noscript>Sorry, your browser does not support JavaScript!</noscript>
 </div>
 
 <div id="content">
 lkjsflkjsdfdf
+<button type="button" onclick="compute()">Click me</button>
+<p id="demo">sdf</p>
 <p>sdf
-<p>sdf
+
+	enter text value: <input type="text" value="xxx" autocomplete="off" id="myinput1" ><br>
+	enter number value: <input type="text" value="xxx" autocomplete="off" id="myinput2" ><br>
+	<button type="button" onclick="addit()">Add</button>
+	<div id="addresult">xx</div>
+
 <p>sdf
 <p>sdf
 <p>sdf
@@ -42,6 +50,14 @@ lkjsflkjsdfdf
 <p>sdfs
 
 </div>
+
+<script>
+var x, y, z;
+x = 5;
+y = 6;
+z = x + y;
+document.getElementById("demo").innerHTML = z;
+</script>
 
 	</body>
 </html>
