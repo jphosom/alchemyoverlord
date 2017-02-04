@@ -1,3 +1,9 @@
+<!-- -------------------------------------------------------------------------
+index.html : HTML for AlchemyOverlord web page, Tinseth IBU sub-page
+Written by John-Paul Hosom 
+Version 1.0 : January 30, 2017 
+------------------------------------------------------------------------- --!>
+
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/index.css">
@@ -20,11 +26,11 @@
 	<tbody>
 	<tr>
 		<td>Post-Boil Volume (<span id="volumeUnits">G</span>):</td>
-		<td><input type="text" value="0.0" autocomplete="off" id="volume"></td>
+		<td><input type="text" value="5.25" autocomplete="off" id="volume" onchange="computeIBU()"></td>
 	</tr>
 	<tr>
 		<td>Average Specific Gravity: </td>
-		<td><input type="text" value="1.055" autocomplete="off" id="SG"></td>
+		<td><input type="text" value="1.055" autocomplete="off" id="SG" onchange="computeIBU()"></td>
 	</tr>
 	<tr>
 		<td>Number of Hop Additions: </td>
@@ -43,7 +49,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="js/index.js" charset="utf-8">
+<script type="text/javascript" src="js/ibu_tinseth.js" charset="utf-8">
 </script>
 
 <script>
