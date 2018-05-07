@@ -1,0 +1,166 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+ibu_mIBU.html : HTML for AlchemyOverlord web page, mIBU sub-page
+Written by John-Paul Hosom
+Version 1.0.1 : May 6, 2018
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+  </head>
+  <body>
+
+ <a name="top_mIBU"></a>
+<div id="content">
+  <h2>mIBU Calculator</h2>
+  <p>This page provides a calculator for predicting IBUs using the mIBU
+  method, which is described in a blog post
+  <a href="https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/">"A Modified IBU Calculation (Especially for Late Hopping and Whirlpool Hops)"</a>.  This method modifies the
+  Tinseth IBU formula to account for post-flameout utilization.
+  This calculator takes into account utilization from any hop stand or whirlpool,
+  as well as the time it takes to cool the wort using an immersion chiller,
+  counterflow chiller, or ice bath.
+  The (optional) use of an alpha-acid solubility limit is an additional modification
+  to the Tinseth formula, based on the experiments described in
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
+  </p>
+
+  <p>
+  For the temperature decay functions, default values are shown in
+  <font color="#94476b">grayish-red</font>.
+  <em>You should change these defaults to values that are appropriate
+  for your system.</em> (Time is measured in minutes.) The post-boil
+  defaults assume about 6 G (24 liters) of wort in a 10 G (40 liter)
+  kettle, and that the kettle is uncovered while cooling.  The
+  forced-cooling decay factor ranges from 100 (nearly instantaneous
+  cooling) to just above 0 (almost no cooling).  To get back to a default
+  value, enter 'd'.
+  </p>
+
+  <h3>Inputs:</h3>
+  <p style="margin-left:3em">Input Units:
+  <input type="radio" id="unitsMetric" name="units" onclick=setUnits_mIBU() autocomplete="off">metric or
+  <input type="radio" id="unitsImperial" name="units" onclick=setUnits_mIBU() autocomplete="off" checked>imperial (e.g. gallons, ounces)
+  </p>
+
+  <p>
+  <b>Wort:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Evaporation Rate (<span id="evaporationUnits">G/hr</span>):</td>
+    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="evaporationRate" onchange="computeIBU()"></td>
+  </tr>
+  <tr>
+    <td>Post-Boil Wort Volume (<span id="volumeUnits">G</span>):</td>
+    <td><input type="text" value="5.25" autocomplete="off" STYLE="text-align:left" id="volume" onchange="set_volume()"></td>
+  </tr>
+  <tr>
+    <td>Post-Boil Original Gravity: </td>
+    <td><input type="text" value="1.055" autocomplete="off" STYLE="text-align:left" id="OG" onchange="computeIBU()"></td>
+  </tr>
+  <tr>
+    <td>Wort/Trub Left in Kettle (<span id="wortLossUnits">G</span>):</td>
+    <td><input type="text" value="0.25" autocomplete="off" STYLE="text-align:left" id="wortLossVolume" onchange="computeIBU()">
+    (only needed for partial boils)</td>
+  </tr>
+  <tr>
+    <td>(Partial Boil) Added Water (<span id="topoffUnits">G</span>):</td>
+    <td><input type="text" value="0.00" autocomplete="off" STYLE="text-align:left" id="topoffVolume" onchange="computeIBU()"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  <b>Post-Boil Temperature Decrease:</b><br>
+  <span style="margin-left:3em">
+  Post-Boil Wort Temperature Decay Function:
+  <input type="radio" id="tempDecayLinear" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off" checked>linear or
+  <input type="radio" id="tempDecayExponential" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off">exponential decay
+  <br>
+  </span>
+  <span style="margin-left:3em">
+  &emsp;&emsp;
+  temperature (<span id="tempUnits">&deg;F</span>) = <span id="tempDecayFormula">TO_BE_CHANGED</span>
+  </span>
+  </p>
+
+  <p style="margin-left:3em">
+  Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 value=0.0 autocomplete="off" id="whirlpoolTime" onchange=computeIBU()></span> minutes<br>
+  </p>
+
+  <p style="margin-left:3em">Forced Cooling Method:<br>
+  &emsp;&emsp;<input type="radio" value="forcedDecayImmersion" name="forcedDecayType" onclick=computeIBU() autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 value="0.150" autocomplete="off" id="immersionDecayFactor" onchange=set_immersionDecayFactor(0)></span>)<br>
+  &emsp;&emsp;<input type="radio" value="forcedDecayCounterflow" name="forcedDecayType" onclick=computeIBU() autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 value="0.55" autocomplete="off" id="counterflowRate" onchange=set_counterflowRate(1)></span> <span id="rateUnits">gallons/min</span>)<br>
+  &emsp;&emsp;<input type="radio" value="forcedDecayIcebath" name="forcedDecayType" onclick=computeIBU() autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 value="0.200" autocomplete="off" id="icebathDecayFactor" onchange=set_icebathDecayFactor()></span>)<br>
+  </p>
+
+  <p>
+  <b>Hops:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Global IBU scaling factor:</td>
+    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="scalingFactor" onchange="computeIBU()"></td>
+  </tr>
+  <tr>
+    <td>Number of Hop Additions: </td>
+    <td><input type="text" value="1" autocomplete="off" STYLE="text-align:left" id="numAdd" onchange="hopAdditionsSet()"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p style="margin-left:3em">Apply
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">alpha-acid solubility-limit correction</a>:
+  <input type="radio" id="solubilityLimitYes" name="solubilityLimit" onclick=computeIBU() autocomplete="off" checked>yes or
+  <input type="radio" id="solubilityLimitNo" name="solubilityLimit" onclick=computeIBU() autocomplete="off">no
+  </p>
+
+  <div id="hopsAdditionsTableDiv">
+  </div>
+
+  <h3>Outputs:</h3>
+  <div id="outputTableDiv">
+  </div>
+</div>
+
+<script type="text/javascript" src="js/ibu_common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_mIBU.js" charset="utf-8"></script>
+
+<script>
+setTempDecayType_mIBU();
+set_immersionDecayFactor(1);
+set_counterflowRate(0);
+set_icebathDecayFactor(1);
+hopAdditionsSet();
+</script>
+
+<br>
+<hr>
+<small>
+<a name="versions"></a>
+<h4>Versions:</h4>
+<b>1.0.1</b>: (2018-May-06)  Initial version.  The default values for temperature decay
+functions are fixed, based on 6G (24l) wort in a 10G (40l) kettle, uncovered.
+</small>
+
+<p>
+<center>
+Navigate:
+<a href="#top_mIBU">top of page</a>
+<p>
+<small>Copyright © 2018 John-Paul Hosom, all rights reserved.
+While I hope that you find this page useful, I make no guarantees about
+the accuracy or suitability of the results.  Predicting IBUs is a bit
+of a "black art", because there are so many variables and there is so much
+variability.  The only way to really know the IBU level of a beer is
+to have it professionally tested, which is something I highly recommend.
+Cheers!</small>
+</p>
+</center>
+  </body>
+</html>
