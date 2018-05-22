@@ -3,6 +3,7 @@
 // Written by John-Paul Hosom
 // Version 1.0.0 : January 30, 2017
 // Version 1.0.1 : May 6, 2018
+// Version 1.1.0 : May 23, 2018 : additional functions in support of mIBU
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -207,13 +208,52 @@ function convertCelsiusToKelvin(temp_C) {
   return Number(temp_K);
 }
 
+function convertDiameterToInches(diameter_cm) {
+  var diameter_inches = diameter_cm / 2.54;
+  return Number(diameter_inches);
+}
+
+function convertDiameterToCentimeters(diameter_inches) {
+  var diameter_cm = diameter_inches * 2.54;
+  return Number(diameter_cm);
+}
+
 
 
 //------------------------------------------------------------------------------
 // DEFAULTS
 
+function get_kettle_diameter_default() {
+  var diameterDefault = 36.83;
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var isMetric = document.getElementById('unitsMetric').checked;
+
+  if (!isMetric) {
+    diameterDefault = convertDiameterToInches(diameterDefault);
+  }
+
+  return Number(diameterDefault);
+}
+
+function get_opening_diameter_default() {
+  var diameterDefault = 36.83;
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var isMetric = document.getElementById('unitsMetric').checked;
+
+  if (!isMetric) {
+    diameterDefault = convertDiameterToInches(diameterDefault);
+  }
+
+  // make sure opening diameter is not greater than kettle diameter
+  if (diameterDefault > kettle_diameter) {
+    diameterDefault = kettle_diameter;
+  }
+
+  return Number(diameterDefault);
+}
+
 function get_volume_default() {
-  var volumeDefault = 19.87341
+  var volumeDefault = 19.87341;
   var isMetric = document.getElementById('unitsMetric').checked;
   if (!isMetric) {
     volumeDefault = convertVolumeToGallons(volumeDefault);
@@ -222,7 +262,7 @@ function get_volume_default() {
 }
 
 function get_weight_default() {
-  var weightDefault = 28.35
+  var weightDefault = 28.35;
   var isMetric = document.getElementById('unitsMetric').checked;
   if (!isMetric) {
     weightDefault = convertWeightToOunces(weightDefault);
@@ -231,10 +271,10 @@ function get_weight_default() {
 }
 
 function get_evaporationRate_default() {
-  var evaporationRateDefault = 3.78541
+  var evaporationRateDefault = 3.78541;
   var isMetric = document.getElementById('unitsMetric').checked;
   if (!isMetric) {
-    evaporationRateDefault = convertWeightToOunces(evaporationRateDefault);
+    evaporationRateDefault = convertVolumeToGallons(evaporationRateDefault);
   }
   return Number(evaporationRateDefault);
 }
@@ -276,4 +316,104 @@ function get_icebathDecayFactor_default() {
     precision = precision + 1;
   }
   return Number(icebathDefault.toFixed(precision));
+}
+
+function get_tempExpParamA_default() {
+  var value = 53.70;
+  var volume = document.getElementById('volume').value;
+  var isMetric = document.getElementById('unitsMetric').checked;
+  if (!isMetric) {
+    value = convert_tempExpParamA_toImperial(value);
+  }
+  return Number(value.toFixed(2));
+}
+
+
+function get_tempExpParamB_default() {
+  var value = 0.0;
+  var radius = 0.0;
+  var surface_area = 0.0;
+  var opening_area = 0.0;
+  var effective_area = 0.0;
+  var AVR = 0.0;
+  var volume = document.getElementById('volume').value;
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var isMetric = document.getElementById('unitsMetric').checked;
+  var precision = 3;
+  if (!isMetric) {
+    volume = convertVolumeToLiters(volume);
+    kettle_diameter = convertDiameterToCentimeters(kettle_diameter);
+    opening_diameter = convertDiameterToCentimeters(opening_diameter);
+  }
+
+  radius = kettle_diameter / 2.0;
+  surface_area = Math.PI * radius * radius;
+
+  radius = opening_diameter / 2.0;
+  opening_area = Math.PI * radius * radius;
+
+  effective_area = Math.sqrt(surface_area * opening_area);
+
+  if (volume <= 0.0) volume = 0.1;
+  AVR = effective_area / volume;
+  value = (0.0002833 * AVR) + 0.0054926;
+  while (Number(value.toFixed(precision)) == 0) {
+    precision = precision + 1;
+  }
+  return Number(value.toFixed(precision));
+}
+
+function get_tempExpParamC_default() {
+  var value = 46.40;
+  var isMetric = document.getElementById('unitsMetric').checked;
+  if (!isMetric) {
+    value = convert_tempExpParamC_toImperial(value);
+  }
+  return Number(value.toFixed(2));
+}
+
+function get_tempLinParamA_default() {
+  var value = 0.0;
+  var radius = 0.0;
+  var surface_area = 0.0;
+  var opening_area = 0.0;
+  var effective_area = 0.0;
+  var AVR = 0.0;
+  var volume = document.getElementById('volume').value;
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var isMetric = document.getElementById('unitsMetric').checked;
+  
+  if (!isMetric) {
+    volume = convertVolumeToLiters(volume);
+    kettle_diameter = convertDiameterToCentimeters(kettle_diameter);
+    opening_diameter = convertDiameterToCentimeters(opening_diameter);
+  }
+
+  radius = kettle_diameter / 2.0;
+  surface_area = Math.PI * radius * radius;
+
+  radius = opening_diameter / 2.0;
+  opening_area = Math.PI * radius * radius;
+
+  effective_area = Math.sqrt(surface_area * opening_area);
+
+  if (volume <= 0.0) volume = 0.1;
+  AVR = effective_area / volume;
+  value = (3.055 * (1.0 - Math.exp(-0.0051 * AVR))) + 0.238;
+  value *= -1.0;
+  if (!isMetric) {
+    value = convert_tempLinParamA_toImperial(value);
+  }
+  return Number(value.toFixed(2));
+}
+
+function get_tempLinParamB_default() {
+  var value = 100.1;
+  var isMetric = document.getElementById('unitsMetric').checked;
+  if (!isMetric) {
+    value = convert_tempLinParamB_toImperial(value);
+  }
+  return Number(value.toFixed(2));
 }

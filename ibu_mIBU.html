@@ -4,6 +4,7 @@
 ibu_mIBU.html : HTML for AlchemyOverlord web page, mIBU sub-page
 Written by John-Paul Hosom
 Version 1.0.1 : May 6, 2018
+Version 1.1.0 : May 23, 2018
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -30,13 +31,14 @@ Version 1.0.1 : May 6, 2018
   <p>
   For the temperature decay functions, default values are shown in
   <font color="#94476b">grayish-red</font>.
-  <em>You should change these defaults to values that are appropriate
-  for your system.</em> (Time is measured in minutes.) The post-boil
-  defaults assume about 6 G (24 liters) of wort in a 10 G (40 liter)
-  kettle, and that the kettle is uncovered while cooling.  The
-  forced-cooling decay factor ranges from 100 (nearly instantaneous
-  cooling) to just above 0 (almost no cooling).  To get back to a default
-  value, enter 'd'.
+  The defaults should yield reasonable results for most homebrewing scenarios.
+  The defaults are based on the wort volume, kettle diameter, and kettle opening
+  diameter.  For most homebrewers, the kettle diameter and the opening diameter
+  are the same (with an uncovered kettle).  The "exponential decay" function is
+  probably somewhat more accurate than the "linear" function, but the linear function 
+  is easier to conceptualize (e.g. a decrease of 1.74&deg;F per minute).  If your 
+  measured decrease in wort temperature is not well modeled by these defaults, 
+  feel free to change them.  To get back to a default value, enter 'd'.
   </p>
 
   <h3>Inputs:</h3>
@@ -44,6 +46,21 @@ Version 1.0.1 : May 6, 2018
   <input type="radio" id="unitsMetric" name="units" onclick=setUnits_mIBU() autocomplete="off">metric or
   <input type="radio" id="unitsImperial" name="units" onclick=setUnits_mIBU() autocomplete="off" checked>imperial (e.g. gallons, ounces)
   </p>
+
+  <p>
+  <b>Kettle:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Kettle Diameter (<span id="kettle_diameterUnits">inches</span>):</td>
+    <td><input type="text" value="14.5" autocomplete="off" STYLE="text-align:left" id="kettle_diameter" onchange="set_kettle_diameter()"> (for wort exposed surface area)</td>
+  </tr>
+  <tr>
+    <td>Kettle Opening Diameter (<span id="opening_diameterUnits">inches</span>):</td>
+    <td><input type="text" value="14.5" autocomplete="off" STYLE="text-align:left" id="opening_diameter" onchange="set_opening_diameter()"> (usually same as kettle diameter)</td>
+  </tr>
+  </tbody>
+  </table>
 
   <p>
   <b>Wort:</b>
@@ -78,8 +95,8 @@ Version 1.0.1 : May 6, 2018
   <b>Post-Boil Temperature Decrease:</b><br>
   <span style="margin-left:3em">
   Post-Boil Wort Temperature Decay Function:
-  <input type="radio" id="tempDecayLinear" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off" checked>linear or
-  <input type="radio" id="tempDecayExponential" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off">exponential decay
+  <input type="radio" id="tempDecayLinear" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off">linear or
+  <input type="radio" id="tempDecayExponential" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off" checked>exponential decay
   <br>
   </span>
   <span style="margin-left:3em">
@@ -103,7 +120,7 @@ Version 1.0.1 : May 6, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Global IBU scaling factor:</td>
+    <td>Global IBU Scaling Factor:</td>
     <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="scalingFactor" onchange="computeIBU()"></td>
   </tr>
   <tr>
@@ -145,7 +162,12 @@ hopAdditionsSet();
 <a name="versions"></a>
 <h4>Versions:</h4>
 <b>1.0.1</b>: (2018-May-06)  Initial version.  The default values for temperature decay
-functions are fixed, based on 6G (24l) wort in a 10G (40l) kettle, uncovered.
+functions are fixed, based on 6G (24l) wort in a 10G (40l) kettle, uncovered.<br>
+<b>1.1.0</b>: (2018-May-23)  Add 'kettle diameter' and 'kettle opening diameter' fields 
+to compute wort exposed surface area and opening area.  Make linear and exponential post-boil 
+temperature decrease defaults dependent on volume, wort exposed surface area, and opening
+area.  Make exponential decay the default temperature decrease function.  Minor bug fix
+in IBU computation.
 </small>
 
 <p>

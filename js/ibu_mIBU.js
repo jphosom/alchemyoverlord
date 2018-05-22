@@ -9,14 +9,20 @@
 //         code in this project, with many modifications and enhancements
 //         for mIBU functionality, adjusting volume and SG over boil, adding
 //         a global scaling factor, accounting for partial boils, etc.
+// 
+// Version 1.1.0 : May 23, 2018
+//         . Add 'kettle diameter' and 'kettle opening diameter' fields to 
+//           compute wort exposed surface area and opening area.
+//         . Make linear and exponential post-boil temperature decrease
+//           default values dependent on volume, wort exposed surface area
+//           (via kettle diameter), and kettle opening area.
+//         . Make exponential decay the default temperature-decrease function.
+//         . Bug fix: apply relative utilization/volume to IBU, not rate const.
 //
 // TODO:
 // 1. save and load settings with cookies
-// 2. make temperature-decay defaults dependent on wort volume, kettle size, etc
-//    and therefore when volume changes, the defaults should change too.
-//    >> need new selections for 'kettle size' (imperial/metric) or 'diameter'?
-// 3. add correction factor for pellets
-// 4. add correction factor for pH
+// 2. add correction factor for pellets
+// 3. add correction factor for pH
 // -----------------------------------------------------------------------------
 
 // Global Variables
@@ -66,6 +72,8 @@ function setUnits_mIBU() {
   var numAdd = document.getElementById("numAdd").value;
   var rate = 0.0;
   var volume = 0.0;
+  var kettle_diameter = 0.0;
+  var opening_diameter = 0.0;
   var weight = 0.0;
 
   if (isMetric) {
@@ -77,6 +85,8 @@ function setUnits_mIBU() {
     document.getElementById('topoffUnits').innerHTML = "liters";
     document.getElementById('wortLossUnits').innerHTML = "liters";
     document.getElementById('evaporationUnits').innerHTML = "liters/hr";
+    document.getElementById('kettle_diameterUnits').innerHTML = "cm";
+    document.getElementById('opening_diameterUnits').innerHTML = "cm";
 
     // convert temp decay parameters, regardless of whether
     // currently linear or exponential formula
@@ -95,6 +105,19 @@ function setUnits_mIBU() {
     volume = Number(document.getElementById('volume').value);
     volume = convertVolumeToLiters(volume);
     document.getElementById('volume').value = volume.toFixed(2);
+
+    // convert and update kettle diameter
+    kettle_diameter = Number(document.getElementById('kettle_diameter').value);
+    kettle_diameter = convertDiameterToCentimeters(kettle_diameter);
+    document.getElementById('kettle_diameter').value = 
+            kettle_diameter.toFixed(2);
+
+    // convert and update opening diameter
+    opening_diameter = 
+            Number(document.getElementById('opening_diameter').value);
+    opening_diameter = convertDiameterToCentimeters(opening_diameter);
+    document.getElementById('opening_diameter').value = 
+            opening_diameter.toFixed(2);
 
     // convert and update wort loss volume
     volume = Number(document.getElementById('wortLossVolume').value);
@@ -127,6 +150,8 @@ function setUnits_mIBU() {
     document.getElementById('wortLossUnits').innerHTML = "G";
     document.getElementById('evaporationUnits').innerHTML = "G/hr";
     document.getElementById('topoffUnits').innerHTML = "G";
+    document.getElementById('kettle_diameterUnits').innerHTML = "inches";
+    document.getElementById('opening_diameterUnits').innerHTML = "inches";
 
     // convert temp decay parameters, regardless of whether
     // currently linear or exponential formula
@@ -145,6 +170,19 @@ function setUnits_mIBU() {
     volume = Number(document.getElementById('volume').value);
     volume = convertVolumeToGallons(volume);
     document.getElementById('volume').value = volume.toFixed(2);
+
+    // convert and update kettle diameter
+    kettle_diameter = Number(document.getElementById('kettle_diameter').value);
+    kettle_diameter = convertDiameterToInches(kettle_diameter);
+    document.getElementById('kettle_diameter').value = 
+            kettle_diameter.toFixed(2);
+
+    // convert and update opening diameter
+    opening_diameter = 
+            Number(document.getElementById('opening_diameter').value);
+    opening_diameter = convertDiameterToInches(opening_diameter);
+    document.getElementById('opening_diameter').value = 
+            opening_diameter.toFixed(2);
 
     // convert and update wort loss volume (for partial boils)
     volume = Number(document.getElementById('wortLossVolume').value);
@@ -180,6 +218,21 @@ function setUnits_mIBU() {
   }
 
   return true;
+}
+
+//------------------------------------------------------------------------------
+// CONSTRUCT TEMPERATURE DECAY FUNCTION PARAMETER INPUT FIELD
+
+function construct_tempParam(userSet, fieldName, value, valueName,
+                             fnName, fieldStr) {
+  window[fieldStr] = formStrP1+fieldName+formStrP2+value+
+                     formStrP3+valueName+formStrP4+fnName+formStrP5;
+  document.getElementById(fieldName).innerHTML = window[fieldStr];
+
+  if (userSet == 1)
+    document.getElementById(valueName).style.color = color_userSet;
+  else
+    document.getElementById(valueName).style.color = color_default;
 }
 
 //------------------------------------------------------------------------------
@@ -223,56 +276,6 @@ function setTempDecayType_mIBU() {
   return true;
 }
 
-
-//------------------------------------------------------------------------------
-// DEFAULTS
-
-function get_tempExpParamA_default() {
-  var value = 52.5;
-  var volume = document.getElementById('volume').value;
-  var isMetric = document.getElementById('unitsMetric').checked;
-  if (!isMetric) {
-    value = convert_tempExpParamA_toImperial(value);
-  }
-  return Number(value.toFixed(2));
-}
-
-
-function get_tempExpParamB_default() {
-  var value = 0.018;
-  var isMetric = document.getElementById('unitsMetric').checked;
-  if (!isMetric) {
-    value = convert_tempExpParamB_toImperial(value);
-  }
-  return Number(value.toFixed(3));
-}
-
-function get_tempExpParamC_default() {
-  var value = 47.5;
-  var isMetric = document.getElementById('unitsMetric').checked;
-  if (!isMetric) {
-    value = convert_tempExpParamC_toImperial(value);
-  }
-  return Number(value.toFixed(2));
-}
-
-function get_tempLinParamA_default() {
-  var value = -0.74667;
-  var isMetric = document.getElementById('unitsMetric').checked;
-  if (!isMetric) {
-    value = convert_tempLinParamA_toImperial(value);
-  }
-  return Number(value.toFixed(2));
-}
-
-function get_tempLinParamB_default() {
-  var value = 99.244;
-  var isMetric = document.getElementById('unitsMetric').checked;
-  if (!isMetric) {
-    value = convert_tempLinParamB_toImperial(value);
-  }
-  return Number(value.toFixed(2));
-}
 
 //------------------------------------------------------------------------------
 // set the exponential decay factor for an immersion chiller
@@ -364,29 +367,95 @@ function set_counterflowRate(userSet) {
 function set_volume() {
   var volumeDefault = get_volume_default();
   var volume = document.getElementById('volume').value;
+  var isExp = document.getElementById("tempDecayExponential").checked;
 
   volume = validateNumber(volume, 0, 5000, 2, volumeDefault,
                       "volume", document.getElementById('volume'), junk);
   set_immersionDecayFactor(1);
   set_icebathDecayFactor(1);
+  if (isExp) {
+    set_tempExpParamB(1);
+    if (!tempLinParamB_userSet) {
+      tempLinParamB = get_tempLinParamB_default();
+    }
+  } else {
+    set_tempLinParamB(1);
+    if (!tempExpParamB_userSet) {
+      tempExpParamB = get_tempExpParamB_default();
+    }
+  }
   computeIBU();
 }
 
 
 //------------------------------------------------------------------------------
-// CONSTRUCT TEMPERATURE DECAY FUNCTION PARAMETER INPUT FIELD
 
-function construct_tempParam(userSet, fieldName, value, valueName,
-                             fnName, fieldStr) {
-  window[fieldStr] = formStrP1+fieldName+formStrP2+value+
-                     formStrP3+valueName+formStrP4+fnName+formStrP5;
-  document.getElementById(fieldName).innerHTML = window[fieldStr];
+function set_kettle_diameter() {
+  var kettle_diameterDefault = get_kettle_diameter_default();
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var isExp = document.getElementById("tempDecayExponential").checked;
 
-  if (userSet == 1)
-    document.getElementById(valueName).style.color = color_userSet;
-  else
-    document.getElementById(valueName).style.color = color_default;
+  kettle_diameter = validateNumber(kettle_diameter, 0, 500, 2, 
+          kettle_diameterDefault, "kettle diameter", 
+          document.getElementById('kettle_diameter'), junk);
+
+  // make sure opening diameter is not greater than kettle diameter
+  if (opening_diameter > kettle_diameter) {
+    window.alert("Opening diameter (" + opening_diameter + ") can't be " + 
+                 "greater than kettle diameter (" + kettle_diameter + "). " + 
+                 "Setting opening diameter to kettle diameter.");
+    document.getElementById('opening_diameter').value = kettle_diameter;
+  }
+
+  if (isExp) {
+    set_tempExpParamB(1);
+    if (!tempLinParamA_userSet) {
+      tempLinParamA = get_tempLinParamA_default();
+    }
+  } else {
+    set_tempLinParamA(1);
+    if (!tempExpParamB_userSet) {
+      tempExpParamB = get_tempExpParamB_default();
+    }
+  }
+  computeIBU();
 }
+
+//------------------------------------------------------------------------------
+
+function set_opening_diameter() {
+  var opening_diameterDefault = get_opening_diameter_default();
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var isExp = document.getElementById("tempDecayExponential").checked;
+
+  opening_diameter = validateNumber(opening_diameter, 0, 500, 2, 
+          opening_diameterDefault, "opening diameter", 
+          document.getElementById('opening_diameter'), junk);
+
+  // make sure opening diameter is not greater than kettle diameter
+  if (opening_diameter > kettle_diameter) {
+    window.alert("Opening diameter (" + opening_diameter + ") can't be " + 
+                 "greater than kettle diameter (" + kettle_diameter + "). " + 
+                 "Setting opening diameter to kettle diameter.");
+    document.getElementById('opening_diameter').value = kettle_diameter;
+  }
+  
+  if (isExp) {
+    set_tempExpParamB(1);
+    if (!tempLinParamA_userSet) {
+      tempLinParamA = get_tempLinParamA_default();
+    }
+  } else {
+    set_tempLinParamA(1);
+    if (!tempExpParamB_userSet) {
+      tempExpParamB = get_tempExpParamB_default();
+    }
+  }
+  computeIBU();
+}
+
 
 //------------------------------------------------------------------------------
 // SET TEMPERATURE DECAY PARAMETER VALUES
@@ -413,7 +482,10 @@ function set_tempExpParamA (unitConversion) {
     document.getElementById('tempExpParamA').style.color = color_userSet;
   else
     document.getElementById('tempExpParamA').style.color = color_default;
-  computeIBU();
+
+  if (!unitConversion) {
+    computeIBU();
+  }
   return;
 }
 
@@ -439,7 +511,10 @@ function set_tempExpParamB (unitConversion) {
     document.getElementById('tempExpParamB').style.color = color_userSet;
   else
     document.getElementById('tempExpParamB').style.color = color_default;
-  computeIBU();
+
+  if (!unitConversion) {
+    computeIBU();
+  }
   return;
   }
 
@@ -465,7 +540,10 @@ function set_tempExpParamC (unitConversion) {
     document.getElementById('tempExpParamC').style.color = color_userSet;
   else
     document.getElementById('tempExpParamC').style.color = color_default;
-  computeIBU();
+
+  if (!unitConversion) {
+    computeIBU();
+  }
   return;
 }
 
@@ -491,7 +569,10 @@ function set_tempLinParamA (unitConversion) {
     document.getElementById('tempLinParamA').style.color = color_userSet;
   else
     document.getElementById('tempLinParamA').style.color = color_default;
-  computeIBU();
+
+  if (!unitConversion) {
+    computeIBU();
+  }
   return;
 }
 
@@ -517,7 +598,10 @@ function set_tempLinParamB (unitConversion) {
     document.getElementById('tempLinParamB').style.color = color_userSet;
   else
     document.getElementById('tempLinParamB').style.color = color_default;
-  computeIBU();
+
+  if (!unitConversion) {
+    computeIBU();
+  }
   return;
 }
 
@@ -526,12 +610,12 @@ function set_tempLinParamB (unitConversion) {
 
 function convert_tempExpParamA_toMetric(paramA_imperial) {
   var paramA_metric = paramA_imperial / 1.8;  // 'F to 'C slope component
-  return paramA_metric;
+  return Number(paramA_metric.toFixed(2));
 }
 
 function convert_tempExpParamA_toImperial(paramA_metric) {
   var paramA_imperial = paramA_metric * 1.8;  // 'C to 'F slope component
-  return paramA_imperial;
+  return Number(paramA_imperial.toFixed(2));
 }
 
 function convert_tempExpParamB_toMetric(paramB_imperial) {
@@ -546,32 +630,32 @@ function convert_tempExpParamB_toImperial(paramB_metric) {
 
 function convert_tempExpParamC_toMetric(paramC_imperial) {
   var paramC_metric = convertTemperatureToCelsius(paramC_imperial);
-  return paramC_metric;
+  return Number(paramC_metric.toFixed(2));
 }
 
 function convert_tempExpParamC_toImperial(paramC_metric) {
   var paramC_imperial = convertTemperatureToFahrenheit(paramC_metric);
-  return paramC_imperial;
+  return Number(paramC_imperial.toFixed(2));
 }
 
 function convert_tempLinParamA_toMetric(paramA_imperial) {
   var paramA_metric = paramA_imperial / 1.8;  // 'F to 'C slope component
-  return paramA_metric;
+  return Number(paramA_metric.toFixed(2));
 }
 
 function convert_tempLinParamA_toImperial(paramA_metric) {
   var paramA_imperial = paramA_metric * 1.8;  // 'C to 'F slope component
-  return paramA_imperial;
+  return Number(paramA_imperial.toFixed(2));
 }
 
 function convert_tempLinParamB_toMetric(paramB_imperial) {
   var paramB_metric = convertTemperatureToCelsius(paramB_imperial);
-  return paramB_metric;
+  return Number(paramB_metric.toFixed(2));
 }
 
 function convert_tempLinParamB_toImperial(paramB_metric) {
   var paramB_imperial = convertTemperatureToFahrenheit(paramB_metric);
-  return paramB_imperial;
+  return Number(paramB_imperial.toFixed(2));
 }
 
 
@@ -644,6 +728,10 @@ function computeIBU () {
   var volume = 0.0;
   var volumeChange = 0.0;
   var volumeDefault = get_volume_default();
+  var kettle_diameter = document.getElementById('kettle_diameter').value;
+  var opening_diameter = document.getElementById('opening_diameter').value;
+  var kettle_diameterDefault = get_kettle_diameter_default();
+  var opening_diameterDefault = get_opening_diameter_default();
   var weight;
   var weightDefault = get_weight_default();
   var whirlpoolTime = document.getElementById('whirlpoolTime').value;
@@ -679,11 +767,19 @@ function computeIBU () {
                     document.getElementById('scalingFactor'), junk));
   OG = Number(validateNumber(OG, 1.0, 1.150, 3, 1.055, "original gravity",
                     document.getElementById('OG'), junk));
+  kettle_diameter = Number(validateNumber(kettle_diameter, 0.0, 500.0, 2,
+                    kettle_diameterDefault, "kettle diameter",
+                    document.getElementById('kettle_diameter'), junk));
+  opening_diameter = Number(validateNumber(opening_diameter, 0.0, 500.0, 2,
+                    opening_diameterDefault, "opening diameter",
+                    document.getElementById('opening_diameter'), junk));
   console.log("whirlpool time = " + whirlpoolTime +
               ", post-boil volume = " + postBoilVolume +
-              ", wort loss volume = " + wortLossVolume);
+              ", wort loss volume = " + wortLossVolume + 
+              ", topoff volume = " + topoffVolume);
   console.log("evaporation rate = " + evaporationRate +
-              ", topoff volume = " + topoffVolume +
+              ", kettle diameter = " + kettle_diameter + 
+              ", opening diameter = " + opening_diameter + 
               ", scaling factor = " + scalingFactor +
               ", OG = " + OG);
 
@@ -963,11 +1059,13 @@ function computeIBU () {
     relativeVolume = volume / postBoilVolume;
     if (relativeVolume > 1.0) relativeVolume = 1.0;
 
-    // compute derivative of total AA concentration, and total AA concentration
-    // compute IBU from AA concentration, and utilization from IBUs and orig AA
-    dAAconcent = AAconcent * k * degreeU * relativeVolume;
+    // compute derivative of total AA concentration, and total AA concentration.
+    // compute IBU from AA concentration and other factors, and utilization 
+    // from IBUs and orig AA
+    dAAconcent = AAconcent * k;
     AAconcent = AAconcent + (dAAconcent * integrationTime);
-    IBU = IBU + (-1.0 * dAAconcent * integrationTime * factor);
+    IBU = IBU + (-1.0 * dAAconcent * degreeU * relativeVolume * 
+                 integrationTime * factor);
     if (AAinitTotal > 0.0)
       U = IBU / AAinitTotal;
     else
@@ -976,9 +1074,10 @@ function computeIBU () {
 
     // compute AA concentration and IBUs for each separate addition
     for (idx = 0; idx < numAdd; idx++) {
-      dAA = add[idx].AAcurr * k * degreeU * relativeVolume;
+      dAA = add[idx].AAcurr * k;
       add[idx].AAcurr = add[idx].AAcurr + (dAA * integrationTime);
-      add[idx].IBU = add[idx].IBU + (-1.0 * dAA * integrationTime * factor);
+      add[idx].IBU = add[idx].IBU + 
+             (-1.0 * dAA * degreeU * relativeVolume * integrationTime * factor);
       if (add[idx].AAinit > 0.0)
         add[idx].U = add[idx].IBU / add[idx].AAinit;
       else
