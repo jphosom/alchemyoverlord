@@ -20,6 +20,7 @@
 //         . Bug fix: apply relative utilization/volume to IBU, not rate const.
 //
 // Version 1.1.1 : June 15, 2018
+//         . minor update to exponential temp decay rate constant prediction
 //         . bug fix in linear temp. decay defaults
 //
 // TODO:

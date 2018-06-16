@@ -357,7 +357,7 @@ function get_tempExpParamB_default() {
 
   if (volume <= 0.0) volume = 0.1;
   AVR = effective_area / volume;
-  value = (0.0002833 * AVR) + 0.0054926;
+  value = (0.0002925 * AVR) + 0.0053834;
   while (Number(value.toFixed(precision)) == 0) {
     precision = precision + 1;
   }
