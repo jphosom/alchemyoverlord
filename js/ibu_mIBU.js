@@ -19,6 +19,9 @@
 //         . Make exponential decay the default temperature-decrease function.
 //         . Bug fix: apply relative utilization/volume to IBU, not rate const.
 //
+// Version 1.1.1 : June 15, 2018
+//         . bug fix in linear temp. decay defaults
+//
 // TODO:
 // 1. save and load settings with cookies
 // 2. add correction factor for pellets
@@ -375,11 +378,11 @@ function set_volume() {
   set_icebathDecayFactor(1);
   if (isExp) {
     set_tempExpParamB(1);
-    if (!tempLinParamB_userSet) {
-      tempLinParamB = get_tempLinParamB_default();
+    if (!tempLinParamA_userSet) {
+      tempLinParamA = get_tempLinParamA_default();
     }
   } else {
-    set_tempLinParamB(1);
+    set_tempLinParamA(1);
     if (!tempExpParamB_userSet) {
       tempExpParamB = get_tempExpParamB_default();
     }
