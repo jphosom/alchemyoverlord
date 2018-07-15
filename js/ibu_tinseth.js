@@ -9,225 +9,145 @@
 //         Tinseth formula.
 //
 // Version 1.0.1 : May 6, 2018
-//         Add evaporation rate, losses, topoff volume, global scaling factor
+//         . Add evaporation rate, losses, topoff volume, global scaling factor
 //
-// TODO:
-// 1. save and load settings with cookies
+// Version 1.2.0 : July 15, 2018
+//         . complete re-write under the hood
+//         . add boil time parameter
+//         . bug fix in computing average specific gravity
+//         . add saving and loading of settings
+//
 // -----------------------------------------------------------------------------
 
-// global variable needed for validateNumber() but not used in this code
-var junk = 0.0;
+//==============================================================================
+
+var Tinseth = Tinseth || {};
+
+// Declare a "namespace" called "Tinseth"
+// This namespace contains functions that are specific to the Tinseth method.
+//
+//    public functions:
+//    . initialize_Tinseth()
+//    . computeIBU_Tinseth()
+//
+
+Tinseth._construct = function() {
+
 
 //------------------------------------------------------------------------------
-// set units to metric or British Imperial
+// initialize for performing Tinseth calculations
 
-function setUnits_Tinseth() {
-  var isMetric = document.getElementById("unitsMetric").checked;
-  var numAdd = document.getElementById("numAdd").value;
-  var rate   = 0.0;
-  var volume = 0.0;
-  var weight = 0.0;
+this.initialize_Tinseth = function() {
+  var idx = 0;
+  var keys = Object.keys(ibu);
 
-  if (isMetric) {
-    // update units
-    document.getElementById('volumeUnits').innerHTML = "liters";
-    document.getElementById('weightUnits').innerHTML = "g";
-    document.getElementById('topoffUnits').innerHTML = "liters";
-    document.getElementById('wortLossUnits').innerHTML = "liters";
-    document.getElementById('evaporationUnits').innerHTML = "liters/hr";
-
-    // convert and update volume
-    volume = Number(document.getElementById('volume').value);
-    volume = convertVolumeToLiters(volume);
-    document.getElementById('volume').value = volume.toFixed(2);
-
-    // convert and update wort loss volume
-    volume = Number(document.getElementById('wortLossVolume').value);
-    volume = convertVolumeToLiters(volume);
-    document.getElementById('wortLossVolume').value = volume.toFixed(2);
-
-    // convert and update evaporation rate
-    rate = Number(document.getElementById('evaporationRate').value);
-    rate = convertVolumeToLiters(rate);
-    document.getElementById('evaporationRate').value = rate.toFixed(2);
-
-    // convert and update topoff volume (for partial boils)
-    volume = Number(document.getElementById('topoffVolume').value);
-    volume = convertVolumeToLiters(volume);
-    document.getElementById('topoffVolume').value = volume.toFixed(2);
-
-    // convert and update hops weight
-    for (idx = 1; idx <= numAdd; idx++) {
-      weight = Number(document.getElementById('weight'+idx).value);
-      weight = convertWeightToGrams(weight);
-      document.getElementById('weight'+idx).value = weight.toFixed(2);
+  // add function to call when using set() function with ibu namespace
+  for (idx = 0; idx < keys.length; idx++) {
+    if (keys[idx] == "_construct") {
+      continue;
     }
+    ibu[keys[idx]].updateFunction = Tinseth.computeIBU_Tinseth;
   }
-  else {
-    // update units
-    document.getElementById('volumeUnits').innerHTML = "G";
-    document.getElementById('weightUnits').innerHTML = "oz";
-    document.getElementById('wortLossUnits').innerHTML = "G";
-    document.getElementById('evaporationUnits').innerHTML = "G/hr";
-    document.getElementById('topoffUnits').innerHTML = "G";
+  ibu.numAdditions.additionalFunctionArgs = Tinseth.computeIBU_Tinseth;
 
-    // convert and update volume
-    volume = Number(document.getElementById('volume').value);
-    volume = convertVolumeToGallons(volume);
-    document.getElementById('volume').value = volume.toFixed(2);
+  // don't need to set() any variables that change with unit conversion;
+  // when we call set(units), those dependent variables will also be set.
+  common.set(ibu.units, 0);
+  common.set(ibu.boilTime, 0);
+  common.set(ibu.OG, 0);
+  common.set(ibu.scalingFactor, 0);
+  common.set(ibu.numAdditions, 0);
 
-    // convert and update wort loss volume (for partial boils)
-    volume = Number(document.getElementById('wortLossVolume').value);
-    volume = convertVolumeToGallons(volume);
-    document.getElementById('wortLossVolume').value = volume.toFixed(2);
+  Tinseth.computeIBU_Tinseth();
 
-    // convert and update evaporation rate
-    rate = Number(document.getElementById('evaporationRate').value);
-    rate = convertVolumeToGallons(rate);
-    document.getElementById('evaporationRate').value = rate.toFixed(2);
-
-    // convert and update topoff volume (for partial boils)
-    volume = Number(document.getElementById('topoffVolume').value);
-    volume = convertVolumeToGallons(volume);
-    document.getElementById('topoffVolume').value = volume.toFixed(2);
-
-    // convert and update hops weight
-    for (idx = 1; idx <= numAdd; idx++) {
-      weight = Number(document.getElementById('weight'+idx).value);
-      weight = convertWeightToOunces(weight);
-      document.getElementById('weight'+idx).value = weight.toFixed(2);
-    }
-  }
-  return true;
+  return;
 }
 
 //------------------------------------------------------------------------------
 // compute IBUs and utilization for all hops additions
 
-function computeIBU () {
-  var isMetric = document.getElementById('unitsMetric').checked;
-  var postBoilVolume = document.getElementById('volume').value;
-  var wortLossVolume = document.getElementById('wortLossVolume').value;
-  var wortLossVolumeDefault = 0.0;
-  var OG = document.getElementById('OG').value;
+this.computeIBU_Tinseth = function() {
+  var AA = 0.0;
+  var addIBU = 0.0;
+  var addIBUoutput = 0.0;
+  var addUtilOutput = 0.0;
+  var idx = 0;
+  var idxP1 = 0;
+  var maxBoilTime = ibu.boilTime.value;
   var OGpoints = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
-  var numAdd = document.getElementById('numAdd').value;
-  var AA;
-  var weight;
-  var boilTime;
-  var tableID;
-  var idx = 0;
-  var addIBU;
-  var addIBUoutput;
-  var addUtilOutput;
-  var totalIBU;
+  var steepTime = 0.0;
+  var totalIBU = 0.0;
   var totalIBUoutput = 0.0;
-  var volumeDefault = 5.25;
-  var tableID = "";
-  var idxP1 = 0;
-  var weightDefault = 1.0;
-  var evaporationRate = document.getElementById('evaporationRate').value;
-  var evaporationRateDefault = get_evaporationRate_default();
-  var topoffVolume = document.getElementById('topoffVolume').value;
-  var topoffVolumeDefault = 0.0;
-  var scalingFactor = document.getElementById('scalingFactor').value;
+  var weight = 0.0;
 
   // if no IBU outputs exist (no table yet), then just return
   if (!document.getElementById("AA1")) {
     return false;
   }
   console.log("==============================================================");
+  console.log("evaporation rate = " + ibu.evaporationRate.value +
+              ", post-boil volume = " + ibu.postBoilVolume.value +
+              ", OG = " + ibu.OG.value);
+  console.log("wort loss volume = " + ibu.wortLossVolume.value +
+              ", topoff volume = " + ibu.topoffVolume.value);
 
-  if (isMetric) {
-    volumeDefault = 20.0;
-    weightDefault = 30.0;
-  }
-  postBoilVolume = Number(validateNumber(postBoilVolume, 0, 5000, 2,
-        volumeDefault, "volume", document.getElementById('volume'), junk));
-  wortLossVolume = Number(validateNumber(wortLossVolume, 0, 500, 2,
-        wortLossVolumeDefault, "wort/trub left in kettle",
-        document.getElementById('wortLossVolume'), junk));
-  evaporationRate = Number(validateNumber(evaporationRate, 0, 500, 2,
-                    evaporationRateDefault, "evaporation rate",
-                    document.getElementById('evaporationRate'), junk));
-  topoffVolume = Number(validateNumber(topoffVolume, 0, 5000, 2,
-                    topoffVolumeDefault, "topoffVolume",
-                    document.getElementById('topoffVolume'), junk));
-  scalingFactor = Number(validateNumber(scalingFactor, 0.001, 2.0, 2,
-                    1.0, "global scaling factor",
-                    document.getElementById('scalingFactor'), junk));
-  OG = Number(validateNumber(OG, 1.0, 1.150, 3, 1.055, "original gravity",
-                     document.getElementById('OG'), junk));
-
-  // convert to metric if needed
-  if (!isMetric) {
-    postBoilVolume = convertVolumeToLiters(postBoilVolume);
-    wortLossVolume = convertVolumeToLiters(wortLossVolume);
-    evaporationRate = convertVolumeToLiters(evaporationRate);
-    topoffVolume = convertVolumeToLiters(topoffVolume);
+  // initialize outputs from each hop addition to zero
+  console.log("number of hops additions: " + ibu.add.length);
+  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    console.log("  addition " + hopIdx+1 + ": AA=" + ibu.add[hopIdx].AA.value +
+                ", weight=" + ibu.add[hopIdx].weight.value +
+                ", time=" + ibu.add[hopIdx].boilTime.value);
+    ibu.add[hopIdx].AAinit = 0.0;
+    ibu.add[hopIdx].AAcurr = 0.0;
+    ibu.add[hopIdx].IBU = 0.0;
+    ibu.add[hopIdx].U = 0.0;
   }
 
-  // find out how long the boil is, or at least how long the hops will steep
-  maxBoilTime = 0.0;
-  for (idx = 0; idx < numAdd; idx++) {
-    idxP1 = idx + 1;
-    tableID = "boilTimeTable"+idxP1;
-    boilTime = document.getElementById(tableID).value;
-    boilTime = Number(validateNumber(boilTime, 0.0, 360.0, 1, 0.0,
-              "boil time (min)", document.getElementById(tableID), junk));
-    if (boilTime > maxBoilTime) {
-      maxBoilTime = boilTime;
-    }
-  }
-  console.log("maximum boil time is " + maxBoilTime);
-
-  // compute volume at beginning of boil, average volume, and adjust
-  // boil gravity to be the average gravity during the boil
-  volume = postBoilVolume + (evaporationRate/60.0 * maxBoilTime);
+  // get initial volume from post-boil volume, evaporation rate, and boil time;
+  // then get average volume and average specific gravity
+  initVolume = ibu.postBoilVolume.value +
+               (ibu.evaporationRate.value/60.0 * maxBoilTime);
   console.log("volume at first hops addition = " +
-              postBoilVolume + " + (" + evaporationRate + "/60.0 * " +
-              maxBoilTime + ") = " + volume);
-  averageVolume = (volume + postBoilVolume) / 2.0;
-  OGpoints = (OG - 1.0) * 1000.0;
-  SGpoints = OGpoints * averageVolume / postBoilVolume;
+              ibu.postBoilVolume.value + " + (" + ibu.evaporationRate.value +
+              "/60.0 * " + maxBoilTime + ") = " + initVolume);
+  averageVolume = (initVolume + ibu.postBoilVolume.value) / 2.0;
+  OGpoints = (ibu.OG.value - 1.0) * 1000.0;
+  SGpoints = OGpoints * ibu.postBoilVolume.value / averageVolume;
   SG = (SGpoints / 1000.0) + 1.0;
-  console.log("OG is " + OG.toFixed(4) + ", post-boil volume is " +
-              postBoilVolume.toFixed(4) + " and initial volume is " +
-              volume.toFixed(4) + ", so *average* gravity is " +
+  console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
+              ibu.postBoilVolume.value + " and initial volume is " +
+              initVolume.toFixed(4) + ", so *average* gravity is " +
               SG.toFixed(4));
 
   totalIBU = 0.0;
-  for (idx = 1; idx <= numAdd; idx++) {
-    tableID = "AA"+idx;
-    AA = document.getElementById(tableID).value;
-    AA = Number(validateNumber(AA, 0.5, 100.0, 2, 8.34, "alpha acid (%)",
-                         document.getElementById(tableID), junk));
-
-    tableID = "weight"+idx;
-    weight = document.getElementById(tableID).value;
-    weight = Number(validateNumber(weight, 0.0, 5000.0, 2, weightDefault,
-              "hops weight", document.getElementById(tableID), junk));
-    if (!isMetric) {
-      weight = convertWeightToGrams(weight);
+  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    AA = ibu.add[hopIdx].AA.value / 100.0;
+    weight = ibu.add[hopIdx].weight.value;
+    steepTime = ibu.add[hopIdx].boilTime.value;
+    // Tinseth formula doesn't allow for post-flameout utilization
+    if (steepTime < 0) {
+      steepTime = 0.0;
     }
 
-    tableID = "boilTimeTable"+idx;
-    boilTime = document.getElementById(tableID).value;
-    boilTime = Number(validateNumber(boilTime, 0.0, 360.0, 1, 0.0,
-              "boil time (min)", document.getElementById(tableID), junk));
-
-    addIBU = computeIBUsingleAddition_Tinseth(isMetric, postBoilVolume,
-                wortLossVolume, topoffVolume, SG, AA, weight, boilTime,
-                scalingFactor);
+    addIBU = computeIBUsingleAddition_Tinseth(ibu.postBoilVolume.value,
+                ibu.wortLossVolume.value, ibu.topoffVolume.value,
+                SG, AA, weight, steepTime, ibu.scalingFactor.value);
     totalIBU += addIBU.IBU;
 
-    addIBUoutput = addIBU.IBU.toFixed(2);
-    document.getElementById('addIBUvalue'+idx).innerHTML = addIBUoutput;
+    ibu.add[hopIdx].IBU = addIBU.IBU;
+    ibu.add[hopIdx].U = addIBU.util;
+  }
 
-    addUtilOutput = (addIBU.util * 100.0).toFixed(2);
-    document.getElementById('addUtilValue'+idx).innerHTML = addUtilOutput;
+  // set output values in HTML
+  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    idxP1 = hopIdx + 1;
+    addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
+    document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
+
+    addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
+    document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
   }
 
   totalIBUoutput = totalIBU.toFixed(2);
@@ -238,12 +158,12 @@ function computeIBU () {
 //------------------------------------------------------------------------------
 // compute IBUs and utilization for a single addition
 
-function computeIBUsingleAddition_Tinseth(isMetric, postBoilVolume,
-        wortLossVolume, topoffVolume, SG, AA, weight, boilTime, scalingFactor) {
+function computeIBUsingleAddition_Tinseth(postBoilVolume, wortLossVolume,
+                   topoffVolume, SG, AA, weight, steepTime, scalingFactor) {
   var scaledTime = 0.0;
   var wgm1 = 0.0;
   var bignessFactor = 0.0;
-  var boilTimeFactor = 0.0;
+  var steepTimeFactor = 0.0;
   var decimalAArating = 0.0;
   var AAcon = 0.0;
   var finalVolume = 0.0;
@@ -258,17 +178,18 @@ function computeIBUsingleAddition_Tinseth(isMetric, postBoilVolume,
   IBUresult.IBU = 0.0;
   IBUresult.utilization = 0.0;
 
-  // convert AA from percent to 0...1 range
-  AA /= 100.0;
-
-  scaledTime = -0.04 * boilTime;
+  scaledTime = -0.04 * steepTime;
   wgm1 = SG - 1.0;
   bignessFactor = 1.65 * Math.pow(0.000125, wgm1);
-  boilTimeFactor = (1.0 - Math.exp(scaledTime)) / 4.15;
-  decimalAArating = bignessFactor * boilTimeFactor;
+  steepTimeFactor = (1.0 - Math.exp(scaledTime)) / 4.15;
+  decimalAArating = bignessFactor * steepTimeFactor;
   U = decimalAArating;
   IBUresult.util = scalingFactor * U;
-  IBUresult.IBU = scalingFactor * U * AA * weight * 1000.0 / postBoilVolume;
+  if (postBoilVolume > 0) {
+    IBUresult.IBU = scalingFactor * U * AA * weight * 1000.0 / postBoilVolume;
+    } else {
+    IBUresult.IBU = 0.0;
+    }
   finalVolume = postBoilVolume - wortLossVolume;
   if (finalVolume > 0.0) {
     topoffScaling = finalVolume / (finalVolume + topoffVolume);
@@ -283,3 +204,7 @@ function computeIBUsingleAddition_Tinseth(isMetric, postBoilVolume,
 
   return IBUresult;
 }
+
+// close the "namespace" and call the function to construct it.
+}
+Tinseth._construct();

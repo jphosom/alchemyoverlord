@@ -5,6 +5,7 @@ ibu_mIBU.html : HTML for AlchemyOverlord web page, mIBU sub-page
 Written by John-Paul Hosom
 Version 1.0.1 : May 6, 2018
 Version 1.1.0 : May 23, 2018
+Version 1.2.0 : Jul 15, 2018
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -18,14 +19,16 @@ Version 1.1.0 : May 23, 2018
   <h2>mIBU Calculator</h2>
   <p>This page provides a calculator for predicting IBUs using the mIBU
   method, which is described in a blog post
-  <a href="https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/">"A Modified IBU Calculation (Especially for Late Hopping and Whirlpool Hops)"</a>.  This method modifies the
+  <a href="https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/">
+  "A Modified IBU Calculation (Especially for Late Hopping and Whirlpool Hops)"</a>.  This method modifies the
   Tinseth IBU formula to account for post-flameout utilization.
   This calculator takes into account utilization from any hop stand or whirlpool,
   as well as the time it takes to cool the wort using an immersion chiller,
   counterflow chiller, or ice bath.
   The (optional) use of an alpha-acid solubility limit is an additional modification
   to the Tinseth formula, based on the experiments described in
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
   </p>
 
   <p>
@@ -37,14 +40,14 @@ Version 1.1.0 : May 23, 2018
   are the same (with an uncovered kettle).  The "exponential decay" function is
   probably somewhat more accurate than the "linear" function, but the linear function 
   is easier to conceptualize (e.g. a decrease of 1.74&deg;F per minute).  If your 
-  measured decrease in wort temperature is not well modeled by these defaults, 
+  measured decrease in wort temperature is not modeled well by these defaults, 
   feel free to change them.  To get back to a default value, enter 'd'.
   </p>
 
   <h3>Inputs:</h3>
   <p style="margin-left:3em">Input Units:
-  <input type="radio" id="unitsMetric" name="units" onclick=setUnits_mIBU() autocomplete="off">metric or
-  <input type="radio" id="unitsImperial" name="units" onclick=setUnits_mIBU() autocomplete="off" checked>imperial (e.g. gallons, ounces)
+  <input type="radio" value="metric" id="metric" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off">metric or
+  <input type="radio" value="imperial" id="imperial" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off" checked>imperial (e.g. gallons, ounces)
   </p>
 
   <p>
@@ -52,12 +55,12 @@ Version 1.1.0 : May 23, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Kettle Diameter (<span id="kettle_diameterUnits">inches</span>):</td>
-    <td><input type="text" value="14.5" autocomplete="off" STYLE="text-align:left" id="kettle_diameter" onchange="set_kettle_diameter()"> (for wort exposed surface area)</td>
+    <td>Kettle Diameter (<span id="kettleDiameterUnits">inches</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.kettleDiameter" onchange="common.set(ibu.kettleDiameter, 1)"> (for wort exposed surface area)</td>
   </tr>
   <tr>
-    <td>Kettle Opening Diameter (<span id="opening_diameterUnits">inches</span>):</td>
-    <td><input type="text" value="14.5" autocomplete="off" STYLE="text-align:left" id="opening_diameter" onchange="set_opening_diameter()"> (usually same as kettle diameter)</td>
+    <td>Kettle Opening Diameter (<span id="kettleOpeningUnits">inches</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.kettleOpening" onchange="common.set(ibu.kettleOpening, 1)"> (usually same as kettle diameter)</td>
   </tr>
   </tbody>
   </table>
@@ -67,25 +70,29 @@ Version 1.1.0 : May 23, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Evaporation Rate (<span id="evaporationUnits">G/hr</span>):</td>
-    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="evaporationRate" onchange="computeIBU()"></td>
+    <td>Boil Time (minutes):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.boilTime" onchange="common.set(ibu.boilTime, 1)"></td>
   </tr>
   <tr>
-    <td>Post-Boil Wort Volume (<span id="volumeUnits">G</span>):</td>
-    <td><input type="text" value="5.25" autocomplete="off" STYLE="text-align:left" id="volume" onchange="set_volume()"></td>
+    <td>Evaporation Rate (<span id="evaporationUnits">G/hr</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.evaporationRate" onchange="common.set(ibu.evaporationRate, 1)"></td>
+  </tr>
+  <tr>
+    <td>Post-Boil Wort Volume (<span id="postBoilVolumeUnits">G</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.postBoilVolume" onchange="common.set(ibu.postBoilVolume, 1)"></td>
   </tr>
   <tr>
     <td>Post-Boil Original Gravity: </td>
-    <td><input type="text" value="1.055" autocomplete="off" STYLE="text-align:left" id="OG" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.OG" onchange="common.set(ibu.OG, 1)"></td>
   </tr>
   <tr>
     <td>Wort/Trub Left in Kettle (<span id="wortLossUnits">G</span>):</td>
-    <td><input type="text" value="0.25" autocomplete="off" STYLE="text-align:left" id="wortLossVolume" onchange="computeIBU()">
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortLossVolume" onchange="common.set(ibu.wortLossVolume, 1)">
     (only needed for partial boils)</td>
   </tr>
   <tr>
     <td>(Partial Boil) Added Water (<span id="topoffUnits">G</span>):</td>
-    <td><input type="text" value="0.00" autocomplete="off" STYLE="text-align:left" id="topoffVolume" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.topoffVolume" onchange="common.set(ibu.topoffVolume, 1)"></td>
   </tr>
   </tbody>
   </table>
@@ -95,8 +102,8 @@ Version 1.1.0 : May 23, 2018
   <b>Post-Boil Temperature Decrease:</b><br>
   <span style="margin-left:3em">
   Post-Boil Wort Temperature Decay Function:
-  <input type="radio" id="tempDecayLinear" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off">linear or
-  <input type="radio" id="tempDecayExponential" name="tempDecayType" onclick=setTempDecayType_mIBU() autocomplete="off" checked>exponential decay
+  <input type="radio" id="tempDecayLinear" value="tempDecayLinear" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off">linear or
+  <input type="radio" id="tempDecayExponential" value="tempDecayExponential" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off" checked>exponential decay
   <br>
   </span>
   <span style="margin-left:3em">
@@ -106,13 +113,13 @@ Version 1.1.0 : May 23, 2018
   </p>
 
   <p style="margin-left:3em">
-  Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 value=0.0 autocomplete="off" id="whirlpoolTime" onchange=computeIBU()></span> minutes<br>
+  Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 autocomplete="off" id="ibu.whirlpoolTime" onchange="common.set(ibu.whirlpoolTime, 1)"></span> minutes<br>
   </p>
 
   <p style="margin-left:3em">Forced Cooling Method:<br>
-  &emsp;&emsp;<input type="radio" value="forcedDecayImmersion" name="forcedDecayType" onclick=computeIBU() autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 value="0.150" autocomplete="off" id="immersionDecayFactor" onchange=set_immersionDecayFactor(0)></span>)<br>
-  &emsp;&emsp;<input type="radio" value="forcedDecayCounterflow" name="forcedDecayType" onclick=computeIBU() autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 value="0.55" autocomplete="off" id="counterflowRate" onchange=set_counterflowRate(1)></span> <span id="rateUnits">gallons/min</span>)<br>
-  &emsp;&emsp;<input type="radio" value="forcedDecayIcebath" name="forcedDecayType" onclick=computeIBU() autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 value="0.200" autocomplete="off" id="icebathDecayFactor" onchange=set_icebathDecayFactor()></span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayImmersion" value="forcedDecayImmersion" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.immersionDecayFactor" onchange="common.set(ibu.immersionDecayFactor,1)"></span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayCounterflow" value="forcedDecayCounterflow" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.counterflowRate" onchange="common.set(ibu.counterflowRate,1)"></span> <span id="rateUnits">gallons/min</span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayIcebath" value="forcedDecayIcebath" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.icebathDecayFactor" onchange="common.set(ibu.icebathDecayFactor,1)"></span>)<br>
   </p>
 
   <p>
@@ -121,20 +128,21 @@ Version 1.1.0 : May 23, 2018
   <tbody>
   <tr>
     <td>Global IBU Scaling Factor:</td>
-    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="scalingFactor" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
   </tr>
   <tr>
     <td>Number of Hop Additions: </td>
-    <td><input type="text" value="1" autocomplete="off" STYLE="text-align:left" id="numAdd" onchange="hopAdditionsSet()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.numAdditions" onchange="common.set(ibu.numAdditions,1)"></td>
   </tr>
   </tbody>
   </table>
   </p>
 
   <p style="margin-left:3em">Apply
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">alpha-acid solubility-limit correction</a>:
-  <input type="radio" id="solubilityLimitYes" name="solubilityLimit" onclick=computeIBU() autocomplete="off" checked>yes or
-  <input type="radio" id="solubilityLimitNo" name="solubilityLimit" onclick=computeIBU() autocomplete="off">no
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  alpha-acid solubility-limit correction</a>:
+  <input type="radio" value="solubilityLimitYes" id="solubilityLimitYes" name="ibu.useSolubilityLimit" onclick="common.set(ibu.useSolubilityLimit,1)" autocomplete="off" checked>yes or
+  <input type="radio" value="solubilityLimitNo" id="solubilityLimitNo" name="ibu.useSolubilityLimit" onclick="common.set(ibu.useSolubilityLimit,1)" autocomplete="off">no
   </p>
 
   <div id="hopsAdditionsTableDiv">
@@ -145,15 +153,12 @@ Version 1.1.0 : May 23, 2018
   </div>
 </div>
 
-<script type="text/javascript" src="js/ibu_common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu_mIBU.js" charset="utf-8"></script>
 
 <script>
-setTempDecayType_mIBU();
-set_immersionDecayFactor(1);
-set_counterflowRate(0);
-set_icebathDecayFactor(1);
-hopAdditionsSet();
+mIBU.initialize_mIBU();
 </script>
 
 <br>
@@ -169,13 +174,20 @@ temperature decrease defaults dependent on volume, wort exposed surface area, an
 area.  Make exponential decay the default temperature decrease function.  Minor bug fix
 in IBU computation.<br>
 <b>1.1.1</b>: (2018-Jun-15) Minor revision to exponential temperature decay rate constant
-prediction.  Bug fix in linear temperature decay defaults.
+prediction.  Bug fix in linear temperature decay defaults.<br>
+<b>1.2.0</b>: (2018-Jul-15) Complete re-write under the hood.  Add boil time. Minor fixes.
+New functionality: automatically save and load parameter settings.<br>
 </small>
 
 <p>
 <center>
 Navigate:
 <a href="#top_mIBU">top of page</a>
+<p>
+<p>
+<center>
+Reset:
+<button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button> 
 <p>
 <small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about

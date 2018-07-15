@@ -1,0 +1,10 @@
+git checkout master
+git add
+git commit
+git push
+
+git checkout gh-pages
+git merge master
+git push
+
+git checkout master

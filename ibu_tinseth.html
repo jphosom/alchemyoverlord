@@ -5,6 +5,7 @@ ibu_tinseth.html : HTML for AlchemyOverlord web page, Tinseth IBU sub-page
 Written by John-Paul Hosom
 Version 1.0.0 : January 30, 2017
 Version 1.0.1 : May 6, 2018
+Version 1.2.0 : July 15, 2018
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -23,9 +24,9 @@ Version 1.0.1 : May 6, 2018
   </p>
 
   <h3>Inputs:</h3>
-  <p>Input Units:
-  <input type="radio" id="unitsMetric" name="units" onclick=setUnits_Tinseth() autocomplete="off">metric or
-  <input type="radio" id="unitsImperial" name="units" onclick=setUnits_Tinseth() autocomplete="off" checked>imperial (gallons, oz)
+  <p style="margin-left:3em">Input Units:
+  <input type="radio" value="metric" id="metric" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off">metric or
+  <input type="radio" value="imperial" id="imperial" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off" checked>imperial (e.g. gallons, ounces)
   </p>
 
   <p>
@@ -33,25 +34,29 @@ Version 1.0.1 : May 6, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Evaporation Rate (<span id="evaporationUnits">G/hr</span>):</td>
-    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="evaporationRate" onchange="computeIBU()"></td>
+    <td>Boil Time (minutes):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.boilTime" onchange="common.set(ibu.boilTime, 1)"></td>
   </tr>
   <tr>
-    <td>Post-Boil Wort Volume (<span id="volumeUnits">G</span>):</td>
-    <td><input type="text" value="5.25" autocomplete="off" STYLE="text-align:left" id="volume" onchange="set_volume()"></td>
+    <td>Evaporation Rate (<span id="evaporationUnits">G/hr</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.evaporationRate" onchange="common.set(ibu.evaporationRate, 1)"></td>
+  </tr>
+  <tr>
+    <td>Post-Boil Wort Volume (<span id="postBoilVolumeUnits">G</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.postBoilVolume" onchange="common.set(ibu.postBoilVolume, 1)"></td>
   </tr>
   <tr>
     <td>Post-Boil Original Gravity: </td>
-    <td><input type="text" value="1.055" autocomplete="off" STYLE="text-align:left" id="OG" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.OG" onchange="common.set(ibu.OG, 1)"></td>
   </tr>
   <tr>
     <td>Wort/Trub Left in Kettle (<span id="wortLossUnits">G</span>):</td>
-    <td><input type="text" value="0.25" autocomplete="off" STYLE="text-align:left" id="wortLossVolume" onchange="computeIBU()">
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortLossVolume" onchange="common.set(ibu.wortLossVolume, 1)">
     (only needed for partial boils)</td>
   </tr>
   <tr>
     <td>(Partial Boil) Added Water (<span id="topoffUnits">G</span>):</td>
-    <td><input type="text" value="0.00" autocomplete="off" STYLE="text-align:left" id="topoffVolume" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.topoffVolume" onchange="common.set(ibu.topoffVolume, 1)"></td>
   </tr>
   </tbody>
   </table>
@@ -63,11 +68,11 @@ Version 1.0.1 : May 6, 2018
   <tbody>
   <tr>
     <td>Global IBU Scaling Factor:</td>
-    <td><input type="text" value="1.00" autocomplete="off" STYLE="text-align:left" id="scalingFactor" onchange="computeIBU()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
   </tr>
   <tr>
     <td>Number of Hop Additions: </td>
-    <td><input type="text" value="1" autocomplete="off" id="numAdd" onchange="hopAdditionsSet()"></td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.numAdditions" onchange="common.set(ibu.numAdditions,1)"></td>
   </tr>
   </tbody>
   </table>
@@ -82,11 +87,12 @@ Version 1.0.1 : May 6, 2018
   </div>
 </div>
 
-<script type="text/javascript" src="js/ibu_common.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/ibu_tinseth.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_Tinseth.js" charset="utf-8"></script>
 
 <script>
-hopAdditionsSet();
+Tinseth.initialize_Tinseth();
 </script>
 
 <br>
@@ -97,12 +103,19 @@ hopAdditionsSet();
 <b>1.0.0</b>: (2017-Jan-06)  Initial version.<br>
 <b>1.0.1</b>: (2018-May-06)  Added functionality for partial boils, global scaling,
 and evaporation rate.</br>
+<b>1.2.0</b>: (2018-Jul-15) Complete re-write under the hood.  Add boil time. Minor fixes.
+New functionality: automatically save and load parameter settings.<br>
 </small>
 
 <p>
 <center>
 Navigate:
 <a href="#top_Tinseth">top of page</a>
+<p>
+<p>
+<center>
+Reset:
+<button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button> 
 <p>
 <small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
