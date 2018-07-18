@@ -2,6 +2,7 @@
 // common.js : JavaScript for AlchemyOverlord web page, common functions
 // Written by John-Paul Hosom
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
+// Version 1.2.1 : Jul 18, 2018 : add support for checkbox
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -123,6 +124,13 @@ this.set = function(variable, haveUserInput) {
       var query = "input[name='"+variable.id+"']:checked";
       check.value = document.querySelector(query).value;
       console.log("RADIO BUTTON VALUE : " + check.value);
+      } else if (variable.inputType == "checkbox") {
+      check.useDefaultValue = false;
+      check.valid = true;
+      // var query = "input[name='"+variable.id+"']:checked";
+      // check.value = document.querySelector(query).value;
+      check.value = document.getElementById(variable.id).checked;
+      console.log("CHECKBOX VALUE : " + check.value);
       } else {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
@@ -155,8 +163,8 @@ this.set = function(variable, haveUserInput) {
     variable.userSet = 0;
     variable.precision = variable.minPrecision;
   } else {
-    console.log("SETTING VALUE TO INPUT");
     variable.value = check.value;
+    console.log("SET VALUE TO INPUT: " + variable.value);
     // get and set the precision
     variable.precision = common.getPrecision(inputString);
     // convert to metric, so that 'value' is always in metric
@@ -193,12 +201,16 @@ this.set = function(variable, haveUserInput) {
   }
 
   // update HTML
-  if (variable.inputType != "radioButton") {
-    common.updateHTML(variable);
-    } else {
+  if (variable.inputType == "radioButton") {
     console.log("setting radiobutton " + variable.id + " to be " +
                 variable.value);
     document.getElementById(variable.value).checked = true;
+    } else if (variable.inputType == "checkbox") {
+    console.log("setting checkbox " + variable.id + " to be " +
+                variable.value);
+    document.getElementById(variable.id).checked = variable.value;
+    } else {
+    common.updateHTML(variable);
     }
 
   // save or unset value
@@ -210,6 +222,7 @@ this.set = function(variable, haveUserInput) {
 
   // process special cases, e.g. make sure kettle opening < kettle diameter
   // or setting table of number of hop additions
+  // console.log(Object.keys(variable));
   if ("additionalFunction" in variable) {
     console.log("Processing additional function : " +
                 variable.additionalFunction.name);
@@ -267,7 +280,8 @@ this.updateHTML = function(variable) {
                 " with precision " + variable.precision);
     document.getElementById(variable.id).value = variable.display;
 
-    if (("inputType" in variable) && variable.inputType != "radioButton") {
+    if (("inputType" in variable) && variable.inputType != "radioButton" &&
+        variable.inputType != "checkbox") {
       if (!variable.userSet && ("defaultColor" in variable)) {
         // console.log("  setting color to default for " + variable.id);
         document.getElementById(variable.id).style.color=variable.defaultColor;
@@ -399,6 +413,13 @@ this.getSavedValue = function(variable) {
   saved.value = localStorage.getItem(variable.id);
   if (variable.inputType == "float" || variable.inputType == "int") {
     saved.value = Number(saved.value);
+  }
+  if (variable.inputType == "checkbox") {
+    if (saved.value === "true") {
+      saved.value = true;
+    } else {
+      saved.value = false;
+    }
   }
   if ("precision" in variable) {
     saved.precision = localStorage.getItem(variable.id + ".precision");

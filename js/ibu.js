@@ -6,6 +6,7 @@
 // Version 1.0.1 : May 6, 2018
 // Version 1.1.0 : May 23, 2018 : additional functions in support of mIBU
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
+// Version 1.2.1 : Jul 18, 2018 : add support for hop stand constant temp.
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -17,7 +18,7 @@ var ibu = ibu || {};
 // to *any* IBU method.
 // "Variables", in this case, are objects that *may* contain the following:
 //    . id = HTML id
-//    . inputType = "float", "int", or "radioButton"
+//    . inputType = "float", "int", "radioButton", or "checkbox"
 //    . value = current value of this variable, in metric
 //    . userSet = 0 if value was not set by user, 1 if value was set by user
 //    . convertToMetric = a function to convert to metric, if needed
@@ -53,6 +54,8 @@ var ibu = ibu || {};
 //    . tempExpParamC = temperature decay parameter: exponential formula, offset
 //    . tempDecayType = "tempDecayLinear" or "tempDecayExponential"
 //    . whirlpoolTime = number of minutes for hop stand or whirlpool
+//    . holdTempCheckbox = whether or not to hold hop stand at constant temp.
+//    . holdTemp = temperature at which to hold hop stand, if any
 //    . forcedDecayType = method of cooling: immersion, counterflow, icebath
 //    . immersionDecayFactor = rate constant for forced cooling with immersion
 //    . counterflowRate = rate of transfer when using counterflow chiller
@@ -96,6 +99,9 @@ ibu._construct = function() {
   this.tempDecayType = new Object();
 
   this.whirlpoolTime = new Object();
+
+  this.holdTempCheckbox = new Object();
+  this.holdTemp = new Object();
 
   this.immersionDecayFactor = new Object();
   this.counterflowRate      = new Object();
@@ -359,6 +365,34 @@ ibu._construct = function() {
   this.whirlpoolTime.description = "whirlpool time";
   this.whirlpoolTime.defaultValue = 0.0;
 
+  // holdTempCheckbox
+  this.holdTempCheckbox.id = "ibu.holdTempCheckbox";
+  this.holdTempCheckbox.inputType = "checkbox";
+  this.holdTempCheckbox.value = false;
+  this.holdTempCheckbox.userSet = 0;
+  this.holdTempCheckbox.defaultValue = false;
+  this.holdTempCheckbox.additionalFunction = checkHoldTemp;
+  this.holdTempCheckbox.additionalFunctionArgs = ibu.forcedDecayType;
+
+  // holdTemp
+  this.holdTemp.id = "ibu.holdTemp";
+  this.holdTemp.inputType = "float";
+  this.holdTemp.value = 0.0;
+  this.holdTemp.userSet = 0;
+  this.holdTemp.convertToMetric = common.convertFahrenheitToCelsius;
+  this.holdTemp.convertToImperial = common.convertCelsiusToFahrenheit;
+  this.holdTemp.precision = 1;
+  this.holdTemp.minPrecision = 1;
+  this.holdTemp.display = "";
+  this.holdTemp.min = 0.0;
+  this.holdTemp.max = 300.0;
+  this.holdTemp.description = "hop-stand fixed temperature";
+  this.holdTemp.defaultValue = 76.66667;
+  this.holdTemp.defaultColor = "#b1b1cd";
+  this.holdTemp.additionalFunction = checkHoldTemp;
+  this.holdTemp.additionalFunctionArgs = ibu.forcedDecayType;
+
+
   // immersionDecayFactor
   this.immersionDecayFactor.id = "ibu.immersionDecayFactor";
   this.immersionDecayFactor.inputType = "float";
@@ -411,6 +445,8 @@ ibu._construct = function() {
   this.forcedDecayType.value = "forcedDecayImmersion";
   this.forcedDecayType.userSet = 0;
   this.forcedDecayType.defaultValue = "forcedDecayImmersion";
+  this.forcedDecayType.additionalFunction = checkHoldTemp;
+  this.forcedDecayType.additionalFunctionArgs = ibu.forcedDecayType;
 
   // scalingFactor
   this.scalingFactor.id = "ibu.scalingFactor";
@@ -482,6 +518,9 @@ function setUnits() {
     if (document.getElementById('kettleOpeningUnits')) {
       document.getElementById('kettleOpeningUnits').innerHTML = "cm";
     }
+    if (document.getElementById('holdTempUnits')) {
+      document.getElementById('holdTempUnits').innerHTML = "&deg;C";
+    }
 
     // update variables
     common.set(ibu.kettleDiameter, 0);
@@ -495,6 +534,7 @@ function setUnits() {
     common.set(ibu.tempExpParamA, 0);
     common.set(ibu.tempExpParamB, 0);
     common.set(ibu.tempExpParamC, 0);
+    common.set(ibu.holdTemp, 0);
     common.set(ibu.counterflowRate, 0);
     for (idx = 0; idx < ibu.add.length; idx++) {
       common.set(ibu.add[idx].weight, 0);
@@ -528,6 +568,10 @@ function setUnits() {
     if (document.getElementById('kettleOpeningUnits')) {
       document.getElementById('kettleOpeningUnits').innerHTML = "inches";
     }
+    if (document.getElementById('holdTempUnits')) {
+      document.getElementById('holdTempUnits').innerHTML = "&deg;F";
+    }
+
     // update variables
     common.set(ibu.kettleDiameter, 0);
     common.set(ibu.kettleOpening, 0);
@@ -540,6 +584,7 @@ function setUnits() {
     common.set(ibu.tempExpParamA, 0);
     common.set(ibu.tempExpParamB, 0);
     common.set(ibu.tempExpParamC, 0);
+    common.set(ibu.holdTemp, 0);
     common.set(ibu.counterflowRate, 0);
     for (idx = 0; idx < ibu.add.length; idx++) {
       common.set(ibu.add[idx].weight, 0);
@@ -603,6 +648,53 @@ function checkBoilTime() {
       common.setSavedValue(ibu.add[idx].boilTime, 0);
     }
   }
+}
+
+//------------------------------------------------------------------------------
+// check if the 'hold' temperature of the hop stand is valid; depending
+// on the result, set the color of this field.
+
+function checkHoldTemp(forcedDecayType) {
+  var idx = 0;
+  var checked = ibu.holdTempCheckbox.value;
+
+  if (ibu.holdTemp.value > 100.0) {
+    window.alert("maximum temperature of hop stand temperature is boiling.");
+    ibu.holdTemp.value = 100.0;
+    common.updateHTML(ibu.holdTemp);
+    common.setSavedValue(ibu.holdTemp, 1);
+    ibu.holdTemp.updateFunction();
+  }
+
+  if (checked && forcedDecayType.value == "forcedDecayCounterflow") {
+    window.alert("Holding a specific temperature during a hop stand " +
+                 "is not possible with a counterflow wort chiller.");
+    document.getElementById("ibu.holdTempCheckbox").checked = false;
+    ibu.holdTempCheckbox.value = false;
+    checked = false;
+    console.log("HOLD TEMP BOX CHECKED CHANGED TO " + checked);
+    common.setSavedValue(ibu.holdTempCheckbox, 1);
+  }
+  if (document.getElementById(ibu.holdTempCheckbox.id)) {
+    if (checked) {
+      document.getElementById("holdTempColor").style.color = "black";
+      document.getElementById("ibu.holdTemp").style.color = "black";
+    } else {
+      document.getElementById("holdTempColor").style.color = "#b1b1cd";
+      document.getElementById("ibu.holdTemp").style.color = "#b1b1cd";
+    }
+  }
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// the public version of the private function... we need both forms because
+// we check it both internally and externally.
+
+this.checkHoldTempCheckbox = function(forcedDecayType) {
+  checkHoldTemp(forcedDecayType);
+  return;
 }
 
 //==============================================================================

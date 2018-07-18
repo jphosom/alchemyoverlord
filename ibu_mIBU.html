@@ -6,6 +6,7 @@ Written by John-Paul Hosom
 Version 1.0.1 : May 6, 2018
 Version 1.1.0 : May 23, 2018
 Version 1.2.0 : Jul 15, 2018
+Version 1.2.1 : Jul 18, 2018
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -38,9 +39,9 @@ Version 1.2.0 : Jul 15, 2018
   The defaults are based on the wort volume, kettle diameter, and kettle opening
   diameter.  For most homebrewers, the kettle diameter and the opening diameter
   are the same (with an uncovered kettle).  The "exponential decay" function is
-  probably somewhat more accurate than the "linear" function, but the linear function 
-  is easier to conceptualize (e.g. a decrease of 1.74&deg;F per minute).  If your 
-  measured decrease in wort temperature is not modeled well by these defaults, 
+  probably somewhat more accurate than the "linear" function, but the linear function
+  is easier to conceptualize (e.g. a decrease of 1.74&deg;F per minute).  If your
+  measured decrease in wort temperature is not modeled well by these defaults,
   feel free to change them.  To get back to a default value, enter 'd'.
   </p>
 
@@ -114,6 +115,11 @@ Version 1.2.0 : Jul 15, 2018
 
   <p style="margin-left:3em">
   Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 autocomplete="off" id="ibu.whirlpoolTime" onchange="common.set(ibu.whirlpoolTime, 1)"></span> minutes<br>
+  <span style="margin-left:3em">
+  <span id="holdTempColor" style="color:#b1b1cd">
+  <input type="checkbox" id="ibu.holdTempCheckbox" onchange="common.set(ibu.holdTempCheckbox, 1)"> quickly cool to <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.holdTemp" onchange="common.set(ibu.holdTemp, 1)"><span id="holdTempUnits">&deg;F</span>, then hold at this temperature during hop-stand time<br>
+  </span>
+  </span>
   </p>
 
   <p style="margin-left:3em">Forced Cooling Method:<br>
@@ -168,8 +174,8 @@ mIBU.initialize_mIBU();
 <h4>Versions:</h4>
 <b>1.0.1</b>: (2018-May-06)  Initial version.  The default values for temperature decay
 functions are fixed, based on 6G (24l) wort in a 10G (40l) kettle, uncovered.<br>
-<b>1.1.0</b>: (2018-May-23)  Add 'kettle diameter' and 'kettle opening diameter' fields 
-to compute wort exposed surface area and opening area.  Make linear and exponential post-boil 
+<b>1.1.0</b>: (2018-May-23)  Add 'kettle diameter' and 'kettle opening diameter' fields
+to compute wort exposed surface area and opening area.  Make linear and exponential post-boil
 temperature decrease defaults dependent on volume, wort exposed surface area, and opening
 area.  Make exponential decay the default temperature decrease function.  Minor bug fix
 in IBU computation.<br>
@@ -177,6 +183,7 @@ in IBU computation.<br>
 prediction.  Bug fix in linear temperature decay defaults.<br>
 <b>1.2.0</b>: (2018-Jul-15) Complete re-write under the hood.  Add boil time. Minor fixes.
 New functionality: automatically save and load parameter settings.<br>
+<b>1.2.1</b>: (2018-Jul-18) Add option to hold hop stand at constant temperature. Minor adjustments.<br>
 </small>
 
 <p>
@@ -187,7 +194,7 @@ Navigate:
 <p>
 <center>
 Reset:
-<button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button> 
+<button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
 <small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
