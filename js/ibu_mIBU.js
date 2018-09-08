@@ -1,8 +1,7 @@
 // -----------------------------------------------------------------------------
 // ibu_mIBU.js : JavaScript for AlchemyOverlord web page, mIBU sub-page
 // Written by John-Paul Hosom
-//
-// Copyright © 2018 John-Paul Hosom, all rights reserved.
+// Copyright © 2018 by John-Paul Hosom, all rights reserved.
 //
 // Version 1.0.1 : May 6, 2018
 //         This version is based off of the original Tinseth IBU javascript
@@ -33,9 +32,11 @@
 // Version 1.2.1 : July 18, 2018
 //         . add option for hop stand constant temperature, minor adjustments
 //
+// Version 1.2.2 : Sep.  3, 2018
+//         . add pH adjustment, pre- or post-boil volume, and minor adjustments.
+//
 // TODO:
-// 1. add correction factor for pH
-// 2. add correction factor for pellets
+// 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -72,6 +73,7 @@ this.initialize_mIBU = function() {
   // when we call set(units), those dependent variables will also be set.
   common.set(ibu.units, 0);
   common.set(ibu.boilTime, 0);
+  common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
   common.set(ibu.tempDecayType, 0);
   common.set(ibu.whirlpoolTime, 0);
@@ -80,8 +82,11 @@ this.initialize_mIBU = function() {
   common.set(ibu.forcedDecayType, 0);
   common.set(ibu.holdTempCheckbox, 0);  // must do this after forcedDecayType
   common.set(ibu.scalingFactor, 0);
+  common.set(ibu.applySolubilityLimitCheckbox, 0);
+  common.set(ibu.pHCheckbox, 0);
+  common.set(ibu.pH, 0);
+  common.set(ibu.preOrPostBoilpH, 0);
   common.set(ibu.numAdditions, 0);
-  common.set(ibu.useSolubilityLimit, 0);
 
   mIBU.computeIBU_mIBU();
 
@@ -100,6 +105,8 @@ this.computeIBU_mIBU = function() {
   var addIBUoutput = 0.0;
   var addUtilOutput = 0.0;
   var averageVolume = 0.0;
+  var bignessFactor = 0.0;
+  var boilTime = ibu.boilTime.value;
   var chillingTime = 0.0;
   var coolingMethod =
       document.querySelector('input[name="ibu.forcedDecayType"]:checked').value;
@@ -120,6 +127,8 @@ this.computeIBU_mIBU = function() {
   var holdTempK = 0.0;
   var holdTempCounter = 0.0;
   var hopIdx = 0;
+  var IAAlossFactor = 0.0;
+  var IAAutil = 0.0;
   var idxP1 = 0;
   var IBU = 0.0;
   var IBUtopoffScale = 0.0;
@@ -130,10 +139,15 @@ this.computeIBU_mIBU = function() {
   var isTempDecayLinear = document.getElementById('tempDecayLinear').checked;
   var k = 0.0;
   var linParamB_Kelvin = 0.0;
-  var maxBoilTime = ibu.boilTime.value;
+  var nonIAAlossFactor = 0.0;
+  var nonIAAutil = 0.0;
   var OGpoints = 0.0;
   var postBoilTime = 0.0;
+  var postBoilVolume = 0.0;
   var preAddConcent = 0.0;
+  var pH = ibu.pH.value;
+  var preBoilpH = 0.0;
+  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
   var relativeVolume = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
@@ -143,15 +157,18 @@ this.computeIBU_mIBU = function() {
   var tempC = 0.0;
   var tempK = 0.0;
   var tempNoBase = 0.0;
+  var totalIBU = 0.0;
   var totalIBUoutput = 0.0;
+  var totalU = 0.0;
   var totalXferTime = 0.0;
   var U = 0.0;
-  var useSolubilityLimit =
-          document.getElementById('solubilityLimitYes').checked;
+  var useSolubilityLimit = ibu.applySolubilityLimitCheckbox.value;
+  var use_pH = ibu.pHCheckbox.value;
   var volumeChange = 0.0;
   var weight;
   var whirlpoolTime = 0.0;
   var xferRate = 0.0;
+
 
   // if no IBU outputs exist (no table yet), then just return
   if (!document.getElementById("AA1")) {
@@ -160,11 +177,13 @@ this.computeIBU_mIBU = function() {
 
   console.log("\n============================================================");
 
+  postBoilVolume = ibu.getPostBoilVolume();
+
   console.log("kettle diameter = " + ibu.kettleDiameter.value +
               ", kettle opening = " + ibu.kettleOpening.value);
 
   console.log("evaporation rate = " + ibu.evaporationRate.value +
-              ", post-boil volume = " + ibu.postBoilVolume.value +
+              ", post-boil volume = " + postBoilVolume +
               ", OG = " + ibu.OG.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
@@ -190,6 +209,9 @@ this.computeIBU_mIBU = function() {
   }
   console.log("IBU scaling factor = " + ibu.scalingFactor.value +
               ", useSolubilityLimit = " + useSolubilityLimit);
+  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
+  console.log("Use pH : " + use_pH + " with " + preOrPostBoilpH +
+              " pH = " + pH);
 
   // initialize outputs from each hop addition to zero
   console.log("number of hops additions: " + ibu.add.length);
@@ -206,17 +228,17 @@ this.computeIBU_mIBU = function() {
 
   // get initial volume from post-boil volume, evaporation rate, and boil time;
   // then get average volume and average specific gravity
-  initVolume = ibu.postBoilVolume.value +
-               (ibu.evaporationRate.value/60.0 * maxBoilTime);
+  initVolume = postBoilVolume +
+               (ibu.evaporationRate.value/60.0 * boilTime);
   console.log("volume at first hops addition = " +
-              ibu.postBoilVolume.value + " + (" + ibu.evaporationRate.value +
-              "/60.0 * " + maxBoilTime + ") = " + initVolume);
-  averageVolume = (initVolume + ibu.postBoilVolume.value) / 2.0;
+              postBoilVolume + " + (" + ibu.evaporationRate.value +
+              "/60.0 * " + boilTime + ") = " + initVolume);
+  averageVolume = (initVolume + postBoilVolume) / 2.0;
   OGpoints = (ibu.OG.value - 1.0) * 1000.0;
-  SGpoints = OGpoints * ibu.postBoilVolume.value / averageVolume;
+  SGpoints = OGpoints * postBoilVolume / averageVolume;
   SG = (SGpoints / 1000.0) + 1.0;
   console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
-              ibu.postBoilVolume.value + " and initial volume is " +
+              postBoilVolume + " and initial volume is " +
               initVolume.toFixed(4) + ", so *average* gravity is " +
               SG.toFixed(4));
 
@@ -235,8 +257,8 @@ this.computeIBU_mIBU = function() {
   if (!holdTempCheckbox) holdTempK = 0.0; // 'Kelvin
 
   // make sure that boil time doesn't have higher precision than integ. time
-  if (common.getPrecision("" + maxBoilTime) > 2) {
-    maxBoilTime = Number(maxBoilTime.toFixed(2));
+  if (common.getPrecision("" + boilTime) > 2) {
+    boilTime = Number(boilTime.toFixed(2));
   }
 
   volumeChange = xferRate * integrationTime;  // for counterflow
@@ -253,7 +275,7 @@ this.computeIBU_mIBU = function() {
   holdTempCounter = 0.0;
   whirlpoolTime = ibu.whirlpoolTime.value;
   if (holdTempCheckbox) whirlpoolTime = 0.0;
-  for (t = maxBoilTime; finished == 0; t = t - integrationTime) {
+  for (t = boilTime; finished == 0; t = t - integrationTime) {
     // check to see if add hops at this time point.
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
       additionTime = ibu.add[hopIdx].boilTime.value;
@@ -266,13 +288,13 @@ this.computeIBU_mIBU = function() {
         weight = ibu.add[hopIdx].weight.value;
         // note that AAinit is computed using postBoilVolume because
         // we base IBU off of AAinit, and IBU should be relative to final vol.
-        if (ibu.postBoilVolume.value > 0) {
-          AAinit = AA * weight * 1000 / ibu.postBoilVolume.value;
+        if (postBoilVolume > 0) {
+          AAinit = AA * weight * 1000 / postBoilVolume;
         } else {
           AAinit = 0.0;
         }
         console.log("AA=" + AA + ", w=" + weight + ", vol=" +
-                    ibu.postBoilVolume.value);
+                    postBoilVolume);
         console.log("at time " + t.toFixed(3) + ", adding hops addition " +
                     hopIdx + " with [AA] = " + AAinit.toFixed(2) +
                     " to existing [AA] = " + AAconcent.toFixed(2));
@@ -398,6 +420,11 @@ this.computeIBU_mIBU = function() {
       }
     }
 
+    // adjust current volume due to evaporation during the boil
+    if (t >= 0) {
+      currVolume -= ibu.evaporationRate.value/60.0 * integrationTime;
+    }
+
     // if finished whirlpool+stand time, do transfer and reduce volume of
     // wort, or use immersion chiller.  Check if volume reduced to 0, in
     // which case we're done.
@@ -416,8 +443,8 @@ this.computeIBU_mIBU = function() {
     // relative volume is used as a proxy for the relative amount of
     // alpha acids still being converted.  So maximum is 1.0
     relativeVolume = 1.0;
-    if (ibu.postBoilVolume.value > 0)
-      relativeVolume = currVolume / ibu.postBoilVolume.value;
+    if (postBoilVolume > 0)
+      relativeVolume = currVolume / postBoilVolume;
     if (relativeVolume > 1.0) relativeVolume = 1.0;
 
     // compute derivative of total AA concentration, and total AA concentration.
@@ -449,8 +476,70 @@ this.computeIBU_mIBU = function() {
     t = Number(t.toFixed(4));
   }
 
+  // if specified, apply pH correct to IBUs
+  if (use_pH) {
+    console.log("Adjusting IBUs based on pH...");
+    console.log("  original util = " + U.toFixed(4));
+    console.log("  original IBU  = " + IBU.toFixed(2));
+    // separate utilization into IAA and nonIAA components (very approximate).
+    // We'll assume that the boil gravity affects IAA and nonIAA equally,
+    // so we include the "bigness factor" in the threshold for IAA
+    bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
+    console.log("  bigness factor = " + bignessFactor.toFixed(4));
+    console.log("  from average specific gravity " + SG);
+
+    // If pre-boil pH, estimate the post-boil pH which is the
+    // one we want to base losses on.  Estimate that the pH drops by
+    // about 0.1 units per hour... this is a ballpark estimate.
+    if (preOrPostBoilpH == "preBoilpH") {
+      console.log("mapping pre-boil pH to post-boil pH");
+      preBoilpH = pH;
+      pH = preBoilpH - (boilTime * 0.10 / 60.0);
+    }
+    // compute loss factors for IAA and nonIAA
+    IAAlossFactor = (0.0710 * pH) + 0.592;
+    nonIAAlossFactor = (0.894791 * pH) - 4.145047;
+    console.log("  post-boil pH = " + pH.toFixed(2));
+    console.log("  IAA loss factor = " + IAAlossFactor.toFixed(4));
+    console.log("  nonIAA loss factor = " + nonIAAlossFactor.toFixed(4));
+
+    // Adjust utilization and IBUs for each separate addition.
+    // Accumulate separate additions for total
+    totalU = 0.0;
+    totalIBU = 0.0;
+    for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+      console.log("  hop addition " + hopIdx + ":");
+      nonIAAutil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
+      IAAutil = ibu.add[hopIdx].U - nonIAAutil;
+      // if estimated utilization from IAA < 0, reduce nonIAA utilization.
+      // another option would be to just set IAA utilization to zero.
+      if (IAAutil < 0.0) {
+        nonIAAutil += IAAutil;
+        IAAutil = 0.0;
+      }
+      console.log("    before losses: IAAutil = " + IAAutil.toFixed(4) +
+                  "; nonIAAutil = " + nonIAAutil.toFixed(4));
+       IAAutil *= IAAlossFactor;
+      nonIAAutil *= nonIAAlossFactor;
+      console.log("    after  losses: IAAutil = " + IAAutil.toFixed(4) +
+                  "; nonIAAutil = " + nonIAAutil.toFixed(4));
+      ibu.add[hopIdx].U = IAAutil + nonIAAutil;
+      ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
+      console.log("    U = " + ibu.add[hopIdx].U.toFixed(4) +
+                  "; IBU = " + ibu.add[hopIdx].IBU.toFixed(2));
+
+      totalU += ibu.add[hopIdx].U;
+      totalIBU += ibu.add[hopIdx].IBU;
+    }
+    U = totalU;
+    IBU = totalIBU;
+    console.log("  modified total util = " + U.toFixed(4));
+    console.log("  modified total IBU  = " + IBU.toFixed(2));
+    console.log("");
+  }
+
   // adjust IBUs based on wort/trub loss and topoff volume added
-  finalVolume = ibu.postBoilVolume.value - ibu.wortLossVolume.value;
+  finalVolume = postBoilVolume - ibu.wortLossVolume.value;
   if (finalVolume > 0) {
     IBUtopoffScale = finalVolume / (finalVolume + ibu.topoffVolume.value);
   } else {

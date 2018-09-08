@@ -3,10 +3,12 @@
 <!-- -------------------------------------------------------------------------
 ibu_mIBU.html : HTML for AlchemyOverlord web page, mIBU sub-page
 Written by John-Paul Hosom
+Copyright © 2018 by John-Paul Hosom, all rights reserved.
 Version 1.0.1 : May 6, 2018
 Version 1.1.0 : May 23, 2018
 Version 1.2.0 : Jul 15, 2018
 Version 1.2.1 : Jul 18, 2018
+Version 1.2.2 : Sep  3, 2018
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -27,9 +29,13 @@ Version 1.2.1 : Jul 18, 2018
   as well as the time it takes to cool the wort using an immersion chiller,
   counterflow chiller, or ice bath.
   The (optional) use of an alpha-acid solubility limit is an additional modification
-  to the Tinseth formula, based on the experiments described in
+  of the Tinseth formula, based on the experiments described in
   <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
   Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
+  The (optional) correction of IBU values based on wort pH is still another modification
+  of the Tinseth formula, based on the experiment described in
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/the-effect-of-ph-on-utilization-and-ibus/">
+  The Effect of pH on Utilization and IBUs</a>.
   This calculator is described in more detail in
   <a href="https://alchemyoverlord.wordpress.com/2018/05/07/an-on-line-calculator-for-the-mibu-technique/">
   An On-Line Calculator for the mIBU Technique</a>.
@@ -82,11 +88,13 @@ Version 1.2.1 : Jul 18, 2018
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.evaporationRate" onchange="common.set(ibu.evaporationRate, 1)"></td>
   </tr>
   <tr>
-    <td>Post-Boil Wort Volume (<span id="postBoilVolumeUnits">G</span>):</td>
-    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.postBoilVolume" onchange="common.set(ibu.postBoilVolume, 1)"></td>
+    <td>Wort Volume (<span id="wortVolumeUnits">G</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortVolume" onchange="common.set(ibu.wortVolume, 1)">
+    <input type="radio" value="preBoilVol" id="preBoilVol" name="ibu.preOrPostBoilVol" onclick="common.set(ibu.preOrPostBoilVol,1)" autocomplete="off">pre-boil or
+    <input type="radio" value="postBoilVol" id="postBoilVol" name="ibu.preOrPostBoilVol" onclick="common.set(ibu.preOrPostBoilVol,1)" autocomplete="off" checked>post-boil volume</td>
   </tr>
   <tr>
-    <td>Post-Boil Original Gravity: </td>
+    <td>(Post-Boil) Original Gravity: </td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.OG" onchange="common.set(ibu.OG, 1)"></td>
   </tr>
   <tr>
@@ -136,23 +144,34 @@ Version 1.2.1 : Jul 18, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Global IBU Scaling Factor:</td>
-    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
-  </tr>
-  <tr>
     <td>Number of Hop Additions: </td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.numAdditions" onchange="common.set(ibu.numAdditions,1)"></td>
+  </tr>
+  <tr>
+    <td>Global IBU Scaling Factor:</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
   </tr>
   </tbody>
   </table>
   </p>
 
-  <p style="margin-left:3em">Apply
+  <p style="margin-left:3em">
+  <span id="solubilityLimitColor">
+  <input type="checkbox" id="ibu.applySolubilityLimitCheckbox" onchange="common.set(ibu.applySolubilityLimitCheckbox,1)"> Apply
   <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
-  alpha-acid solubility-limit correction</a>:
-  <input type="radio" value="solubilityLimitYes" id="solubilityLimitYes" name="ibu.useSolubilityLimit" onclick="common.set(ibu.useSolubilityLimit,1)" autocomplete="off" checked>yes or
-  <input type="radio" value="solubilityLimitNo" id="solubilityLimitNo" name="ibu.useSolubilityLimit" onclick="common.set(ibu.useSolubilityLimit,1)" autocomplete="off">no
+  alpha-acid solubility-limit correction</a>
+  </span>
+  <br>
+  <span id="pHColor">
+  <input type="checkbox" id="ibu.pHCheckbox" onchange="common.set(ibu.pHCheckbox,1)"> Apply
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  pH correction</a> with wort pH =
+  <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.pH" onchange="common.set(ibu.pH, 1)">
+    <input type="radio" value="preBoilpH" id="preBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off">pre-boil or
+    <input type="radio" value="postBoilpH" id="postBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off" checked>post-boil
+  </span>
   </p>
+
 
   <div id="hopsAdditionsTableDiv">
   </div>
@@ -187,6 +206,7 @@ prediction.  Bug fix in linear temperature decay defaults.<br>
 <b>1.2.0</b>: (2018-Jul-15) Complete re-write under the hood.  Add boil time. Minor fixes.
 New functionality: automatically save and load parameter settings.<br>
 <b>1.2.1</b>: (2018-Jul-18) Add option to hold hop stand at constant temperature. Minor adjustments.<br>
+<b>1.2.2</b>: (2018-Sep-03) Add pH adjustment.  Add pre- or post-boil volume option.  Minor adjustments.<br>
 </small>
 
 <p>

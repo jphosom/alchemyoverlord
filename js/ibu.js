@@ -2,11 +2,15 @@
 // ibu.js : JavaScript for AlchemyOverlord web page, IBU-related functions
 //          but not specific estimation methods.
 // Written by John-Paul Hosom
+// Copyright © 2018 by John-Paul Hosom, all rights reserved.
+//
 // Version 1.0.0 : January 30, 2017
 // Version 1.0.1 : May 6, 2018
 // Version 1.1.0 : May 23, 2018 : additional functions in support of mIBU
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
 // Version 1.2.1 : Jul 18, 2018 : add support for hop stand constant temp.
+// Version 1.2.2 : Sep  3, 2018 : add pH adjustment, pre- or post-boil volume,
+//                                and minor adjustments.
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -43,7 +47,8 @@ var ibu = ibu || {};
 //    . kettleOpening = diameter of the opening in the kettle
 //    . boilTime = amount of time for which the wort is boiled
 //    . evaporationRate = rate at which wort evaporates during the boil
-//    . postBoilVolume = the volume of the wort at the end of the boil
+//    . wortVolume = the volume of the wort, either pre- or post-boil
+//    . preOrPostBoilVol = whether the wort volume is measured pre- or post-boil
 //    . OG = original gravity (specific gravity at the end of the boil)
 //    . wortLossVolume = amount of wort left behind after post-boil transfer
 //    . topoffVolume = amount of water added when doing a partial boil
@@ -60,16 +65,20 @@ var ibu = ibu || {};
 //    . immersionDecayFactor = rate constant for forced cooling with immersion
 //    . counterflowRate = rate of transfer when using counterflow chiller
 //    . icebathDecayFactor = rate constant for forced cooling with ice bath
-//    . scalingFactor = global scaling factor to increase or decrease IBUs
 //    . numAdditions = number of hop additions
-//    . useSolubilityLimit = whether or not to use alpha-acid solubility limit
+//    . scalingFactor = global scaling factor to increase or decrease IBUs
+//    . applySolubilityLimitCheckbox = whether or not to use AA solubility limit
+//    . pHCheckbox = whether or not to adjust IBUs based on wort pH
+//    . pH = the pre-boil wort pH, if applying pH correction
 //    . add = array of hop additions, containing:
 //        . AA = alpha acid, in percent (scale 0 to 100)
 //        . weight = weight of hops added
 //        . boilTime = amount of time that hops spend in the boil (may be neg.)
 //
 //    public functions:
-//      <NONE>
+//      checkHoldTempCheckbox = check if the 'hold' temp on hop stand is valid
+//      getPostBoilVolume = get post-boil volume from wort volume and other info
+//
 
 ibu._construct = function() {
 
@@ -86,7 +95,8 @@ ibu._construct = function() {
 
   this.boilTime = new Object();
   this.evaporationRate = new Object();
-  this.postBoilVolume = new Object();
+  this.wortVolume = new Object();
+  this.preOrPostBoilVol = new Object();
   this.OG = new Object();
   this.wortLossVolume = new Object();
   this.topoffVolume = new Object();
@@ -108,9 +118,12 @@ ibu._construct = function() {
   this.icebathDecayFactor   = new Object();
   this.forcedDecayType      = new Object();
 
-  this.scalingFactor        = new Object();
   this.numAdditions         = new Object();
-  this.useSolubilityLimit   = new Object();
+  this.scalingFactor        = new Object();
+  this.applySolubilityLimitCheckbox = new Object();
+  this.pHCheckbox = new Object();
+  this.pH = new Object();
+  this.preOrPostBoilpH = new Object();
 
   this.add = [];  // array of hops additions
 
@@ -202,21 +215,33 @@ ibu._construct = function() {
   this.evaporationRate.description = "evaporation rate";
   this.evaporationRate.defaultValue = 3.78541;
 
-  // postBoilVolume
-  this.postBoilVolume.id = "ibu.postBoilVolume";
-  this.postBoilVolume.inputType = "float";
-  this.postBoilVolume.value = 0.0;
-  this.postBoilVolume.userSet = 0;
-  this.postBoilVolume.convertToMetric = common.convertGallonsToLiters;
-  this.postBoilVolume.convertToImperial = common.convertLitersToGallons;
-  this.postBoilVolume.precision = 2;
-  this.postBoilVolume.minPrecision = 2;
-  this.postBoilVolume.display = "";
-  this.postBoilVolume.min = 0.0;
-  this.postBoilVolume.max = 5000.0;
-  this.postBoilVolume.description = "post-boil wort volume";
-  this.postBoilVolume.defaultValue = 19.8734025;
-  this.postBoilVolume.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
+  // wortVolume
+  this.wortVolume.id = "ibu.wortVolume";
+  this.wortVolume.inputType = "float";
+  this.wortVolume.value = 0.0;
+  this.wortVolume.userSet = 0;
+  this.wortVolume.convertToMetric = common.convertGallonsToLiters;
+  this.wortVolume.convertToImperial = common.convertLitersToGallons;
+  this.wortVolume.precision = 2;
+  this.wortVolume.minPrecision = 2;
+  this.wortVolume.display = "";
+  this.wortVolume.min = 0.0;
+  this.wortVolume.max = 5000.0;
+  this.wortVolume.description = "wort volume";
+  this.wortVolume.defaultValue = 19.8734025;
+  this.wortVolume.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
+                                     ibu.immersionDecayFactor,
+                                     ibu.icebathDecayFactor ];
+
+  // preOrPostBoilVol
+  this.preOrPostBoilVol.id = "ibu.preOrPostBoilVol";
+  this.preOrPostBoilVol.inputType = "radioButton";
+  this.preOrPostBoilVol.value = "postBoilVol";
+  this.preOrPostBoilVol.userSet = 0;
+  this.preOrPostBoilVol.defaultValue = "postBoilVol";
+  this.preOrPostBoilVol.additionalFunction = setPreOrPostBoilVol;
+  this.preOrPostBoilVol.additionalFunctionArgs = "";
+  this.preOrPostBoilVol.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
                                      ibu.immersionDecayFactor,
                                      ibu.icebathDecayFactor ];
 
@@ -474,12 +499,46 @@ ibu._construct = function() {
   this.numAdditions.additionalFunction = hopAdditionsSet;
   this.numAdditions.additionalFunctionArgs = "";
 
-  // useSolubilityLimit
-  this.useSolubilityLimit.id = "ibu.useSolubilityLimit";
-  this.useSolubilityLimit.inputType = "radioButton";
-  this.useSolubilityLimit.value = "solubilityLimitYes";
-  this.useSolubilityLimit.userSet = 0;
-  this.useSolubilityLimit.defaultValue = "solubilityLimitYes";
+  // applySolubilityLimitCheckbox
+  this.applySolubilityLimitCheckbox.id = "ibu.applySolubilityLimitCheckbox";
+  this.applySolubilityLimitCheckbox.inputType = "checkbox";
+  this.applySolubilityLimitCheckbox.value = true;
+  this.applySolubilityLimitCheckbox.userSet = 0;
+  this.applySolubilityLimitCheckbox.defaultValue = true;
+  this.applySolubilityLimitCheckbox.additionalFunction = checkSolubilityLimit;
+
+  // pHCheckbox
+  this.pHCheckbox.id = "ibu.pHCheckbox";
+  this.pHCheckbox.inputType = "checkbox";
+  this.pHCheckbox.value = true;
+  this.pHCheckbox.userSet = 0;
+  this.pHCheckbox.defaultValue = true;
+  this.pHCheckbox.additionalFunction = checkpH;
+
+  // pH
+  this.pH.id = "ibu.pH";
+  this.pH.inputType = "float";
+  this.pH.value = 0.0;
+  this.pH.userSet = 0;
+  this.pH.precision = 2;
+  this.pH.minPrecision = 2;
+  this.pH.display = "";
+  this.pH.min = 4.0;
+  this.pH.max = 7.0;
+  this.pH.description = "pre-boil wort pH";
+  this.pH.defaultValue = 5.75;
+  this.pH.defaultColor = "#b1b1cd";
+  this.pH.additionalFunction = checkpH;
+
+  // preOrPostBoilpH
+  this.preOrPostBoilpH.id = "ibu.preOrPostBoilpH";
+  this.preOrPostBoilpH.inputType = "radioButton";
+  this.preOrPostBoilpH.value = "postBoilpH";
+  this.preOrPostBoilpH.userSet = 0;
+  this.preOrPostBoilpH.defaultValue = "postBoilpH";
+  this.preOrPostBoilpH.additionalFunction = setPreOrPostBoilpH;
+  this.preOrPostBoilpH.additionalFunctionArgs = "";
+
 
 //==============================================================================
 // FUNCTION RELATED TO UNITS
@@ -491,8 +550,8 @@ function setUnits() {
 
   if (ibu.units.value == "metric") {
     // update displayed units
-    if (document.getElementById('postBoilVolumeUnits')) {
-      document.getElementById('postBoilVolumeUnits').innerHTML = "liters";
+    if (document.getElementById('wortVolumeUnits')) {
+      document.getElementById('wortVolumeUnits').innerHTML = "liters";
     }
     if (document.getElementById('weightUnits')) {
       document.getElementById('weightUnits').innerHTML = "g";
@@ -526,7 +585,7 @@ function setUnits() {
     common.set(ibu.kettleDiameter, 0);
     common.set(ibu.kettleOpening, 0);
     common.set(ibu.evaporationRate, 0);
-    common.set(ibu.postBoilVolume, 0);
+    common.set(ibu.wortVolume, 0);
     common.set(ibu.wortLossVolume, 0);
     common.set(ibu.topoffVolume, 0);
     common.set(ibu.tempLinParamA, 0);
@@ -541,8 +600,8 @@ function setUnits() {
     }
   } else {
     // update displayed units
-    if (document.getElementById('postBoilVolumeUnits')) {
-      document.getElementById('postBoilVolumeUnits').innerHTML = "G";
+    if (document.getElementById('wortVolumeUnits')) {
+      document.getElementById('wortVolumeUnits').innerHTML = "G";
      }
     if (document.getElementById('weightUnits')) {
       document.getElementById('weightUnits').innerHTML = "oz";
@@ -576,7 +635,7 @@ function setUnits() {
     common.set(ibu.kettleDiameter, 0);
     common.set(ibu.kettleOpening, 0);
     common.set(ibu.evaporationRate, 0);
-    common.set(ibu.postBoilVolume, 0);
+    common.set(ibu.wortVolume, 0);
     common.set(ibu.wortLossVolume, 0);
     common.set(ibu.topoffVolume, 0);
     common.set(ibu.tempLinParamA, 0);
@@ -626,6 +685,18 @@ function checkDiameterAndOpening(variable) {
   }
 
   return true;
+}
+
+//------------------------------------------------------------------------------
+// check if wort volume is pre-boil or post-boil.
+
+function setPreOrPostBoilVol() {
+  var idx = 0;
+  var value = ibu.preOrPostBoilVol.value;
+
+  console.log("SET PRE- or POST-BOIL VOLUME TO " + value);
+
+  return;
 }
 
 //------------------------------------------------------------------------------
@@ -763,6 +834,78 @@ function setTempDecayType() {
   return true;
 }
 
+
+//------------------------------------------------------------------------------
+// check if the solubility-limit checkbox is checked; change the color
+// depending on the value.  Change both the text color and the link color.
+// If checked, revert to the default color.
+
+function checkSolubilityLimit() {
+  var idx = 0;
+  var checked = ibu.applySolubilityLimitCheckbox.value;
+  linkElements =
+    document.getElementById("solubilityLimitColor").getElementsByTagName("a");
+
+  if (document.getElementById(ibu.applySolubilityLimitCheckbox.id)) {
+    if (checked) {
+      document.getElementById("solubilityLimitColor").style.color = "";
+      for (var i = 0; i < linkElements.length; i++) {
+        linkElements[i].style.color = "";
+      }
+    } else {
+      document.getElementById("solubilityLimitColor").style.color = "#b1b1cd";
+      for (var i = 0; i < linkElements.length; i++) {
+        linkElements[i].style.color = "#b1b1cd";
+      }
+    }
+  }
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// check if the pH checkbox is checked; change the color
+// depending on the value.  Change both the text color and the link color.
+// If checked, revert to the default color.
+
+function checkpH() {
+  var idx = 0;
+  var checked = ibu.pHCheckbox.value;
+  linkElements =
+    document.getElementById("pHColor").getElementsByTagName("a");
+
+  if (document.getElementById(ibu.pHCheckbox.id)) {
+    if (checked) {
+      document.getElementById("pHColor").style.color = "";
+      document.getElementById("ibu.pH").style.color = "";
+      for (var i = 0; i < linkElements.length; i++) {
+        linkElements[i].style.color = "";
+      }
+    } else {
+      document.getElementById("pHColor").style.color = "#b1b1cd";
+      document.getElementById("ibu.pH").style.color = "#b1b1cd";
+      for (var i = 0; i < linkElements.length; i++) {
+        linkElements[i].style.color = "#b1b1cd";
+      }
+    }
+  }
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// check if wort pH is pre-boil or post-boil.
+
+function setPreOrPostBoilpH() {
+  var idx = 0;
+  var value = ibu.preOrPostBoilpH.value;
+
+  console.log("SET PRE- or POST-BOIL pH TO " + value);
+
+  return;
+}
+
+//------------------------------------------------------------------------------
 
 //==============================================================================
 // FUNCTION TO INITIALIZE TABLE HOP HOP ADDITIONS AND OUTPUTS
@@ -962,13 +1105,43 @@ function hopAdditionsSet(updateFunction) {
 //==============================================================================
 // FUNCTIONS FOR COMPUTING DEFAULT VALUES
 
+function get_postBoilVolume() {
+  var wortVolume = ibu.wortVolume.value;
+  var preBoilVol = document.getElementById("preBoilVol").checked;
+  var evapRate = ibu.evaporationRate.value;
+  var boilTime = ibu.boilTime.value;
+
+  // if volume is not pre-boil, it is post-boil, which is what we want
+  if (!preBoilVol) {
+    return wortVolume;
+  }
+  // otherwise, it is pre-boil, so we convert from pre- to post-boil volume
+  // NOTE: this does not take into account evaporation that happens while
+  //       the wort is heated but not yet boiling.  This could be fixed,
+  //       but it would mean yet another parameter.  For now, keep it simple.
+  postBoilVolume = wortVolume - (evapRate * boilTime/60.0);
+  return postBoilVolume;
+}
+
+//------------------------------------------------------------------------------
+// the public version of the private function... we need both forms because
+// we check it both internally and externally.
+
+this.getPostBoilVolume = function() {
+  var postBoilVolume;
+  postBoilVolume = get_postBoilVolume();
+  return postBoilVolume;
+}
+
 //------------------------------------------------------------------------------
 // get default for immersion chiller
 
 function get_immersionDecayFactor_default() {
   var immersionDefault = 0.0;
+  var postBoilVolume = 0.0;
 
-  immersionDefault = 0.6075 * Math.exp(-0.0704 * ibu.postBoilVolume.value);
+  postBoilVolume = get_postBoilVolume();
+  immersionDefault = 0.6075 * Math.exp(-0.0704 * postBoilVolume);
   return immersionDefault;
 }
 
@@ -977,8 +1150,10 @@ function get_immersionDecayFactor_default() {
 
 function get_icebathDecayFactor_default() {
   var icebathDefault = 0.0;
+  var postBoilVolume = 0.0;
 
-  icebathDefault = 0.4071 * Math.exp(-0.0754 * ibu.postBoilVolume.value);
+  postBoilVolume = get_postBoilVolume();
+  icebathDefault = 0.4071 * Math.exp(-0.0754 * postBoilVolume);
   return icebathDefault;
 }
 
@@ -992,6 +1167,9 @@ function get_tempExpParamB_default() {
   var opening_area = 0.0;
   var effective_area = 0.0;
   var AVR = 0.0;
+  var postBoilVolume = 0.0;
+
+  postBoilVolume = get_postBoilVolume();
 
   radius = ibu.kettleDiameter.value / 2.0;
   surface_area = Math.PI * radius * radius;
@@ -1002,8 +1180,8 @@ function get_tempExpParamB_default() {
   effective_area = Math.sqrt(surface_area * opening_area);
 
   AVR = 0.0;
-  if (ibu.postBoilVolume.value > 0.0) {
-    AVR = effective_area / ibu.postBoilVolume.value;
+  if (postBoilVolume > 0.0) {
+    AVR = effective_area / postBoilVolume;
   }
   value = (0.0002925 * AVR) + 0.0053834;
 
@@ -1020,6 +1198,9 @@ function get_tempLinParamA_default() {
   var opening_area = 0.0;
   var effective_area = 0.0;
   var AVR = 0.0;
+  var postBoilVolume = 0.0;
+
+  postBoilVolume = get_postBoilVolume();
 
   radius = ibu.kettleDiameter.value / 2.0;
   surface_area = Math.PI * radius * radius;
@@ -1030,8 +1211,8 @@ function get_tempLinParamA_default() {
   effective_area = Math.sqrt(surface_area * opening_area);
 
   AVR = 0.0;
-  if (ibu.postBoilVolume.value > 0.0) {
-    AVR = effective_area / ibu.postBoilVolume.value;
+  if (postBoilVolume > 0.0) {
+    AVR = effective_area / postBoilVolume;
   }
   value = (3.055 * (1.0 - Math.exp(-0.0051 * AVR))) + 0.238;
   value *= -1.0;

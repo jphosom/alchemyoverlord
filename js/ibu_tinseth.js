@@ -1,8 +1,7 @@
 // -----------------------------------------------------------------------------
 // ibu_tinseth.js : JavaScript for AlchemyOverlord web page, Tinseth sub-page
 // Written by John-Paul Hosom
-//
-// Copyright © 2018 John-Paul Hosom, all rights reserved.
+// Copyright © 2018 by John-Paul Hosom, all rights reserved.
 //
 // Version 1.0.0 : January 30, 2017
 //         Initial version.  Complete but no-frills implementation of the
@@ -16,6 +15,9 @@
 //         . add boil time parameter
 //         . bug fix in computing average specific gravity
 //         . add saving and loading of settings
+//
+// Version 1.2.2 : September 3, 2018
+//         . minor updates
 //
 // -----------------------------------------------------------------------------
 
@@ -54,6 +56,7 @@ this.initialize_Tinseth = function() {
   // when we call set(units), those dependent variables will also be set.
   common.set(ibu.units, 0);
   common.set(ibu.boilTime, 0);
+  common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
   common.set(ibu.scalingFactor, 0);
   common.set(ibu.numAdditions, 0);
@@ -73,8 +76,9 @@ this.computeIBU_Tinseth = function() {
   var addUtilOutput = 0.0;
   var idx = 0;
   var idxP1 = 0;
-  var maxBoilTime = ibu.boilTime.value;
+  var boilTime = ibu.boilTime.value;
   var OGpoints = 0.0;
+  var postBoilVolume = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
   var steepTime = 0.0;
@@ -87,8 +91,11 @@ this.computeIBU_Tinseth = function() {
     return false;
   }
   console.log("==============================================================");
+
+  postBoilVolume = ibu.getPostBoilVolume();
+
   console.log("evaporation rate = " + ibu.evaporationRate.value +
-              ", post-boil volume = " + ibu.postBoilVolume.value +
+              ", post-boil volume = " + postBoilVolume +
               ", OG = " + ibu.OG.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
@@ -107,17 +114,17 @@ this.computeIBU_Tinseth = function() {
 
   // get initial volume from post-boil volume, evaporation rate, and boil time;
   // then get average volume and average specific gravity
-  initVolume = ibu.postBoilVolume.value +
-               (ibu.evaporationRate.value/60.0 * maxBoilTime);
+  initVolume = postBoilVolume +
+               (ibu.evaporationRate.value/60.0 * boilTime);
   console.log("volume at first hops addition = " +
-              ibu.postBoilVolume.value + " + (" + ibu.evaporationRate.value +
-              "/60.0 * " + maxBoilTime + ") = " + initVolume);
-  averageVolume = (initVolume + ibu.postBoilVolume.value) / 2.0;
+              postBoilVolume + " + (" + ibu.evaporationRate.value +
+              "/60.0 * " + boilTime + ") = " + initVolume);
+  averageVolume = (initVolume + postBoilVolume) / 2.0;
   OGpoints = (ibu.OG.value - 1.0) * 1000.0;
-  SGpoints = OGpoints * ibu.postBoilVolume.value / averageVolume;
+  SGpoints = OGpoints * postBoilVolume / averageVolume;
   SG = (SGpoints / 1000.0) + 1.0;
   console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
-              ibu.postBoilVolume.value + " and initial volume is " +
+              postBoilVolume + " and initial volume is " +
               initVolume.toFixed(4) + ", so *average* gravity is " +
               SG.toFixed(4));
 
@@ -131,7 +138,7 @@ this.computeIBU_Tinseth = function() {
       steepTime = 0.0;
     }
 
-    addIBU = computeIBUsingleAddition_Tinseth(ibu.postBoilVolume.value,
+    addIBU = computeIBUsingleAddition_Tinseth(postBoilVolume,
                 ibu.wortLossVolume.value, ibu.topoffVolume.value,
                 SG, AA, weight, steepTime, ibu.scalingFactor.value);
     totalIBU += addIBU.IBU;

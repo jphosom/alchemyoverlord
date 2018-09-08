@@ -13,7 +13,7 @@ html {
 
 body {
   /* margin: 0; */
-	font-size: 100%;
+  font-size: 100%;
   font-family: verdana;
 }
 
@@ -22,37 +22,37 @@ body {
 /* subbanner (tag line) */
 
 #banner {
-	  background: url("../img/alchemyoverlord-light.png");
-		background-size: 7.0em auto;
-		background-attachment: fixed;
-		background-repeat: repeat-x;
+    background: url("../img/alchemyoverlord-light.png");
+    background-size: 7.0em auto;
+    background-attachment: fixed;
+    background-repeat: repeat-x;
     color: black;
-		width: 100%;
+    width: 100%;
     text-align: left;
-		text-indent: 1.00ex;
-		font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
-		font-style: italic;
-		font-size: 3.0em;
-		font-weight: bold;
-		border-width: 1;
-		border-top-style: solid;
-		border-left-style: solid;
-		border-right-style: solid;	
+    text-indent: 1.00ex;
+    font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+    font-style: italic;
+    font-size: 3.0em;
+    font-weight: bold;
+    border-width: 1;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
 }
 
 #subbanner {
-		color: black;
-		width: 100%;
-		text-align: left;
-		text-indent: 3.00ex;
-		letter-spacing: 0.1ex;
-		font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
-		font-size: 1.0em;
+    color: black;
+    width: 100%;
+    text-align: left;
+    text-indent: 3.00ex;
+    letter-spacing: 0.1ex;
+    font-family: Book Antiqua,Palatino,Palatino Linotype,Palatino LT STD,Georgia,serif;
+    font-size: 1.0em;
     padding-bottom: 0.5ex;
-		border-width: 1;
-		border-left-style: solid;
-		border-right-style: solid;
-		border-bottom-style: solid;
+    border-width: 1;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
 }
 
 
@@ -60,13 +60,13 @@ body {
 /* define horizontal menu */
 
 #horizontalMenuList {
-		width: 100.3%;
-	  font-size: 0.8em;
+    width: 100.3%;
+    font-size: 0.8em;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-		background-color:  #2e4053;
+    background-color:  #2e4053;
 }
 
 #horizontalMenuItem {
@@ -76,7 +76,7 @@ body {
 
 #horizontalMenuItem:last-child {
     border-right: none;
-		border-left:1px solid #cacfd2;
+    border-left:1px solid #cacfd2;
 }
 
 #horizontalMenuItem a {
@@ -101,7 +101,7 @@ body {
     padding-left: 0;
     padding-right: 0;
     width: 14ex;
-		height: 100%;
+    height: 100%;
     background-color: #eff2f8;
     position: absolute;
     height: calc(100% - 9em);
@@ -128,16 +128,16 @@ body {
 /* define iframe properties */
 
 #iframe {
-	width: calc(100% - 14ex);
-	margin-left:14ex;
-	padding:1ex 0;
+  width: calc(100% - 14ex);
+  margin-left:14ex;
+  padding:1ex 0;
   border:0px;
   height: calc(100% - 9em);
   overflow:hidden;
   }
 
 #content {
-	width: 100%;
+  width: 100%;
   }
 
 /*----------------------------------------------------------------------------*/
@@ -150,16 +150,16 @@ body {
 /* define table of outputs */
 
 .outputTableCellName {
-	width:15ex;
+  width:15ex;
 }
 .outputTableCellValue {
-	width:11.5ex;
-	background:lightgray;
+  width:11.5ex;
+  background:lightgray;
 }
 .outputTableTotalName {
-	width:15ex;
+  width:15ex;
 }
 .outputTableTotalValue {
-	width:11.5ex;
-	background:lightgray;
+  width:11.5ex;
+  background:lightgray;
 }
