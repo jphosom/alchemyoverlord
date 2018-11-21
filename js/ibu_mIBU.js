@@ -108,8 +108,7 @@ this.computeIBU_mIBU = function() {
   var bignessFactor = 0.0;
   var boilTime = ibu.boilTime.value;
   var chillingTime = 0.0;
-  var coolingMethod =
-      document.querySelector('input[name="ibu.forcedDecayType"]:checked').value;
+  var coolingMethod = ibu.forcedDecayType.value;
   var currentAddition = 0.0;
   var currVolume = 0.0;
   var dAA = 0.0;
@@ -136,7 +135,7 @@ this.computeIBU_mIBU = function() {
   var immersionChillerBaseTemp = 293.15; // 20'C = 68'F
   var initVolume = 0.0;
   var integrationTime = 0.0;
-  var isTempDecayLinear = document.getElementById('tempDecayLinear').checked;
+  var isTempDecayLinear = 0;
   var k = 0.0;
   var linParamB_Kelvin = 0.0;
   var nonIAAlossFactor = 0.0;
@@ -187,6 +186,14 @@ this.computeIBU_mIBU = function() {
               ", OG = " + ibu.OG.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
+	if (ibu.tempDecayType.value == "tempDecayLinear") {
+		isTempDecayLinear = 1;
+	} else if (ibu.tempDecayType.value == "tempDecayExponential") {
+		isTempDecayLinear = 0;
+	} else {
+		console.log("ERROR: unknown temp decay type: " + ibu.tempDecayType.value);
+		isTempDecayLinear = 0;
+	}
   if (!isTempDecayLinear) {
     console.log("Exponential decay: A=" + ibu.tempExpParamA.value + ", B=" +
                 ibu.tempExpParamB.value + ", C=" + ibu.tempExpParamC.value);
