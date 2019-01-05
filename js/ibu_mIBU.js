@@ -2,6 +2,8 @@
 // ibu_mIBU.js : JavaScript for AlchemyOverlord web page, mIBU sub-page
 // Written by John-Paul Hosom
 // Copyright © 2018 by John-Paul Hosom, all rights reserved.
+// To license this software, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
 //
 // Version 1.0.1 : May 6, 2018
 //         This version is based off of the original Tinseth IBU javascript
@@ -35,6 +37,9 @@
 // Version 1.2.2 : Sep.  3, 2018
 //         . add pH adjustment, pre- or post-boil volume, and minor adjustments.
 //
+// Version 1.2.3 : Dec. 29, 2018
+//         . minor cleanup.
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -62,12 +67,13 @@ this.initialize_mIBU = function() {
 
   // add function to call when using set() function with ibu namespace
   for (idx = 0; idx < keys.length; idx++) {
-    if (keys[idx] == "_construct") {
+    if (!ibu[keys[idx]].id) {
       continue;
     }
     ibu[keys[idx]].updateFunction = mIBU.computeIBU_mIBU;
   }
   ibu.numAdditions.additionalFunctionArgs = mIBU.computeIBU_mIBU;
+  ibu.hopTableSize = 3; // compact table: AA%, weight, boilTime
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
@@ -99,10 +105,10 @@ this.initialize_mIBU = function() {
 this.computeIBU_mIBU = function() {
   var AA = 0.0;
   var AAconcent = 0.0;
-  var additionTime = 0.0;
   var AAinit = 0.0;
   var AAinitTotal = 0.0;
   var addIBUoutput = 0.0;
+  var additionTime = 0.0;
   var addUtilOutput = 0.0;
   var averageVolume = 0.0;
   var bignessFactor = 0.0;
@@ -121,17 +127,17 @@ this.computeIBU_mIBU = function() {
   var factor = 0.0;
   var finalVolume = 0.0;
   var finished = 0;
-  var holdTempCheckbox = ibu.holdTempCheckbox.value;
   var holdTemp = ibu.holdTemp.value;
-  var holdTempK = 0.0;
+  var holdTempCheckbox = ibu.holdTempCheckbox.value;
   var holdTempCounter = 0.0;
+  var holdTempK = 0.0;
   var hopIdx = 0;
   var IAAlossFactor = 0.0;
   var IAAutil = 0.0;
-  var idxP1 = 0;
   var IBU = 0.0;
   var IBUtopoffScale = 0.0;
   var icebathBaseTemp = 314.00; // 40.85'C = 105.53'F
+  var idxP1 = 0;
   var immersionChillerBaseTemp = 293.15; // 20'C = 68'F
   var initVolume = 0.0;
   var integrationTime = 0.0;
@@ -141,10 +147,10 @@ this.computeIBU_mIBU = function() {
   var nonIAAlossFactor = 0.0;
   var nonIAAutil = 0.0;
   var OGpoints = 0.0;
+  var pH = ibu.pH.value;
   var postBoilTime = 0.0;
   var postBoilVolume = 0.0;
   var preAddConcent = 0.0;
-  var pH = ibu.pH.value;
   var preBoilpH = 0.0;
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
   var relativeVolume = 0.0;
@@ -161,16 +167,14 @@ this.computeIBU_mIBU = function() {
   var totalU = 0.0;
   var totalXferTime = 0.0;
   var U = 0.0;
-  var useSolubilityLimit = ibu.applySolubilityLimitCheckbox.value;
   var use_pH = ibu.pHCheckbox.value;
+  var useSolubilityLimit = ibu.applySolubilityLimitCheckbox.value;
   var volumeChange = 0.0;
   var weight;
   var whirlpoolTime = 0.0;
   var xferRate = 0.0;
 
-
-  // if no IBU outputs exist (no table yet), then just return
-  if (!document.getElementById("AA1")) {
+  if (ibu.numAdditions.value < 1) {
     return false;
   }
 
@@ -186,14 +190,15 @@ this.computeIBU_mIBU = function() {
               ", OG = " + ibu.OG.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
-	if (ibu.tempDecayType.value == "tempDecayLinear") {
-		isTempDecayLinear = 1;
-	} else if (ibu.tempDecayType.value == "tempDecayExponential") {
-		isTempDecayLinear = 0;
-	} else {
-		console.log("ERROR: unknown temp decay type: " + ibu.tempDecayType.value);
-		isTempDecayLinear = 0;
-	}
+
+  if (ibu.tempDecayType.value == "tempDecayLinear") {
+    isTempDecayLinear = 1;
+  } else if (ibu.tempDecayType.value == "tempDecayExponential") {
+    isTempDecayLinear = 0;
+  } else {
+    console.log("ERROR: unknown temp decay type: " + ibu.tempDecayType.value);
+    isTempDecayLinear = 0;
+  }
   if (!isTempDecayLinear) {
     console.log("Exponential decay: A=" + ibu.tempExpParamA.value + ", B=" +
                 ibu.tempExpParamB.value + ", C=" + ibu.tempExpParamC.value);
@@ -201,6 +206,7 @@ this.computeIBU_mIBU = function() {
     console.log("Linear temp decay: A=" + ibu.tempLinParamA.value + ", B=" +
                 ibu.tempLinParamB.value);
   }
+
   console.log("hold temp during hop stand? " + holdTempCheckbox +
               ", hold temp is " + holdTemp);
   // get forced cooling function decay rate or transfer rate
@@ -570,17 +576,21 @@ this.computeIBU_mIBU = function() {
   console.log("U = " + U.toFixed(4) + ", IBU = " + IBU.toFixed(3));
 
   // set output values in HTML
-  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-    idxP1 = hopIdx + 1;
-    addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
-    document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
+  if (document.getElementById("addIBUvalue1")) {
+    for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+      idxP1 = hopIdx + 1;
+      addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
+      document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
 
-    addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
-    document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
+      addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
+      document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
+    }
   }
 
   totalIBUoutput = IBU.toFixed(2);
-  document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
+  if (document.getElementById("totalIBUvalue")) {
+    document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
+  }
 
   return true;
 }

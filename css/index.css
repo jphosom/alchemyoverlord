@@ -141,6 +141,14 @@ body {
   }
 
 /*----------------------------------------------------------------------------*/
+/* define select option */
+#ibu.flocculation {
+	width:11em;
+	min-width:11em;
+	max-width:11em;
+}
+
+/*----------------------------------------------------------------------------*/
 /* define table of hops additions */
 
 #hopsAdditionsTable {

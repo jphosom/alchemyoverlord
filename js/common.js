@@ -5,6 +5,7 @@
 //
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
 // Version 1.2.1 : Jul 18, 2018 : add support for checkbox
+// Version 1.2.2 : Dec 29, 2018 : add support for 'select', float or string
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -90,6 +91,54 @@ validate = function(variable, input) {
 }
 
 //------------------------------------------------------------------------------
+// validate user input as either a floating point number or a default string.
+// The output 'check' contains:
+//    - valid : true if the input is a valid value, else false
+//    - useDefaultValue : true if we explicitly want to go back to default value
+//    - value : the (numeric or other) value of the (string) input
+
+validateFloatOrString = function(variable, input) {
+  var check = new Object();
+  var idx;
+  var inputValue;
+
+  check.useDefaultValue = false;
+  check.valid = true;
+
+  if (input == "D" || input == "d" || input == "'D'" || input == "'d'") {
+    check.valid = false;
+    check.useDefaultValue = true;
+    check.value = "";
+    return check;
+  }
+
+  check.valid = false;
+  if (!isNaN(input)) {
+    inputValue = Number(input);
+    check.valid = true;
+    if (inputValue < variable.min || inputValue > variable.max) {
+      check.valid = false;
+    }
+    check.value = inputValue;
+  } else {
+    for (idx = 0; idx < variable.inputStrings.length; idx++) {
+      // console.log("checking " + variable.inputStrings[idx]);
+      if (variable.inputStrings[idx] == input.toLowerCase()) {
+        check.valid = true;
+        check.value = input;
+      }
+    }
+  }
+
+  if (!check.valid) {
+    window.alert("For " + variable.description + ", input '" + input +
+                 "' is not valid.");
+  }
+
+  return check;
+}
+
+//------------------------------------------------------------------------------
 
 this.getPrecision = function(valueString) {
   var dotIndex = valueString.indexOf(".");
@@ -109,12 +158,12 @@ this.getPrecision = function(valueString) {
 //------------------------------------------------------------------------------
 
 this.set = function(variable, haveUserInput) {
+  var check = new Object();
+  var defaultValue;
+  var idx = 0;
+  var inputString = "";
   var savedValueExists;
   var savedValue;
-  var inputString = "";
-  var defaultValue;
-  var check = new Object();
-  var idx = 0;
 
   console.log("\n");
   console.log("------------------- SET " + variable.id + " ------------------");
@@ -126,14 +175,25 @@ this.set = function(variable, haveUserInput) {
       var query = "input[name='"+variable.id+"']:checked";
       check.value = document.querySelector(query).value;
       console.log("RADIO BUTTON VALUE : " + check.value);
-      } else if (variable.inputType == "checkbox") {
+    } else if (variable.inputType == "checkbox") {
       check.useDefaultValue = false;
       check.valid = true;
-      // var query = "input[name='"+variable.id+"']:checked";
-      // check.value = document.querySelector(query).value;
       check.value = document.getElementById(variable.id).checked;
       console.log("CHECKBOX VALUE : " + check.value);
-      } else {
+    } else if (variable.inputType == "select") {
+      check.useDefaultValue = false;
+      check.valid = true;
+      check.value = document.getElementById(variable.id).value;
+      console.log("SELECT VALUE : " + check.value);
+    } else if (variable.inputType == "floatOrString") {
+      inputString = document.getElementById(variable.id).value;
+      console.log("  input = " + inputString);
+      check = validateFloatOrString(variable, inputString);
+      console.log("  validate = " + check.valid + ", " + check.useDefaultValue);
+      if (!check.valid || check.useDefaultValue) {
+        console.log("  input is not valid, or we want the default");
+      }
+    } else {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
       check = validate(variable, inputString);
@@ -206,14 +266,24 @@ this.set = function(variable, haveUserInput) {
   if (variable.inputType == "radioButton") {
     console.log("setting radiobutton " + variable.id + " to be " +
                 variable.value);
-    document.getElementById(variable.value).checked = true;
-    } else if (variable.inputType == "checkbox") {
+    if (document.getElementById(variable.value)) {
+      document.getElementById(variable.value).checked = true;
+    }
+  } else if (variable.inputType == "checkbox") {
     console.log("setting checkbox " + variable.id + " to be " +
                 variable.value);
-    document.getElementById(variable.id).checked = variable.value;
-    } else {
-    common.updateHTML(variable);
+    if (document.getElementById(variable.id)) {
+      document.getElementById(variable.id).checked = variable.value;
     }
+  } else if (variable.inputType == "select") {
+    console.log("setting select " + variable.id + " to be " +
+                variable.value);
+    if (document.getElementById(variable.id)) {
+      document.getElementById(variable.id).value = variable.value;
+    }
+  } else {
+    common.updateHTML(variable);
+  }
 
   // save or unset value
   if (variable.userSet) {
@@ -247,10 +317,10 @@ this.updateHTML = function(variable) {
 
   // console.log("UPDATING HTML for " + variable.id);
   outputNumber = variable.value;
+  if (!isNaN(outputNumber)) outputNumber = parseFloat(outputNumber);
 
   // convert output to imperial units, if necessary
-  if (("convertToImperial" in variable) &&
-      window[variable.parent]["units"].value == "imperial") {
+  if (("convertToImperial" in variable) && ibu.units.value == "imperial") {
     outputNumber = variable.convertToImperial(outputNumber);
   }
 
@@ -258,7 +328,11 @@ this.updateHTML = function(variable) {
   // or nothing specific.  Convert to string.
   if ("precision" in variable && variable.precision >= 0) {
     // console.log("setting precision to " + variable.precision);
-    variable.display = outputNumber.toFixed(variable.precision);
+    if (!isNaN(outputNumber)) {
+      variable.display = outputNumber.toFixed(variable.precision);
+    } else {
+      variable.display = variable.value;
+    }
   } else if ("precision" in variable && variable.precision < 0) {
     var precision = variable.precision * -1;
     // console.log("precision initially " + precision);
@@ -283,12 +357,12 @@ this.updateHTML = function(variable) {
     document.getElementById(variable.id).value = variable.display;
 
     if (("inputType" in variable) && variable.inputType != "radioButton" &&
-        variable.inputType != "checkbox") {
+        variable.inputType != "checkbox" && variable.inputType != "select") {
       if (!variable.userSet && ("defaultColor" in variable)) {
         // console.log("  setting color to default for " + variable.id);
         document.getElementById(variable.id).style.color=variable.defaultColor;
       } else {
-      document.getElementById(variable.id).style.color = "black";
+        document.getElementById(variable.id).style.color = "black";
       }
     }
   }

@@ -19,6 +19,9 @@
 // Version 1.2.2 : September 3, 2018
 //         . minor updates
 //
+// Version 1.2.3 : December 29, 2018
+//         . minor updates
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -45,12 +48,13 @@ this.initialize_Tinseth = function() {
 
   // add function to call when using set() function with ibu namespace
   for (idx = 0; idx < keys.length; idx++) {
-    if (keys[idx] == "_construct") {
+    if (!ibu[keys[idx]].id) {
       continue;
     }
     ibu[keys[idx]].updateFunction = Tinseth.computeIBU_Tinseth;
   }
   ibu.numAdditions.additionalFunctionArgs = Tinseth.computeIBU_Tinseth;
+  ibu.hopTableSize = 3; // compact: AA%, weight, boilTime
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
@@ -60,6 +64,8 @@ this.initialize_Tinseth = function() {
   common.set(ibu.OG, 0);
   common.set(ibu.scalingFactor, 0);
   common.set(ibu.numAdditions, 0);
+
+  this.verbose = 1;
 
   Tinseth.computeIBU_Tinseth();
 
@@ -86,26 +92,35 @@ this.computeIBU_Tinseth = function() {
   var totalIBUoutput = 0.0;
   var weight = 0.0;
 
-  // if no IBU outputs exist (no table yet), then just return
-  if (!document.getElementById("AA1")) {
+  if (ibu.numAdditions.value < 1) {
     return false;
   }
-  console.log("==============================================================");
+
+  if (Tinseth.verbose > 0) {
+    console.log("============================================================");
+  }
 
   postBoilVolume = ibu.getPostBoilVolume();
 
-  console.log("evaporation rate = " + ibu.evaporationRate.value +
+  if (Tinseth.verbose > 0) {
+    console.log("evaporation rate = " + ibu.evaporationRate.value +
               ", post-boil volume = " + postBoilVolume +
               ", OG = " + ibu.OG.value);
-  console.log("wort loss volume = " + ibu.wortLossVolume.value +
+    console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
+  }
 
   // initialize outputs from each hop addition to zero
-  console.log("number of hops additions: " + ibu.add.length);
+  if (Tinseth.verbose > 0) {
+    console.log("number of hops additions: " + ibu.add.length);
+  }
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-    console.log("  addition " + hopIdx+1 + ": AA=" + ibu.add[hopIdx].AA.value +
+    if (Tinseth.verbose > 0) {
+      console.log("  addition " + hopIdx+1 + ": AA=" +
+                ibu.add[hopIdx].AA.value +
                 ", weight=" + ibu.add[hopIdx].weight.value +
                 ", time=" + ibu.add[hopIdx].boilTime.value);
+    }
     ibu.add[hopIdx].AAinit = 0.0;
     ibu.add[hopIdx].AAcurr = 0.0;
     ibu.add[hopIdx].IBU = 0.0;
@@ -116,17 +131,21 @@ this.computeIBU_Tinseth = function() {
   // then get average volume and average specific gravity
   initVolume = postBoilVolume +
                (ibu.evaporationRate.value/60.0 * boilTime);
-  console.log("volume at first hops addition = " +
+  if (Tinseth.verbose > 0) {
+    console.log("volume at first hops addition = " +
               postBoilVolume + " + (" + ibu.evaporationRate.value +
               "/60.0 * " + boilTime + ") = " + initVolume);
+  }
   averageVolume = (initVolume + postBoilVolume) / 2.0;
   OGpoints = (ibu.OG.value - 1.0) * 1000.0;
   SGpoints = OGpoints * postBoilVolume / averageVolume;
   SG = (SGpoints / 1000.0) + 1.0;
-  console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
+  if (Tinseth.verbose > 0) {
+    console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
               postBoilVolume + " and initial volume is " +
               initVolume.toFixed(4) + ", so *average* gravity is " +
               SG.toFixed(4));
+  }
 
   totalIBU = 0.0;
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
@@ -148,17 +167,22 @@ this.computeIBU_Tinseth = function() {
   }
 
   // set output values in HTML
-  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-    idxP1 = hopIdx + 1;
-    addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
-    document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
+  if (document.getElementById("addIBUvalue1")) {
+    for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+      idxP1 = hopIdx + 1;
+      addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
+      document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
 
-    addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
-    document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
+      addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
+      document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
+    }
   }
 
   totalIBUoutput = totalIBU.toFixed(2);
-  document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
+  ibu.IBU = totalIBU;
+  if (document.getElementById("totalIBUvalue")) {
+    document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
+  }
   return true;
 }
 
@@ -176,7 +200,6 @@ function computeIBUsingleAddition_Tinseth(postBoilVolume, wortLossVolume,
   var finalVolume = 0.0;
   var topoffScaling = 0.0;
   var U = 0.0;
-  var IBU = 0.0;
   var IBUresult = {
             util: 0,
             IBU: 0
@@ -194,20 +217,24 @@ function computeIBUsingleAddition_Tinseth(postBoilVolume, wortLossVolume,
   IBUresult.util = scalingFactor * U;
   if (postBoilVolume > 0) {
     IBUresult.IBU = scalingFactor * U * AA * weight * 1000.0 / postBoilVolume;
-    } else {
+  } else {
     IBUresult.IBU = 0.0;
-    }
+  }
   finalVolume = postBoilVolume - wortLossVolume;
   if (finalVolume > 0.0) {
     topoffScaling = finalVolume / (finalVolume + topoffVolume);
-    console.log("finalVol = " + finalVolume + ", topoff = " +
+    if (Tinseth.verbose > 0) {
+      console.log("finalVol = " + finalVolume + ", topoff = " +
                 topoffVolume + ", scaling factor = " + topoffScaling);
+    }
   } else {
     topoffScaling = 0.0;
   }
   IBUresult.IBU = IBUresult.IBU * topoffScaling;
   AAcon = AA * weight * 1000.0 / postBoilVolume;
-  console.log("[AA] = " + AAcon + ", U = " + U + ", IBU = " + IBU);
+  if (Tinseth.verbose > 0) {
+    console.log("[AA] = "+AAcon+", U = "+U+", IBU = "+IBUresult.IBU);
+  }
 
   return IBUresult;
 }
