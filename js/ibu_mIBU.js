@@ -40,6 +40,11 @@
 // Version 1.2.3 : Dec. 29, 2018
 //         . minor cleanup.
 //
+// Version 1.2.4 : Jan. 21, 2019
+//         . increase diameter and counterflow rate limits.
+//         . If hold a constant temperature during whirlpool, use immersion
+//           chiller to reach this target temperature.
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -208,7 +213,7 @@ this.computeIBU_mIBU = function() {
   }
 
   console.log("hold temp during hop stand? " + holdTempCheckbox +
-              ", hold temp is " + holdTemp);
+              ", hold temp is " + holdTemp.toFixed(4));
   // get forced cooling function decay rate or transfer rate
   if (coolingMethod == "forcedDecayCounterflow") {
     xferRate = ibu.counterflowRate.value;
@@ -220,6 +225,13 @@ this.computeIBU_mIBU = function() {
     decayRate = ibu.icebathDecayFactor.value;
     console.log("cooling method = " + coolingMethod + ", rate = " + decayRate);
   }
+
+  // if counterflow chiller, but we're holding a temperature during whirlpool,
+  // use immersion chiller decay rate for initial cooling.
+  if (coolingMethod == "forcedDecayCounterflow" && holdTempCheckbox) {
+    decayRate = ibu.immersionDecayFactor.value;
+  }
+
   console.log("IBU scaling factor = " + ibu.scalingFactor.value +
               ", useSolubilityLimit = " + useSolubilityLimit);
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
@@ -244,14 +256,14 @@ this.computeIBU_mIBU = function() {
   initVolume = postBoilVolume +
                (ibu.evaporationRate.value/60.0 * boilTime);
   console.log("volume at first hops addition = " +
-              postBoilVolume + " + (" + ibu.evaporationRate.value +
-              "/60.0 * " + boilTime + ") = " + initVolume);
+              postBoilVolume.toFixed(4) + " + (" + ibu.evaporationRate.value +
+              "/60.0 * " + boilTime + ") = " + initVolume.toFixed(4));
   averageVolume = (initVolume + postBoilVolume) / 2.0;
   OGpoints = (ibu.OG.value - 1.0) * 1000.0;
   SGpoints = OGpoints * postBoilVolume / averageVolume;
   SG = (SGpoints / 1000.0) + 1.0;
   console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
-              postBoilVolume + " and initial volume is " +
+              postBoilVolume.toFixed(4) + " and initial volume is " +
               initVolume.toFixed(4) + ", so *average* gravity is " +
               SG.toFixed(4));
 
@@ -287,7 +299,6 @@ this.computeIBU_mIBU = function() {
   currVolume = initVolume;
   holdTempCounter = 0.0;
   whirlpoolTime = ibu.whirlpoolTime.value;
-  if (holdTempCheckbox) whirlpoolTime = 0.0;
   for (t = boilTime; finished == 0; t = t - integrationTime) {
     // check to see if add hops at this time point.
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
@@ -307,7 +318,7 @@ this.computeIBU_mIBU = function() {
           AAinit = 0.0;
         }
         console.log("AA=" + AA + ", w=" + weight + ", vol=" +
-                    postBoilVolume);
+                    postBoilVolume.toFixed(4));
         console.log("at time " + t.toFixed(3) + ", adding hops addition " +
                     hopIdx + " with [AA] = " + AAinit.toFixed(2) +
                     " to existing [AA] = " + AAconcent.toFixed(2));
@@ -378,8 +389,9 @@ this.computeIBU_mIBU = function() {
     if (t < 0) {
       postBoilTime = t * -1.0;
       // if counterflow or not yet done with whirlpool, get temp from cooling fn
-      if (coolingMethod == "forcedDecayCounterflow" ||
-          postBoilTime < whirlpoolTime) {
+      if ((coolingMethod == "forcedDecayCounterflow" ||
+          postBoilTime < whirlpoolTime) &&
+          (!holdTempCheckbox || (holdTempCheckbox && doneHoldTemp))) {
         if (!isTempDecayLinear) {
           tempK = (ibu.tempExpParamA.value *
                      Math.exp(-1.0 * ibu.tempExpParamB.value * postBoilTime)) +
@@ -402,18 +414,37 @@ this.computeIBU_mIBU = function() {
         tempNoBase = tempNoBase + (-1.0*decayRate*tempNoBase*integrationTime);
         tempK = tempNoBase + icebathBaseTemp;
       }
-      // prevent numerical errors at <= 0 Kelvin
-      if (tempK <= 1.0) tempK = 1.0;
 
-      // if hold temperature during hop stand, do so now
+      // if hold temperature during hop stand, see if need to cool to target
+      if (holdTempCheckbox && tempK > holdTempK && !doneHoldTemp) {
+        // if cool to target, use immersion chiller decay factor
+        // regardless of the post-whirlpool cooling method
+        tempNoBase = tempK - immersionChillerBaseTemp;
+        tempNoBase = tempNoBase + (-1.0*decayRate*tempNoBase*integrationTime);
+        tempK = tempNoBase + immersionChillerBaseTemp;
+        whirlpoolTime += integrationTime;
+        // console.log("POST-BOIL quickly cool to target " +
+                    // (holdTempK-273.15).toFixed(2) +
+                    // ", current temp = " + (tempK-273.15).toFixed(2) +
+                    // ", WP time now " + whirlpoolTime.toFixed(2));
+      }
+
+      // if hold temperature during hop stand, and reached target temp, hold it
       if (holdTempCheckbox && tempK <= holdTempK && !doneHoldTemp) {
         holdTempCounter += integrationTime;
         tempK = holdTempK;
-        if (holdTempCounter > ibu.whirlpoolTime.value) {
+        // console.log("POST-BOIL HOLDING target " +
+                    // (holdTempK-273.15).toFixed(2) +
+                    // ", current temp = " + (tempK-273.15).toFixed(2) +
+                    // ", WP time now " + whirlpoolTime.toFixed(2));
+        if (holdTempCounter > whirlpoolTime) {
           doneHoldTemp = true;
+          console.log("POST-BOIL WHIRLPOOL DONE!!");
         }
       }
 
+      // prevent numerical errors at <= 0 Kelvin
+      if (tempK <= 1.0) tempK = 1.0;
       tempC = common.convertKelvinToCelsius(tempK);
 
       // this function from post 'an analysis of sub-boiling hop utilization'

@@ -17,6 +17,10 @@
 //                                In hop additions array, add variety, beta
 //                                acids, hop form, freshness factor, and
 //                                percent loss after 6 months at room temp.
+// Version 1.2.4 : Jan 21, 2019 : increase diameter and counterflow rate limits.
+//                                If hold a constant temperature during
+//                                whirlpool, use immersion chiller to reach
+//                                this target temperature.
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -195,7 +199,7 @@ ibu._construct = function() {
   this.kettleDiameter.minPrecision = 1;
   this.kettleDiameter.display = "";
   this.kettleDiameter.min = 0.0;
-  this.kettleDiameter.max = 100.0;
+  this.kettleDiameter.max = 500.0;
   this.kettleDiameter.description = "kettle diameter";
   this.kettleDiameter.defaultValue = 36.83;
   this.kettleDiameter.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB ];
@@ -213,7 +217,7 @@ ibu._construct = function() {
   this.kettleOpening.minPrecision = 1;
   this.kettleOpening.display = "";
   this.kettleOpening.min = 0.0;
-  this.kettleOpening.max = 100.0;
+  this.kettleOpening.max = 500.0;
   this.kettleOpening.description = "kettle opening";
   this.kettleOpening.defaultValue = 36.83;
   this.kettleOpening.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB ];
@@ -478,7 +482,7 @@ ibu._construct = function() {
   this.counterflowRate.minPrecision = 1;
   this.counterflowRate.display = "";
   this.counterflowRate.min = 0.01;
-  this.counterflowRate.max = 200.0;
+  this.counterflowRate.max = 500.0;
   this.counterflowRate.description = "counterflow chiller flow rate";
   this.counterflowRate.defaultColor = defaultColor;
   this.counterflowRate.defaultValue = 2.082;
@@ -816,15 +820,6 @@ function checkHoldTemp(forcedDecayType) {
     ibu.holdTemp.updateFunction();
   }
 
-  if (checked && forcedDecayType.value == "forcedDecayCounterflow") {
-    window.alert("Holding a specific temperature during a hop stand " +
-                 "is not possible with a counterflow wort chiller.");
-    document.getElementById("ibu.holdTempCheckbox").checked = false;
-    ibu.holdTempCheckbox.value = false;
-    checked = false;
-    console.log("HOLD TEMP BOX CHECKED CHANGED TO " + checked);
-    common.setSavedValue(ibu.holdTempCheckbox, 1);
-  }
   if (document.getElementById(ibu.holdTempCheckbox.id)) {
     if (checked) {
       document.getElementById("holdTempColor").style.color = "black";
@@ -1467,6 +1462,9 @@ function get_immersionDecayFactor_default() {
 
   postBoilVolume = get_postBoilVolume();
   immersionDefault = 0.6075 * Math.exp(-0.0704 * postBoilVolume);
+  if (immersionDefault < 1.0e-10) {
+    immersionDefault = 1.0e-10;
+  }
   return immersionDefault;
 }
 
@@ -1479,6 +1477,9 @@ function get_icebathDecayFactor_default() {
 
   postBoilVolume = get_postBoilVolume();
   icebathDefault = 0.4071 * Math.exp(-0.0754 * postBoilVolume);
+  if (icebathDefault < 1.0e-10) {
+    icebathDefault = 1.0e-10;
+  }
   return icebathDefault;
 }
 

@@ -129,7 +129,7 @@ Version 1.2.3 : Dec 29, 2018
   Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 autocomplete="off" id="ibu.whirlpoolTime" onchange="common.set(ibu.whirlpoolTime, 1)"></span> minutes<br>
   <span style="margin-left:3em">
   <span id="holdTempColor" style="color:#b1b1cd">
-  <input type="checkbox" id="ibu.holdTempCheckbox" onchange="common.set(ibu.holdTempCheckbox, 1)"> quickly cool to <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.holdTemp" onchange="common.set(ibu.holdTemp, 1)"><span id="holdTempUnits">&deg;F</span>, then hold at this temperature during hop-stand time<br>
+  <input type="checkbox" id="ibu.holdTempCheckbox" onchange="common.set(ibu.holdTempCheckbox, 1)"> cool with immersion chiller to <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.holdTemp" onchange="common.set(ibu.holdTemp, 1)"><span id="holdTempUnits">&deg;F</span>; hold this temperature during hop-stand time<br>
   </span>
   </span>
   </p>
@@ -209,6 +209,8 @@ New functionality: automatically save and load parameter settings.<br>
 <b>1.2.1</b>: (2018-Jul-18) Add option to hold hop stand at constant temperature. Minor adjustments.<br>
 <b>1.2.2</b>: (2018-Sep-03) Add pH adjustment.  Add pre- or post-boil volume option.  Minor adjustments.<br>
 <b>1.2.3</b>: (2018-Dec-29) Minor adjustments; no effect on computations.<br>
+<b>1.2.4</b>: (2019-Jan-21) Minor adjustments. If hold whirlpool temperature, do initial
+cooling with immersion chiller.<br>
 </small>
 
 <p>
