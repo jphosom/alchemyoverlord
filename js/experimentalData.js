@@ -7,22 +7,22 @@
 // Note: Util. Exp. #2 didn't use any hops, to estimate the contribution of malt polyphenols to IBUs
 //
 
-var evaluateExperiments = [ ];  // null list means evaluate on all 
-// var evaluateExperiments = [ "Tinseth" ];
-// var evaluateExperiments = [ "Peacock" ];
-// var evaluateExperiments = [ "mIBU Exp. #2a", "mIBU Exp. #2b" ];
-// var evaluateExperiments = [ "mIBU Exp. #1", "mIBU Exp. #2a", "mIBU Exp. #2b", "mIBU Exp. #3" ];
-// var evaluateExperiments = [ "Util. Exp. #1", "Util. Exp. #3", "Util. Exp. #4" ];
-// var evaluateExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4" ];
-// var evaluateExperiments = [ "ConPel Exp. #1", "ConPel Exp. #2", "ConPel Exp. #3", "ConPel Exp. #4" ];
-// var evaluateExperiments = [ "Sol. pH 5.2" ];
-// var evaluateExperiments = [ "Hop Concentration Exp. #1" ];
-// var evaluateExperiments = [ "pH Exp. #1" ];
-// var evaluateExperiments = [ "CaCl2 Exp. #1" ];
+var evaluateTrainingExperiments = [ ];  // null list means evaluate on all 
+// var evaluateTrainingExperiments = [ "Tinseth" ];
+// var evaluateTrainingExperiments = [ "Peacock" ];
+// var evaluateTrainingExperiments = [ "mIBU Exp. #2a", "mIBU Exp. #2b" ];
+// var evaluateTrainingExperiments = [ "mIBU Exp. #1", "mIBU Exp. #2a", "mIBU Exp. #2b", "mIBU Exp. #3" ];
+// var evaluateTrainingExperiments = [ "Util. Exp. #1", "Util. Exp. #3", "Util. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "ConPel Exp. #1", "ConPel Exp. #2", "ConPel Exp. #3", "ConPel Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Sol. pH 5.2" ];
+// var evaluateTrainingExperiments = [ "Hop Concentration Exp. #1" ];
+// var evaluateTrainingExperiments = [ "pH Exp. #1" ];
+// var evaluateTrainingExperiments = [ "CaCl2 Exp. #1" ];
 
 // units *must* be all metric
 
-var data = {
+var trainingData = {
     "Tinseth": {
         "conditions":  [ "t=10","t=20","t=30","t=40","t=50","t=60","t=70","t=80","t=90" ], 
 			  // time_list is the list of times after the *first* addition of hops at which 
