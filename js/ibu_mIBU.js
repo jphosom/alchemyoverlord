@@ -234,7 +234,6 @@ this.computeIBU_mIBU = function() {
 
   console.log("IBU scaling factor = " + ibu.scalingFactor.value +
               ", useSolubilityLimit = " + useSolubilityLimit);
-  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
   console.log("Use pH : " + use_pH + " with " + preOrPostBoilpH +
               " pH = " + pH);
 
@@ -422,7 +421,14 @@ this.computeIBU_mIBU = function() {
         tempNoBase = tempK - immersionChillerBaseTemp;
         tempNoBase = tempNoBase + (-1.0*decayRate*tempNoBase*integrationTime);
         tempK = tempNoBase + immersionChillerBaseTemp;
+        // however, if tempExpParamA = 0 and C < holdTemp('C), this
+        // means to instantaneously cool the wort to the target temperature
+        if (ibu.tempExpParamA.value == 0 &&
+            ibu.tempExpParamC.value < holdTemp) {
+          tempK = holdTempK;
+        }
         whirlpoolTime += integrationTime;
+        whirlpoolTime = Number(whirlpoolTime.toFixed(4));
         // console.log("POST-BOIL quickly cool to target " +
                     // (holdTempK-273.15).toFixed(2) +
                     // ", current temp = " + (tempK-273.15).toFixed(2) +
@@ -439,7 +445,8 @@ this.computeIBU_mIBU = function() {
                     // ", WP time now " + whirlpoolTime.toFixed(2));
         if (holdTempCounter > whirlpoolTime) {
           doneHoldTemp = true;
-          console.log("POST-BOIL WHIRLPOOL DONE!!");
+          console.log("Done with post-boil whirlpool; total whirlpoolTime = " +
+                      whirlpoolTime);
         }
       }
 

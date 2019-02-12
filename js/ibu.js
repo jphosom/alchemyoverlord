@@ -405,7 +405,7 @@ ibu._construct = function() {
   this.tempExpParamC.max = 300.0;
   this.tempExpParamC.description = "linear temperature decay parameter 'C'";
   this.tempExpParamC.defaultColor = defaultColor;
-  this.tempExpParamC.defaultValue = 46.4;
+  this.tempExpParamC.defaultValue = 46.3;
 
   // tempDecayType
   this.tempDecayType.id = "ibu.tempDecayType";
