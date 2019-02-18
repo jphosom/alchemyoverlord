@@ -187,6 +187,7 @@ ibu._construct = function() {
   this.boilTemp.max = 250.0;
   this.boilTemp.description = "temperature at which water boils";
   this.boilTemp.defaultValue = 100.0;
+  this.boilTemp.dependents = [ ibu.tempLinParamB, ibu.tempExpParamC ];
 
   // kettleDiameter
   this.kettleDiameter.id = "ibu.kettleDiameter";
@@ -358,7 +359,8 @@ ibu._construct = function() {
   this.tempLinParamB.max = 300.0;
   this.tempLinParamB.description = "linear temperature decay parameter 'B'";
   this.tempLinParamB.defaultColor = defaultColor;
-  this.tempLinParamB.defaultValue = 100.1;
+  this.tempLinParamB.defaultFunction = get_tempLinParamB_default;
+  this.tempLinParamB.defaultArgs = "";
 
   // temperature decay exponential : param A
   this.tempExpParamA.id = "ibu.tempExpParamA";
@@ -375,6 +377,7 @@ ibu._construct = function() {
   this.tempExpParamA.description = "linear temperature decay parameter 'A'";
   this.tempExpParamA.defaultColor = defaultColor;
   this.tempExpParamA.defaultValue = 53.7;
+  this.tempExpParamA.dependents = [ ibu.tempLinParamB, ibu.tempExpParamC ];
 
   // temperature decay exponential : param B
   this.tempExpParamB.id = "ibu.tempExpParamB";
@@ -405,7 +408,8 @@ ibu._construct = function() {
   this.tempExpParamC.max = 300.0;
   this.tempExpParamC.description = "linear temperature decay parameter 'C'";
   this.tempExpParamC.defaultColor = defaultColor;
-  this.tempExpParamC.defaultValue = 46.3;
+  this.tempExpParamC.defaultFunction = get_tempExpParamC_default;
+  this.tempExpParamC.defaultArgs = "";
 
   // tempDecayType
   this.tempDecayType.id = "ibu.tempDecayType";
@@ -1347,12 +1351,16 @@ function hopAdditionsSet(updateFunction) {
 
   // initialize outputs to zero
   for (idx = 1; idx <= numAdd; idx++) {
-    ibu.add[arrayIdx].AAinit = 0.0;
-    ibu.add[arrayIdx].AAcurr = 0.0;
+    ibu.add[arrayIdx].AA_init_concent = 0.0;
+    ibu.add[arrayIdx].AA_dis = 0.0;
     ibu.add[arrayIdx].IBU = 0.0;
     ibu.add[arrayIdx].U = 0.0;
-    ibu.add[arrayIdx].IAAcurr = 0.0;
-    ibu.add[arrayIdx].IAAxfer = 0.0;
+    ibu.add[arrayIdx].IAA_dis = 0.0;
+    ibu.add[arrayIdx].IAA_xfer = 0.0;
+    ibu.add[arrayIdx].IAA_concent_wort = 0.0;
+	  ibu.add[arrayIdx].oAA_concent_boil = 0.0;
+	  ibu.add[arrayIdx].oBA_concent_boil = 0.0;
+	  ibu.add[arrayIdx].PP_beer = 0.0;
     ibu.add[arrayIdx].tempK = 0.0;
   }
   ibu.IBU = 0.0;
@@ -1399,7 +1407,11 @@ function hopAdditionsSet(updateFunction) {
     }
     table += "</tr> "
     table += "<tr> "
-    table += "<td class='outputTableCellName'>IBUs:</td> "
+	if (numAdd > 1) {
+      table += "<td class='outputTableCellName'>IBUs from each:</td> "
+	  } else {
+      table += "<td class='outputTableCellName'>IBUs from hops:</td> "
+	  }
     for (idx = 1; idx <= numAdd; idx++) {
       table += "<td class='outputTableCellValue' id='addIBUvalue"+idx+"'>0.00</td> "
     }
@@ -1484,6 +1496,17 @@ function get_icebathDecayFactor_default() {
 }
 
 //------------------------------------------------------------------------------
+// get default for linear temperature-decay, parameter B (base temp.)
+
+function get_tempLinParamB_default() {
+  var value = 0.0;
+
+  value = ibu.boilTemp.value;
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
 // get default for exponential temperature-decay, parameter B (rate constant)
 
 function get_tempExpParamB_default() {
@@ -1510,6 +1533,17 @@ function get_tempExpParamB_default() {
     AVR = effective_area / postBoilVolume;
   }
   value = (0.0002925 * AVR) + 0.0053834;
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+// get default for exponential temperature-decay, parameter C (base temp.)
+
+function get_tempExpParamC_default() {
+  var value = 0.0;
+
+  value = ibu.boilTemp.value - ibu.tempExpParamA.value;
 
   return value;
 }

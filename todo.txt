@@ -1,0 +1,84 @@
+TODO:
+
+ . IBU as a function of grain / beer color (?)
+
+ . redo IBU as function of age, with separate IAA and nonIAA components
+
+ . re-analyze with oAA nonzero, oBA close to zero, and vice versa, just for fun.
+
+ . add in functionality for pellets, fix testData.js
+
+ . add in hop variety pull-down
+
+ . on test data, searching for beta acids doesn't help as much as expected 
+   for ESB or XtraIPA.  Other cases, get good results just searching for
+   alpha acids.  This suggests the model isn't quite right, but it's
+   not clear what to do about it.
+
+ . test on chrome.
+
+ . add miscellaneous calculators
+ 		- evaporation rate from change in SG
+		- map Plato <-> SG
+		- correct SG based on temperature
+		- correct pH based on temperature
+		- correct volume based on temperature
+		- compute yeast pitching rate
+		- predict beer color from grains
+		- predict HSI <-> freshness factor <-> age, temp, storage factor, variety
+    - keg weight <-> volume for corny keg
+
+ . learn how to read/write local file
+ . add in ability to save state to file, read from file
+ . if add hops before start of boil... how to deal with this?
+
+ . create larger system
+        - create local parameters template (volume of trub left behind, etc)
+        - create local process template (output template)
+        - create larger system
+        - write results to file
+
+--------------------------------------------------------------------------------
+
+NOTES on larger system:
+
+grain : ** type (include extract)
+        ** color
+        ** %extract
+        ** weight
+        absorbing factor
+        volume contributing factor
+
+water : ** number of infusions
+        ** amount of water
+        ** pH of water
+        ** other water chemistry
+
+mash:   ** pH adjustment
+        ** single temp vs step mash
+                ** target time
+                ** target temp
+                   temp of water additions
+
+hops:   ** additions
+        absorbing factor
+        volume contributing factor
+
+boil:   volume vs. temp
+        ** evaporation rate
+        ** trub left
+        ** cooling (natural & forced)
+        ** target volume
+
+ferment: ** yeast type, amount
+        ** use secondary?  
+                if so, loss
+        ** temperature (max)
+
+conditioning: ** bottle vs keg
+        ** carbonation 
+        ** temperature (and time)
+        ** priming sugar 
+
+
+

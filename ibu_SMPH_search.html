@@ -1,0 +1,61 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+ibu_SMPH.html : HTML for AlchemyOverlord web page, SMPH sub-page
+Written by John-Paul Hosom
+Copyright © 2018 by John-Paul Hosom, all rights reserved.
+Version 1.0.1 : Nov. 22, 2018
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+  </head>
+  <body>
+
+ <a name="top_SMPH"></a>
+ Select search type:
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('initial')">initial search</button>
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('coarse')">coarse search</button>
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('fine')">fine search</button>
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('veryfine')">very fine search</button>
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('superfine')">super fine search</button>
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('none')">no search</button>
+ <br>
+ or perform testing:
+ <button type="button" onclick="SMPHsearch.increment_SMPH_search('test')">TEST</button>
+<div id="content">
+  <h2>Progress</h2>
+	<div id="progress"></div>
+  <h2>Results of SMPH Parameter Search</h2>
+	<div id="resultsTableDiv"></div>
+
+</div>
+
+<script type="text/javascript" src="js/experimentalData.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/testData.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/parameterRanges.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_tinseth.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_SMPH.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_SMPH_search.js" charset="utf-8"></script>
+
+<script>
+SMPHsearch.init_SMPH_search();
+</script>
+
+<br>
+<hr>
+<small>
+<a name="versions"></a>
+<h4>Versions:</h4>
+<b>1.0.1</b>: (2018-Nov-22)  Initial version.<br>
+</small>
+
+<p>
+<small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.</small>
+</p>
+</center>
+  </body>
+</html>
