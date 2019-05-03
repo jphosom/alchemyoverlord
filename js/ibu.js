@@ -200,7 +200,7 @@ ibu._construct = function() {
   this.kettleDiameter.minPrecision = 1;
   this.kettleDiameter.display = "";
   this.kettleDiameter.min = 0.0;
-  this.kettleDiameter.max = 500.0;
+  this.kettleDiameter.max = 1000.0;
   this.kettleDiameter.description = "kettle diameter";
   this.kettleDiameter.defaultValue = 36.83;
   this.kettleDiameter.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB ];
@@ -218,7 +218,7 @@ ibu._construct = function() {
   this.kettleOpening.minPrecision = 1;
   this.kettleOpening.display = "";
   this.kettleOpening.min = 0.0;
-  this.kettleOpening.max = 500.0;
+  this.kettleOpening.max = 1000.0;
   this.kettleOpening.description = "kettle opening";
   this.kettleOpening.defaultValue = 36.83;
   this.kettleOpening.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB ];
@@ -266,7 +266,7 @@ ibu._construct = function() {
   this.wortVolume.minPrecision = 2;
   this.wortVolume.display = "";
   this.wortVolume.min = 0.0;
-  this.wortVolume.max = 5000.0;
+  this.wortVolume.max = 10000.0;
   this.wortVolume.description = "wort volume";
   this.wortVolume.defaultValue = 19.8734025;
   this.wortVolume.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
@@ -309,7 +309,7 @@ ibu._construct = function() {
   this.wortLossVolume.minPrecision = 2;
   this.wortLossVolume.display = "";
   this.wortLossVolume.min = 0.0;
-  this.wortLossVolume.max = 500.0;
+  this.wortLossVolume.max = 1000.0;
   this.wortLossVolume.description = "volume of wort and trub left in kettle";
   this.wortLossVolume.defaultValue = 0.9463525;
 
@@ -890,7 +890,7 @@ function setTempDecayType() {
     if (document.getElementById("tempDecayFormula")) {
       document.getElementById('tempDecayFormula').innerHTML =
         "<span id=\"tempExpParamA_field\">xxx</span>"+
-        "  x exp(-1 &times; <span id=\"tempExpParamB_field\">"+
+        "  &times; exp(-1 &times; <span id=\"tempExpParamB_field\">"+
         "xxx</span> &times; time) + <span id=\"tempExpParamC_field\">xxx</span>";
     }
     common.set(ibu.tempExpParamA, 0);
@@ -1410,7 +1410,7 @@ function hopAdditionsSet(updateFunction) {
 	if (numAdd > 1) {
       table += "<td class='outputTableCellName'>IBUs from each:</td> "
 	  } else {
-      table += "<td class='outputTableCellName'>IBUs from hops:</td> "
+      table += "<td class='outputTableCellName'>IBUs:</td> "
 	  }
     for (idx = 1; idx <= numAdd; idx++) {
       table += "<td class='outputTableCellValue' id='addIBUvalue"+idx+"'>0.00</td> "

@@ -1248,5 +1248,60 @@ var trainingData = {
 
         ]
     },
+    
+    "Protein Exp. #1": {
+        "conditions":           [ "A10",   "A20",   "A30",   "A40",   "B10",   "B20",   "B30",   "B40" ],
+        "IBU_list":             [ 10.2,    14.2,    19.6,    24.1,    13.5,    18.8,    22.4,    27.5 ],
+        "IBU_list_onlyB":       [ 13.5,    18.8,    22.4,    27.5,    13.5,    18.8,    22.4,    27.5 ],
+        "IBU_list_onlyA":       [ 10.2,    14.2,    19.6,    24.1,    10.2,    14.2,    19.6,    24.1 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 12.23,   12.21,   12.19,   12.17,   12.23,   12.21,   12.19,   12.17 ],
+        "OG_list":              [ 1.0428,  1.0429,  1.0429,  1.0430,  1.0428,  1.0429,  1.0429,  1.0430 ],
+
+        // comet package rating AA 10.0%; analysis = AA=10.80%, BA=3.92%, HSI=0.25
+        //                      analysis close to time of experiment: AA=9.70%, BA=3.71%, HSI=0.35
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [ 10.00,  3.92, "cones", 0.90,  37.43,  20.91,    40 ],
+
+        "timeToFirstAddition":  5,     // wait 10 minutes after start of boil
+        "evaporationRate":      0.09,  // (12.23 - 12.17) / (40min duration) * 60
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.65,
+        "preBoilSG":            1.0425,
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  10.0,
+                "method":   "value",
+                "low":      9.5,
+                "high":     10.8,
+                "inc":      0.10,
+            },
+
+            {
+                "param":    "BA1",
+                "default":  3.92,
+                "method":   "value",
+                "low":      3.92,
+                "high":     3.92,
+                "inc":      0.25,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.85,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+
+        ]
+    },
 };
 

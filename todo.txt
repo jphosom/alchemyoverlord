@@ -1,5 +1,7 @@
 TODO:
 
+ . bug in SMPH code: check/uncheck pH doesn't affect results
+
  . IBU as a function of grain / beer color (?)
 
  . redo IBU as function of age, with separate IAA and nonIAA components
