@@ -324,18 +324,20 @@ function compute_RF_IAA_pH(ibu) {
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
   var RF_pH = 1.0;
 
-  // If pre-boil pH, estimate the post-boil pH which is the
-  // one we want to base losses on.  Estimate that the pH drops by
-  // about 0.1 units per hour... this is a ballpark estimate.
-  if (preOrPostBoilpH == "preBoilpH") {
-    preBoilpH = pH;
-    pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
-  }
+  if (ibu.pHCheckbox.value) {
+    // If pre-boil pH, estimate the post-boil pH which is the
+    // one we want to base losses on.  Estimate that the pH drops by
+    // about 0.1 units per hour... this is a ballpark estimate.
+    if (preOrPostBoilpH == "preBoilpH") {
+      preBoilpH = pH;
+      pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
+    }
 
-  // formula from blog post 'The Effect of pH on Utilization and IBUs'
-  RF_pH = (0.071 * pH) + 0.592;
-  if (SMPH.verbose > 5) {
-    console.log("pH = " + pH + ", RF for IAA = " + RF_pH.toFixed(4));
+    // formula from blog post 'The Effect of pH on Utilization and IBUs'
+    RF_pH = (0.071 * pH) + 0.592;
+    if (SMPH.verbose > 5) {
+      console.log("pH = " + pH + ", RF for IAA = " + RF_pH.toFixed(4));
+    }
   }
 
   return RF_pH;
@@ -1034,21 +1036,23 @@ function compute_LF_nonIAA_pH(ibu) {
   var preBoilpH = 0.0;
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
 
-  // If pre-boil pH, estimate the post-boil pH which is the
-  // one we want to base losses on.  Estimate that the pH drops by
-  // about 0.1 units per hour... this is a ballpark estimate.
-  if (preOrPostBoilpH == "preBoilpH") {
-    if (SMPH.verbose > 2) {
-      console.log("mapping pre-boil pH to post-boil pH");
+  if (ibu.pHCheckbox.value) {
+    // If pre-boil pH, estimate the post-boil pH which is the
+    // one we want to base losses on.  Estimate that the pH drops by
+    // about 0.1 units per hour... this is a ballpark estimate.
+    if (preOrPostBoilpH == "preBoilpH") {
+      if (SMPH.verbose > 2) {
+        console.log("mapping pre-boil pH to post-boil pH");
+      }
+      preBoilpH = pH;
+      pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
     }
-    preBoilpH = pH;
-    pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
-  }
-
-  // formula from blog post 'The Effect of pH on Utilization and IBUs'
-  LF_pH = (0.8948 * pH) - 4.145;
-  if (SMPH.verbose > 5) {
-    console.log("pH = " + pH + ", LF for nonIAA = " + LF_pH.toFixed(4));
+  
+    // formula from blog post 'The Effect of pH on Utilization and IBUs'
+    LF_pH = (0.8948 * pH) - 4.145;
+    if (SMPH.verbose > 5) {
+      console.log("pH = " + pH + ", LF for nonIAA = " + LF_pH.toFixed(4));
+    }
   }
 
   return LF_pH;
