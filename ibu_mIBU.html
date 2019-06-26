@@ -10,6 +10,8 @@ Version 1.2.0 : Jul 15, 2018
 Version 1.2.1 : Jul 18, 2018
 Version 1.2.2 : Sep  3, 2018
 Version 1.2.3 : Dec 29, 2018
+Version 1.2.4 : Jan 21, 2019
+Version 1.2.5 : Jun 25, 2019
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -37,6 +39,10 @@ Version 1.2.3 : Dec 29, 2018
   of the Tinseth formula, based on the experiment described in
   <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
   The Effect of pH on Utilization and IBUs</a>.
+  The (optional) correction of IBU values based on krausen loss is yet another modification,
+  based on the experiment described in
+  <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
+  The Impact of Krausen Loss on IBUs</a>.
   This calculator is described in more detail in
   <a href="https://alchemyoverlord.wordpress.com/2018/05/07/an-on-line-calculator-for-the-mibu-technique/">
   An On-Line Calculator for the mIBU Technique</a>.
@@ -177,6 +183,29 @@ Version 1.2.3 : Dec 29, 2018
   <div id="hopsAdditionsTableDiv">
   </div>
 
+  <p>
+  <b>Fermentation:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Krausen Loss:</td>
+    <td><select style="width:24em;" id="ibu.krausen" onchange="common.set(ibu.krausen, 1)">
+    <option value="1.042">mix krausen back in; no loss</option>
+    <option value="1.021">minor krausen deposits</option>
+    <option value="1.000" selected>medium krausen deposits (default)</option>
+    <option value="0.979">heavy krausen deposits</option>
+    <option value="0.958">very heavy krausen deposits</option>
+    <option value="0.938">blow off krausen with slow fermentation</option>
+    <option value="0.833">blow off krausen with normal fermentation</option>
+    <option value="0.729">blow off krausen with vigorous fermentation</option>
+    </select>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+
   <h3>Outputs:</h3>
   <div id="outputTableDiv">
   </div>
@@ -211,6 +240,7 @@ New functionality: automatically save and load parameter settings.<br>
 <b>1.2.3</b>: (2018-Dec-29) Minor adjustments; no effect on computations.<br>
 <b>1.2.4</b>: (2019-Jan-21) Minor adjustments. If hold whirlpool temperature, do initial
 cooling with immersion chiller.<br>
+<b>1.2.5</b>: (2019-Jun-25) Add option for krausen loss.<br>
 </small>
 
 <p>

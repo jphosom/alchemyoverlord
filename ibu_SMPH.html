@@ -20,13 +20,13 @@ Version 1.0.1 : Nov. 22, 2018
   method, which is described in a blog post
   <a href="BADLINK">
   "BAD LINK"</a>.  This method accounts separately for the contributions
-	from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds" (or 
-	nonIAA).  It is based in large part on work published by Val Peacock, 
-	Tom Shellhammer, and Mark Malowicki, as well as my own experiments.  This 
-	calculator takes into account utilization from any hop stand or whirlpool, 
-	as well as the time it takes to cool the wort using an immersion chiller, 
-	counterflow chiller, or ice bath.</p>
-	<p>This calculator is described in more detail in
+  from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds" (or
+  nonIAA).  It is based in large part on work published by Val Peacock,
+  Tom Shellhammer, and Mark Malowicki, as well as my own experiments.  This
+  calculator takes into account utilization from any hop stand or whirlpool,
+  as well as the time it takes to cool the wort using an immersion chiller,
+  counterflow chiller, or ice bath.</p>
+  <p>This calculator is described in more detail in
   <a href="BADLINK">
   BAD LINK</a>.
   </p>
@@ -35,33 +35,33 @@ Version 1.0.1 : Nov. 22, 2018
   For the temperature decay functions, default values are shown in
   <font color="#94476b">grayish-red</font>.
   The defaults should yield reasonable results for most homebrewing scenarios.
-  The defaults are based on the wort volume, kettle diameter, and kettle 
-	opening diameter.  For most homebrewers, the kettle diameter and the 
-	opening diameter are the same (with an uncovered kettle).  
-	The "exponential decay" function is probably somewhat more accurate than 
-	the "linear" function, but the linear function is easier to conceptualize 
-	(e.g. a decrease of 1.74&deg;F per minute).  If your measured decrease in 
-	wort temperature is not modeled well by these defaults, feel free to 
-	change them.  To get back to a default value, enter 'd'.
+  The defaults are based on the wort volume, kettle diameter, and kettle
+  opening diameter.  For most homebrewers, the kettle diameter and the
+  opening diameter are the same (with an uncovered kettle).
+  The "exponential decay" function is probably somewhat more accurate than
+  the "linear" function, but the linear function is easier to conceptualize
+  (e.g. a decrease of 1.74&deg;F per minute).  If your measured decrease in
+  wort temperature is not modeled well by these defaults, feel free to
+  change them.  To get back to a default value, enter 'd'.
   </p>
 
   <h3>Inputs:</h3>
-	<p>
-	<b>Global:</b>
+  <p>
+  <b>Global:</b>
   <table style="margin-left:3em">
   <tbody>
-	<tr>
-	  <td colspan="2">Input Units:
+  <tr>
+    <td colspan="2">Input Units:
     <input type="radio" value="metric" id="metric" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off">metric or
     <input type="radio" value="imperial" id="imperial" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off" checked>imperial (e.g. gallons, ounces)
-	  </td>
-	</tr>
+    </td>
+  </tr>
   <tr>
-	<td>Boiling Point of Water (<span id="boilTempUnits">&deg;F</span>):</td>
-	<td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.boilTemp" onchange="common.set(ibu.boilTemp, 1)"></td>
-	</tr>
-	</tbody>
-	</table>
+  <td>Boiling Point of Water (<span id="boilTempUnits">&deg;F</span>):</td>
+  <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.boilTemp" onchange="common.set(ibu.boilTemp, 1)"></td>
+  </tr>
+  </tbody>
+  </table>
   </p>
 
   <p>
@@ -185,13 +185,27 @@ Version 1.0.1 : Nov. 22, 2018
   <table style="margin-left:3em">
   <tbody>
   <tr>
+    <td>Krausen Loss:</td>
+    <td><select style="width:24em;" id="ibu.krausen" onchange="common.set(ibu.krausen, 1)">
+    <option value="1.042">mix krausen back in; no loss</option>
+    <option value="1.021">minor krausen deposits</option>
+    <option value="1.000" selected>medium krausen deposits (default)</option>
+    <option value="0.979">heavy krausen deposits</option>
+    <option value="0.958">very heavy krausen deposits</option>
+    <option value="0.938">blow off krausen with slow fermentation</option>
+    <option value="0.833">blow off krausen with normal fermentation</option>
+    <option value="0.729">blow off krausen with vigorous fermentation</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
     <td>Yeast Flocculation:</td>
-		<td><select style="width:11em;" id="ibu.flocculation" onchange="common.set(ibu.flocculation, 1)">
-		<option value="high">high</option>
-		<option value="medium">medium</option>
-		<option value="low">low</option>
-		</select>
-		</td>
+    <td><select style="width:11em;" id="ibu.flocculation" onchange="common.set(ibu.flocculation, 1)">
+    <option value="high">high</option>
+    <option value="medium">medium</option>
+    <option value="low">low</option>
+    </select>
+    </td>
   </tr>
   <tr>
     <td>Filtering (micron rating):</td>

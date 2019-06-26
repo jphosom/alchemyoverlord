@@ -1,21 +1,12 @@
 TODO:
 
- . bug in SMPH code: check/uncheck pH doesn't affect results
-
- . IBU as a function of grain / beer color (?)
+ . add krausen information to development data?
 
  . redo IBU as function of age, with separate IAA and nonIAA components
-
- . re-analyze with oAA nonzero, oBA close to zero, and vice versa, just for fun.
 
  . add in functionality for pellets, fix testData.js
 
  . add in hop variety pull-down
-
- . on test data, searching for beta acids doesn't help as much as expected 
-   for ESB or XtraIPA.  Other cases, get good results just searching for
-   alpha acids.  This suggests the model isn't quite right, but it's
-   not clear what to do about it.
 
  . test on chrome.
 

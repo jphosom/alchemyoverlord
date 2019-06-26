@@ -45,6 +45,9 @@
 //         . If hold a constant temperature during whirlpool, use immersion
 //           chiller to reach this target temperature.
 //
+// Version 1.2.5 : Jun. 25, 2019
+//         . add option for krausen loss
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -98,6 +101,7 @@ this.initialize_mIBU = function() {
   common.set(ibu.pH, 0);
   common.set(ibu.preOrPostBoilpH, 0);
   common.set(ibu.numAdditions, 0);
+  common.set(ibu.krausen, 0);
 
   mIBU.computeIBU_mIBU();
 
@@ -137,6 +141,8 @@ this.computeIBU_mIBU = function() {
   var holdTempCounter = 0.0;
   var holdTempK = 0.0;
   var hopIdx = 0;
+  var iaaKrausenLoss = 0.0;
+  var iaaKrausenLossFactor = 0.0;
   var IAAlossFactor = 0.0;
   var IAAutil = 0.0;
   var IBU = 0.0;
@@ -150,6 +156,8 @@ this.computeIBU_mIBU = function() {
   var k = 0.0;
   var linParamB_Kelvin = 0.0;
   var nonIAAlossFactor = 0.0;
+  var nonIaaKrausenLoss = 0.0;
+  var nonIaaKrausenLossFactor = 0.0;
   var nonIAAutil = 0.0;
   var OGpoints = 0.0;
   var pH = ibu.pH.value;
@@ -588,6 +596,48 @@ this.computeIBU_mIBU = function() {
     console.log("  modified total IBU  = " + IBU.toFixed(2));
     console.log("");
   }
+
+  // adjust IBUs based on krausen loss
+  console.log("Adjusting IBUs based on krausen loss...");
+  // separate utilization into IAA and nonIAA components (very approximate).
+  // We'll assume that the boil gravity affects IAA and nonIAA equally,
+  // so we include the "bigness factor" in the threshold for IAA
+  bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
+
+  // compute loss factors for IAA and nonIAA
+  iaaKrausenLossFactor = Number(ibu.krausen.value);
+  iaaKrausenLoss = (1.0 - iaaKrausenLossFactor);  // in percent
+  nonIaaKrausenLoss = iaaKrausenLoss * 2.27;      // from krausen blog post
+  nonIaaKrausenLossFactor = (1.0 - nonIaaKrausenLoss);
+  console.log("  IAA loss factor = " + iaaKrausenLossFactor.toFixed(4));
+  console.log("  nonIAA loss factor = " + nonIaaKrausenLossFactor.toFixed(4));
+
+  // Adjust utilization and IBUs for each separate addition.
+  // Accumulate separate additions for total
+  totalU = 0.0;
+  totalIBU = 0.0;
+  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    nonIAAutil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
+    IAAutil = ibu.add[hopIdx].U - nonIAAutil;
+    // if estimated utilization from IAA < 0, reduce nonIAA utilization.
+    // another option would be to just set IAA utilization to zero.
+    if (IAAutil < 0.0) {
+      nonIAAutil += IAAutil;
+      IAAutil = 0.0;
+    }
+    IAAutil *= iaaKrausenLossFactor;
+    nonIAAutil *= nonIaaKrausenLossFactor;
+    ibu.add[hopIdx].U = IAAutil + nonIAAutil;
+    ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
+
+    totalU += ibu.add[hopIdx].U;
+    totalIBU += ibu.add[hopIdx].IBU;
+  }
+  U = totalU;
+  IBU = totalIBU;
+  console.log("  modified total util = " + U.toFixed(4));
+  console.log("  modified total IBU  = " + IBU.toFixed(2));
+  console.log("");
 
   // adjust IBUs based on wort/trub loss and topoff volume added
   finalVolume = postBoilVolume - ibu.wortLossVolume.value;

@@ -10,7 +10,7 @@
 //         which has then been modified to implement the SMPH method.
 //
 // TODO:
-// 1. IBU as a function of wort/beer color?
+// 1. change IBU based on OG
 // 2. pellets: adjustment from cones
 // 3. pellets: oAA percent init for pellets (and oBA percent init for pellets)
 // 4. add hop variety via pulldown menu
@@ -70,6 +70,7 @@ this.initialize_SMPH = function() {
   common.set(ibu.pH, 0);
   common.set(ibu.preOrPostBoilpH, 0);
   common.set(ibu.numAdditions, 0);
+  common.set(ibu.krausen, 0);
   common.set(ibu.flocculation, 0);
   common.set(ibu.filtering, 0);
   common.set(ibu.beerAge_days, 0);
@@ -91,16 +92,16 @@ this.initialize_SMPH = function() {
   this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
 
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
-  this.LF_boil            = 0.57;   // SEARCH
+  this.LF_boil            = 0.56;   // SEARCH
 
   this.oAA_storageFactor  = 0.022;  // estimate from Maye data
-  this.oAA_boilFactor     = 0.22;   // SEARCH
-  this.scale_oAAloss      = 0.21;   // SEARCH
+  this.oAA_boilFactor     = 0.24;   // SEARCH
+  this.scale_oAAloss      = 0.20;   // SEARCH
   this.scale_oAA          = 1.093;  // from Maye, Figure 7
 
   this.oBA_storageFactor  = 0.00;   // SEARCH
   this.oBA_boilFactor     = 0.10;   // from Stevens p. 500 max 10%
-  this.scale_oBAloss      = 0.70;   // SEARCH
+  this.scale_oBAloss      = 0.75;   // SEARCH
   this.scale_oBA          = 1.176;  // from Hough p. 491: 1/0.85
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
@@ -155,6 +156,7 @@ this.computeIBU_SMPH = function() {
               ", OG = " + ibu.OG.value);
     console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
+    console.log("krausen factor = " + ibu.krausen.value);
   }
 
   // initialize outputs from each hop addition to zero
@@ -243,7 +245,10 @@ this.computeIBU_SMPH = function() {
               ", maltPP = " + maltPP_beer.toFixed(3))
   }
 
-  U = IAA_beer / totalAA;
+  if (totalAA > 0)
+    U = IAA_beer / totalAA;
+  else
+    U = 0.0;
   ibu.IBU = IBU * ibu.scalingFactor.value;
   ibu.AA = totalAA;
   ibu.IAA = IAA_beer;
@@ -268,7 +273,11 @@ this.computeIBU_SMPH = function() {
     oAA_beer = compute_oAA_beer(ibu.add[hopIdx].oAA_concent_boil, LF_oAA);
     oBA_beer = compute_oBA_beer(ibu.add[hopIdx].oBA_concent_boil, LF_oBA);
     hopPP_beer = ibu.add[hopIdx].PP_beer;
-    ibu.add[hopIdx].U = IAA_beer / ibu.add[hopIdx].AA_init_concent;
+    if (ibu.add[hopIdx].AA_init_concent > 0) {
+      ibu.add[hopIdx].U = IAA_beer / ibu.add[hopIdx].AA_init_concent;
+      } else {
+      ibu.add[hopIdx].U = 0.0;
+      }
     IBU = (51.2/69.68) * (IAA_beer + ((oAA_beer * SMPH.scale_oAA) +
                                     (oBA_beer * SMPH.scale_oBA) +
                                     (hopPP_beer * SMPH.scale_hopPP)));
@@ -389,7 +398,7 @@ function compute_LF_OG_Noonan(ibu) {
 //
 //   LF_hopForm = 1.0; // baseline: "extract", as used by Malowicki
 //
-//   if (ibu.hopForm.value == "looseCones" || 
+//   if (ibu.hopForm.value == "looseCones" ||
 //       ibu.hopForm.value == "baggedCones") {
 //     LF_hopForm *= SMPH.hop_nonExtract;
 //   }
@@ -476,7 +485,7 @@ function compute_LF_IAA(ibu) {
               ", LF_package=" + compute_LF_package(ibu).toFixed(4));
   }
   LF_IAA = SMPH.LF_boil * compute_LF_OG_Noonan(ibu) *
-           compute_LF_ferment(ibu) *
+           compute_LF_ferment(ibu) * ibu.krausen.value *
            compute_LF_package(ibu);
   if (SMPH.verbose > 3) {
     console.log("      LF IAA : " + LF_IAA.toFixed(4));
@@ -1047,7 +1056,7 @@ function compute_LF_nonIAA_pH(ibu) {
       preBoilpH = pH;
       pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
     }
-  
+
     // formula from blog post 'The Effect of pH on Utilization and IBUs'
     LF_pH = (0.8948 * pH) - 4.145;
     if (SMPH.verbose > 5) {
@@ -1059,7 +1068,31 @@ function compute_LF_nonIAA_pH(ibu) {
 }
 
 // -----------------------------------------------------------------------------
-// compute temperature at IBU addition, relative to boiling 
+// compute loss factor for nonIAA components caused by krausen loss
+
+function compute_LF_nonIAA_krausen(ibu) {
+  var LF_krausen = 1.0;
+  var IAA_krausen_loss_factor = ibu.krausen.value;
+  var IAA_krausen_loss = 0.0;
+  var nonIAA_krausen_loss = 0.0;
+  var nonIaaKrausenFactor = 2.27;  // from krausen experiment
+
+  IAA_krausen_loss = (1.0 - IAA_krausen_loss_factor); // in percent
+  nonIAA_krausen_loss = IAA_krausen_loss * nonIaaKrausenFactor;
+  LF_krausen = (1.0 - nonIAA_krausen_loss);
+
+  if (SMPH.verbose > 5) {
+    console.log("KRAUSEN: iaa factor = " + IAA_krausen_loss_factor +
+              ", iaa loss = " + IAA_krausen_loss +
+              ", nonIAA loss = " + nonIAA_krausen_loss +
+              ", nonIAA loss factor = " + LF_krausen);
+  }
+
+  return LF_krausen;
+}
+
+// -----------------------------------------------------------------------------
+// compute temperature at IBU addition, relative to boiling
 
 function compute_relativeTemp(ibu, hopIdx) {
   var relativeTemp = 0.0;
@@ -1150,13 +1183,14 @@ function compute_oAA_concent_boil(ibu) {
 
 // -----------------------------------------------------------------------------
 // compute loss factor (LF) for oxidized alpha acids (oAA), using
-// loss factor for IAA, non-IAA loss factor for pH, and an oAA-specific 
+// loss factor for IAA, non-IAA loss factor for pH, and an oAA-specific
 // relative scaling factor.  Maximum value is 1.0 (no loss)
 
 function compute_LF_oAA(ibu) {
   var LF_oAA = 0.0;
 
-  LF_oAA = compute_LF_IAA(ibu) * compute_LF_nonIAA_pH(ibu) * SMPH.scale_oAAloss;
+  LF_oAA = compute_LF_IAA(ibu) * compute_LF_nonIAA_pH(ibu) *
+           compute_LF_nonIAA_krausen(ibu) * SMPH.scale_oAAloss;
   if (LF_oAA > 1.0) LF_oAA = 1.0;
   if (SMPH.verbose > 3) {
     console.log("    LF oAA " + LF_oAA.toFixed(4));
@@ -1250,13 +1284,14 @@ function compute_oBA_concent_boil(ibu) {
 
 // -----------------------------------------------------------------------------
 // compute loss factor (LF) for oxidized beta acids (oBA), using
-// loss factor for IAA, non-IAA loss factor for pH, and an oBA-specific 
+// loss factor for IAA, non-IAA loss factor for pH, and an oBA-specific
 // relative scaling factor.  Maximum value is 1.0 (no loss)
 
 function compute_LF_oBA(ibu) {
   var LF_oBA = 0.0;
 
-  LF_oBA = compute_LF_IAA(ibu) * compute_LF_nonIAA_pH(ibu) * SMPH.scale_oBAloss;
+  LF_oBA = compute_LF_IAA(ibu) * compute_LF_nonIAA_pH(ibu) *
+           compute_LF_nonIAA_krausen(ibu) * SMPH.scale_oBAloss;
   if (LF_oBA > 1.0) LF_oBA = 1.0;
   if (SMPH.verbose > 3) {
     console.log("    LF oBA = " + LF_oBA.toFixed(4));
@@ -1302,7 +1337,8 @@ function compute_hopPP_beer(ibu) {
     PP_wort_add = SMPH.hopPPrating * ibu.add[hopIdx].weight.value * 1000.0 /
                           postBoilVolume;
     PP_addition = PP_wort_add * SMPH.LF_hopPP * compute_LF_nonIAA_pH(ibu) *
-               compute_LF_ferment(ibu) * compute_LF_package(ibu);
+               compute_LF_ferment(ibu) * compute_LF_nonIAA_krausen(ibu) *
+               compute_LF_package(ibu);
     ibu.add[hopIdx].PP_beer = PP_addition;
     PP_beer += PP_addition;
   }

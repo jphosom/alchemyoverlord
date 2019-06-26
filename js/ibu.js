@@ -21,6 +21,7 @@
 //                                If hold a constant temperature during
 //                                whirlpool, use immersion chiller to reach
 //                                this target temperature.
+// Version 1.2.5 : Jun 18, 2019 : add krausen loss factor
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -88,6 +89,8 @@ var ibu = ibu || {};
 //        . AA = alpha acid, in percent (scale 0 to 100)
 //        . weight = weight of hops added
 //        . boilTime = amount of time that hops spend in the boil (may be neg.)
+//    . krausen = krausen loss factor for IAA (normalized so that a value
+//          of 1.0 is 'medium' krausen deposits)
 //    . flocculation = degree of yeast flocculation (low, medium, high)
 //    . filtering = micron rating of the filter, or no filtering
 //    . beerAge_days = age of the beer, in days, measured from start of ferment.
@@ -147,6 +150,8 @@ ibu._construct = function() {
 
   this.add = [];  // array of hops additions
 
+
+  this.krausen              = new Object();
   this.flocculation         = new Object();
   this.filtering            = new Object();
   this.beerAge_days         = new Object();
@@ -580,6 +585,15 @@ ibu._construct = function() {
   this.preOrPostBoilpH.defaultValue = "postBoilpH";
   this.preOrPostBoilpH.additionalFunction = setPreOrPostBoilpH;
   this.preOrPostBoilpH.additionalFunctionArgs = "";
+
+  // krausen
+  this.krausen.id = "ibu.krausen";
+  this.krausen.inputType = "select";
+  this.krausen.value = 1.000;
+  this.krausen.userSet = 0;
+  this.krausen.display = "medium krausen deposits";
+  this.krausen.description = "krausen loss factor";
+  this.krausen.defaultValue = 1.000;
 
   // flocculation
   this.flocculation.id = "ibu.flocculation";
@@ -1358,9 +1372,9 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].IAA_dis = 0.0;
     ibu.add[arrayIdx].IAA_xfer = 0.0;
     ibu.add[arrayIdx].IAA_concent_wort = 0.0;
-	  ibu.add[arrayIdx].oAA_concent_boil = 0.0;
-	  ibu.add[arrayIdx].oBA_concent_boil = 0.0;
-	  ibu.add[arrayIdx].PP_beer = 0.0;
+    ibu.add[arrayIdx].oAA_concent_boil = 0.0;
+    ibu.add[arrayIdx].oBA_concent_boil = 0.0;
+    ibu.add[arrayIdx].PP_beer = 0.0;
     ibu.add[arrayIdx].tempK = 0.0;
   }
   ibu.IBU = 0.0;
@@ -1407,11 +1421,11 @@ function hopAdditionsSet(updateFunction) {
     }
     table += "</tr> "
     table += "<tr> "
-	if (numAdd > 1) {
+  if (numAdd > 1) {
       table += "<td class='outputTableCellName'>IBUs from each:</td> "
-	  } else {
+    } else {
       table += "<td class='outputTableCellName'>IBUs:</td> "
-	  }
+    }
     for (idx = 1; idx <= numAdd; idx++) {
       table += "<td class='outputTableCellValue' id='addIBUvalue"+idx+"'>0.00</td> "
     }
