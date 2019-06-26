@@ -605,7 +605,7 @@ this.computeIBU_mIBU = function() {
   bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
 
   // compute loss factors for IAA and nonIAA
-  iaaKrausenLossFactor = Number(ibu.krausen.value);
+  iaaKrausenLossFactor = ibu.getKrausenValue(ibu.krausen.value);
   iaaKrausenLoss = (1.0 - iaaKrausenLossFactor);  // in percent
   nonIaaKrausenLoss = iaaKrausenLoss * 2.27;      // from krausen blog post
   nonIaaKrausenLossFactor = (1.0 - nonIaaKrausenLoss);

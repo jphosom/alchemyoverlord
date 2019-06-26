@@ -471,6 +471,18 @@ function compute_LF_package(ibu) {
   return LF_package;
 }
 
+// -----------------------------------------------------------------------------
+// compute loss factor for IAA components caused by krausen loss
+
+function compute_LF_IAA_krausen(ibu) {
+  var description = ibu.krausen.value;
+  var LF_krausen = 1.0;
+
+  LF_krausen = ibu.getKrausenValue(description);
+
+  return LF_krausen;
+}
+
 //------------------------------------------------------------------------------
 // Compute overall loss factor (LF) for IAA, given loss factors caused by
 // the boil, gravity, fermentation, flocculation, filtering, and age of beer.
@@ -485,7 +497,7 @@ function compute_LF_IAA(ibu) {
               ", LF_package=" + compute_LF_package(ibu).toFixed(4));
   }
   LF_IAA = SMPH.LF_boil * compute_LF_OG_Noonan(ibu) *
-           compute_LF_ferment(ibu) * ibu.krausen.value *
+           compute_LF_ferment(ibu) * compute_LF_IAA_krausen(ibu) *
            compute_LF_package(ibu);
   if (SMPH.verbose > 3) {
     console.log("      LF IAA : " + LF_IAA.toFixed(4));
@@ -1071,12 +1083,13 @@ function compute_LF_nonIAA_pH(ibu) {
 // compute loss factor for nonIAA components caused by krausen loss
 
 function compute_LF_nonIAA_krausen(ibu) {
-  var LF_krausen = 1.0;
-  var IAA_krausen_loss_factor = ibu.krausen.value;
+  var IAA_krausen_loss_factor = 1.0;
   var IAA_krausen_loss = 0.0;
   var nonIAA_krausen_loss = 0.0;
   var nonIaaKrausenFactor = 2.27;  // from krausen experiment
+  var LF_krausen = 1.0;
 
+  IAA_krausen_loss_factor = ibu.getKrausenValue(ibu.krausen.value);
   IAA_krausen_loss = (1.0 - IAA_krausen_loss_factor); // in percent
   nonIAA_krausen_loss = IAA_krausen_loss * nonIaaKrausenFactor;
   LF_krausen = (1.0 - nonIAA_krausen_loss);

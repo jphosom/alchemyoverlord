@@ -589,11 +589,11 @@ ibu._construct = function() {
   // krausen
   this.krausen.id = "ibu.krausen";
   this.krausen.inputType = "select";
-  this.krausen.value = 1.000;
+  this.krausen.value = "medium krausen deposits (default)";
   this.krausen.userSet = 0;
-  this.krausen.display = "medium krausen deposits";
+  this.krausen.display = "medium krausen deposits (default)";
   this.krausen.description = "krausen loss factor";
-  this.krausen.defaultValue = 1.000;
+  this.krausen.defaultValue = "medium krausen deposits (default)";
 
   // flocculation
   this.flocculation.id = "ibu.flocculation";
@@ -1022,6 +1022,35 @@ function setPreOrPostBoilpH() {
 
   return;
 }
+
+//------------------------------------------------------------------------------
+// map krausen description to numerical value
+
+this.getKrausenValue = function(description) {
+  var value = 1.0;
+
+  if (description == "mix krausen back in; no loss")
+    value = 1.042;
+  else if (description == "minor krausen deposits")
+    value = 1.021;
+  else if (description == "medium krausen deposits (default)")
+    value = 1.000;
+  else if (description == "heavy krausen deposits")
+    value = 0.979;
+  else if (description == "very heavy krausen deposits")
+    value = 0.958;
+  else if (description == "blow off krausen with slow fermentation")
+    value = 0.938;
+  else if (description == "blow off krausen with normal fermentation")
+    value = 0.833;
+  else if (description == "blow off krausen with vigorous fermentation")
+    value = 0.729;
+  else {
+    console.log("ERROR: can't find suitable description for krausen loss");
+  }
+  return value;
+}
+
 
 //------------------------------------------------------------------------------
 
