@@ -914,10 +914,6 @@ function compute_IAA_concent_wort(ibu) {
             ibu.add[hopIdx].AA_dis = 0.0;
           }
 
-          // record the temperature at which hops were added, for later
-          // oAA and oBA estimates
-          ibu.add[hopIdx].tempK = tempK;
-
           if (SMPH.verbose > 2) {
             console.log("    [AA]_init = " + AA_init_concent.toFixed(4) +
                         ", [AA]_limit = " + AA_limit.toFixed(4) +
@@ -925,6 +921,9 @@ function compute_IAA_concent_wort(ibu) {
                         "'C, [AA]_dis = "+ AA_dis_concent.toFixed(4));
           }
         } // use solubility limit?
+        // record the temperature at which hops were added, for later
+        // oAA and oBA estimates
+        ibu.add[hopIdx].tempK = tempK;
       } // check for hop addition at this time
     } // evaluate all hop additions
 
@@ -1111,9 +1110,9 @@ function compute_relativeTemp(ibu, hopIdx) {
   var relativeTemp = 0.0;
   var minEffectiveTempK = 0.0;  // room temperature, degrees Kelvin
 
-  relativeTemp = 1.0;
+  relativeTemp = 0.0;
   if (!ibu.add[hopIdx].tempK) {
-    console.log("ERROR: temperature at hop addition not known");
+    console.log("ERROR: temperature at hop addition not known; assuming RT");
     return relativeTemp;
   }
 

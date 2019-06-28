@@ -48,6 +48,11 @@
 // Version 1.2.5 : Jun. 25, 2019
 //         . add option for krausen loss
 //
+// Version 1.2.6 : Jun. 28, 2019
+//         . adjust the way volume is used in IBU computations.  This change
+//           primarily affects IBUs with hopping rates at around 200 ppm.
+//           Also, add link to AlchemyOverlord blog page.
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -317,15 +322,13 @@ this.computeIBU_mIBU = function() {
       if (Math.round(t * 1000) == Math.round(additionTime * 1000)) {
         AA = ibu.add[hopIdx].AA.value / 100.0;
         weight = ibu.add[hopIdx].weight.value;
-        // note that AAinit is computed using postBoilVolume because
-        // we base IBU off of AAinit, and IBU should be relative to final vol.
-        if (postBoilVolume > 0) {
-          AAinit = AA * weight * 1000 / postBoilVolume;
+        if (currVolume > 0) {
+          AAinit = AA * weight * 1000 / currVolume;
         } else {
           AAinit = 0.0;
         }
         console.log("AA=" + AA + ", w=" + weight + ", vol=" +
-                    postBoilVolume.toFixed(4));
+                    currVolume.toFixed(4));
         console.log("at time " + t.toFixed(3) + ", adding hops addition " +
                     hopIdx + " with [AA] = " + AAinit.toFixed(2) +
                     " to existing [AA] = " + AAconcent.toFixed(2));
@@ -356,14 +359,18 @@ this.computeIBU_mIBU = function() {
                       ", limit is " + solubilityLimit.toFixed(2));
           // if effective [AA] after new hops addition is above threshold,
           // set [AA] to new limit; otherwise, [AA] is the effective [AA]
+          // adjust AAconcent to be the concentration at the end of the boil,
+          // since that concentration is what the IBU is measuring.
           if (effectiveAA > solLowerThresh && effectiveAA > solubilityLimit) {
-            AAconcent = solubilityLimit;
+            AAconcent = solubilityLimit * currVolume / postBoilVolume;
           } else {
-            AAconcent = effectiveAA;
+            AAconcent = effectiveAA * currVolume / postBoilVolume;
           }
           console.log("    after addition, AAconcent = " +AAconcent.toFixed(4));
         } else {
-          AAconcent = AAconcent + AAinit;
+          // adjust AAconcent to be the concentration at the end of the boil,
+          // since that concentration is what the IBU is measuring.
+          AAconcent = AAconcent + (AAinit * currVolume / postBoilVolume);
         }
         currentAddition = AAconcent - preAddConcent;
         if (currentAddition < 0) {

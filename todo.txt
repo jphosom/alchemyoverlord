@@ -1,24 +1,30 @@
 TODO:
 
- . add krausen information to development data?
+ . check up on Firefox beta issue if load index.html, not getting
+   any saved values; error in script.  works on older version of
+   Firefox and on Chrome.
+
+ . add in hop variety pull-down
+
+ . add krausen information to SMPH development and test data?
 
  . redo IBU as function of age, with separate IAA and nonIAA components
 
- . add in functionality for pellets, fix testData.js
+ . redo analysis with results from teamaker hops
 
- . add in hop variety pull-down
+ . add in functionality for pellets, fix testData.js
 
  . test on chrome.
 
  . add miscellaneous calculators
- 		- evaporation rate from change in SG
-		- map Plato <-> SG
-		- correct SG based on temperature
-		- correct pH based on temperature
-		- correct volume based on temperature
-		- compute yeast pitching rate
-		- predict beer color from grains
-		- predict HSI <-> freshness factor <-> age, temp, storage factor, variety
+    - evaporation rate from change in SG
+    - map Plato <-> SG
+    - correct SG based on temperature
+    - correct pH based on temperature
+    - correct volume based on temperature
+    - compute yeast pitching rate
+    - predict beer color from grains
+    - predict HSI <-> freshness factor <-> age, temp, storage factor, variety
     - keg weight <-> volume for corny keg
 
  . learn how to read/write local file
@@ -37,7 +43,7 @@ NOTES on larger system:
 
 grain : ** type (include extract)
         ** color
-        ** %extract
+        ** %extract or PPG
         ** weight
         absorbing factor
         volume contributing factor
@@ -48,10 +54,13 @@ water : ** number of infusions
         ** other water chemistry
 
 mash:   ** pH adjustment
+        ** water to grist ratio, target SG
         ** single temp vs step mash
                 ** target time
                 ** target temp
                    temp of water additions
+        ** single infusion, multiple infusions
+        ** single sparge, batch sparge, xx sparge
 
 hops:   ** additions
         absorbing factor
@@ -64,14 +73,14 @@ boil:   volume vs. temp
         ** target volume
 
 ferment: ** yeast type, amount
-        ** use secondary?  
+        ** use secondary?
                 if so, loss
-        ** temperature (max)
+        ** secondary fermentation temperature (max)
 
 conditioning: ** bottle vs keg
-        ** carbonation 
+        ** carbonation
         ** temperature (and time)
-        ** priming sugar 
+        ** priming sugar
 
 
 
