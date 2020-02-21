@@ -615,7 +615,7 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
     }
 
     res.currSettings = "";
-    res.bestErr = 10000000.0;
+    res.bestErr = 1.0e20;
     res.numExpConditions = 0;
     res.maxDiff = 0.0;
     res.htmlResult = "";
@@ -718,7 +718,7 @@ this.init_SMPH_search = function() {
                  "to start the parameter search";
   document.getElementById('progress').innerHTML = progressText;
 
-  Tinseth.initialize_Tinseth();
+  Tinseth.initialize_Tinseth();  // need Tinseth for evaluating Tinseth model
   SMPH.initialize_SMPH();
 
   n = d.toLocaleTimeString();
@@ -884,7 +884,7 @@ this.increment_SMPH_search = function(searchType) {
     this.beginTime = n;
     this.beginDate = d.getTime();
 
-    this.minError = 100000;
+    this.minError = 1.0e20;
     this.bestParams = "";
 
     progressText = "<H2>Please wait...</H2><br>";

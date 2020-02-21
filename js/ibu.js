@@ -22,6 +22,7 @@
 //                                whirlpool, use immersion chiller to reach
 //                                this target temperature.
 // Version 1.2.5 : Jun 18, 2019 : add krausen loss factor
+// Version 1.2.6 : Jul 12, 2019 : add hop variety selection, hop form default
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -81,6 +82,7 @@ var ibu = ibu || {};
 //    . icebathDecayFactor = rate constant for forced cooling with ice bath
 //    . numAdditions = number of hop additions
 //    . scalingFactor = global scaling factor to increase or decrease IBUs
+//    . defaultHopForm = default form of hop additions (cones, pellets)
 //    . applySolubilityLimitCheckbox = whether or not to use AA solubility limit
 //    . pHCheckbox = whether or not to adjust IBUs based on wort pH
 //    . pH = the wort pH, if applying pH correction
@@ -89,8 +91,7 @@ var ibu = ibu || {};
 //        . AA = alpha acid, in percent (scale 0 to 100)
 //        . weight = weight of hops added
 //        . boilTime = amount of time that hops spend in the boil (may be neg.)
-//    . krausen = krausen loss factor for IAA (normalized so that a value
-//          of 1.0 is 'medium' krausen deposits)
+//    . krausen = krausen loss factor for IAA 
 //    . flocculation = degree of yeast flocculation (low, medium, high)
 //    . filtering = micron rating of the filter, or no filtering
 //    . beerAge_days = age of the beer, in days, measured from start of ferment.
@@ -100,12 +101,12 @@ var ibu = ibu || {};
 //      getPostBoilVolume = get post-boil volume from wort volume and other info
 //
 
-"use strict";
-
 ibu._construct = function() {
+  "use strict";
+  var idx = 0;
 
   // color options
-  defaultColor = "#94476b"; // greyish red
+  this.defaultColor = "#94476b"; // greyish red
 
   //----------------------------------------------------------------------------
   // declare objects that are input variables
@@ -143,13 +144,14 @@ ibu._construct = function() {
 
   this.numAdditions         = new Object();
   this.scalingFactor        = new Object();
+  this.defaultHopForm       = new Object();
   this.applySolubilityLimitCheckbox = new Object();
   this.pHCheckbox           = new Object();
   this.pH                   = new Object();
   this.preOrPostBoilpH      = new Object();
 
-  this.add = [];  // array of hops additions
-
+  this.add = [];        // array of hops additions
+  this.letterList = []; // array of hop variety first letters
 
   this.krausen              = new Object();
   this.flocculation         = new Object();
@@ -161,6 +163,9 @@ ibu._construct = function() {
   var keys = Object.keys(this);
   for (idx = 0; idx < keys.length; idx++) {
     if (keys[idx] == "_construct") {
+      continue;
+    }
+    if (keys[idx] == "defaultColor") {
       continue;
     }
     this[keys[idx]].parent = "ibu";
@@ -346,7 +351,7 @@ ibu._construct = function() {
   this.tempLinParamA.min = -100.0;
   this.tempLinParamA.max = 0.0;
   this.tempLinParamA.description = "linear temperature decay parameter 'A'";
-  this.tempLinParamA.defaultColor = defaultColor;
+  this.tempLinParamA.defaultColor = this.defaultColor;
   this.tempLinParamA.defaultFunction = get_tempLinParamA_default;
   this.tempLinParamA.defaultArgs = "";
 
@@ -363,7 +368,7 @@ ibu._construct = function() {
   this.tempLinParamB.min = 0.0;
   this.tempLinParamB.max = 300.0;
   this.tempLinParamB.description = "linear temperature decay parameter 'B'";
-  this.tempLinParamB.defaultColor = defaultColor;
+  this.tempLinParamB.defaultColor = this.defaultColor;
   this.tempLinParamB.defaultFunction = get_tempLinParamB_default;
   this.tempLinParamB.defaultArgs = "";
 
@@ -380,7 +385,7 @@ ibu._construct = function() {
   this.tempExpParamA.min = 0.0;
   this.tempExpParamA.max = 300.0;
   this.tempExpParamA.description = "linear temperature decay parameter 'A'";
-  this.tempExpParamA.defaultColor = defaultColor;
+  this.tempExpParamA.defaultColor = this.defaultColor;
   this.tempExpParamA.defaultValue = 53.7;
   this.tempExpParamA.dependents = [ ibu.tempLinParamB, ibu.tempExpParamC ];
 
@@ -395,7 +400,7 @@ ibu._construct = function() {
   this.tempExpParamB.min = 0.0;
   this.tempExpParamB.max = 200.0;
   this.tempExpParamB.description = "linear temperature decay parameter 'B'";
-  this.tempExpParamB.defaultColor = defaultColor;
+  this.tempExpParamB.defaultColor = this.defaultColor;
   this.tempExpParamB.defaultFunction = get_tempExpParamB_default;
   this.tempExpParamB.defaultArgs = "";
 
@@ -412,7 +417,7 @@ ibu._construct = function() {
   this.tempExpParamC.min = 0.0;
   this.tempExpParamC.max = 300.0;
   this.tempExpParamC.description = "linear temperature decay parameter 'C'";
-  this.tempExpParamC.defaultColor = defaultColor;
+  this.tempExpParamC.defaultColor = this.defaultColor;
   this.tempExpParamC.defaultFunction = get_tempExpParamC_default;
   this.tempExpParamC.defaultArgs = "";
 
@@ -476,7 +481,7 @@ ibu._construct = function() {
   this.immersionDecayFactor.min = 0.00001;
   this.immersionDecayFactor.max = 200.0;
   this.immersionDecayFactor.description = "immersion chiller rate constant";
-  this.immersionDecayFactor.defaultColor = defaultColor;
+  this.immersionDecayFactor.defaultColor = this.defaultColor;
   this.immersionDecayFactor.defaultFunction = get_immersionDecayFactor_default;
   this.immersionDecayFactor.defaultArgs = "";
 
@@ -493,7 +498,7 @@ ibu._construct = function() {
   this.counterflowRate.min = 0.01;
   this.counterflowRate.max = 500.0;
   this.counterflowRate.description = "counterflow chiller flow rate";
-  this.counterflowRate.defaultColor = defaultColor;
+  this.counterflowRate.defaultColor = this.defaultColor;
   this.counterflowRate.defaultValue = 2.082;
 
   // icebathDecayFactor
@@ -507,7 +512,7 @@ ibu._construct = function() {
   this.icebathDecayFactor.min = 0.00001;
   this.icebathDecayFactor.max = 200.0;
   this.icebathDecayFactor.description = "ice bath rate constant";
-  this.icebathDecayFactor.defaultColor = defaultColor;
+  this.icebathDecayFactor.defaultColor = this.defaultColor;
   this.icebathDecayFactor.defaultFunction = get_icebathDecayFactor_default;
   this.icebathDecayFactor.defaultArgs = "";
 
@@ -532,6 +537,16 @@ ibu._construct = function() {
   this.scalingFactor.max = 5.0;
   this.scalingFactor.description = "IBU global scaling factor";
   this.scalingFactor.defaultValue = 1.0;
+
+  // defaultHopForm
+  this.defaultHopForm.id = "ibu.defaultHopForm";
+  this.defaultHopForm.inputType = "select";
+  this.defaultHopForm.value = "cones";
+  this.defaultHopForm.userSet = 0;
+  this.defaultHopForm.display = "cones";
+  this.defaultHopForm.description = "default form of hop additions";
+  this.defaultHopForm.defaultValue = "cones";
+  this.defaultHopForm.additionalFunction = checkHopFormDefaults;
 
   // numAdditions
   this.numAdditions.id = "ibu.numAdditions";
@@ -589,11 +604,11 @@ ibu._construct = function() {
   // krausen
   this.krausen.id = "ibu.krausen";
   this.krausen.inputType = "select";
-  this.krausen.value = "medium krausen deposits (default)";
+  this.krausen.value = "medium krausen deposits on FV (default)";
   this.krausen.userSet = 0;
-  this.krausen.display = "medium krausen deposits (default)";
+  this.krausen.display = "medium krausen deposits on FV (default)";
   this.krausen.description = "krausen loss factor";
-  this.krausen.defaultValue = "medium krausen deposits (default)";
+  this.krausen.defaultValue = "medium krausen deposits on FV (default)";
 
   // flocculation
   this.flocculation.id = "ibu.flocculation";
@@ -1030,29 +1045,453 @@ this.getKrausenValue = function(description) {
   var value = 1.0;
 
   if (description == "mix krausen back in; no loss")
-    value = 1.042;
-  else if (description == "minor krausen deposits")
-    value = 1.021;
-  else if (description == "medium krausen deposits (default)")
-    value = 1.000;
-  else if (description == "heavy krausen deposits")
-    value = 0.979;
-  else if (description == "very heavy krausen deposits")
-    value = 0.958;
+    value = 1.1268; // see beer64/analyze.tcl = 1.0/0.8875
+  else if (description == "minor krausen deposits on FV")
+    value = 1.0500; // 'medium' * 1.05
+  else if (description == "medium krausen deposits on FV (default)")
+    value = 1.0000; // see beer64/analyze.tcl, normalize 0.8875 to 1.0
+  else if (description == "heavy krausen deposits on FV")
+    value = 0.9500; // 'medium' * 0.95
+  else if (description == "very heavy krausen deposits on FV")
+    value = 0.9000; // 'medium' * 0.90
   else if (description == "blow off krausen with slow fermentation")
-    value = 0.938;
+    value = 0.9380;  // 'medium' * 0.938;
   else if (description == "blow off krausen with normal fermentation")
-    value = 0.833;
+    value = 0.8330;  // 'medium' * 0.833;
   else if (description == "blow off krausen with vigorous fermentation")
-    value = 0.729;
+    value = 0.7290;  // 'medium' * 0.729;
+  else if (!isNaN(parseFloat(description)))
+    value = parseFloat(description);
   else {
-    console.log("ERROR: can't find suitable description for krausen loss");
+    console.log("ERROR: can't find suitable description for krausen loss: " + 
+                 description);
   }
   return value;
 }
 
 
 //------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// functions for handling selection of hop variety
+
+//------------------------------------------------------------------------------
+// check if the hop form defaults within each addition are the current default
+
+function checkHopFormDefaults() {
+  var idx = 0;
+  var numAdd = ibu.numAdditions.value;
+  var userSet = 0;
+  var arrayIdx = 0;
+
+  // console.log("CHECKING HOP FORM DEFAULTS FOR EACH ADDITION");
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    userSet = ibu.add[arrayIdx].hopForm.userSet;
+    // console.log("addition " + idx + " = " + userSet);
+    if (!userSet) {
+      ibu.add[arrayIdx].hopForm.defaultValue = ibu.defaultHopForm.value;
+      common.set(ibu.add[arrayIdx].hopForm,0);
+      }
+    }
+
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// if the user selects a hop form, and if that form is "(default)", 
+// immediately change the value to the current default.
+
+function checkHopFormDefaults2(arrayIdx) {
+  var value = "";
+  var variable = ibu.add[arrayIdx].hopForm;
+
+  value = ibu.add[arrayIdx].hopForm.value;
+  if (value == "(default)") {
+    variable.defaultValue = ibu.defaultHopForm.value;
+    variable.value = ibu.defaultHopForm.value;
+    variable.userSet = 0;
+    if (document.getElementById(variable.id)) {
+      document.getElementById(variable.id).value = variable.value;
+      if (!variable.userSet && ("defaultColor" in variable)) {
+        document.getElementById(variable.id).style.color=variable.defaultColor;
+      } else {
+        document.getElementById(variable.id).style.color = "black";
+      }
+    }
+  }
+  return;
+}
+
+//------------------------------------------------------------------------------
+
+function get_AA_default(arrayIdx) {
+  var value = 0.0;
+  var variety = "";
+  var defaultValue = 8.75;  // average value over many varieties
+
+  variety = ibu.add[arrayIdx].variety.value;
+  value = defaultValue;
+  console.log("VARIETY = " + variety);
+  if (variety != "(unspecified)") {
+    if (hops[variety].AA) {
+      value = hops[variety].AA;
+    }
+  }
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+
+function get_BA_default(arrayIdx) {
+  var value = 0.0;
+  var variety = "";
+  var defaultValue = 5.0;  // approximate value over many varieties
+
+  variety = ibu.add[arrayIdx].variety.value;
+  value = defaultValue;
+  if (variety != "(unspecified)") {
+    if (hops[variety].BA) {
+      value = hops[variety].BA;
+    }
+  }
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+
+function get_percentLoss_default(arrayIdx) {
+  var value = 0.0;
+  var variety = "";
+  var defaultValue = 32.0;  // average value over many varieties
+
+  variety = ibu.add[arrayIdx].variety.value;
+  value = defaultValue;
+  if (variety != "(unspecified)") {
+    if (hops[variety].loss) {
+      value = hops[variety].loss;
+    }
+  }
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+// if user has set the hop variety, update the AA, BA, and percent loss
+// values, if they are default values, to the variety-specific values
+
+function setHopVariety(arrayIdx) {
+  var AA = ibu.add[arrayIdx].AA;
+  var BA = ibu.add[arrayIdx].BA;
+  var loss = ibu.add[arrayIdx].percentLoss;
+  if (AA) {
+    common.set(AA, 0);
+  }
+  if (BA) {
+    common.set(BA, 0);
+  }
+  if (loss) {
+    common.set(loss, 0);
+  }
+  return;
+}
+
+//------------------------------------------------------------------------------
+
+function buildHops(tableID, addIdx, selection) {
+  var hopVarieties = Object.keys(hops);
+  var countList = [];
+  var startIndexList = [];
+  var stopIndexList = [];
+  var firstLetter = "";
+  var hIdx = 0;
+  var lIdx = 0;
+  var varietyMenu1 = "";
+  var submenu = "";
+  var limit = 15;
+  var firstLetterInfo = [];
+  var count = 0;
+  var startIdx = 0;
+  var endIdx = 0;
+  var secondLetter = "";
+  var midIdx = 0;
+  var sIdx = 0;
+  var origStartIdx = 0;
+  var origEndIdx = 0;
+  var splitCount = 0;
+  var splitIdx = 0;
+  var menu = "";
+  var letter = "";
+  var sumAA = 0.0;
+  var countAA = 0.0;
+  var sumBA = 0.0;
+  var countBA = 0.0;
+  var sumLoss = 0.0;
+  var countLoss = 0.0;
+
+  // if list of hop variety letters hasn't been constructed yet, do so now
+  if (ibu.letterList.length == 0) {
+    // sort the hop varieties using case-insensitive sorting
+    hopVarieties.sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
+    // get all of the first letters from all varieties, creating initial list
+    sumAA = 0.0;
+    sumBA = 0.0;
+    sumLoss = 0.0;
+    for (hIdx = 0; hIdx < hopVarieties.length; hIdx++) {
+      firstLetter = hopVarieties[hIdx].charAt(0).toUpperCase();
+      if (hops[hopVarieties[hIdx]].AA) {
+        sumAA += hops[hopVarieties[hIdx]].AA;
+        countAA += 1.0;
+        }
+      if (hops[hopVarieties[hIdx]].BA) {
+        sumBA += hops[hopVarieties[hIdx]].BA;
+        countBA += 1.0;
+        }
+      if (hops[hopVarieties[hIdx]].loss) {
+        sumLoss += hops[hopVarieties[hIdx]].loss;
+        countLoss += 1.0;
+        }
+      // search for first letter in current variety
+      for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+        if (firstLetter == ibu.letterList[lIdx].letter) {
+          break;
+        }
+      }
+      if (lIdx >= ibu.letterList.length) {
+        // if letter doesn't exist yet, create a new entry in letterList
+        firstLetterInfo = 
+            { letter:firstLetter, count:1, startIdx:hIdx, endIdx:hIdx };
+        ibu.letterList.push(firstLetterInfo);
+      } else {
+        // if letter does exist, update the count and end index of letterList
+        count = ibu.letterList[lIdx].count;
+        count += 1;
+        endIdx = ibu.letterList[lIdx].endIdx;
+        endIdx += 1;
+        firstLetterInfo = { letter:firstLetter, count:count, 
+                            startIdx:ibu.letterList[lIdx].startIdx, endIdx };
+        ibu.letterList[lIdx] = firstLetterInfo;
+      }
+    }
+    console.log("Have data on " + countAA + " varieties of hops");
+    console.log("Average AA  = " + (sumAA / countAA).toFixed(2) + "%");
+    console.log("Average BA  = " + (sumBA / countBA).toFixed(2) + "%");
+    console.log("Average Loss = " + (sumLoss / countLoss).toFixed(2) + "%");
+    console.log("ORIGINAL LETTER LIST: ");
+    for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+      console.log("  " + ibu.letterList[lIdx].letter + 
+                  " count=" + ibu.letterList[lIdx].count + 
+                  " start=" + ibu.letterList[lIdx].startIdx + 
+                  " end=" + ibu.letterList[lIdx].endIdx);
+    }
+
+    // revise the list, breaking up a letter with too many varieties
+    // into two or more groupings (based on the second letter)
+    for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+      if (ibu.letterList[lIdx].count > limit) {
+        origStartIdx = ibu.letterList[lIdx].startIdx;
+        origEndIdx = ibu.letterList[lIdx].endIdx;
+        splitCount = parseInt((ibu.letterList[lIdx].count / limit) + 1);
+        ibu.letterList.splice(lIdx, 1);  // remove item with too many varieties
+        startIdx = origStartIdx;
+        for (splitIdx = 0; splitIdx < splitCount; splitIdx++) {
+          // get the index partway into the complete list
+          midIdx = parseInt((origEndIdx - origStartIdx)*((splitIdx+1)/
+                             splitCount) + origStartIdx);
+          firstLetter = hopVarieties[midIdx].charAt(0).toUpperCase();
+          // search the varieties for a change in the second letter
+          secondLetter = hopVarieties[midIdx].charAt(1).toLowerCase();
+          for (sIdx = midIdx + 1; sIdx <= origEndIdx; sIdx++) {
+            if (secondLetter != hopVarieties[sIdx].charAt(1).toLowerCase()) {
+              break;
+            }
+          }
+          // get the second letter of the variety at the start of the list
+          secondLetter = hopVarieties[startIdx].charAt(1).toLowerCase();
+          count = sIdx - startIdx;
+          if (count == 0) {
+            continue;
+          }
+          // update letterList with small grouping
+          firstLetterInfo = 
+              { letter:firstLetter+secondLetter, 
+                count:count, startIdx:startIdx, endIdx:sIdx-1 };
+          ibu.letterList.splice(lIdx+splitIdx, 0, firstLetterInfo);
+          startIdx = sIdx;
+        }
+      }
+    }
+    console.log("REVISED LETTER LIST: ");
+    for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+      console.log("  " + ibu.letterList[lIdx].letter + 
+                  " count=" + ibu.letterList[lIdx].count + 
+                  " start=" + ibu.letterList[lIdx].startIdx + 
+                  " end=" + ibu.letterList[lIdx].endIdx);
+    }
+  }
+
+  // construct dropdown menu of first letters 
+
+  // specify highest level dropdown menu button
+  menu = "<div id='"+tableID+"' class='dropdown'> <button id='ibu.add"+addIdx+".variety' onclick='ibu.varietySelect1(\""+addIdx+"\")' class='dropbtn' value='"+selection+"'>"+selection+"</button><div id='varietyDropdown"+addIdx+"' class='dropdown-content'>";
+
+  // first dropdown item is always '(unspecified)'
+  submenu = "<div id=unspecified class='dropdown'><button onclick='ibu.varietySelect3(\""+addIdx+"\",\"(unspecified)\")' class='dropbtn'>(unspecified)</button></div><br>";
+  menu += submenu;
+
+  // for each first letter in varities, construct dropdown menu 
+  for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+    letter = ibu.letterList[lIdx].letter;
+    submenu = "<div id=letter"+letter+" class='dropdown'><button onclick='ibu.varietySelect2(\""+addIdx+"\",\""+letter+"\")' class='dropbtn'>"+letter+"...</button><div id='varietyDropdown"+addIdx+letter+"'></div></div>";
+    menu += submenu;
+  }
+
+  return menu;
+}
+
+//------------------------------------------------------------------------------
+
+this.varietySelect1 = function(addIdx) {
+  var selection = "";
+  var dropdownMenu = "varietyDropdown" + addIdx;
+  var origClassList = document.getElementById(dropdownMenu).classList;
+
+  // user clicked on top-level dropdown menu button, so show the menu
+  console.log("clicked on first-level dropdown for addition " + addIdx);
+
+  // get the current selection associated with the hop addition
+  selection = document.getElementById("ibu.add"+addIdx+".variety").innerHTML;
+
+  // rebuild the first-level menu in case the user selected a letter 
+  // and then changed their mind and selected the original item.
+  document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML = 
+        buildHops("ibu.add"+addIdx+".varietyMenu", addIdx, selection);
+
+  // note: simply toggling 'show' doesn't work; need to know if the
+  //       menu *was* being shown when we entered this routine, before
+  //       rebuilding the first-level menu.
+  if (origClassList.contains('show')) {
+    document.getElementById(dropdownMenu).classList.remove('show');
+    // set the current selection to black (otherwise it remains gray)
+    document.getElementById("ibu.add"+addIdx+".variety").style.color = "black";
+  } else {
+    document.getElementById(dropdownMenu).classList.add('show');
+  }
+
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+
+this.varietySelect2 = function(addIdx, letter) {
+  var varietyId1 = "";  // ID of first-level dropdown for variety
+  var varietyId2 = "";  // ID of second-level dropdown for variety (letter)
+  var allDropdowns = null;
+  var openDropdown = null;
+  var id = null;
+  var submenu = "";
+  var hopVarieties = Object.keys(hops);
+  var hIdx = 0;
+  var lIdx = 0;
+  var startIdx = 0;
+  var endIdx = 0;
+
+  // user clicked on second-level dropdown menu button, so show the 
+  // specific varieties associated with this letter
+  console.log("clicked on second-level dropdown");
+
+  // change the submenu to the list of specific varieties
+  submenu = "<div id=letter"+letter+" class='dropdown'><div id='varietyDropdown"+addIdx+""+letter+"' class='dropdown-content'>";
+  for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+    if (letter == ibu.letterList[lIdx].letter) {
+      startIdx = ibu.letterList[lIdx].startIdx;
+      endIdx = ibu.letterList[lIdx].endIdx;
+      break
+    }
+  }
+
+  for (hIdx = startIdx; hIdx <= endIdx; hIdx++) {
+    submenu += "<button class='dropbtn' onclick='ibu.varietySelect3(\""+addIdx+"\",\""+hopVarieties[hIdx]+"\")'>"+hopVarieties[hIdx]+"</button><br>";
+  }
+  submenu += "</div></div>";
+
+  varietyId1 = "varietyDropdown" + addIdx;
+  varietyId2 = "varietyDropdown" + addIdx + letter;
+  console.log("varietyId1 = " + varietyId1 + "; varietyId2 = " + varietyId2);
+
+  // set the menu to the list of varieties, and show this list
+  document.getElementById(varietyId1).innerHTML = submenu;
+  document.getElementById(varietyId2).classList.toggle('show');
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+
+this.varietySelect3 = function(addIdx, variety) {
+  // user clicked on third-level (final) dropdown menu button, so 
+  // set the hop variety
+  var tableID = "";
+  var submenu = "";
+  var varietyId1 = "";
+  var arrayIdx = 0;
+
+  console.log("clicked on third-level dropdown, addIdx = " + 
+                addIdx + " variety : " + variety);
+  tableID = "ibu.add"+addIdx+".variety";
+  // document.getElementById(tableID).innerHTML = variety;
+
+  // rebuild pulldown menu to choose any letter (and set the variety in ibu)
+  tableID = "ibu.add"+addIdx+".varietyMenu";
+  document.getElementById(tableID).innerHTML = 
+      buildHops(tableID, addIdx, variety);
+
+  arrayIdx = Number(addIdx-1);
+  console.log("setting to " + variety);
+  console.log("id = " + ibu.add[arrayIdx].variety.id);
+  ibu.add[arrayIdx].variety.value = variety;
+  ibu.add[arrayIdx].variety.userSet = 1;
+  common.set(ibu.add[arrayIdx].variety, 1);
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+
+window.onclick = function(event) {
+  var idx = 0;
+  var openDropdown = null;
+  var allDropdowns = null;
+  var selection = "";
+  var addIdx = "";
+
+  // if click not on dropdown menu button, hide all dropdown menu(s)
+  if (!event.target.matches('.dropbtn')) {
+    allDropdowns = document.getElementsByClassName("dropdown-content");
+    for (idx = 0; idx < allDropdowns.length; idx++) {
+      openDropdown = allDropdowns[idx];
+      // if dropdown is currently shown, hide it
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+        // get the addition index of the dropdown menu
+        addIdx = openDropdown.id.match('(?:Dropdown)([0-9]+)')[1];
+        // get the current selection associated with the hop addition
+        selection = document.getElementById("ibu.add"+addIdx+"variety").innerHTML;
+        // rebuild the top-level hop-selection menu and set the selection 
+        // to the current selection
+        document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML = 
+            buildHops("ibu.add"+addIdx+".varietyMenu", addIdx, selection);
+        // set the current selection to black (otherwise it remains gray)
+        document.getElementById("ibu.add"+addIdx+".variety").style.color = "black";
+      }
+    }
+  }
+  return;
+}
 
 //==============================================================================
 // FUNCTION TO INITIALIZE TABLE HOP HOP ADDITIONS AND OUTPUTS
@@ -1062,25 +1501,21 @@ this.getKrausenValue = function(description) {
 // and set table of output values
 
 function hopAdditionsSet(updateFunction) {
-  var aaDefault = 8.4;
   var arrayIdx = 0;
   var boilTimeDefault = 0.0;
-  var baDefault = 5.0;
   var constructInputTable = false;
   var constructOutputTable = false;
-  var currElement = 0;
-  var currValue = "";
-  var freshnessFactorDefault = 1.0;
-  var hopFormDefault = "cones"; // in future, default should be "pellets"
+  var freshnessFactorDefault = 0.9;
   var idx = 1;
   var numAdd = ibu.numAdditions.value;
-  var percentLoss6MosDefault = 38.2;  // average value over many varieties
   var table = "";
   var tableID = "";
   var units = 0;
   var varietyDefault = "(unspecified)";
   var weightDefault = 0.0;
   var weightUnits = 0;
+  var varietyMenu = "";
+  var currentVariety = "";
 
   console.log(" ------ SETTING HOPS ADDITIONS ------ ");
   if (ibu.hopTableSize == null) {
@@ -1131,100 +1566,34 @@ function hopAdditionsSet(updateFunction) {
     ibu.add.push(hops);
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 7) {
+  if (constructInputTable && ibu.hopTableSize >= 5) {
     table += "</tr> "
     table += "<tr> "
     table += "<td> Variety:</td> "
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    currValue = varietyDefault;
-    tableID = "variety"+idx;
-    if (constructInputTable && ibu.hopTableSize >= 7) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-    table += "<td><button id='" + tableID +
-             "' class='button'>(unspecified)</button></td>"
-    }
-    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".varietyMenu";
+    // create the object and then build the table so that we can get
+    // any existing value or the default if none yet exists
     ibu.add[arrayIdx].variety = new Object;
-    ibu.add[arrayIdx].variety.id = tableID;
+    ibu.add[arrayIdx].variety.id = "ibu.add"+idx+".variety";
     ibu.add[arrayIdx].variety.inputType = "select";
-    ibu.add[arrayIdx].variety.value = currValue;
     ibu.add[arrayIdx].variety.userSet = 0;
     ibu.add[arrayIdx].variety.display = varietyDefault;
     ibu.add[arrayIdx].variety.description = "hop variety";
     ibu.add[arrayIdx].variety.defaultValue = varietyDefault;
     ibu.add[arrayIdx].variety.updateFunction = updateFunction;
+    ibu.add[arrayIdx].variety.additionalFunction = setHopVariety;
+    ibu.add[arrayIdx].variety.additionalFunctionArgs = arrayIdx;
     ibu.add[arrayIdx].variety.parent = "ibu";
-  }
-
-
-  if (constructInputTable) {
-    table += "</tr> "
-    table += "<tr> "
-    table += "<td> Alpha Acid (%):</td> "
-  }
-  for (idx = 1; idx <= numAdd; idx++) {
-    arrayIdx = Number(idx-1);
-    currValue = aaDefault;
-    tableID = "AA"+idx;
-    if (constructInputTable) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-      table += "<td> <input type='text' size='12' value='"+currValue+"' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].AA,1)'></td> "
-    }
-    ibu.add[arrayIdx].AA = new Object;
-    ibu.add[arrayIdx].AA.id = tableID;
-    ibu.add[arrayIdx].AA.inputType = "float";
-    ibu.add[arrayIdx].AA.value = Number(currValue);
-    ibu.add[arrayIdx].AA.userSet = 0;
-    ibu.add[arrayIdx].AA.precision = 1;
-    ibu.add[arrayIdx].AA.minPrecision = 1;
-    ibu.add[arrayIdx].AA.display = "";
-    ibu.add[arrayIdx].AA.min = 1.0;
-    ibu.add[arrayIdx].AA.max = 100.0;
-    ibu.add[arrayIdx].AA.description = "hops AA rating";
-    ibu.add[arrayIdx].AA.defaultValue = aaDefault;
-    ibu.add[arrayIdx].AA.updateFunction = updateFunction;
-    ibu.add[arrayIdx].AA.parent = "ibu";
-  }
-
-  if (constructInputTable && ibu.hopTableSize >= 5) {
-    table += "</tr> "
-    table += "<tr> "
-    table += "<td> Beta Acid (%):</td> "
-  }
-  for (idx = 1; idx <= numAdd; idx++) {
-    arrayIdx = Number(idx-1);
-    currValue = baDefault;
-    tableID = "BA"+idx;
+    // now that we have 'variety', build the table of hop varieties
     if (constructInputTable && ibu.hopTableSize >= 5) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].BA,1)'> </td> "
+      common.set(ibu.add[arrayIdx].variety,0);  // get saved value if any
+      currentVariety = ibu.add[arrayIdx].variety.value;
+      varietyMenu = buildHops(tableID, idx, currentVariety);
+      table += "<td>"+varietyMenu+"</td>";
     }
-    arrayIdx = Number(idx-1);
-    ibu.add[arrayIdx].BA = new Object;
-    ibu.add[arrayIdx].BA.id = tableID;
-    ibu.add[arrayIdx].BA.inputType = "float";
-    ibu.add[arrayIdx].BA.value = Number(currValue);
-    ibu.add[arrayIdx].BA.userSet = 0;
-    ibu.add[arrayIdx].BA.precision = 1;
-    ibu.add[arrayIdx].BA.minPrecision = 1;
-    ibu.add[arrayIdx].BA.display = "";
-    ibu.add[arrayIdx].BA.min = 1.0;
-    ibu.add[arrayIdx].BA.max = 100.0;
-    ibu.add[arrayIdx].BA.description = "hops beta acid rating";
-    ibu.add[arrayIdx].BA.defaultValue = baDefault;
-    ibu.add[arrayIdx].BA.updateFunction = updateFunction;
-    ibu.add[arrayIdx].BA.parent = "ibu";
   }
 
   if (constructInputTable && ibu.hopTableSize >= 4) {
@@ -1234,26 +1603,108 @@ function hopAdditionsSet(updateFunction) {
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    currValue = hopFormDefault;
-    tableID = "hopForm"+idx;
+    tableID = "ibu.add"+idx+".hopForm";
     if (constructInputTable && ibu.hopTableSize >= 4) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].hopForm,1)'> <option value='cones'>cones</option> <option value='pellets'>pellets</option> </td> "
+      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopForm,1)'> <option value='cones'>cones</option> <option value='pellets'>pellets</option> <option value='(default)'>(default)</option></td> "
     }
     arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].hopForm = new Object;
     ibu.add[arrayIdx].hopForm.id = tableID;
     ibu.add[arrayIdx].hopForm.inputType = "select";
-    ibu.add[arrayIdx].hopForm.value = currValue;
     ibu.add[arrayIdx].hopForm.userSet = 0;
-    ibu.add[arrayIdx].hopForm.display = hopFormDefault;
     ibu.add[arrayIdx].hopForm.description = "form of hops";
-    ibu.add[arrayIdx].hopForm.defaultValue = hopFormDefault;
+    ibu.add[arrayIdx].hopForm.defaultValue = ibu.defaultHopForm.value;
+    ibu.add[arrayIdx].hopForm.defaultColor = ibu.defaultColor;
     ibu.add[arrayIdx].hopForm.updateFunction = updateFunction;
+    ibu.add[arrayIdx].hopForm.additionalFunction = checkHopFormDefaults2;
+    ibu.add[arrayIdx].hopForm.additionalFunctionArgs = arrayIdx;
     ibu.add[arrayIdx].hopForm.parent = "ibu";
+  }
+
+  if (constructInputTable) {
+    table += "</tr> "
+    table += "<tr> "
+    table += "<td> Alpha Acid (%):</td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".AA";
+    if (constructInputTable) {
+      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].AA,1)'></td> "
+    }
+    ibu.add[arrayIdx].AA = new Object;
+    ibu.add[arrayIdx].AA.id = tableID;
+    ibu.add[arrayIdx].AA.inputType = "float";
+    ibu.add[arrayIdx].AA.userSet = 0;
+    ibu.add[arrayIdx].AA.precision = 1;
+    ibu.add[arrayIdx].AA.minPrecision = 1;
+    ibu.add[arrayIdx].AA.display = "";
+    ibu.add[arrayIdx].AA.min = 1.0;
+    ibu.add[arrayIdx].AA.max = 100.0;
+    ibu.add[arrayIdx].AA.description = "hops AA rating";
+    ibu.add[arrayIdx].AA.defaultFunction = get_AA_default;
+    ibu.add[arrayIdx].AA.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].AA.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].AA.updateFunction = updateFunction;
+    ibu.add[arrayIdx].AA.parent = "ibu";
+  }
+
+  if (constructInputTable && ibu.hopTableSize >= 8) {
+    table += "</tr> "
+    table += "<tr> "
+    table += "<td> Beta Acid (%):</td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".BA";
+    if (constructInputTable && ibu.hopTableSize >= 8) {
+      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].BA,1)'> </td> "
+    }
+    arrayIdx = Number(idx-1);
+    ibu.add[arrayIdx].BA = new Object;
+    ibu.add[arrayIdx].BA.id = tableID;
+    ibu.add[arrayIdx].BA.inputType = "float";
+    ibu.add[arrayIdx].BA.userSet = 0;
+    ibu.add[arrayIdx].BA.precision = 1;
+    ibu.add[arrayIdx].BA.minPrecision = 1;
+    ibu.add[arrayIdx].BA.display = "";
+    ibu.add[arrayIdx].BA.min = 1.0;
+    ibu.add[arrayIdx].BA.max = 100.0;
+    ibu.add[arrayIdx].BA.description = "hops beta acid rating";
+    ibu.add[arrayIdx].BA.defaultFunction = get_BA_default;
+    ibu.add[arrayIdx].BA.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].BA.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].BA.updateFunction = updateFunction;
+    ibu.add[arrayIdx].BA.parent = "ibu";
+  }
+
+  if (constructInputTable && ibu.hopTableSize >= 7) {
+    table += "</tr> ";
+    table += "<tr> ";
+    table += "<td> % Loss (6mos,RT): </td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".percentLoss";
+    if (constructInputTable && ibu.hopTableSize >= 7) {
+      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].percentLoss,1)'> </td> "
+    }
+    arrayIdx = Number(idx-1);
+    ibu.add[arrayIdx].percentLoss = new Object;
+    ibu.add[arrayIdx].percentLoss.id = tableID;
+    ibu.add[arrayIdx].percentLoss.inputType = "float";
+    ibu.add[arrayIdx].percentLoss.userSet = 0;
+    ibu.add[arrayIdx].percentLoss.precision = 2;
+    ibu.add[arrayIdx].percentLoss.minPrecision = 1;
+    ibu.add[arrayIdx].percentLoss.display = "";
+    ibu.add[arrayIdx].percentLoss.min = 0.0;
+    ibu.add[arrayIdx].percentLoss.max = 100.0;
+    ibu.add[arrayIdx].percentLoss.description = "percent loss of alpha acids after six months at room temperature";
+    ibu.add[arrayIdx].percentLoss.defaultFunction = get_percentLoss_default;
+    ibu.add[arrayIdx].percentLoss.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].percentLoss.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].percentLoss.updateFunction = updateFunction;
+    ibu.add[arrayIdx].percentLoss.parent = "ibu";
   }
 
   if (constructInputTable && ibu.hopTableSize >= 6) {
@@ -1263,20 +1714,14 @@ function hopAdditionsSet(updateFunction) {
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    currValue = freshnessFactorDefault;
-    tableID = "freshnessFactor"+idx;
+    tableID = "ibu.add"+idx+".freshnessFactor";
     if (constructInputTable && ibu.hopTableSize >= 6) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].freshnessFactor,1)'> </td> "
     }
     arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].freshnessFactor = new Object;
     ibu.add[arrayIdx].freshnessFactor.id = tableID;
     ibu.add[arrayIdx].freshnessFactor.inputType = "float";
-    ibu.add[arrayIdx].freshnessFactor.value = Number(currValue);
     ibu.add[arrayIdx].freshnessFactor.userSet = 0;
     ibu.add[arrayIdx].freshnessFactor.precision = 2;
     ibu.add[arrayIdx].freshnessFactor.minPrecision = 2;
@@ -1289,39 +1734,6 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].freshnessFactor.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 7) {
-    table += "</tr> ";
-    table += "<tr> ";
-    table += "<td> % Loss (6mos,RT): </td> "
-  }
-  for (idx = 1; idx <= numAdd; idx++) {
-    arrayIdx = Number(idx-1);
-    currValue = percentLoss6MosDefault;
-    tableID = "percentLoss"+idx;
-    if (constructInputTable && ibu.hopTableSize >= 7) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].percentLoss,1)'> </td> "
-    }
-    arrayIdx = Number(idx-1);
-    ibu.add[arrayIdx].percentLoss = new Object;
-    ibu.add[arrayIdx].percentLoss.id = tableID;
-    ibu.add[arrayIdx].percentLoss.inputType = "float";
-    ibu.add[arrayIdx].percentLoss.value = Number(currValue);
-    ibu.add[arrayIdx].percentLoss.userSet = 0;
-    ibu.add[arrayIdx].percentLoss.precision = 2;
-    ibu.add[arrayIdx].percentLoss.minPrecision = 1;
-    ibu.add[arrayIdx].percentLoss.display = "";
-    ibu.add[arrayIdx].percentLoss.min = 0.0;
-    ibu.add[arrayIdx].percentLoss.max = 100.0;
-    ibu.add[arrayIdx].percentLoss.description = "percent loss of alpha acids after six months at room temperature";
-    ibu.add[arrayIdx].percentLoss.defaultValue = percentLoss6MosDefault;
-    ibu.add[arrayIdx].percentLoss.updateFunction = updateFunction;
-    ibu.add[arrayIdx].percentLoss.parent = "ibu";
-  }
-
   if (constructInputTable) {
     table += "</tr> "
     table += "<tr> "
@@ -1329,19 +1741,13 @@ function hopAdditionsSet(updateFunction) {
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    currValue = weightDefault;
-    tableID = "weight"+idx;
+    tableID = "ibu.add"+idx+".weight";
     if (constructInputTable) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
-      table += "<td> <input type='text' size='12' value='"+currValue+"' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].weight,1)'> </td> "
+      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].weight,1)'> </td> "
     }
     ibu.add[arrayIdx].weight = new Object;
     ibu.add[arrayIdx].weight.id = tableID;
     ibu.add[arrayIdx].weight.inputType = "float";
-    ibu.add[arrayIdx].weight.value = Number(currValue);
     ibu.add[arrayIdx].weight.userSet = 0;
     ibu.add[arrayIdx].weight.convertToMetric = common.convertOuncesToGrams;
     ibu.add[arrayIdx].weight.convertToImperial = common.convertGramsToOunces;
@@ -1363,20 +1769,14 @@ function hopAdditionsSet(updateFunction) {
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    currValue = boilTimeDefault;
-    tableID = "boilTimeTable"+idx;
+    tableID = "ibu.add"+idx+".boilTimeTable";
     if (constructInputTable) {
-      currElement = document.getElementById(tableID);
-      if (currElement != null) {
-        currValue = document.getElementById(tableID).value;
-      }
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].boilTime,1)'> </td> "
     }
     arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].boilTime = new Object;
     ibu.add[arrayIdx].boilTime.id = tableID;
     ibu.add[arrayIdx].boilTime.inputType = "float";
-    ibu.add[arrayIdx].boilTime.value = Number(currValue);
     ibu.add[arrayIdx].boilTime.userSet = 0;
     ibu.add[arrayIdx].boilTime.precision = 0;
     ibu.add[arrayIdx].boilTime.minPrecision = 0;
@@ -1392,23 +1792,6 @@ function hopAdditionsSet(updateFunction) {
   }
 
 
-  // initialize outputs to zero
-  for (idx = 1; idx <= numAdd; idx++) {
-    ibu.add[arrayIdx].AA_init_concent = 0.0;
-    ibu.add[arrayIdx].AA_dis = 0.0;
-    ibu.add[arrayIdx].IBU = 0.0;
-    ibu.add[arrayIdx].U = 0.0;
-    ibu.add[arrayIdx].IAA_dis = 0.0;
-    ibu.add[arrayIdx].IAA_xfer = 0.0;
-    ibu.add[arrayIdx].IAA_concent_wort = 0.0;
-    ibu.add[arrayIdx].oAA_concent_boil = 0.0;
-    ibu.add[arrayIdx].oBA_concent_boil = 0.0;
-    ibu.add[arrayIdx].PP_beer = 0.0;
-    ibu.add[arrayIdx].tempK = 0.0;
-  }
-  ibu.IBU = 0.0;
-  ibu.U = 0.0;
-
   if (constructInputTable) {
     table += "</tr> ";
     table += "</tbody> ";
@@ -1417,17 +1800,36 @@ function hopAdditionsSet(updateFunction) {
   }
 
 
+  // get correct values for table, either defaults or set values
   for (idx = 1; idx <= numAdd; idx++) {
     var AA_percent_boil = 0.0;
     arrayIdx = Number(idx-1);
+    common.set(ibu.add[arrayIdx].variety,0);
+    common.set(ibu.add[arrayIdx].hopForm,0);
     common.set(ibu.add[arrayIdx].AA,0);
     common.set(ibu.add[arrayIdx].BA,0);
-    common.set(ibu.add[arrayIdx].hopForm,0);
-    common.set(ibu.add[arrayIdx].freshnessFactor,0);
     common.set(ibu.add[arrayIdx].percentLoss,0);
+    common.set(ibu.add[arrayIdx].freshnessFactor,0);
     common.set(ibu.add[arrayIdx].weight,0);
     common.set(ibu.add[arrayIdx].boilTime,0);
   }
+
+  // initialize outputs to zero
+  for (idx = 1; idx <= numAdd; idx++) {
+    ibu.add[arrayIdx].AA_init_concent = 0.0;
+    ibu.add[arrayIdx].AA_dis_mg = 0.0;
+    ibu.add[arrayIdx].IBU = 0.0;
+    ibu.add[arrayIdx].U = 0.0;
+    ibu.add[arrayIdx].IAA_dis_mg = 0.0;
+    ibu.add[arrayIdx].IAA_xfer_mg = 0.0;
+    ibu.add[arrayIdx].IAA_concent_wort = 0.0;
+    ibu.add[arrayIdx].oAA_concent_boil = 0.0;
+    ibu.add[arrayIdx].oBA_concent_boil = 0.0;
+    ibu.add[arrayIdx].PP_beer = 0.0;
+    ibu.add[arrayIdx].tempK = 0.0;
+  }
+  ibu.IBU = 0.0;
+  ibu.U = 0.0;
 
   if (constructOutputTable) {
     table = "";
@@ -1480,6 +1882,7 @@ function hopAdditionsSet(updateFunction) {
 function get_postBoilVolume() {
   var boilTime = ibu.boilTime.value;
   var evapRate = ibu.evaporationRate.value;
+  var postBoilVolume = 0.0;
   var preBoilVol = false;
   var wortVolume = ibu.wortVolume.value;
 

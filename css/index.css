@@ -141,7 +141,8 @@ body {
   }
 
 /*----------------------------------------------------------------------------*/
-/* define select option */
+/* define select option for yeast flocculation */
+
 #ibu.flocculation {
 	width:11em;
 	min-width:11em;
@@ -153,6 +154,52 @@ body {
 
 #hopsAdditionsTable {
 }
+
+/*----------------------------------------------------------------------------*/
+/* define dropdown button(s) */
+.dropbtn {
+  cursor: pointer;
+  border: solid;
+  border-width: 1px;
+  border-color: silver;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.dropbtn:hover {
+  background-color:  #BAC8D1;
+}
+
+/*
+.dropbtn:active {
+}
+*/
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+
+.dropdown-content {
+  display: none;
+  overflow: visible;
+  position: absolute;
+  min-width: 12em;
+  z-index: 1;
+  background-color: #ffffff;
+  box-shadow: 8px 8px 16px 8px rgba(0,0,0,0.5);
+}
+
+/* any ID beginning with 'letter' (i.e. the dropdown buttons for */
+/* selecting hop varities) should have min width 4em for good spacing */
+div[id^="letter"] {
+  min-width:4em;
+}
+
+.show {display: block;}
+
+
 
 /*----------------------------------------------------------------------------*/
 /* define table of outputs */

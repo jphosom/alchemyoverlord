@@ -13,6 +13,7 @@ Version 1.2.3 : Dec 29, 2018
 Version 1.2.4 : Jan 21, 2019
 Version 1.2.5 : Jun 25, 2019
 Version 1.2.6 : Jun 28, 2019
+Version 1.2.7 : Feb 21, 2020
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -192,10 +193,10 @@ Version 1.2.6 : Jun 28, 2019
   <td>Krausen Loss:</td>
   <td><select style="width:24em;" id="ibu.krausen" onchange="common.set(ibu.krausen, 1)">
   <option value="mix krausen back in; no loss">mix krausen back in; no loss</option>
-  <option value="minor krausen deposits">minor krausen deposits</option>
-  <option value="medium krausen deposits (default)" selected>medium krausen deposits (default)</option>
-  <option value="heavy krausen deposits">heavy krausen deposits</option>
-  <option value="very heavy krausen deposits">very heavy krausen deposits</option>
+  <option value="minor krausen deposits on FV">minor krausen deposits on FV</option>
+  <option value="medium krausen deposits on FV (default)" selected>medium krausen deposits on FV (default)</option>
+  <option value="heavy krausen deposits on FV">heavy krausen deposits on FV</option>
+  <option value="very heavy krausen deposits on FV">very heavy krausen deposits on FV</option>
   <option value="blow off krausen with slow fermentation">blow off krausen with slow fermentation</option>
   <option value="blow off krausen with normal fermentation">blow off krausen with normal fermentation</option>
   <option value="blow off krausen with vigorous fermentation">blow off krausen with vigorous fermentation</option>
@@ -214,12 +215,30 @@ Version 1.2.6 : Jun 28, 2019
 </div>
 
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu_mIBU.js" charset="utf-8"></script>
 
 <script>
 mIBU.initialize_mIBU();
 </script>
+
+<br>
+<hr>
+<h3>Save and Load:</h3>
+<table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Save to File:</td> 
+  <td><button type="button" onclick="common.saveToFile('IBU_mIBU.txt')">Browse... </button></td>
+  </tr>
+  <tr>
+  <td>Load from File:</td>
+  <td><input type="file" accept=".txt" id="files" onchange="common.loadFromFile(this.files)"/></td>
+  </tr>
+  </tbody>
+</table>
+
 
 <br>
 <hr>
@@ -244,6 +263,7 @@ New functionality: automatically save and load parameter settings.<br>
 cooling with immersion chiller.<br>
 <b>1.2.5</b>: (2019-Jun-25) Add option for krausen loss.<br>
 <b>1.2.6</b>: (2019-Jun-28) Adjust volume use in computations; impacts hopping rates around 200ppm.<br>
+<b>1.2.7</b>: (2020-Feb-21) Add ability to save and load files.<br>
 </small>
 
 <p>
@@ -260,7 +280,7 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2018-2020 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
 the accuracy or suitability of the results.  Predicting IBUs is a bit
 of a "black art", because there are so many variables and there is so much

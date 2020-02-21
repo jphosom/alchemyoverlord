@@ -155,6 +155,14 @@ Version 1.0.1 : Nov. 22, 2018
     <td>Global IBU Scaling Factor:</td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
   </tr>
+  <tr>
+    <td>Default Hop Form:</td>
+    <td><select style="width:8em;" id="ibu.defaultHopForm" onchange="common.set(ibu.defaultHopForm, 1)">
+    <option value="cones" selected>cones</option>
+    <option value="pellets">pellets</option>
+    </select>
+    </td>
+  </tr>
   </tbody>
   </table>
   </p>
@@ -188,10 +196,10 @@ Version 1.0.1 : Nov. 22, 2018
     <td>Krausen Loss:</td>
     <td><select style="width:24em;" id="ibu.krausen" onchange="common.set(ibu.krausen, 1)">
     <option value="mix krausen back in; no loss">mix krausen back in; no loss</option>
-    <option value="minor krausen deposits">minor krausen deposits</option>
-    <option value="medium krausen deposits (default)" selected>medium krausen deposits (default)</option>
-    <option value="heavy krausen deposits">heavy krausen deposits</option>
-    <option value="very heavy krausen deposits">very heavy krausen deposits</option>
+    <option value="minor krausen deposits on FV">minor krausen deposits on FV</option>
+    <option value="medium krausen deposits on FV (default)" selected>medium krausen deposits on FV (default)</option>
+    <option value="heavy krausen deposits on FV">heavy krausen deposits on FV</option>
+    <option value="very heavy krausen deposits on FV">very heavy krausen deposits on FV</option>
     <option value="blow off krausen with slow fermentation">blow off krausen with slow fermentation</option>
     <option value="blow off krausen with normal fermentation">blow off krausen with normal fermentation</option>
     <option value="blow off krausen with vigorous fermentation">blow off krausen with vigorous fermentation</option>
@@ -224,12 +232,30 @@ Version 1.0.1 : Nov. 22, 2018
 </div>
 
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu_SMPH.js" charset="utf-8"></script>
 
 <script>
 SMPH.initialize_SMPH();
 </script>
+
+<br>
+<hr>
+<h3>Save and Load:</h3>
+<table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Save to File:</td> 
+  <td><button type="button" onclick="common.saveToFile('IBU_SMPH.txt')">Browse... </button></td>
+  </tr>
+  <tr>
+  <td>Load from File:</td>
+  <td><input type="file" accept=".txt" id="files" onchange="common.loadFromFile(this.files)"/></td>
+  </tr>
+  </tbody>
+</table>
+
 
 <br>
 <hr>
@@ -253,7 +279,11 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2018-2020 John-Paul Hosom, all rights reserved.
+All product and company names are trademarks&trade; or registered&reg; 
+trademarks of their respective holders. Use of these names does not imply 
+any affiliation with, endorsement of, or endorsement by them.
+<p>
 While I hope that you find this page useful, I make no guarantees about
 the accuracy or suitability of the results.  Predicting IBUs is a bit
 of a "black art", because there are so many variables and there is so much

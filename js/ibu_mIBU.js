@@ -42,7 +42,7 @@
 //
 // Version 1.2.4 : Jan. 21, 2019
 //         . increase diameter and counterflow rate limits.
-//         . If hold a constant temperature during whirlpool, use immersion
+//         . if hold a constant temperature during whirlpool, use immersion
 //           chiller to reach this target temperature.
 //
 // Version 1.2.5 : Jun. 25, 2019
@@ -52,6 +52,9 @@
 //         . adjust the way volume is used in IBU computations.  This change
 //           primarily affects IBUs with hopping rates at around 200 ppm.
 //           Also, add link to AlchemyOverlord blog page.
+//
+// Version 1.2.7 : Oct. 1, 2019
+//         . have non-zero evaporation rate when temperature less than boiling.
 //
 // TODO:
 // 1. add correction factor for pellets
@@ -101,12 +104,16 @@ this.initialize_mIBU = function() {
   common.set(ibu.forcedDecayType, 0);
   common.set(ibu.holdTempCheckbox, 0);  // must do this after forcedDecayType
   common.set(ibu.scalingFactor, 0);
+  common.set(ibu.defaultHopForm, 0);
   common.set(ibu.applySolubilityLimitCheckbox, 0);
   common.set(ibu.pHCheckbox, 0);
   common.set(ibu.pH, 0);
   common.set(ibu.preOrPostBoilpH, 0);
   common.set(ibu.numAdditions, 0);
   common.set(ibu.krausen, 0);
+  common.set(ibu.flocculation, 0);
+  common.set(ibu.filtering, 0);
+  common.set(ibu.beerAge_days, 0);
 
   mIBU.computeIBU_mIBU();
 
@@ -172,10 +179,12 @@ this.computeIBU_mIBU = function() {
   var preBoilpH = 0.0;
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
   var relativeVolume = 0.0;
+  var relRate = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
   var solLowerThresh = 180.0;
   var solubilityLimit = 0.0;
+  var subBoilEvapRate = 0.0;
   var t = 0.0;
   var tempC = 0.0;
   var tempK = 0.0;
@@ -468,6 +477,12 @@ this.computeIBU_mIBU = function() {
       // prevent numerical errors at <= 0 Kelvin
       if (tempK <= 1.0) tempK = 1.0;
       tempC = common.convertKelvinToCelsius(tempK);
+
+      // adjust current volume due to evaporation at below-boiling temps
+      // if sub-boiling, estimate evaporation rate
+      relRate = (0.0243 * Math.exp(0.0502 * 100.0)) / ibu.evaporationRate.value;
+      subBoilEvapRate = relRate* 0.0243 * Math.exp(0.0502 * tempC); // liters/hr
+      currVolume -= subBoilEvapRate/60.0 * integrationTime;
 
       // this function from post 'an analysis of sub-boiling hop utilization'
       degreeU = 2.39 * Math.pow(10.0, 11.0) * Math.exp(-9773.0 / tempK);

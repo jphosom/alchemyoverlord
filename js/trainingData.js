@@ -21,6 +21,9 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "Hop Concentration Exp. #1" ];
 // var evaluateTrainingExperiments = [ "pH Exp. #1" ];
 // var evaluateTrainingExperiments = [ "CaCl2 Exp. #1" ];
+// var evaluateTrainingExperiments = [ "OG Exp. #1", "OG Exp. #2" ];
+// var evaluateTrainingExperiments = [ "IPA, Jun. 2018", "IPA, Jul. 2019" ];
+// var evaluateTrainingExperiments = [ "Teamaker #1" ];
 
 // units *must* be all metric
 
@@ -53,7 +56,6 @@ var trainingData = {
         "forcedDecayType":       "forcedDecayImmersion", // each sample uses immersion chiller
         "beerAge_days":          7,
 
-        // search parameters:  JPH TODO try restricting BA1 and weight1 more
         "search": [
             {
                 "param":    "AA1",
@@ -65,19 +67,10 @@ var trainingData = {
             },
 
             {
-                "param":    "BA1",
-                "default":  6.18,
-                "method":   "relative",
-                "low":      0.90,
-                "high":     1.10,
-                "inc":      0.10,
-            },
-
-            {
                 "param":    "weight1",
-                "default":  283.495,
+                "default":  200.0,
                 "method":   "relative",
-                "low":      0.80,
+                "low":      0.40,
                 "high":     1.20,
                 "inc":      0.10,
             },
@@ -134,8 +127,8 @@ var trainingData = {
                 "param":    "weight1",
                 "default":  425.0,
                 "method":   "value",
-                "low":      350.0,
-                "high":     500.0,
+                "low":      360.0,
+                "high":     560.0,
                 "inc":      20.0,
             }
         ]
@@ -164,6 +157,8 @@ var trainingData = {
         "immersionDecayFactor": 0.44,
         "pH":                   "estimate",
         "preBoilSG":            1.042,
+        // "krausen":              "medium krausen deposits on FV (default)",
+        "krausen":              "mix krausen back in; no loss",  // guess; no actual record
         "beerAge_days":         77,
 
         // search parameters:
@@ -174,17 +169,8 @@ var trainingData = {
                 "default":  8.0,  // package rating.  also, measured 6.25/0.72=8.70%; meas 7.25%/0.27=10.7%
                 "method":   "value",
                 "low":      7.0,
-                "high":     9.0,
+                "high":     10.0,
                 "inc":      0.50,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  6.6,  // average of two estimates : 4.11%/0.72=5.71%, 5.40%/0.72=7.50%
-                "method":   "value",
-                "low":      5.5,
-                "high":     8.00,  // high range for cascade hops
-                "inc":      0.25,
             },
 
             {
@@ -192,7 +178,7 @@ var trainingData = {
                 "default":  0.72,  // from HSI
                 "method":   "value",
                 "low":      0.60,
-                "high":     0.80,
+                "high":     1.00,
                 "inc":      0.10,
             }
         ]
@@ -227,6 +213,7 @@ var trainingData = {
         "immersionDecayFactor": 0.44,
         "pH":                   "estimate",
         "preBoilSG":            1.062,
+        "krausen":              "medium krausen deposits on FV (default)",
         "beerAge_days":         42,
 
         // search parameters:
@@ -239,15 +226,6 @@ var trainingData = {
                 "low":      7.4,   // search within 1 percentage point
                 "high":     9.4,   // search within 1 percentage point
                 "inc":      0.50,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  7.75,  // measured at 5.27 / 0.68 = 7.75%
-                "method":   "value",
-                "low":      3.50,  // low range for cascade hops
-                "high":     8.00,  // high range for cascade hops
-                "inc":      0.25,
             },
 
             {
@@ -290,6 +268,7 @@ var trainingData = {
         "pH":                   "estimate",
         "preBoilSG":            1.0613,
         "immersionDecayFactor": 0.44,
+        "krausen":              "medium krausen deposits on FV (default)",
         "beerAge_days":         42,
 
         // search parameters:
@@ -301,15 +280,6 @@ var trainingData = {
                 "method":   "value",
                 "low":      6.9,
                 "high":     8.9,
-                "inc":      0.50,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  6.32,  // measured at 4.99%, correct by 0.79 to get 6.32%
-                "method":   "value",
-                "low":      3.50,  // low range for cascade hops
-                "high":     8.00,  // high range for cascade hops
                 "inc":      0.50,
             },
 
@@ -350,6 +320,7 @@ var trainingData = {
         "immersionDecayFactor": 0.44,
         "pH":                   "estimate",
         "preBoilSG":            1.062,
+        "krausen":              "medium krausen deposits on FV (default)",
         "beerAge_days":         57,
 
         // search parameters:
@@ -362,15 +333,6 @@ var trainingData = {
                 "low":      5.6,
                 "high":     7.6,
                 "inc":      0.20,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  5.38,  // analysis soon after harvest
-                "method":   "value",
-                "low":      3.50,  // low range for cascade hops
-                "high":     8.00,  // high range for cascade hops
-                "inc":      0.25,
             },
 
             {
@@ -404,6 +366,7 @@ var trainingData = {
         "immersionDecayFactor": 0.25,
         "pH":                   "estimate",
         "preBoilSG":            1.0514,
+        "krausen":              "mix krausen back in; no loss",  // guess; no actual record
         "beerAge_days":         28,
 
         // search parameters:
@@ -415,15 +378,6 @@ var trainingData = {
                 "method":   "value",
                 "low":      7.1,
                 "high":     9.1,
-                "inc":      0.20,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  7.60,     // from package
-                "method":   "value",
-                "low":      5.00,
-                "high":     8.00,
                 "inc":      0.25,
             },
 
@@ -458,6 +412,7 @@ var trainingData = {
         "immersionDecayFactor": 0.22,
         "pH":                   "estimate",
         "preBoilSG":            1.051,
+        "krausen":              "mix krausen back in; no loss",  // guess; no actual record
         "beerAge_days":         35,
 
         // search parameters:
@@ -469,15 +424,6 @@ var trainingData = {
                 "method":   "value",
                 "low":      7.1,
                 "high":     9.1,
-                "inc":      0.20,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  7.60,
-                "method":   "value",
-                "low":      5.00,
-                "high":     8.00,
                 "inc":      0.25,
             },
 
@@ -517,10 +463,11 @@ var trainingData = {
         "tempExpParamB":        0.0,   // instantly cool for post-boil hop stand
         "tempExpParamC":        20.0,  // cool below temp of lowest hop stand
         "tempDecayType":        "tempDecayExponential",
-        "immersionDecayFactor": 0.87,
+        "immersionDecayFactor": 0.87,  // JPH : CHECK THIS
         "forcedDecayType":      "forcedDecayImmersion",
         "pH":                   "estimate",
         "preBoilSG":            1.051,
+        "krausen":              "mix krausen back in; no loss",  // guess; no actual record
         "beerAge_days":         35,
 
         // search parameters:
@@ -532,15 +479,6 @@ var trainingData = {
                 "method":   "value",
                 "low":      7.1,
                 "high":     9.1,
-                "inc":      0.20,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  7.60,
-                "method":   "value",
-                "low":      5.00,
-                "high":     8.00,
                 "inc":      0.25,
             },
 
@@ -583,6 +521,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0467,
+        "krausen":              "medium krausen deposits on FV (default)",   // day before wipe down inside of container
         "beerAge_days":         10,
 
         // search parameters:
@@ -592,27 +531,36 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  13.30,
                 "method":   "value",
-                "low":      13.3,
-                "high":     13.3,
-                "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.90,
-                "method":   "value",
-                "low":      3.00,
-                "high":     5.00,
-                "inc":      0.25,
+                "low":      12.8,
+                "high":     13.8,
+                "inc":      0.5,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.58,
                 "method":   "value",
-                "low":      0.50,
-                "high":     1.00,
-                "inc":      0.02,
+                "low":      0.60,
+                "high":     0.70,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "AA2",
+                "default":  13.30,
+                "method":   "value",
+                "low":      12.8,
+                "high":     13.8,
+                "inc":      0.5,
+            },
+
+            {
+                "param":    "freshnessFactor2",
+                "default":  0.58,
+                "method":   "value",
+                "low":      0.60,
+                "high":     0.70,
+                "inc":      0.05,
             }
         ]
     },
@@ -644,6 +592,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0475,
+        "krausen":              "medium krausen deposits on FV (default)",   // day before wipe down inside of container
         "beerAge_days":         10,
 
         // search parameters:
@@ -653,17 +602,8 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  13.30,
                 "method":   "value",
-                "low":      13.3,
-                "high":     13.3,
-                "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.90,
-                "method":   "value",
-                "low":      3.00,
-                "high":     5.00,
+                "low":      12.8,
+                "high":     13.8,
                 "inc":      0.25,
             },
 
@@ -671,9 +611,9 @@ var trainingData = {
                 "param":    "freshnessFactor1",
                 "default":  0.58,
                 "method":   "value",
-                "low":      0.50,
+                "low":      0.60,
                 "high":     1.00,
-                "inc":      0.02,
+                "inc":      0.05,
             }
         ]
     },
@@ -705,6 +645,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0468,
+        "krausen":              "medium krausen deposits on FV (default)",   // day before wipe down inside of container
         "beerAge_days":         10,
 
         // search parameters:
@@ -714,17 +655,8 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  13.30,
                 "method":   "value",
-                "low":      13.3,
-                "high":     13.3,
-                "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.90,
-                "method":   "value",
-                "low":      3.00,
-                "high":     5.00,
+                "low":      12.8,
+                "high":     13.8,
                 "inc":      0.25,
             },
 
@@ -732,9 +664,9 @@ var trainingData = {
                 "param":    "freshnessFactor1",
                 "default":  0.58,
                 "method":   "value",
-                "low":      0.50,
+                "low":      0.60,
                 "high":     1.00,
-                "inc":      0.02,
+                "inc":      0.05,
             }
         ]
     },
@@ -766,6 +698,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0465,
+        "krausen":              "medium krausen deposits on FV (default)",   // day before wipe down inside of container
         "beerAge_days":         10,
 
         // search parameters:
@@ -775,17 +708,8 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  13.30,
                 "method":   "value",
-                "low":      13.3,
-                "high":     13.3,
-                "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.90,
-                "method":   "value",
-                "low":      3.00,
-                "high":     5.00,
+                "low":      12.8,
+                "high":     13.8,
                 "inc":      0.25,
             },
 
@@ -793,9 +717,9 @@ var trainingData = {
                 "param":    "freshnessFactor1",
                 "default":  0.58,
                 "method":   "value",
-                "low":      0.50,
+                "low":      0.60,
                 "high":     1.00,
-                "inc":      0.02,
+                "inc":      0.05,
             }
         ]
     },
@@ -823,6 +747,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0381,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
         // search parameters:
@@ -835,15 +760,6 @@ var trainingData = {
                 "low":      13.8,
                 "high":     14.8,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.5,
-                "method":   "value",
-                "low":      3.5,
-                "high":     3.5,
-                "inc":      0.25,
             },
 
             {
@@ -875,6 +791,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0381,
+        "krausen":              "medium krausen deposits on FV (default)",   // NO swirling of containers during fermentation
         "beerAge_days":         13,
 
         // search parameters:
@@ -887,15 +804,6 @@ var trainingData = {
                 "low":      4.7,
                 "high":     5.3,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.10,
-                "method":   "value",
-                "low":      3.10,
-                "high":     3.10,
-                "inc":      0.25,
             },
 
             {
@@ -927,6 +835,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0381,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
         // search parameters:
@@ -939,15 +848,6 @@ var trainingData = {
                 "low":      4.7,
                 "high":     5.3,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.10,
-                "method":   "value",
-                "low":      3.10,
-                "high":     3.10,
-                "inc":      0.25,
             },
 
             {
@@ -978,6 +878,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0381,  // new hydrometer
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         8,
 
         // search parameters:
@@ -987,18 +888,52 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  10.0,
                 "method":   "value",
-                "low":      9.8,
-                "high":     10.8,
+                "low":      9.4,
+                "high":     10.4,
                 "inc":      0.10,
             },
 
             {
-                "param":    "BA1",
-                "default":  3.92,
+                "param":    "freshnessFactor1",
+                "default":  1.00,
                 "method":   "value",
-                "low":      3.92,
-                "high":     3.92,
-                "inc":      0.25,
+                "low":      0.90,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #5": {
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60" ],
+        "IBU_list":             [ 16.4,    21.2,    26.6,    31.3,    35.2,    39.0 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0 ],
+        "volume_list":          [ 30.15,   29.74,   29.34,   28.95,   28.57,   28.21 ],
+        "OG_list":              [ 1.0378,  1.0383,  1.0388,  1.0394,  1.0399,  1.0404 ],
+
+        // comet package rating AA 9.9%, measured 9.70% therefore loss factor 0.98, beta acids = 3.17/0.98
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  9.90,  3.23, "cones", 0.98,  50.0,  54.96,     60 ],
+
+        "timeToFirstAddition":  6,      // wait 6 minutes after start of boil
+        "evaporationRate":      1.907,  // (V0=30.567 - V60=28.66) / 1.0hr
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0375,  // new hydrometer
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         8,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  9.80,
+                "method":   "value",
+                "low":      9.4,
+                "high":     10.4,
+                "inc":      0.10,
             },
 
             {
@@ -1030,6 +965,7 @@ var trainingData = {
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
         "pH":                   5.19,
+        "krausen":              "medium krausen deposits on FV (default)",   // NO swirling of containers during fermentation (??)
         "beerAge_days":         10,
 
         // search parameters:
@@ -1042,15 +978,6 @@ var trainingData = {
                 "low":      14.3,
                 "high":     14.3,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.5,
-                "method":   "value",
-                "low":      3.50,
-                "high":     3.50,
-                "inc":      0.25,
             },
 
             {
@@ -1087,12 +1014,12 @@ var trainingData = {
         "add2":        [  5.00,  3.1, "cones", 0.95,  37.43, 0.0,   30 ],
 
         "timeToFirstAddition":  0,      // wait 0 minutes after start of boil
-        "evaporationRate":      0.0, // approximate
         "evaporationRate":      0.0257, // (V10=31.80 - V80=31.77) / (70min/60min)
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0405,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation Mar. 25-29
         "beerAge_days":         10,
 
         // search parameters:
@@ -1108,31 +1035,14 @@ var trainingData = {
             },
 
             {
-                "param":    "BA1",
-                "default":  3.5,
-                "method":   "value",
-                "low":      3.50,
-                "high":     3.50,
-                "inc":      0.25,
-            },
-
-            {
                 "param":    "AA2",
                 "default":  5.00,
                 "method":   "value",
                 "low":      5.0,
                 "high":     5.0,
                 "inc":      0.25,
-            },
-
-            {
-                "param":    "BA2",
-                "default":  3.1,
-                "method":   "value",
-                "low":      3.10,
-                "high":     3.10,
-                "inc":      0.25,
             }
+
         ]
     },
 
@@ -1158,6 +1068,7 @@ var trainingData = {
         "evaporationRate":      0.99, // (V10=16.130 - V40=15.635) / (30min/60min)
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
         // search parameters:
@@ -1170,15 +1081,6 @@ var trainingData = {
                 "low":      14.3,
                 "high":     14.3,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.50,
-                "method":   "value",
-                "low":      3.50,
-                "high":     3.50,
-                "inc":      0.25,
             },
 
             {
@@ -1214,6 +1116,7 @@ var trainingData = {
         "immersionDecayFactor": 2.5,
         "pH":                   "estimate",
         "preBoilSG":            1.0390,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
         // search parameters:
@@ -1223,18 +1126,9 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  14.3,
                 "method":   "value",
-                "low":      14.3,
-                "high":     14.3,
-                "inc":      0.25,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.5,
-                "method":   "value",
-                "low":      3.50,
-                "high":     3.50,
-                "inc":      0.25,
+                "low":      13.3,
+                "high":     15.3,
+                "inc":      0.20,
             },
 
             {
@@ -1268,7 +1162,9 @@ var trainingData = {
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
         "pH":                   5.65,
+        "preOrPostBoilpH":      "preBoilpH",
         "preBoilSG":            1.0425,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
         // search parameters:
@@ -1279,17 +1175,8 @@ var trainingData = {
                 "default":  10.0,
                 "method":   "value",
                 "low":      9.5,
-                "high":     10.8,
+                "high":     10.5,
                 "inc":      0.10,
-            },
-
-            {
-                "param":    "BA1",
-                "default":  3.92,
-                "method":   "value",
-                "low":      3.92,
-                "high":     3.92,
-                "inc":      0.25,
             },
 
             {
@@ -1303,5 +1190,304 @@ var trainingData = {
 
         ]
     },
+
+    "OG Exp. #1": {
+        "conditions":           [ "A10",   "A20",   "A30",   "A40",   "B10",   "B20",   "B30",   "B40",
+                                  "C10",   "C20",   "C30",   "C40",   "D10",   "D20",   "D30",   "D40" ],
+        "IBU_list":             [ 13.9,    19.3,    24.6,    28.2,    12.7,    16.9,    21.9,    26.9,
+                                  12.8,    17.5,    21.9,    25.3,    11.1,    16.3,    20.4,    24.6 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    10.0,    20.0,    30.0,    40.0,
+                                  10.0,    20.0,    30.0,    40.0,    10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 12.32,   12.28,   12.25,   12.21,   12.42,   12.39,   12.37,   12.35,
+                                  12.64,   12.60,   12.57,   12.54,   12.75,   12.71,   12.68,   12.65],
+        "OG_list":              [ 1.0777,  1.0780,  1.0782,  1.0785,  1.0631,  1.0633,  1.0634,  1.0635,
+                                  1.0461,  1.0463,  1.0464,  1.0465,  1.0301,  1.0301,  1.0302,  1.0303],
+
+        // cascade analysis: AA 7.05%, BA 5.66%, store 11 months @ -5.5'F SF 0.5 -> decay 0.908
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  7.05, 5.66, "cones", 0.908,  50.0,  33.485,    40 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.345, // average of estimated evaporation rates from vol_0 to vol_40
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.60,  // average of 4 measured pH values at time 0
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  7.05,
+                "method":   "value",
+                "low":      6.05,
+                "high":     7.05,
+                "inc":      0.10,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.80,
+                "high":     0.90,
+                "inc":      0.05,
+            }
+
+        ]
+    },
+
+    "OG Exp. #2": {
+        "conditions":           [ "A10",   "A20",   "A30",   "A40",   "B10",   "B20",   "B30",   "B40",
+                                  "C10",   "C20",   "C30",   "C40",   "D10",   "D20",   "D30",   "D40" ],
+        "IBU_list":             [ 11.2,    14.8,    19.2,    21.8,    10.2,    15.2,    19.0,    22.7,
+                                   9.9,    14.4,    18.8,    23.2,     9.7,    14.0,    18.5,    23.6 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    10.0,    20.0,    30.0,    40.0,
+                                  10.0,    20.0,    30.0,    40.0,    10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 12.73,   12.66,   12.58,   12.51,   12.54,   12.46,   12.37,   12.29,
+                                  12.10,   12.02,   11.93,   11.85,   11.44,   11.38,   11.31,   11.25],
+        "OG_list":              [ 1.0755,  1.0759,  1.0763,  1.0768,  1.0611,  1.0615,  1.0620,  1.0624,
+                                  1.0463,  1.0467,  1.0470,  1.0473,  1.0305,  1.0307,  1.0308,  1.0310],
+
+        // cascade analysis: AA 7.05%, BA 5.66%, store 11 months @ -5.5'F SF 0.5 -> decay 0.908
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  7.05, 5.66, "cones", 0.908,  50.0,  33.485,    40 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.345, // average of estimated evaporation rates from vol_0 to vol_40
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.59,  // average of 4 measured pH values at time 0
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "medium krausen deposits on FV (default)",   // krausen deposits on sides of FV
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  7.05,
+                "method":   "value",
+                "low":      6.05,
+                "high":     7.05,
+                "inc":      0.10,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.80,
+                "high":     0.90,
+                "inc":      0.05,
+            }
+
+        ]
+    },
+
+    "Teamaker #1": {
+        "conditions":           [  "A5",   "A10",   "A20",   "A40",   "A60",
+                                   "B10",   "B20",   "B40" ],
+        "IBU_list":             [  3.3,     3.6,     3.8,     3.8,     4.0,
+                                   2.9,     3.2,     3.7 ],
+        "time_list":            [  5.0,    10.0,    20.0,    40.0,    60.0,
+                                   0.0,     0.0,     0.0 ],
+        "postBoil_time_list":   [  0.0,     0.0,     0.0,    0.0,     0.0,
+                                  10.0,    20.0,    40.0 ],
+        "postBoil_temp_list":   [ 100.0,   100.0,   100.0,   100.0,   100.0,
+                                   80.0,    80.0,    80.0 ],
+        "volume_list":          [ 12.69,   12.66,   12.60,   12.49,   12.38,
+                                  12.66,   12.60,   12.49 ],
+        "OG_list":              [ 1.0566,  1.0568,  1.0570,  1.0575,  1.0580,
+                                  1.0568,  1.0570,  1.0575 ],
+
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [ 0.41, 11.93, "cones", 1.00,  50.0,  57.00,      60 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.336, // evaporation rates measured from vol_10 to vol_60
+        "tempExpParamA":        0.0,   // instantly cool for post-boil hop stand
+        "tempExpParamB":        0.0,   // instantly cool for post-boil hop stand
+        "tempExpParamC":        20.0,  // cool below temp of lowest hop stand
+        "tempDecayType":        "tempDecayExponential",
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.75,  // average of 5.74 and 5.76
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "medium krausen deposits on FV (default)",   // krausen deposits on sides of FV
+        "beerAge_days":         9,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  0.41,
+                "method":   "value",
+                "low":      0.20,
+                "high":     0.80,
+                "inc":      0.20,
+            }
+        ]
+
+    },
+
+    "IPA, Jun. 2018": {
+        "conditions":            [ "IPA" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 63.7 ],
+
+        "boilTime":              75,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            30.55,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.068,
+        "pH":                    5.27,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         10,
+        "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
+        "beerAge_days":          26,
+
+        //                AA%   BA%    form    freshF  %loss  weight(g),  boil time
+        "add1":        [ 12.3,  3.75, "cones", 0.86,   25.00,    28.35,     60 ], // citra 2016; BA=guess
+        "add2":        [ 9.0,   6.5,  "cones", 0.98,    4.00,    28.35,     45 ], // amarillo 2016
+        "add3":        [ 13.0,  4.5,  "cones", 0.94,   25.00,    28.35,     30 ], // simcoe 2017?
+        "add4":        [ 12.3,  3.75, "cones", 0.86,   25.00,    14.17,      0 ], // citra 2016; BA=guess
+        "add5":        [ 8.0,   5.0,  "cones", 0.87,   50.00,    21.26,      0 ], // cascade 2017?
+        "add6":        [ 9.0,   6.5,  "cones", 0.98,    4.00,    21.26,      0 ], // amarillo 2016
+        "add7":        [ 11.0,  3.6,  "cones", 0.94,   25.00,    21.26,      0 ], // mosaic 2017?
+        "add8":        [ 13.0,  4.5,  "cones", 0.94,   25.00,    21.26,      0 ], // simcoe 2017?
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         28.0,  // target final expected temp of 93'C after 10 minutes
+        "evaporationRate":       4.10,
+        "immersionDecayFactor":  0.1015,
+        "forcedDecayType":       "forcedDecayImmersion",
+        "krausen":               "mix krausen back in; no loss",   // swirling of containers during fermentation
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  12.30,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  9.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA3",
+                 "default":  13.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA4",
+                 "default":  9.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA5",
+                 "default":  13.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA6",
+                 "default":  12.30,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA7",
+                 "default":  11.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+             {
+                 "param":    "AA8",
+                 "default":  8.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+       ],
+    },
+
+    "IPA, Jul. 2019": {
+        "conditions":            [ "IPA" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 43.3 ],
+
+        "boilTime":              72,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            29.715,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.071,
+        "pH":                    5.25,
+        "preOrPostBoilpH":       "preBoilpH",
+        "whirlpoolTime":         10,
+        "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
+        "beerAge_days":          24,
+
+        //                AA%   BA%    form    freshF  %loss  weight(g),  boil time
+        "add1":        [ 14.3,  4.0,  "cones", 0.837,  25.00,    28.35,     60 ], // citra
+        "add2":        [ 9.3,   6.5,  "cones", 0.959,  14.00,    28.35,     45 ], // amarillo
+        "add3":        [ 12.6,  4.5,  "cones", 0.923,  25.00,    28.35,     30 ], // simcoe
+        "add4":        [ 9.3,   6.5,  "cones", 0.959,  14.00,    21.26,      0 ], // amarillo
+        "add5":        [ 12.6,  4.5,  "cones", 0.923,  25.00,    21.26,      0 ], // simcoe
+        "add6":        [ 14.3,  4.0,  "cones", 0.837,  25.00,    19.84,      0 ], // citra
+        "add7":        [ 10.3,  3.5,  "cones", 0.956,  15.00,    21.26,      0 ], // mosaic
+        "add8":        [  7.05, 5.66, "cones", 0.825,  50.00,    28.30,      0 ], // cascade
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         0.0,  // should be overwritten by tempExpParamB
+        "evaporationRate":       3.71,
+        "immersionDecayFactor":  0.4283,  // hydra wort chiller, measured Oct 27 2018
+        "forcedDecayType":       "forcedDecayImmersion",
+        "krausen":               "medium krausen deposits on FV (default)",
+
+        "skipSearch":   false,
+        "search": [
+             {
+                 "param":    "krausen",
+                 "default":  1.0,
+                 "method":   "value",
+                 "low":      0.90,
+                 "high":     1.00,
+                 "inc":      0.02,
+             },
+             {
+                 "param":    "AA1",
+                 "default":  14.30,
+                 "method":   "relative",
+                 "low":      0.90,
+                 "high":     1.15,
+                 "inc":      0.5,
+             },
+       ],
+    },
+
+
 };
 

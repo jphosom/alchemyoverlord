@@ -9,6 +9,7 @@ Version 1.0.1 : May 6, 2018
 Version 1.2.0 : July 15, 2018
 Version 1.2.2 : September 3, 2018
 Version 1.2.3 : December 29, 2018
+Version 1.2.4 : February 21, 2020
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -93,12 +94,29 @@ Version 1.2.3 : December 29, 2018
 </div>
 
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu_tinseth.js" charset="utf-8"></script>
 
 <script>
 Tinseth.initialize_Tinseth();
 </script>
+
+<br>
+<hr>
+<h3>Save and Load:</h3>
+<table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Save to File:</td> 
+  <td><button type="button" onclick="common.saveToFile('IBU_Tinseth.txt')">Browse... </button></td>
+  </tr>
+  <tr>
+  <td>Load from File:</td>
+  <td><input type="file" accept=".txt" id="files" onchange="common.loadFromFile(this.files)"/></td>
+  </tr>
+  </tbody>
+</table>
 
 <br>
 <hr>
@@ -112,6 +130,7 @@ and evaporation rate.</br>
 New functionality: automatically save and load parameter settings.<br>
 <b>1.2.2</b>: (2018-Sep-03) Minor updates.<br>
 <b>1.2.3</b>: (2018-Dec-29) Minor updates.<br>
+<b>1.2.4</b>: (2020-Feb-21) Add ability to save and load files.<br>
 </small>
 
 <p>
@@ -128,7 +147,7 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2018 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2018-2020 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
 the accuracy or suitability of the results.  Predicting IBUs is a bit
 of a "black art", because there are so many variables and there is so much

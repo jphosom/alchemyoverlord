@@ -1,20 +1,82 @@
 TODO:
 
- . check up on Firefox beta issue if load index.html, not getting
-   any saved values; error in script.  works on older version of
-   Firefox and on Chrome.
+ . analyze protein experiment, fit data to formula, figure out how
+   much impact on IAA and nonIAA.
 
- . add in hop variety pull-down
+ . next beer: take 1 sample immediately after cooling, 1 after resting,
+   and compare both with "standard" IBU value to look at impact of break.
+   also get two more data points for impact of size of FV.
 
- . add krausen information to SMPH development and test data?
+ . blog post: how the concentration of hot and cold break during fermentation affects IBUs
+ . blog post: impact of fermentation vessel and volume on IBUs
+
+
+
+ . analyze sampling-experiment data to figure out oAA Exp #1 *-POST results.
+   > mixing in break has negative impact on IBUs
+   > fermentation surface area has positive impact on IBUs
+
+ . malt PP beer #72:
+      ANALYZE : OG 1.030 1.050 1.070 x 2 = 6 samples
+                OG 1.030@low pH, 1.050 before and after ferment, 1.070@10,60min
+      6 samples for PP and IBU analysis
+
+ . analyze oAA Exp #1 PP at 10 and 40: does PP level change during boil?
+   YES.  91 mg/L at 10 min -> 107 mg/L at 40 min
+   Is this all hops PP, or does malt PP increase?  (see malt PP analysis)
+
+ . analyze CVP #6 PP levels as function of hop concentration: 
+    . linear? : if maltPP = 100
+                measured (112-100)/150.0 = 0.08
+                         (130-100)/400.0 = 0.075
+                         (141-100)/600.0 = 0.068
+                if maltPP = 100, then not quite linear : ratio = -0.00002639*[]+0.08445
+                but pretty close to linear; not obvious nonlinearity
+    . use these points to estimate malt PP before adding hops. : 100 mg/L
+    . are the values for malt and hops PP in line with expectations? No: malt is 2x pred.
+      either formula is off, fermentation has an effect, or scale_PPmalt != scale_PPhops
+    . update "Four Experiemnts" and model of IBUs from malt. : do experiment above
+
+ . analyze oAA Exp #1 : rate of oAA production during boil as fn of temp?
+   (want better malt PP model before doing this analysis.)
+
+
+ . AA model: re-analyze AA solubility limit data with new info about oAA
 
  . redo IBU as function of age, with separate IAA and nonIAA components
+   (see CVP experiment looking at how levels change with age... IAA and
+    nonIAA change differently)
 
- . redo analysis with results from teamaker hops
 
- . add in functionality for pellets, fix testData.js
+ . change SMPH model to reflect new AA solubility limit model, oAA production
+   as function of temp, PP levels constant(?) over time, malt PP model
 
- . test on chrome.
+ . add in functionality for pellets (fix testData.js??)
+
+ . extract parameters from SMPH model, evaluate on dev and test data
+
+ . if results on dev and test are consistently high/low, include dev and/or
+   test in training data and remove them from dev/test set.
+
+
+ . taste experiment: either use expected technique after fix, or get IAA
+   and add to finished beer. (see HopTech web page)
+   98 drops / tsp, 1/8 tsp = 12.25 drops in 5 gallons -> 1 IBU
+   if brew 0.75 gallons, then 1 IBU = 12.25 * 0.75 / 5 = 1.8375 drops
+
+ . new experiment: impact of gelatin fining on IBUs
+ . new experiment: impact of dry hopping on IBUs (?)
+
+
+ . blog: oAA production (?)
+ . blog: estimating AA solubility limit: re-do completely
+ . blog: source of increased IBUs in pellets, re-do
+ . blog: a summary of factors: add PP data, pellet data
+ . blog: taste experiment
+
+
+
+ . test all calculators on chrome.
 
  . add miscellaneous calculators
     - evaporation rate from change in SG
@@ -27,9 +89,7 @@ TODO:
     - predict HSI <-> freshness factor <-> age, temp, storage factor, variety
     - keg weight <-> volume for corny keg
 
- . learn how to read/write local file
- . add in ability to save state to file, read from file
- . if add hops before start of boil... how to deal with this?
+ . add save/load functionality to mIBU HTML
 
  . create larger system
         - create local parameters template (volume of trub left behind, etc)

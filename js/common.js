@@ -6,6 +6,7 @@
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
 // Version 1.2.1 : Jul 18, 2018 : add support for checkbox
 // Version 1.2.2 : Dec 29, 2018 : add support for 'select', float or string
+// Version 1.3.2 : Feb 20, 2020 : add support for saving/loading files
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -209,7 +210,9 @@ this.set = function(variable, haveUserInput) {
       (haveUserInput && !check.valid && !check.useDefaultValue))) {
     saved = common.getSavedValue(variable);
     variable.value = saved.value;
-    variable.precision = saved.precision;
+    if ("precision" in variable) {
+      variable.precision = saved.precision;
+    }
     variable.userSet = 1;
     console.log("SETTING VALUE TO OLD VALUE: " + variable.value);
   } else if (!haveUserInput ||
@@ -223,12 +226,16 @@ this.set = function(variable, haveUserInput) {
     }
     variable.value = defaultValue;
     variable.userSet = 0;
-    variable.precision = variable.minPrecision;
+    if ("precision" in variable) {
+      variable.precision = variable.minPrecision;
+    }
   } else {
     variable.value = check.value;
     console.log("SET VALUE TO INPUT: " + variable.value);
     // get and set the precision
-    variable.precision = common.getPrecision(inputString);
+    if ("precision" in variable) {
+      variable.precision = common.getPrecision(inputString);
+    }
     // convert to metric, so that 'value' is always in metric
     if (("convertToMetric" in variable) &&
         window[variable.parent]["units"].value == "imperial") {
@@ -280,6 +287,15 @@ this.set = function(variable, haveUserInput) {
                 variable.value);
     if (document.getElementById(variable.id)) {
       document.getElementById(variable.id).value = variable.value;
+    }
+    if (document.getElementById(variable.id) &&
+        document.getElementById(variable.id).style) {
+      if (!variable.userSet && ("defaultColor" in variable)) {
+        console.log("  setting color to default for " + variable.id);
+        document.getElementById(variable.id).style.color=variable.defaultColor;
+      } else {
+        document.getElementById(variable.id).style.color = "black";
+      }
     }
   } else {
     common.updateHTML(variable);
@@ -352,12 +368,15 @@ this.updateHTML = function(variable) {
 
   // update HTML (and font color)
   if (document.getElementById(variable.id)) {
-    console.log("UPDATING " + variable.id + " HTML to be " + variable.display +
+    if ("precision" in variable) {
+      console.log("UPDATING " + variable.id + " HTML to " + variable.display +
                 " with precision " + variable.precision);
+    } else {
+      console.log("UPDATING " + variable.id + " HTML to " + variable.display);
+    }
     document.getElementById(variable.id).value = variable.display;
 
-    if (("inputType" in variable) && variable.inputType != "radioButton" &&
-        variable.inputType != "checkbox" && variable.inputType != "select") {
+    if ("inputType" in variable) {
       if (!variable.userSet && ("defaultColor" in variable)) {
         // console.log("  setting color to default for " + variable.id);
         document.getElementById(variable.id).style.color=variable.defaultColor;
@@ -433,16 +452,16 @@ this.convertGramsToOunces = function(input) {
 }
 
 //------------------------------------------------------------------------------
-// SAVE AND LOAD VALUES
+// SAVE AND LOAD VALUES (without filesystem)
 
 this.clearSavedValues = function() {
   if (typeof(Storage) == "undefined") {
     return true;
   }
   console.log("CLEARING LOCAL STORAGE:");
-  for (var a in localStorage) {
-   console.log("  variable " + a + " = " + localStorage[a]);
-  }
+  // for (var a in localStorage) {
+  //   console.log("  variable " + a + " = " + localStorage[a]);
+  // }
   localStorage.clear();
   location.reload();
   return true;
@@ -518,6 +537,91 @@ this.existsSavedValue = function(variable) {
     return true;
   }
 }
+
+
+//------------------------------------------------------------------------------
+// SAVE AND LOAD VALUES TO/FROM FILE
+
+this.saveToFile = function(defaultFilename) {
+  var text = "";
+  var link; // link to object URL to be downloaded
+  var data; // blob data
+  var varNameList = [];
+  var varName = "";
+  var varInfo = "";
+
+  if (typeof(Storage) == "undefined") {
+    window.alert("Can't save to file; no local storage");
+    return false;
+  }
+
+  // create the text data to save by going through all of the local storage
+  varNameList = Object.keys(localStorage).sort();
+  // console.log("list = " + varNameList);
+  text = "";
+  for (varName of varNameList) {
+    varInfo = varName + ' = "' + localStorage[varName] + '";\n';
+    console.log(varInfo);
+    text += varInfo;
+  }
+
+  // create a link and blob of data
+  link = document.createElement('a');
+  data = new Blob([text], {type: 'text/plain'});
+
+  // set the link attribute to 'download' with default filename,
+  // and set the reference in the link to the data blob.
+  link.setAttribute('download', defaultFilename);
+  link.href = window.URL.createObjectURL(data);
+
+  // append a child to the document with the link to the blob
+  document.body.appendChild(link);
+
+  // virtually click on the link containing the object URL to download it
+  var event = new MouseEvent('click');
+  link.dispatchEvent(event);
+
+  // free up memory used by the generted object URL, remove the link
+  window.URL.revokeObjectURL(link.href);
+  document.body.removeChild(link);
+
+  return true;
+}
+
+//------------------------------------------------------------------------------
+
+this.loadFromFile = function(files) {
+  var file = files[0];
+  var reader = new FileReader();
+
+  reader.readAsText(file);
+
+  reader.onload = function(event) {
+    var contents = event.target.result;
+    var keyValueList = contents.split("\n");
+    var key = "";
+    var formattedValue = "";
+    var value = "";
+
+    common.clearSavedValues();
+    for (keyValue of keyValueList) {
+      key = keyValue.split("=")[0].trim();
+      if (key.length > 0) {
+        formattedValue = keyValue.split("=")[1].trim();
+        // get whatever is between " and "; and put it in 'value'
+        value = formattedValue.match(/(")(.+)(";)/)[2];
+        console.log("setting " + key + " = '" + value + "'");
+        localStorage.setItem(key, value);
+        }
+      }
+     location.reload();
+    }
+
+  return true;
+}
+
+//------------------------------------------------------------------------------
+
 
 // close the "namespace" and call the function to construct it.
 }
