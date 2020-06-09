@@ -137,9 +137,12 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   var keys = Object.keys(ibu);
   var idx = 0;
   var totalHopBoilTime = 0.0;
+  var totalTime = 0.0;
   var realHopBoilTime = 0.0;
   var resetTempExpParamB = false;
   var resetTempLinParamA = false;
+  var slopeSlope = -0.003927872518870565;
+  var slopeIntercept = 0.018625896934116128;
 
   // get lists of values for each condition. All experiments must have
   // 'conditions' and 'IBU_list'; other lists are optional.
@@ -276,12 +279,14 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     // if pH is "estimate" (i.e. <= 0), then set ibu.pH.value based on
     // preBoilSG, timeTofirstAddition, and boil time
     if (ibu.pH.value <= 0.0) {
+      if (preBoilSG == 0.0) preBoilSG = 1.055;
       // first, estimate pre-boil pH from pre-boil specific gravity; this
       // estimate comes from blog post 'Some Observations of Mash and Wort pH'
       preBoil_pH = 0.77 * Math.exp(-28.7*(preBoilSG - 1.0)) + 5.624;
       // then, estimate reduction in (post-boil) pH due to boil time,
-      // approx 0.1 pH units per hour.  actual rate is 0.05 to 0.2 per hour
-      postBoil_pH = preBoil_pH - (0.10 * (ibu.boilTime.value / 60.0));
+      totalTime = ibu.boilTime.value; // already includes time to 1st addition
+      postBoil_pH = (preBoil_pH * ((slopeSlope * totalTime) + 1.0)) +
+                                 (slopeIntercept * totalTime);
       // console.log("set pH to " + postBoil_pH.toFixed(4) +
                   // " from pre-boil pH " + preBoil_pH.toFixed(4) +
                   // ", based on SG=" + preBoilSG.toFixed(4) +
@@ -418,8 +423,8 @@ this.recurseExperimentSettings = function(expList, expData, ibu, numAdd,
   inc = currSearch.inc;
   if (currSearch.method == "relative") {
     low = currSearch.default * currSearch.low;
-    high = currSearch.default * currSearch.high;
-    inc = (high - low) * currSearch.inc;
+    high = currSearch.default * currSearch.high + 0.001;  // add epsilon
+    inc = currSearch.default * currSearch.inc;
     if (inc == 0.0) inc = (high - low) / 10.0;
   }
   if (currSearch.method == "offset") {
@@ -428,7 +433,8 @@ this.recurseExperimentSettings = function(expList, expData, ibu, numAdd,
     inc = currSearch.inc;
     if (inc == 0.0) inc = (high - low) / 10.0;
   }
-  // console.log("searching " + low + " to " + high + " with inc " + inc);
+  if (inc == 0.0) inc = 0.001;  // if high and low are same, no infinite loop
+  console.log("searching " + low + " to " + high + " with inc " + inc);
   for (v = low; v <= high; v += inc) {
     // prevent floating-point drift by forcing all values to 4 decimal points
     v = Number(v.toFixed(4));

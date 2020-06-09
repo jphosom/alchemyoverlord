@@ -14,16 +14,23 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "mIBU Exp. #1", "mIBU Exp. #2a", "mIBU Exp. #2b", "mIBU Exp. #3" ];
 // var evaluateTrainingExperiments = [ "mIBU Exp. #1" ];
 // var evaluateTrainingExperiments = [ "Util. Exp. #1", "Util. Exp. #3", "Util. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Util. Exp. #3", "Util. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Util. Exp. #4" ];
 // var evaluateTrainingExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4",
+                                    // "Util. Exp. #3", "Util. Exp. #4" ];
+// var evaluateTrainingExperiments = [ "Sol. Exp. #4" ];
 // var evaluateTrainingExperiments = [ "ConPel Exp. #1", "ConPel Exp. #2", "ConPel Exp. #3", "ConPel Exp. #4" ];
-// var evaluateTrainingExperiments = [ "ConPel Exp. #3" ];
+// var evaluateTrainingExperiments = [ "ConPel Exp. #6" ];
 // var evaluateTrainingExperiments = [ "Sol. pH 5.2" ];
 // var evaluateTrainingExperiments = [ "Hop Concentration Exp. #1" ];
 // var evaluateTrainingExperiments = [ "pH Exp. #1" ];
 // var evaluateTrainingExperiments = [ "CaCl2 Exp. #1" ];
 // var evaluateTrainingExperiments = [ "OG Exp. #1", "OG Exp. #2" ];
-// var evaluateTrainingExperiments = [ "IPA, Jun. 2018", "IPA, Jul. 2019" ];
+// var evaluateTrainingExperiments = [ "IPA, Jun. 2018", "IPA, Jul. 2019", "IPA, Apr. 2020" ];
 // var evaluateTrainingExperiments = [ "Teamaker #1" ];
+// var evaluateTrainingExperiments = [ "oAA as Function of Temperature" ];
+// var evaluateTrainingExperiments = [ "Lauter Exp. #2" ];
 
 // units *must* be all metric
 
@@ -37,7 +44,7 @@ var trainingData = {
         "OG_list":     [ 1.055,  1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055 ],
 
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
-        "add1":        [ 8.65,  6.18, "cones", 0.95,   38.2,  283.495,   90 ],
+        "add1":        [ 8.65,  5.00, "cones", 1.00,   38.2,  325.55,   90 ],
 
         "timeToFirstAddition": 0,
         // assume 2-barrel pilot-brewery volume
@@ -52,8 +59,9 @@ var trainingData = {
         "kettleOpening":         35,    // brew-magic 2bbl unitank top manway SABCO
         "evaporationRate":       14.081725,  // 234.7*1.2*0.05
         "preOrPostBoilVol":      "preBoilVol",  // will account for evaporation rate
-        "immersionDecayFactor":  0.724,
+        "immersionDecayFactor":  0.23,  // target forced cooling time of 3 minutes, like UtilExp1
         "forcedDecayType":       "forcedDecayImmersion", // each sample uses immersion chiller
+        "krausen":               "mix krausen back in; no loss",  // guess
         "beerAge_days":          7,
 
         "search": [
@@ -68,19 +76,19 @@ var trainingData = {
 
             {
                 "param":    "weight1",
-                "default":  200.0,
+                "default":  325.55,
                 "method":   "relative",
-                "low":      0.40,
-                "high":     1.20,
+                "low":      1.00,
+                "high":     1.00,
                 "inc":      0.10,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.95,
-                "method":   "offset",
-                "low":      0.0,
-                "high":     .05,
+                "method":   "value",
+                "low":      1.00,
+                "high":     1.00,
                 "inc":      0.05,
             }
         ]
@@ -125,11 +133,11 @@ var trainingData = {
         "search": [
             {
                 "param":    "weight1",
-                "default":  425.0,
+                "default":  560.0,
                 "method":   "value",
-                "low":      360.0,
-                "high":     560.0,
-                "inc":      20.0,
+                "low":      400.0,
+                "high":     700.0,
+                "inc":      50.0,
             }
         ]
     },
@@ -168,8 +176,8 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  8.0,  // package rating.  also, measured 6.25/0.72=8.70%; meas 7.25%/0.27=10.7%
                 "method":   "value",
-                "low":      7.0,
-                "high":     10.0,
+                "low":      8.0,
+                "high":     11.0,
                 "inc":      0.50,
             },
 
@@ -177,8 +185,8 @@ var trainingData = {
                 "param":    "freshnessFactor1",
                 "default":  0.72,  // from HSI
                 "method":   "value",
-                "low":      0.60,
-                "high":     1.00,
+                "low":      0.50,
+                "high":     0.90,
                 "inc":      0.10,
             }
         ]
@@ -222,10 +230,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  8.40,  // package rating (measured later at 5.75%, so est. freshF at 0.68)
-                "method":   "value",
-                "low":      7.4,   // search within 1 percentage point
-                "high":     9.4,   // search within 1 percentage point
-                "inc":      0.50,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -277,10 +285,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  7.90,  // package rating (measured later at 6.25%, so est. freshF at 0.79)
-                "method":   "value",
-                "low":      6.9,
-                "high":     8.9,
-                "inc":      0.50,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -329,17 +337,17 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  6.64,  // analysis soon after harvest
-                "method":   "value",
-                "low":      5.6,
-                "high":     7.6,
-                "inc":      0.20,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.95,
                 "method":   "value",
-                "low":      0.95,
+                "low":      0.90,
                 "high":     1.00,
                 "inc":      0.05,
             }
@@ -348,7 +356,8 @@ var trainingData = {
 
     "Util. Exp. #1": {
         "conditions":           [ "A",     "B",     "C",     "D",     "E",     "F" ],
-        "IBU_list":             [ 45.0,    34.0,    46.0,    37.0,    48.0,    36.0 ],
+        // "IBU_list":             [ 45.0,    34.0,    46.0,    37.0,    48.0,    36.0 ],
+        "IBU_list":             [ 43.0,    33.0,    44.0,    34.0,    46.0,    34.0 ],
         "time_list":            [ 40,      20,      40,      20,      40,      20 ],
         // pre-boil volume:     [ 6.624,   6.624,   6.624,   6.624,   6.624,   6.624 ],
         // pre-boil SG:         [ 1.0514,  1.0514,  1.0514,  1.0514,  1.0514,  1.0514 ], // from hydrometer
@@ -357,6 +366,7 @@ var trainingData = {
 
         // cascade package rating AA 8.1%  BA 7.6%
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        // default freshness factor 0.95 is rough guess based on measured AA / package AA
         "add1":        [ 8.10,  7.60, "cones", 0.95,  50.0,   21.26,     40 ],
 
         "timeToFirstAddition":  10,      // wait 10 minutes after start of boil
@@ -367,7 +377,7 @@ var trainingData = {
         "pH":                   "estimate",
         "preBoilSG":            1.0514,
         "krausen":              "mix krausen back in; no loss",  // guess; no actual record
-        "beerAge_days":         28,
+        "beerAge_days":         42,
 
         // search parameters:
         "skipSearch": false,
@@ -375,17 +385,17 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  8.10,    // from package
-                "method":   "value",
-                "low":      7.1,
-                "high":     9.1,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.95,
                 "method":   "value",
-                "low":      0.90,
+                "low":      0.85,
                 "high":     1.00,
                 "inc":      0.05,
             }
@@ -403,11 +413,12 @@ var trainingData = {
         "weight_list":          [ 10.49,   20.98,   31.47,   41.96,   52.45,   62.94 ],
 
         // cascade package rating AA=8.10%, BA=7.60%.  Measured AA=7.7%, BA=6.8%, HSI 0.231
+        // default freshness factor 0.95 is rough guess based on measured AA / package AA
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 8.10,  7.60, "cones", 1.00,  50.0,  0.0,     12 ],
+        "add1":        [ 8.10,  7.60, "cones", 0.95,  50.0,  0.0,     12 ],
 
         "timeToFirstAddition":  7,      // wait 7 minutes after start of boil
-        "evaporationRate":      0.833, // estimate from Util Exp #1
+        "evaporationRate":      0.833,  // estimate from Util Exp #1 
         "whirlpoolTime":        0,
         "immersionDecayFactor": 0.22,
         "pH":                   "estimate",
@@ -421,17 +432,17 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  8.10,
-                "method":   "value",
-                "low":      7.1,
-                "high":     9.1,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.95,
                 "method":   "value",
-                "low":      0.95,
+                "low":      0.85,
                 "high":     1.00,
                 "inc":      0.05,
             }
@@ -451,8 +462,9 @@ var trainingData = {
         "postBoil_temp_list":   [ 0.0,     0.0,     0.0,     0.0,     63.61 ],
 
         // cascade package rating AA=8.10%, BA=7.60%.  Measured AA=7.7%, BA=6.8%, HSI 0.231
+        // default freshness factor 0.95 is rough guess based on measured AA / package AA
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 8.10,  7.60, "cones", 0.94,  50.0,  0.0,     26.9 ],
+        "add1":        [ 8.10,  7.60, "cones", 0.95,  50.0,  0.0,     26.9 ],
 
         "timeToFirstAddition":  7,      // wait 7 minutes after start of boil
         "kettleDiameter":       30.0,  // 5G enamel
@@ -463,7 +475,7 @@ var trainingData = {
         "tempExpParamB":        0.0,   // instantly cool for post-boil hop stand
         "tempExpParamC":        20.0,  // cool below temp of lowest hop stand
         "tempDecayType":        "tempDecayExponential",
-        "immersionDecayFactor": 0.87,  // JPH : CHECK THIS
+        "immersionDecayFactor": 0.87,
         "forcedDecayType":      "forcedDecayImmersion",
         "pH":                   "estimate",
         "preBoilSG":            1.051,
@@ -476,17 +488,17 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  8.10,
-                "method":   "value",
-                "low":      7.1,
-                "high":     9.1,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.95,
                 "method":   "value",
-                "low":      0.95,
+                "low":      0.85,
                 "high":     1.00,
                 "inc":      0.05,
             }
@@ -510,10 +522,10 @@ var trainingData = {
                                   1.0497,  1.0499,  1.0502,  1.0504,  1.0507    ],
 
         // citra (both additions) package rating AA 13.3%  BA 3.9%
-        // default freshness factor 0.58 is rough guess based on IBU results
+        // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 13.30,  3.90, "cones", 0.58,  25.0,  32.60,   100 ],
-        "add2":        [ 13.30,  3.90, "cones", 0.58,  25.0,  32.60,    45 ],
+        "add1":        [ 13.30,  3.90, "cones", 0.74,  25.0,  32.60,   100 ],
+        "add2":        [ 13.30,  3.90, "cones", 0.74,  25.0,  32.60,    45 ],
 
         "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
         "evaporationRate":      0.914, // (V10=30.832 - V100=29.461) / (90min/60min)
@@ -530,37 +542,37 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  13.30,
-                "method":   "value",
-                "low":      12.8,
-                "high":     13.8,
-                "inc":      0.5,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.10,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  0.58,
-                "method":   "value",
-                "low":      0.60,
-                "high":     0.70,
-                "inc":      0.05,
+                "default":  0.74,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.10,
             },
 
             {
                 "param":    "AA2",
                 "default":  13.30,
-                "method":   "value",
-                "low":      12.8,
-                "high":     13.8,
-                "inc":      0.5,
+                "method":   "relative",
+                "low":      1.00,
+                "high":     1.00,
+                "inc":      0.10,
             },
 
             {
                 "param":    "freshnessFactor2",
-                "default":  0.58,
-                "method":   "value",
-                "low":      0.60,
-                "high":     0.70,
-                "inc":      0.05,
+                "default":  0.74,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.10,
             }
         ]
     },
@@ -582,9 +594,9 @@ var trainingData = {
                                   1.0507,  1.0510,  1.0513,  1.0516,  1.0519    ],
 
         // citra package rating AA 13.3%  BA 3.9%
-        // default freshness factor 0.58 is rough guess based on IBU results
+        // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 13.30,  3.90, "cones", 0.58,  25.0,  82.865,    103 ],
+        "add1":        [ 13.30,  3.90, "cones", 0.74,  25.0,  82.865,    103 ],
 
         "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
         "evaporationRate":      0.9987, // (V10=30.824 - V100=29.276) / (93min/60min)
@@ -601,18 +613,18 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  13.30,
-                "method":   "value",
-                "low":      12.8,
-                "high":     13.8,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  0.58,
-                "method":   "value",
-                "low":      0.60,
-                "high":     1.00,
+                "default":  0.74,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
                 "inc":      0.05,
             }
         ]
@@ -635,9 +647,9 @@ var trainingData = {
                                   1.0508,  1.0512,  1.0516 ],
 
         // citra package rating AA 13.3%  BA 3.9%
-        // default freshness factor 0.58 is rough guess based on IBU results
+        // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 13.30,  3.90, "cones", 0.58,  25.0,  177.1845,   80 ],
+        "add1":        [ 13.30,  3.90, "cones", 0.74,  25.0,  177.1845,   80 ],
 
         "timeToFirstAddition":  10,     // wait 10 minutes after start of boil
         "evaporationRate":      1.535, // (V10=30.711 - V80=28.920) / (70min/60min)
@@ -654,18 +666,18 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  13.30,
-                "method":   "value",
-                "low":      12.8,
-                "high":     13.8,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  0.58,
-                "method":   "value",
-                "low":      0.60,
-                "high":     1.00,
+                "default":  0.74,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
                 "inc":      0.05,
             }
         ]
@@ -688,9 +700,10 @@ var trainingData = {
                                   1.0503,  1.0507,  1.0512,  1.0516,  1.0521 ],
 
         // citra package rating AA 13.3%  BA 3.9%
-        // default freshness factor 0.58 is rough guess based on IBU results
+        // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
+        // an AA rating of 12.0% yields IAA scaling factor more in line with other experiments
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 13.30,  3.90, "cones", 0.58,  25.0,  120.4855,  100 ],
+        "add1":        [ 13.30,  3.90, "cones", 0.74,  25.0,  120.4855,  100 ],
 
         "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
         "evaporationRate":      1.67, // (V10=31.453 - V100=28.955) / (90min/60min)
@@ -707,18 +720,18 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  13.30,
-                "method":   "value",
-                "low":      12.8,
-                "high":     13.8,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  0.58,
-                "method":   "value",
-                "low":      0.60,
-                "high":     1.00,
+                "default":  0.74,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
                 "inc":      0.05,
             }
         ]
@@ -756,10 +769,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  14.30,
-                "method":   "value",
-                "low":      13.8,
-                "high":     14.8,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -800,10 +813,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  5.0,
-                "method":   "value",
-                "low":      4.7,
-                "high":     5.3,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -844,10 +857,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  5.0,
-                "method":   "value",
-                "low":      4.7,
-                "high":     5.3,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -887,17 +900,17 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  10.0,
-                "method":   "value",
-                "low":      9.4,
-                "high":     10.4,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  1.00,
                 "method":   "value",
-                "low":      0.90,
+                "low":      0.95,
                 "high":     1.00,
                 "inc":      0.05,
             }
@@ -929,19 +942,71 @@ var trainingData = {
         "search": [
             {
                 "param":    "AA1",
-                "default":  9.80,
-                "method":   "value",
-                "low":      9.4,
-                "high":     10.4,
-                "inc":      0.10,
+                "default":  9.90,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  1.00,
+                "default":  0.98,
                 "method":   "value",
                 "low":      0.90,
                 "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #6": {
+        "conditions":           [ "A10",   "A20",   "A30",   "A40",
+                                  "B10",   "B20",   "B30",   "B40" ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,
+                                  10.0,    20.0,    30.0,    40.0 ],
+        "IBU_list":             [ 16.95,   22.05,   27.25,   31.65,    
+                                  38.95,   53.90,   58.65,   71.20 ],
+        "weight_list":          [ 21.68,   21.68,   21.68,   21.68,
+                                  57.81,   57.81,   57.81,   57.81 ],
+        "volume_list":          [ 12.534,  12.469,  12.405,  12.342,
+                                  12.095,  12.041,  11.987,  11.934 ], 
+        "OG_list":              [ 1.0385,  1.0387,  1.0389,  1.0391,  
+                                  1.0390,  1.0392,  1.0393,  1.0395 ],
+
+        // comet package rating AA 9.9%, measured 8.32% before exp, therefore 
+        //  loss factor 0.84, beta acids = 3.92 from initial analysis
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  9.9,  3.92, "cones", 0.84,  50.0,  0.0,       40 ],
+
+        "preOrPostBoilVol":     "postBoilVol",  // will account for evaporation rate
+        "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
+        "evaporationRate":      0.224,  // averaged over all 5 conditions
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.60,
+        "preOrPostBoilpH":      "postBoilpH",
+        "krausen":              "mix krausen back in; no loss",   // took samples on same day as clean FV
+        "beerAge_days":         11,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  10.0,
+                "method":   "value",
+                "low":      10.0,
+                "high":     14.0,
+                "inc":      1.0,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.84,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
                 "inc":      0.05,
             }
         ]
@@ -965,7 +1030,7 @@ var trainingData = {
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
         "pH":                   5.19,
-        "krausen":              "medium krausen deposits on FV (default)",   // NO swirling of containers during fermentation (??)
+        "krausen":              "medium krausen deposits on FV (default)",   // NO swirling of containers
         "beerAge_days":         10,
 
         // search parameters:
@@ -974,10 +1039,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  14.30,
-                "method":   "value",
-                "low":      14.3,
-                "high":     14.3,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -1028,19 +1093,19 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  14.30,
-                "method":   "value",
-                "low":      14.3,
-                "high":     14.3,
-                "inc":      0.25,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "AA2",
                 "default":  5.00,
                 "method":   "value",
-                "low":      5.0,
-                "high":     5.0,
-                "inc":      0.25,
+                "low":      4.6,
+                "high":     5.4,
+                "inc":      0.20,
             }
 
         ]
@@ -1077,10 +1142,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  14.30,
-                "method":   "value",
-                "low":      14.3,
-                "high":     14.3,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -1125,10 +1190,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  14.3,
-                "method":   "value",
-                "low":      13.3,
-                "high":     15.3,
-                "inc":      0.20,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -1173,10 +1238,10 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  10.0,
-                "method":   "value",
-                "low":      9.5,
-                "high":     10.5,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
@@ -1222,18 +1287,18 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  7.05,
-                "method":   "value",
-                "low":      6.05,
-                "high":     7.05,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  1.00,
+                "default":  0.90,
                 "method":   "value",
-                "low":      0.80,
-                "high":     0.90,
+                "low":      0.85,
+                "high":     0.95,
                 "inc":      0.05,
             }
 
@@ -1271,18 +1336,18 @@ var trainingData = {
             {
                 "param":    "AA1",
                 "default":  7.05,
-                "method":   "value",
-                "low":      6.05,
-                "high":     7.05,
-                "inc":      0.10,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
             },
 
             {
                 "param":    "freshnessFactor1",
-                "default":  1.00,
+                "default":  0.90,
                 "method":   "value",
-                "low":      0.80,
-                "high":     0.90,
+                "low":      0.85,
+                "high":     0.95,
                 "inc":      0.05,
             }
 
@@ -1306,7 +1371,7 @@ var trainingData = {
                                   1.0568,  1.0570,  1.0575 ],
 
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 0.41, 11.93, "cones", 1.00,  50.0,  57.00,      60 ],
+        "add1":        [ 0.41, 11.93, "cones", 1.00,  38.2,  57.00,      60 ],
 
         "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
         "evaporationRate":      0.336, // evaporation rates measured from vol_10 to vol_60
@@ -1330,10 +1395,110 @@ var trainingData = {
                 "method":   "value",
                 "low":      0.20,
                 "high":     0.80,
-                "inc":      0.20,
+                "inc":      0.10,
             }
         ]
 
+    },
+
+    "oAA as Function of Temperature": {
+        "conditions":           [  "A10",   "A20",   "A30",   "A40",
+                                   "B10",   "B20",   "B30",   "B40",
+                                   "C10",   "C20",   "C30",   "C40" ],
+        "IBU_list":             [  14.9,    20.0,    24.2,    29.1,
+                                   13.1,    15.7,    19.4,    21.6,
+                                    9.8,    10.2,    13.1,    14.4 ],
+        "time_list":            [  10.0,    20.0,    30.0,    40.0,
+                                    0.0,     0.0,     0.0,     0.0,
+                                    0.0,     0.0,     0.0,     0.0 ],
+        "postBoil_time_list":   [   0.0,     0.0,     0.0,     0.0,    
+                                   10.0,    20.0,    30.0,    40.0,
+                                   10.0,    20.0,    30.0,    40.0 ],
+        "postBoil_temp_list":   [ 100.0,   100.0,   100.0,   100.0,   
+                                   93.5,    93.5,    93.5,    93.5,
+                                   82.0,    82.0,    82.0,    82.0 ],
+        "volume_list":          [ 12.31,   12.26,   12.22,   12.17,
+                                  12.30,   12.26,   12.21,   12.17,
+                                  12.31,   12.27,   12.22,   12.18 ],
+        "OG_list":              [ 1.0342,  1.0343,  1.0345,  1.0346,
+                                  1.0342,  1.0343,  1.0345,  1.0346,
+                                  1.0342,  1.0343,  1.0345,  1.0346 ],
+
+        //                Amarillo hops, 2019 harvest, stored in freezer for 4 months,
+        //                         package 8.8%, AAR 9.56%; BA and loss from hops.js
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [ 9.56,  6.50, "cones", 0.90,  14.0,  24.60,      0 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.268, // evaporation rates measured from vol_10 to vol_60
+        "tempExpParamA":        0.0,   // instantly cool for post-boil hop stand
+        "tempExpParamB":        0.0,   // instantly cool for post-boil hop stand
+        "tempExpParamC":        20.0,  // cool below temp of lowest hop stand
+        "tempDecayType":        "tempDecayExponential",
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.32,  // average of 5.301, 5.322, 5.332
+        "preOrPostBoilpH":      "postBoilpH",
+        "krausen":              "minor krausen deposits on FV",   // guess
+        "beerAge_days":         9,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  9.56,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            }
+        ]
+
+    },
+
+    "Lauter Exp. #2": {
+        "conditions":           [ "C10",   "C20",   "C30",   "C40" ],
+        "IBU_list":             [ 16.8,    23.4,    29.3,    32.8 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 12.32,   12.28,   12.25,   12.21 ],
+        "OG_list":              [ 1.0413,  1.0780,  1.0782,  1.0424 ],
+
+        // cascade 2018 analysis: AA 6.4%, store 555 days @ -9'F SF 0.5 -> decay 0.85
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  6.40, 5.75, "cones", 0.85,  50.0,  37.57,    40 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.284, // estimated from OG experiments
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.69,
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  6.40,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.90,
+                "method":   "value",
+                "low":      0.85,
+                "high":     0.95,
+                "inc":      0.05,
+            }
+
+        ]
     },
 
     "IPA, Jun. 2018": {
@@ -1367,71 +1532,23 @@ var trainingData = {
         "forcedDecayType":       "forcedDecayImmersion",
         "krausen":               "mix krausen back in; no loss",   // swirling of containers during fermentation
 
-        "skipSearch":   true,
+        "skipSearch": false,
         "search": [
              {
                  "param":    "AA1",
                  "default":  12.30,
                  "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
              },
              {
                  "param":    "AA2",
                  "default":  9.00,
                  "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA3",
-                 "default":  13.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA4",
-                 "default":  9.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA5",
-                 "default":  13.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA6",
-                 "default":  12.30,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA7",
-                 "default":  11.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
-             },
-             {
-                 "param":    "AA8",
-                 "default":  8.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.5,
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
              },
        ],
     },
@@ -1467,7 +1584,7 @@ var trainingData = {
         "forcedDecayType":       "forcedDecayImmersion",
         "krausen":               "medium krausen deposits on FV (default)",
 
-        "skipSearch":   false,
+        "skipSearch": false,
         "search": [
              {
                  "param":    "krausen",
@@ -1475,7 +1592,7 @@ var trainingData = {
                  "method":   "value",
                  "low":      0.90,
                  "high":     1.00,
-                 "inc":      0.02,
+                 "inc":      0.05,
              },
              {
                  "param":    "AA1",
@@ -1483,11 +1600,62 @@ var trainingData = {
                  "method":   "relative",
                  "low":      0.90,
                  "high":     1.15,
-                 "inc":      0.5,
+                 "inc":      0.05,
              },
        ],
     },
 
+    "IPA, Apr. 2020": {
+        "conditions":            [ "IPA" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 62.2 ],
+
+        "boilTime":              72,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            29.90,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.070,
+        "pH":                    5.19,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         10,
+        "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
+        "beerAge_days":          21,
+
+        //                AA%   BA%    form    freshF  %loss  weight(g),  boil time
+        "add1":        [ 13.5,  4.0,  "cones", 0.837,  25.00,    42.52,     60 ], // citra
+        "add2":        [ 9.56,  6.5,  "cones", 0.900,  14.00,    49.61,     45 ], // amarillo
+        "add3":        [ 12.6,  4.5,  "cones", 0.923,  25.00,    49.61,     30 ], // simcoe
+        "add4":        [ 9.56,  6.5,  "cones", 0.900,  14.00,    21.26,      0 ], // amarillo
+        "add5":        [ 12.6,  4.5,  "cones", 0.923,  25.00,    21.26,      0 ], // simcoe
+        "add6":        [ 13.5,  4.0,  "cones", 0.837,  25.00,    21.26,      0 ], // citra
+        "add7":        [ 10.3,  3.5,  "cones", 0.956,  15.00,    21.26,      0 ], // mosaic
+        "add8":        [  7.0,  5.66, "cones", 0.825,  50.00,    28.35,      0 ], // cascade
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         0.0,  // should be overwritten by tempExpParamB
+        "evaporationRate":       3.71,
+        "immersionDecayFactor":  0.4283,  // hydra wort chiller, measured Oct 27 2018
+        "forcedDecayType":       "forcedDecayImmersion",
+        "krausen":               "medium krausen deposits on FV (default)",
+
+        "skipSearch": false,
+        "search": [
+             {
+                 "param":    "krausen",
+                 "default":  1.0,
+                 "method":   "value",
+                 "low":      0.90,
+                 "high":     1.00,
+                 "inc":      0.05,
+             },
+             {
+                 "param":    "AA1",
+                 "default":  14.30,
+                 "method":   "relative",
+                 "low":      1.00,
+                 "high":     1.00,
+                 "inc":      0.05,
+             },
+       ],
+    },
 
 };
 

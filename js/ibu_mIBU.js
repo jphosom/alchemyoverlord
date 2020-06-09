@@ -56,6 +56,9 @@
 // Version 1.2.7 : Oct. 1, 2019
 //         . have non-zero evaporation rate when temperature less than boiling.
 //
+// Version 1.2.8 : Jun. 9, 2020
+//         . update the effect of pH on auxiliary bittering compounds
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -579,7 +582,7 @@ this.computeIBU_mIBU = function() {
     }
     // compute loss factors for IAA and nonIAA
     IAAlossFactor = (0.0710 * pH) + 0.592;
-    nonIAAlossFactor = (0.894791 * pH) - 4.145047;
+    nonIAAlossFactor = (1.182936 * pH) - 5.80188;
     console.log("  post-boil pH = " + pH.toFixed(2));
     console.log("  IAA loss factor = " + IAAlossFactor.toFixed(4));
     console.log("  nonIAA loss factor = " + nonIAAlossFactor.toFixed(4));

@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // ibu_SMPH.js : JavaScript for AlchemyOverlord web page, SMPH sub-page
 // Written by John-Paul Hosom
-// Copyright © 2018, 2019 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018, 2019, 2020 by John-Paul Hosom, all rights reserved.
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
@@ -11,14 +11,16 @@
 //         described in the blog post "A Summary of Factors Affecting IBUs".
 //
 // TODO:
-// 1. re-analyze best parameters
-// 2. go over code:
+// 1. go over code:
 //    - are nonIAA treated the way they should be?  e.g. LF_boil, IAA factors?
 //    - clean up code
 //    - double-check logic
-// 3. pellets: adjustment from cones
-// 4. pellets: oAA percent init for pellets (and oBA percent init for pellets)
-// 5. final: check indentation, change tabs to spaces, alphabetize variables,
+// 2. re-run parameter estimation
+// 3. update model & HTML to include effects of fement vessel 
+// 4. update model & HTML to include effects of lautering technique
+// 5. pellets: adjustment from cones
+// 6. pellets: oAA percent init for pellets (and oBA percent init for pellets)
+// 7. final: check indentation, change tabs to spaces, alphabetize variables,
 //           remove unused variables.
 //
 // -----------------------------------------------------------------------------
@@ -84,9 +86,10 @@ this.initialize_SMPH = function() {
   this.verbose            = 5;
   this.integrationTime    = 0.1;   // minutes
 
-  this.AA_limit_func_A    = -66800.0;  // SEARCH
-  this.AA_limit_minLimit  = 180.0; // from experiment
-  this.AA_limit_roomTemp  = 90.0;  // AA solubility limit, ppm, from Malowicki
+  this.AA_limit_minLimit  = 225.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 415.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
+  this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
 
   this.hop_nonExtract     = 1.0;   // some say higher, some say lower than 1.0
   this.hop_pelletFactor   = 1.20;
@@ -96,28 +99,25 @@ this.initialize_SMPH = function() {
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
   this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
 
+  this.IAA_LF_boil        = 0.51;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
-  this.LF_boil            = 0.48;   // SEARCH
 
-  this.relTempAt80_nonIAA = 1.00;   // SEARCH
-  // this.oAA_storageFactor  = 0.022;  // estimate from Maye data
-  this.oAA_storageFactor  = 0.04;   // SEARCH
-  this.oAA_boilFactor     = 0.41;   // SEARCH
-  this.scale_oAAloss      = 0.20;   // SEARCH
+  this.oAA_storageFactor  = 0.22;   // estimate from Maye data
+  this.oAA_boilFactor     = 0.055;  // SEARCH  
+  this.oAA_LF_boil        = this.IAA_LF_boil; // assume same boil loss factor as IAA
   this.scale_oAA          = 1.093;  // from Maye, Figure 7
 
-  this.oBA_storageFactor  = 0.00;   // SEARCH
+  this.oBA_storageFactor  = 0.0;    // SEARCH
   this.oBA_boilFactor     = 0.10;   // from Stevens p. 500 max 10%
-  this.scale_oBAloss      = 0.03;   // cumulative oBA scale is 0.0013 : Teamaker
+  this.oBA_LF_boil        = 0.013;  // cumulative oBA scaling is 0.0013 : Teamaker
   this.scale_oBA          = 1.176;  // from Hough p. 491: 1/0.85
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
   this.LF_hopPP           = 0.20;   // 20% are soluble, from the literature
+  this.ferment_hopPP      = 0.70;   // from blog post on malt PP, assume same
   // Parkin scaling factor is 0.022 from [PP] to BU, but BU is 5/7*concentration
   // so 0.022 * 69.68/51.2 is scaling factor from [PP] to [IAA]-equivalent =0.30
   this.scale_hopPP        = 0.030;  // from Parkin, p. 28, corrected
-
-  this.maltPP_slope       = 0.025;  // from experiment
 
   SMPH.computeIBU_SMPH();
 
@@ -169,11 +169,13 @@ this.computeIBU_SMPH = function() {
   if (SMPH.verbose > 0)
     console.log("number of hops additions: " + ibu.add.length);
 
-  // JPH FROM HERE: remove  and be specific about units in comments
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
     ibu.add[hopIdx].AA_init = 0.0;       // units: ppm
     ibu.add[hopIdx].AA_dis_mg = 0.0;     // units: mg
+    ibu.add[hopIdx].AA_undis_mg = 0.0;   // units: mg
+    ibu.add[hopIdx].AA_xfer_mg = 0.0;    // units: mg
     ibu.add[hopIdx].IAA_dis_mg = 0.0;    // units: mg
+    ibu.add[hopIdx].IAA_undis_mg = 0.0;  // units: mg
     ibu.add[hopIdx].IAA_xfer_mg = 0.0;   // units: mg
     ibu.add[hopIdx].IAA_wort = 0.0;      // units: ppm
     ibu.add[hopIdx].IAA_beer = 0.0;      // units: ppm
@@ -310,52 +312,63 @@ this.computeIBU_SMPH = function() {
 // Rate Factors (RF) for IAA
 
 //------------------------------------------------------------------------------
-// Compute rate factor for IAA based on pH
-
-function compute_RF_IAA_pH(ibu) {
-  var pH = ibu.pH.value;
-  var preBoilpH = 0.0;
-  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
-  var RF_pH = 1.0;
-
-  if (ibu.pHCheckbox.value) {
-    // If pre-boil pH, estimate the post-boil pH which is the
-    // one we want to base losses on.  Estimate that the pH drops by
-    // about 0.1 units per hour... this is a ballpark estimate.
-    if (preOrPostBoilpH == "preBoilpH") {
-      preBoilpH = pH;
-      pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
-    }
-
-    // formula from blog post 'The Effect of pH on Utilization and IBUs'
-    RF_pH = (0.071 * pH) + 0.592;
-    if (SMPH.verbose > 5) {
-      console.log("pH = " + pH + ", RF for IAA = " + RF_pH.toFixed(4));
-    }
-  }
-
-  return RF_pH;
-}
-
-//------------------------------------------------------------------------------
 // Compute IAA rate factor (RF).
-// Currently, only the pH affects the IAA rate factor.
-// (Temperature and time affect rate of IAA production, but not as an
-// adjustment factor)
+// Currently, only time and temperature affect rate of IAA production,
+// and these are modeled elsewhere.
 
 function compute_RF_IAA(ibu) {
   var RF_IAA = 1.0;
-
-  RF_IAA = compute_RF_IAA_pH(ibu);
-  if (SMPH.verbose > 3) {
-    console.log("IAA RF : " + RF_IAA.toFixed(4));
-  }
-
   return RF_IAA;
 }
 
+
 //------------------------------------------------------------------------------
 // Loss Factors (LF) for IAA
+
+//------------------------------------------------------------------------------
+// Estimate post-boil pH from pre-boil pH
+
+function compute_postBoil_pH(preBoilpH) {
+  var slopeSlope = -0.003927872518870565;
+  var slopeIntercept = 0.018625896934116128;
+  var pH = preBoilpH;
+
+  pH = (preBoilpH * ((slopeSlope * ibu.boilTime.value) + 1.0)) +
+       (slopeIntercept * ibu.boilTime.value);
+  pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
+  if (SMPH.verbose > 5) {
+    console.log("pre-boil pH: " + preBoilpH.toFixed(4) + " becomes " +
+               pH.toFixed(4) + " after " + ibu.boilTime.value + "-minute boil");
+    }
+  return pH;
+}
+
+//------------------------------------------------------------------------------
+// Compute loss factor for IAA based on pH
+
+function compute_LF_IAA_pH(ibu) {
+  var pH = ibu.pH.value;
+  var preBoilpH = 0.0;
+  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
+  var LF_pH = 1.0;
+
+  if (ibu.pHCheckbox.value) {
+    // If pre-boil pH, estimate the post-boil pH which is the
+    // one we want to base losses on.
+    if (preOrPostBoilpH == "preBoilpH") {
+      preBoilpH = pH;
+      pH = compute_postBoil_pH(preBoilpH);
+    }
+
+    // formula from blog post 'The Effect of pH on Utilization and IBUs'
+    LF_pH = (0.071 * pH) + 0.592;
+    if (SMPH.verbose > 5) {
+      console.log("pH = " + pH + ", LF for IAA = " + LF_pH.toFixed(4));
+    }
+  }
+
+  return LF_pH;
+}
 
 //------------------------------------------------------------------------------
 // Compute IAA loss factor (LF) for gravity using Noonan's data,
@@ -464,22 +477,30 @@ function compute_LF_ferment(ibu) {
 }
 
 //------------------------------------------------------------------------------
-// Compute IAA loss factor (LF) for packaging (filtering and age of the beer)
+// Compute loss factor (LF) for filtering
 
-function compute_LF_package(ibu) {
-  var beerAge_weeks = 0.0;
-  var LF_age = 0.0;
+function compute_LF_filtering(ibu) {
   var LF_filtering = 0.0;
-  var LF_package = 0.0;
 
   LF_filtering = 1.0;
-  LF_age = 1.0;
   if (!isNaN(ibu.filtering.value)) {
     if (ibu.filtering.value >= 0 && ibu.filtering.value < 3.83) {
       // formula based on Fix & Fix page 129 Table 5.5
       LF_filtering = (0.017 * ibu.filtering.value) + 0.934
     }
   }
+  if (SMPH.verbose > 5) {
+    console.log("LF filtering : " + LF_filtering.toFixed(4));
+  }
+  return LF_filtering;
+}
+
+//------------------------------------------------------------------------------
+// Compute loss factor (LF) for age of the beer
+
+function compute_LF_age(ibu) {
+  var beerAge_weeks = 0.0;
+  var LF_age = 1.0;
 
   // Loss based on exponential fit to first 13 weeks of data; after 15 weeks,
   // losses seem to stabilize.
@@ -493,12 +514,10 @@ function compute_LF_package(ibu) {
     beerAge_weeks = 15.0;
   }
   LF_age = 0.35 * Math.exp(-0.073 * beerAge_weeks) + 0.65;
-
-  LF_package = LF_filtering * LF_age;
   if (SMPH.verbose > 5) {
-    console.log("LF package : " + LF_package.toFixed(4));
+    console.log("LF age : " + LF_age.toFixed(4));
   }
-  return LF_package;
+  return LF_age;
 }
 
 // -----------------------------------------------------------------------------
@@ -524,14 +543,18 @@ function compute_LF_IAA(ibu, hopIdx) {
   var LF_IAA = 0.0;
 
   if (SMPH.verbose > 4) {
-    console.log("    IAA LF: LF_boil=" + SMPH.LF_boil.toFixed(4) +
+    console.log("    IAA LF: LF_boil=" + SMPH.IAA_LF_boil.toFixed(4) +
+              ", LF_pH=" + compute_LF_IAA_pH(ibu).toFixed(4) + 
+              ", LF_OG=" + compute_LF_OG_SMPH(ibu, hopIdx).toFixed(4) + 
               ", LF_ferment=" + compute_LF_ferment(ibu).toFixed(4) +
               ", LF_krausen=" + compute_LF_IAA_krausen(ibu).toFixed(4) +
-              ", LF_package=" + compute_LF_package(ibu).toFixed(4));
+              ", LF_filtering=" + compute_LF_filtering(ibu).toFixed(4) + 
+              ", LF_age=" + compute_LF_age(ibu).toFixed(4));
   }
-  LF_IAA = SMPH.LF_boil * compute_LF_OG_SMPH(ibu, hopIdx) * 
-           compute_LF_ferment(ibu) * 
-           compute_LF_IAA_krausen(ibu) * compute_LF_package(ibu);
+  LF_IAA = SMPH.IAA_LF_boil * compute_LF_IAA_pH(ibu) * 
+           compute_LF_OG_SMPH(ibu, hopIdx) * 
+           compute_LF_ferment(ibu) * compute_LF_IAA_krausen(ibu) * 
+           compute_LF_filtering(ibu) * compute_LF_age(ibu);
   if (SMPH.verbose > 3) {
     console.log("      LF IAA : " + LF_IAA.toFixed(4));
   }
@@ -566,24 +589,30 @@ function compute_IAA_beer(ibu, hopIdx) {
 function compute_concent_wort(ibu) {
   var AA_dis_mg = 0.0;  // dissolved AA, in mg
   var AA_dis = 0.0;     // concentration of dissolved AA
+  var AA_undis_mg = 0.0; // undissolved AA, in mg
   var AA_init = 0.0;    // [AA]_0
   var AA_init_mg = 0.0; // initial amount of AA added, in mg
   var AA_limit = 0.0;
   var AA_limit_func_A = 0.0;
-  var AA_limit_func_A_orig = SMPH.AA_limit_func_A;
   var AA_limit_func_B = 0.0;
   var AA_limit_minLimit = 0.0;
   var AA_limit_minLimit_orig = SMPH.AA_limit_minLimit;
+  var AA_limit_maxLimit = 0.0;
+  var AA_limit_maxLimit_orig = SMPH.AA_limit_maxLimit;
   var AA_percent_wort = 0.0;
   var AA_xfer_mg  = 0.0;
+  var AA_undis_xfer_mg  = 0.0;
   var additionTime = 0.0;
   var boilTime = ibu.boilTime.value;
   var chillingTime = 0.0;
   var coolingMethod = ibu.forcedDecayType.value;
   var currVolume = 0.0;
   var dAA_dis_mg = 0.0;
+  var dAA_undis_mg = 0.0;
+  var dAA_xfer_mg = 0.0;
   var decayRate = 0.0;
   var dIAA_dis_mg = 0.0;
+  var dIAA_xfer_mg = 0.0;
   var doneHoldTemp = false;
   var expParamC_Kelvin = 0.0;
   var FCT = 0.0; // forced cooling time
@@ -596,13 +625,19 @@ function compute_concent_wort(ibu) {
   var hopIdx = 0;
   var IAA_wort = 0.0;
   var IAA_dis_mg = 0.0;
+  var IAA_undis_mg = 0.0;
   var IAA_dis = 0.0;
+  var IAA_undis = 0.0;
   var IAA_xfer_mg = 0.0;
+  var IAA_undis_xfer_mg = 0.0;
   var initVolume = 0.0;
   var integrationTime = 0.0;
   var isTempDecayLinear = 0;
   var k1 = 0.0;
   var k2 = 0.0;
+  var k1undis = 0.0;
+  var k2undis = 0.0;
+  var k_dis = 0.0;
   var linParamB_Kelvin = 0.0;
   var minLimitTempScale = 0.0;
   var newAA  = 0.0;
@@ -610,6 +645,7 @@ function compute_concent_wort(ibu) {
   var postBoilTime = 0.0;
   var postBoilVolume = 0.0;
   var preAdd_AA = 0.0;
+  var preAdd_AAundis = 0.0;
   var relRate = 0.0;
   var subBoilEvapRate = 0.0;
   var t = 0.0;
@@ -617,6 +653,9 @@ function compute_concent_wort(ibu) {
   var tempK = 0.0;
   var tempNoBase = 0.0;
   var topoffScale = 0.0;
+  var boilK = 0.0;
+  var roomTempK = 0.0;
+  var slope = 0.0;
   var totalXferTime = 0.0;
   var useSolubilityLimit = ibu.applySolubilityLimitCheckbox.value;
   var volumeChange = 0.0;
@@ -694,6 +733,12 @@ function compute_concent_wort(ibu) {
   tempC = common.convertKelvinToCelsius(tempK);
   k1 = 7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK);
   k2 = 4.1*Math.pow(10.0,12.0)*Math.exp(-12994.0/tempK);
+  // k1undis = 7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK); // FIX
+  // k2undis = 4.1*Math.pow(10.0,12.0)*Math.exp(-12994.0/tempK); // FIX
+  // k_dis = 2.7*6.0*7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK);   // FIX
+  k1undis = 0.0;
+  k2undis = 0.0;
+  k_dis = 0.0;
   if (SMPH.verbose > 3) {
     console.log("at temp " + tempC.toFixed(2)+ ": k1 = " +
                 k1.toFixed(5) + ", k2 = " + k2.toFixed(5));
@@ -728,7 +773,9 @@ function compute_concent_wort(ibu) {
   AA_dis_mg = 0.0; // mg of AA dissolved, not ppm to account for volume changes
   IAA_dis_mg= 0.0; // mg of IAA dissolved, not ppm to account for volume changes
   AA_xfer_mg  = 0.0; // mg of AA transferred (and cooled) via counterflow
+  AA_undis_xfer_mg = 0.0; // mg of undissolved AA transferred via counterflow
   IAA_xfer_mg = 0.0; // mg of IAA transferred via counterflow
+  IAA_undis_xfer_mg = 0.0; // mg of undissolved IAA transferred via counterflow
 
   for (t = boilTime; finished == false; t = t - integrationTime) {
 
@@ -740,8 +787,9 @@ function compute_concent_wort(ibu) {
     // and if counterflow chiller and doing whirlpool, reduce volume of wort
     if (t <= 0) {
       postBoilTime = t * -1.0;
-      if (postBoilTime == whirlpoolTime && SMPH.verbose > 0) {
-        console.log("---- starting use of " + coolingMethod + " chiller ---");
+      if (postBoilTime == ibu.whirlpoolTime.value && SMPH.verbose > 0) {
+        console.log("---- at " + t + ", starting use of " + 
+                    coolingMethod + " chiller ---");
       }
 
       // if counterflow or not yet done with whirlpool, get temp from cooling fn
@@ -811,6 +859,13 @@ function compute_concent_wort(ibu) {
       k1 = 7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK);
       k2 = 4.1*Math.pow(10.0,12.0)*Math.exp(-12994.0/tempK);
 
+      // k1undis = 7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK); // FIX
+      // k2undis = 4.1*Math.pow(10.0,12.0)*Math.exp(-12994.0/tempK); // FIX
+      // k_dis = 2.7*6.0*7.9*Math.pow(10.0,11.0)*Math.exp(-11858.0/tempK);   // FIX
+      k1undis = 0.0;
+      k2undis = 0.0;
+      k_dis = 0.0;
+
       // stop modeling if temperature is less than minimum for isomerization
       tempC = common.convertKelvinToCelsius(tempK);
       if (tempC < SMPH.immersionMinTempC) {
@@ -834,24 +889,54 @@ function compute_concent_wort(ibu) {
         AA_xfer_mg += AA_dis_mg - newAA;
         AA_dis_mg = newAA;
 
+        newAA = (AA_undis_mg / currVolume) * (currVolume - volumeChange);
+        AA_undis_xfer_mg += AA_undis_mg - newAA;
+        AA_undis_mg = newAA;
+
         newIAA = (IAA_dis_mg / currVolume) * (currVolume - volumeChange);
         IAA_xfer_mg += IAA_dis_mg - newIAA;
         IAA_dis_mg = newIAA;
 
-        if (AA_dis_mg < 0.0)  AA_dis_mg  = 0.0;
-        if (IAA_dis_mg < 0.0) IAA_dis_mg = 0.0;
+        newIAA = (IAA_undis_mg / currVolume) * (currVolume - volumeChange);
+        IAA_undis_xfer_mg += IAA_undis_mg - newIAA;
+        IAA_undis_mg = newIAA;
+
+        if (AA_dis_mg < 0.0)    AA_dis_mg  = 0.0;
+        if (AA_undis_mg < 0.0)  AA_undis_mg = 0.0;
+        if (IAA_dis_mg < 0.0)   IAA_dis_mg = 0.0;
+        if (IAA_undis_mg < 0.0) IAA_undis_mg = 0.0;
 
         // adjust AA and IAA levels of each separate addition
         for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
           newAA = (ibu.add[hopIdx].AA_dis_mg / currVolume) *
                   (currVolume - volumeChange);
+          ibu.add[hopIdx].AA_xfer_mg += ibu.add[hopIdx].AA_dis_mg - newAA;
           ibu.add[hopIdx].AA_dis_mg = newAA;
+
+          newAA = (ibu.add[hopIdx].AA_undis_mg / currVolume) *
+                  (currVolume - volumeChange);
+          ibu.add[hopIdx].AA_undis_xfer_mg += ibu.add[hopIdx].AA_undis_mg-newAA;
+          ibu.add[hopIdx].AA_undis_mg = newAA;
+
           newIAA = (ibu.add[hopIdx].IAA_dis_mg / currVolume) *
                    (currVolume - volumeChange);
           ibu.add[hopIdx].IAA_xfer_mg += ibu.add[hopIdx].IAA_dis_mg - newIAA;
           ibu.add[hopIdx].IAA_dis_mg = newIAA;
-          if (ibu.add[hopIdx].AA_dis_mg < 0.0) ibu.add[hopIdx].AA_dis_mg = 0.0;
-          if (ibu.add[hopIdx].IAA_dis_mg < 0.0) ibu.add[hopIdx].IAA_dis_mg= 0.0;
+
+          newIAA = (ibu.add[hopIdx].IAA_undis_mg / currVolume) *
+                   (currVolume - volumeChange);
+          ibu.add[hopIdx].IAA_undis_xfer_mg += ibu.add[hopIdx].IAA_undis_mg - 
+                                               newIAA;
+          ibu.add[hopIdx].IAA_undis_mg = newIAA;
+
+          if (ibu.add[hopIdx].AA_dis_mg < 0.0) 
+            ibu.add[hopIdx].AA_dis_mg = 0.0;
+          if (ibu.add[hopIdx].AA_undis_mg < 0.0) 
+            ibu.add[hopIdx].AA_undis_mg = 0.0;
+          if (ibu.add[hopIdx].IAA_dis_mg < 0.0) 
+            ibu.add[hopIdx].IAA_dis_mg= 0.0;
+          if (ibu.add[hopIdx].IAA_undis_mg < 0.0) 
+            ibu.add[hopIdx].IAA_undis_mg= 0.0;
         }
 
         currVolume = currVolume - volumeChange;
@@ -895,56 +980,67 @@ function compute_concent_wort(ibu) {
                     " (mg) to existing AA = " + AA_dis_mg.toFixed(3) + " (mg)");
         }
         preAdd_AA = AA_dis_mg;
+        preAdd_AAundis = AA_undis_mg;
         AA_dis_mg += AA_init_mg;
 
         // if use solubility limit, see if we need to change AA concentration
         if (useSolubilityLimit) {
-          AA_limit_func_A = AA_limit_func_A_orig;
           AA_limit_minLimit = AA_limit_minLimit_orig;
+          AA_limit_maxLimit = AA_limit_maxLimit_orig;
           // if add hops at below boiling, lower the solubility limit
           if (tempK < 373.15) {
-            // change AA_limit_func_A, AA_limit_minLimit based on temperature
-            // so that we hit AA_limit_roomTemp at room temperature, and
-            // scale the curve to be between a good curve at room temp and
-            // a good curve at boiling.
-            // 4910 = computed with AA_limit_minLimit=90ppm at 20'C and AA
-            //       limit of 120 at 200 ppm and 20'C, estimated from Malowicki.
-            AA_limit_func_A = (AA_limit_func_A_orig + 4910.0) * (tempK-293.15) /
-                              (373.15 - 293.15);
-            minLimitTempScale = -1.0*(AA_limit_minLimit-SMPH.AA_limit_roomTemp)/
-                                     (373.15-293.15);
-            AA_limit_minLimit = AA_limit_minLimit +
-                                     (minLimitTempScale*(373.15-tempK));
+            // change AA_limit_minLimit, AA_limit_maxLimit based on temperature
+            boilK = ibu.boilTemp.value + 273.15;
+            roomTempK   = 20.0 + 273.15;
+            slope = (SMPH.AA_limit_minLimit - SMPH.AA_limit_min_roomTemp) / 
+                    (boilK - roomTempK);
+            AA_limit_minLimit = slope * (tempK - roomTempK) + 
+                                SMPH.AA_limit_min_roomTemp;
+            slope = (SMPH.AA_limit_maxLimit - SMPH.AA_limit_max_roomTemp) / 
+                    (boilK - roomTempK);
+            AA_limit_maxLimit = slope * (tempK - roomTempK) + 
+                                SMPH.AA_limit_max_roomTemp;
             if (SMPH.verbose > 2) {
               console.log("   change due to low temp " + tempK.toFixed(4) +
-                    ": AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
-                    ", minLimitTempScale = " + minLimitTempScale.toFixed(4) +
-                    ", AA_limit_minLimit = " + AA_limit_minLimit.toFixed(4));
+                    ": AA_limit_maxLimit = " + AA_limit_minLimit.toFixed(4) +
+                    ", AA_limit_minLimit = " + AA_limit_maxLimit.toFixed(4));
             }
           }
-          AA_limit_func_B = (-1.0 * AA_limit_func_A / AA_limit_minLimit) +
-                                                      AA_limit_minLimit;
-          AA_dis = AA_dis_mg / currVolume;
-          AA_limit = (AA_limit_func_A / (AA_dis)) + AA_limit_func_B;
-          if (AA_limit < AA_limit_minLimit) {
+          if (AA_limit_maxLimit > AA_limit_minLimit) {
+            AA_limit_func_A = AA_limit_maxLimit;
+            AA_limit_func_B =
+                 -1.0* Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) / 
+                       AA_limit_minLimit;
+            if (SMPH.verbose > 2) {
+              console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
+                        ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
+            }
+            AA_dis = AA_dis_mg / currVolume;
+            AA_limit = AA_limit_func_A * 
+                       (1.0 - Math.exp(-1.0 * AA_limit_func_B * AA_dis));
+            if (AA_limit < AA_limit_minLimit) {
+              AA_limit = AA_limit_minLimit;
+            }
+          } else {
             AA_limit = AA_limit_minLimit;
           }
 
           if (SMPH.verbose > 2) {
             console.log("    AA_limit = " + AA_limit.toFixed(4) + " = " +
-                  AA_limit_func_A.toFixed(4) + "/" + AA_dis.toFixed(4) +
-                  " + " + AA_limit_func_B.toFixed(4) + 
-                  " or AA_minLimit " + AA_limit_minLimit.toFixed(4));
+                  AA_limit_func_A.toFixed(4) + " * (1 - exp(-" + 
+                  AA_limit_func_B.toFixed(6) + "*" + AA_dis.toFixed(4) + "))");
           }
 
-
+          AA_dis = AA_dis_mg / currVolume;
           if (AA_dis > AA_limit) {
+            AA_undis_mg = (AA_dis - AA_limit) * currVolume;
             AA_dis_mg = AA_limit * currVolume;
             AA_dis = AA_limit;
           }
 
           // get dissolved AA in mg for this addition of hops
           ibu.add[hopIdx].AA_dis_mg = AA_dis_mg - preAdd_AA;
+          ibu.add[hopIdx].AA_undis_mg = AA_undis_mg - preAdd_AAundis;
 
           // AA_dis_mg can be negative. If already above saturation limit and
           // add a smaller amount of AA than previous addition, then
@@ -970,9 +1066,23 @@ function compute_concent_wort(ibu) {
               console.log("Warning: can't correct negative [AA]: " + diff);
             }
           }
-
-          // keep record of initial concentration of dissolved alpha acids
-          ibu.add[hopIdx].AA_init_dis_mg = ibu.add[hopIdx].AA_dis_mg;
+          if (ibu.add[hopIdx].AA_undis_mg < 0) {
+            console.log("Info: correcting negative [AA] (undis) = " + 
+                        ibu.add[hopIdx].AA_undis_mg.toFixed(4));
+            diff = ibu.add[hopIdx].AA_undis_mg;
+            for (revIdx = hopIdx-1; revIdx >= 0; revIdx--) {
+              // account for negative [AA]undis by adjusting previous addition
+              ibu.add[revIdx+1].AA_undis_mg = 0.0;
+              ibu.add[revIdx].AA_undis_mg += diff;
+              if (ibu.add[revIdx].AA_undis_mg > 0) {
+                break;
+              }
+              diff = ibu.add[revIdx].AA_undis_mg;
+            }
+            if (revIdx < 0) {
+              console.log("Warning: can't correct negative [AA]: " + diff);
+            }
+          }
 
           if (SMPH.verbose > 2) {
             console.log("    [AA]_init = " + AA_init.toFixed(4) +
@@ -1012,6 +1122,47 @@ function compute_concent_wort(ibu) {
     IAA_dis_mg = IAA_dis_mg + (dIAA_dis_mg * integrationTime);
     if (IAA_dis_mg < 0.0) IAA_dis_mg = 0.0;
 
+    // decrease levels of undissolved AA via conversion to undissolved IAA
+    if (AA_undis_mg > 0.0 && k1undis > 0.0) {
+      dAA_undis_mg = -1.0 * k1undis * AA_undis_mg;
+      AA_undis_mg += dAA_undis_mg * integrationTime;
+      if (AA_undis_mg < 0.0) AA_undis_mg = 0.0;
+    }
+
+    // change levels of undissolved IAA
+    if (IAA_undis_mg > 0.0 && (k1undis > 0.0 || k2undis > 0.0)) {
+      dIAA_undis_mg = (k1undis * AA_undis_mg) - (k2undis * IAA_undis_mg);
+      IAA_undis_mg += dIAA_undis_mg * integrationTime;
+      if (IAA_undis_mg < 0.0) IAA_undis_mg = 0.0;
+    }
+
+    // undissolved AA becomes dissolved AA via first-order reaction
+    if (AA_undis_mg > 0.0 && k_dis > 0.0) {
+      dAA_xfer_mg = k_dis * Math.pow(AA_undis_mg, 0.667);
+      if (AA_dis_mg + (dAA_xfer_mg * integrationTime) > (AA_limit*currVolume)) {
+        dAA_xfer_mg = ((AA_limit*currVolume) - AA_dis_mg) / integrationTime;
+      }
+      if (AA_undis_mg > dAA_xfer_mg * integrationTime) {
+        AA_dis_mg += dAA_xfer_mg * integrationTime;
+        AA_undis_mg -= dAA_xfer_mg * integrationTime;
+      } else {
+        AA_dis_mg += AA_undis_mg;
+        AA_undis_mg = 0.0;
+      }
+    }
+
+    // undissolved IAA becomes dissolved IAA via first-order reaction
+    if (IAA_undis_mg > 0.0 && k_dis > 0.0) {
+      dIAA_xfer_mg = k_dis * Math.pow(IAA_undis_mg, 0.667);
+      if (IAA_undis_mg > dIAA_xfer_mg * integrationTime) {
+        IAA_dis_mg += dIAA_xfer_mg * integrationTime;
+        IAA_undis_mg -= dIAA_xfer_mg * integrationTime;
+      } else {
+        IAA_dis_mg += IAA_undis_mg;
+        IAA_undis_mg = 0.0;
+      }
+    }
+
     // compute AA and IAA levels for each separate addition
     totalAAcheck = 0.0;
     totalIAAcheck = 0.0;
@@ -1020,14 +1171,62 @@ function compute_concent_wort(ibu) {
       dAA_dis_mg = -1.0 * k1 * ibu.add[hopIdx].AA_dis_mg;
       ibu.add[hopIdx].AA_dis_mg += dAA_dis_mg * integrationTime;
       if (ibu.add[hopIdx].AA_dis_mg < 0.0) ibu.add[hopIdx].AA_dis_mg = 0.0;
+
       dIAA_dis_mg = (k1 * ibu.add[hopIdx].AA_dis_mg) -
                  (k2 * ibu.add[hopIdx].IAA_dis_mg);
       ibu.add[hopIdx].IAA_dis_mg += dIAA_dis_mg * integrationTime;
       if (ibu.add[hopIdx].IAA_dis_mg < 0.0) ibu.add[hopIdx].IAA_dis_mg = 0.0;
+
+      if (ibu.add[hopIdx].AA_undis_mg > 0.0 && k1undis > 0.0) {
+        dAA_undis_mg = -1.0 * k1undis * ibu.add[hopIdx].AA_undis_mg;
+        ibu.add[hopIdx].AA_undis_mg += dAA_undis_mg * integrationTime;
+        if (ibu.add[hopIdx].AA_undis_mg < 0.0) 
+          ibu.add[hopIdx].AA_undis_mg = 0.0;
+      }
+
+      if (ibu.add[hopIdx].IAA_undis_mg > 0.0 && 
+          (k1undis > 0.0 || k2undis > 0.0)) {
+        dIAA_undis_mg = (k1undis * ibu.add[hopIdx].AA_undis_mg) - 
+                        (k2undis * ibu.add[hopIdx].IAA_undis_mg);
+        ibu.add[hopIdx].IAA_undis_mg += dIAA_undis_mg * integrationTime;
+        if (ibu.add[hopIdx].IAA_undis_mg < 0.0) 
+          ibu.add[hopIdx].IAA_undis_mg = 0.0;
+      }
+
+      if (ibu.add[hopIdx].AA_undis_mg > 0.0 && k_dis > 0.0) {
+        dAA_xfer_mg = k_dis * Math.pow(ibu.add[hopIdx].AA_undis_mg, 0.667);
+        // JPH FIX THIS:
+        // Note: this isn't quite correct, since limit applies to all additions
+        if (ibu.add[hopIdx].AA_dis_mg + (dAA_xfer_mg * integrationTime) > 
+            (AA_limit*currVolume)) {
+          dAA_xfer_mg = ((AA_limit*currVolume) - ibu.add[hopIdx].AA_dis_mg) / 
+                         integrationTime;
+        }
+        if (ibu.add[hopIdx].AA_undis_mg > dAA_xfer_mg * integrationTime) {
+          ibu.add[hopIdx].AA_dis_mg += dAA_xfer_mg * integrationTime;
+          ibu.add[hopIdx].AA_undis_mg -= dAA_xfer_mg * integrationTime;
+        } else {
+          ibu.add[hopIdx].AA_dis_mg += ibu.add[hopIdx].AA_undis_mg;
+          ibu.add[hopIdx].AA_undis_mg = 0.0;
+        }
+      }
+
+      if (ibu.add[hopIdx].IAA_undis_mg > 0.0 && k_dis > 0.0) {
+        dIAA_xfer_mg = k_dis * Math.pow(ibu.add[hopIdx].IAA_undis_mg, 0.667);
+        if (ibu.add[hopIdx].IAA_undis_mg > dIAA_xfer_mg * integrationTime) {
+          ibu.add[hopIdx].IAA_dis_mg += dIAA_xfer_mg * integrationTime;
+          ibu.add[hopIdx].IAA_undis_mg -= dIAA_xfer_mg * integrationTime;
+        } else {
+          ibu.add[hopIdx].IAA_dis_mg += ibu.add[hopIdx].IAA_undis_mg;
+          ibu.add[hopIdx].IAA_undis_mg = 0.0;
+        }
+      }
+
       totalAAcheck += ibu.add[hopIdx].AA_dis_mg;
       totalIAAcheck += ibu.add[hopIdx].IAA_dis_mg;
       // console.log("     add " + hopIdx + ": AA = " + ibu.add[hopIdx].AA_dis_mg.toFixed(4) + 
                   // ", total = " + totalAAcheck.toFixed(4));
+
       // use IAA relative temp as proxy for everything happening at each temp.
       relativeTemp = 2.39 * Math.pow(10.0,11) * Math.exp(-9773.0/tempK);
       if (relativeTemp > 1.0) relativeTemp = 1.0;
@@ -1055,9 +1254,12 @@ function compute_concent_wort(ibu) {
       console.log("time = " + t.toFixed(3));
       console.log("       temp = " + tempC.toFixed(2));
       console.log("       volume = " + currVolume.toFixed(4));
-      console.log("       AA = " + AA_dis.toFixed(4) + " ppm " +
+      console.log("       AA(dis) = " + AA_dis.toFixed(4) + " ppm " +
                           "with delta " + dAA_dis_mg.toFixed(6) + " mg/min");
-      console.log("       IAA = " + IAA_dis.toFixed(4) + " ppm " +
+      console.log("       AA(undis) = " + (AA_undis_mg/currVolume).toFixed(4) + " ppm " +
+                          "with delta " + dAA_undis_mg.toFixed(6) + " mg/min" +
+                          ", k=" + k_dis.toFixed(8));
+      console.log("       IAA(dis) = " + IAA_dis.toFixed(4) + " ppm " +
                           "with delta " + dIAA_dis_mg.toFixed(6) + " mg/min");
       if (t == 0) {
         console.log("    -------- end of boil --------");
@@ -1093,7 +1295,7 @@ function compute_concent_wort(ibu) {
   }
 
   // compute forced cooling time (FCT)
-  FCT = (-1.0 * t) - whirlpoolTime;
+  FCT = (-1.0 * t) - ibu.whirlpoolTime.value;
 
   // adjust amount of dissolved material based on wort/trub loss and 
   // topoff volume added
@@ -1141,9 +1343,10 @@ function compute_concent_wort(ibu) {
        topoffScale;
     ibu.add[hopIdx].oAA_wort = ibu.add[hopIdx].oAA_dis_mg / finalVolume;
     ibu.add[hopIdx].oBA_wort = ibu.add[hopIdx].oBA_dis_mg / finalVolume;
-    ibu.add[hopIdx].hopPP_wort = ibu.add[hopIdx].hopPP_dis_mg/finalVolume;
+    ibu.add[hopIdx].hopPP_wort = ibu.add[hopIdx].hopPP_dis_mg / finalVolume;
     if (SMPH.verbose > 0) {
-      console.log("  addition " + hopIdx + " has [IAA]=" +
+      console.log("  addition " + hopIdx + " has vol=" + 
+                finalVolume.toFixed(4) + " liters, [IAA]=" +
                 ibu.add[hopIdx].IAA_wort.toFixed(4) + " ppm, [oAA]=" + 
                 ibu.add[hopIdx].oAA_wort.toFixed(4) + " ppm, [oBA]=" + 
                 ibu.add[hopIdx].oBA_wort.toFixed(4) + " ppm, [PP]=" +
@@ -1184,18 +1387,15 @@ function compute_LF_nonIAA_pH(ibu) {
 
   if (ibu.pHCheckbox.value) {
     // If pre-boil pH, estimate the post-boil pH which is the
-    // one we want to base losses on.  Estimate that the pH drops by
-    // about 0.1 units per hour... this is a ballpark estimate.
+    // one we want to base losses on.
     if (preOrPostBoilpH == "preBoilpH") {
-      if (SMPH.verbose > 3) {
-        console.log("mapping pre-boil pH to post-boil pH");
-      }
       preBoilpH = pH;
-      pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
+      pH = compute_postBoil_pH(preBoilpH);
     }
 
     // formula from blog post 'The Effect of pH on Utilization and IBUs'
-    LF_pH = (0.8948 * pH) - 4.145;
+    // LF_pH = (0.8948 * pH) - 4.145;  OLD FORMULA
+    LF_pH = (1.182936 * pH) - 5.80188;
     if (SMPH.verbose > 5) {
       console.log("pH = " + pH + ", LF for nonIAA = " + LF_pH.toFixed(4));
     }
@@ -1241,6 +1441,11 @@ function compute_LF_nonIAA_krausen(ibu) {
 function compute_relativeTemp(ibu, hopIdx) {
   var relativeTemp = 0.0;
 
+  // JPH CHECK THIS:
+  if (1) {
+    return 1.0;
+  }
+
   relativeTemp = 0.0;
   if (!ibu.add[hopIdx].tempK) {
     console.log("ERROR: temperature at hop addition not known; assuming RT");
@@ -1250,13 +1455,14 @@ function compute_relativeTemp(ibu, hopIdx) {
   // Teamaker results at 100'C and 80'C suggest nonIAA similar to 
   // temperature effect with isomerized alpha acids
   // but Util Exp #4 says that this estimate is incorrect.
+  // blog post (not yet written) on oAA and temperature (beer70) says no effect
   if (1) {
     // 80'C = relative temp of 0.722.  why??
     var tempC = 0.0;
     // var relAt80 = 0.722;
     // relAt80 = 0.444; // from Teamaker experiment comparing 80'C and 100'C
     // relAt80 = 0.90;  // gives best results on training data
-    var relAt80 = SMPH.relTempAt80_nonIAA;
+    var relAt80 = 1.0;
     tempC = ibu.add[hopIdx].tempK - 273.15;
     relativeTemp = ((tempC - 80.0)*(1.0 - relAt80)/(100.0 - 80.0)) + relAt80;
     } else {
@@ -1297,42 +1503,57 @@ function compute_oAA_dis_mg(ibu, hopIdx, currVolume) {
       console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
                 " and so k = " + k.toFixed(6));
     }
-    // oAA_fresh is oAA per weight of hops, modeled as 0.5 days decay at 20C
-    // estimate obtained by analysis of Maye paper
-    oAA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 0.5));
+    // oAA_fresh modeled as 3.5 days decay at 20'C, which is then multiplied 
+    // by AA rating.  For Maye paper, average AA of Zeus is 15.75% and SF = 50%,
+    // so 1-(1/exp(0.003798*1*1*3.5) * 0.1575 = 0.002 = 0.2% of weight of hops.
+    // where 0.003798 is k for SF 50%.
+    oAA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
+
     AAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
-    // 0.022 estimated from analysis of Maye paper; see oAA.tcl
     oAA_percent_init = (AAloss_percent * SMPH.oAA_storageFactor) + oAA_fresh;
     if (SMPH.verbose > 4) {
       console.log("    [oAA] storage factors: fresh=" + oAA_fresh.toFixed(5) +
                 ", loss=" + AAloss_percent.toFixed(5) +
+                ", storage=" + SMPH.oAA_storageFactor.toFixed(4) + 
                 ", %init=" + oAA_percent_init.toFixed(5));
     }
   }
 
   relativeTemp = compute_relativeTemp(ibu, hopIdx);
-  relativeAA = 0.0;
-  if (ibu.add[hopIdx].AA_init > 0.0 && currVolume > 0.0) {
-    relativeAA = ibu.add[hopIdx].AA_dis_mg/(ibu.add[hopIdx].AA_init*currVolume);
+  // JPH turn on or off oAA solubility limit 
+  relativeAA = 1.0;
+  if (1) {
+    if (ibu.add[hopIdx].AA_init > 0.0 && currVolume > 0.0) {
+      relativeAA = ibu.add[hopIdx].AA_dis_mg/(ibu.add[hopIdx].AA_init*currVolume);
+    }
   }
-  // JPH turn on or off oAA solubility limit
-  // relativeAA = 1.0;
   // console.log("AA : added = " + (ibu.add[hopIdx].AA_init*currVolume).toFixed(3) + 
               // "mg , dissolved = " + ibu.add[hopIdx].AA_dis_mg.toFixed(3) + 
               // "mg, relative = " + relativeAA.toFixed(3));
   // the AA solubility limit only applies to the oAA produced during the boil
-  oAA_percent_boilFactor = (ibu.add[hopIdx].AA.value / 100.0) *
-                           ibu.add[hopIdx].freshnessFactor.value *
+  oAA_percent_boilFactor = ibu.add[hopIdx].freshnessFactor.value *
                            SMPH.oAA_boilFactor * relativeAA * relativeTemp;
+  if (SMPH.verbose > 4) {
+    console.log("    [oAA] boil factor: " + oAA_percent_boilFactor.toFixed(5) +
+              " from fresh=" + ibu.add[hopIdx].freshnessFactor.value.toFixed(5) +
+              ", boil=" + SMPH.oAA_boilFactor.toFixed(5) + 
+              ", relAA=" + relativeAA.toFixed(5) + 
+              ", relTemp=" + relativeTemp.toFixed(5));
+  }
   // oAA_addition is oAA added to wort, in mg
   oAA_addition = (oAA_percent_init + oAA_percent_boilFactor) *
+                 (ibu.add[hopIdx].AA.value/100.0) * 
                   ibu.add[hopIdx].weight.value * 1000.0;
 
   // note: solubility limit of oAA is large enough so that all are dissolved
   ibu.add[hopIdx].oAA_dis_mg = oAA_addition;
   if (SMPH.verbose > 3) {
     console.log("    addition " + hopIdx + " [oAA] boil = " + 
-                ibu.add[hopIdx].oAA_dis_mg.toFixed(4));
+                (ibu.add[hopIdx].oAA_dis_mg/currVolume).toFixed(4) + 
+                " from (" + oAA_percent_init + " + " + oAA_percent_boilFactor +
+                ") * " + ibu.add[hopIdx].AA.value/100.0 + " * " +
+                ibu.add[hopIdx].weight.value + " * 1000.0 / " + 
+                currVolume);
   }
 
   return;
@@ -1348,15 +1569,28 @@ function compute_oAA_dis_mg(ibu, hopIdx, currVolume) {
 
 function compute_LF_oAA(ibu, hopIdx) {
   var LF_oAA = 0.0;
+  var oAA_LF_boil = 0.0;
 
-  LF_oAA = SMPH.LF_boil * compute_LF_nonIAA_pH(ibu) *
+  // JPH DEBUG: enforce that oAA_LF_boil is same as IAA:
+  oAA_LF_boil = SMPH.IAA_LF_boil;
+
+  LF_oAA = oAA_LF_boil * 
+           compute_LF_nonIAA_pH(ibu) *
            compute_LF_OG_SMPH(ibu, hopIdx) * 
            compute_LF_ferment(ibu) * 
            compute_LF_nonIAA_krausen(ibu) * 
-           compute_LF_package(ibu) * SMPH.scale_oAAloss;
+           compute_LF_filtering(ibu) *
+           compute_LF_age(ibu);
   if (LF_oAA > 1.0) LF_oAA = 1.0;
-  if (SMPH.verbose > 3) {
+  if (SMPH.verbose > 5) {
     console.log("    LF oAA " + LF_oAA.toFixed(4));
+    console.log("       from " + oAA_LF_boil + ", " +
+                                 compute_LF_nonIAA_pH(ibu) + ", " + 
+                                 compute_LF_OG_SMPH(ibu, hopIdx) + ", " + 
+                                 compute_LF_ferment(ibu) + ", " + 
+                                 compute_LF_nonIAA_krausen(ibu) + ", " + 
+                                 compute_LF_filtering(ibu) + ", " + 
+                                 compute_LF_age(ibu));
   }
   return(LF_oAA);
 }
@@ -1373,7 +1607,9 @@ function compute_oAA_beer(ibu, hopIdx) {
   oAA_beer = ibu.add[hopIdx].oAA_beer;
 
   if (SMPH.verbose > 3) {
-    console.log("    oAA in finished beer = " + oAA_beer.toFixed(4));
+    console.log("    oAA in finished beer = " + oAA_beer.toFixed(4) + 
+                " from add" + hopIdx + "=" + ibu.add[hopIdx].oAA_wort.toFixed(4) + 
+                " in wort and LF " + compute_LF_oAA(ibu,hopIdx));
   }
   return(oAA_beer);
 }
@@ -1403,11 +1639,10 @@ function compute_oBA_dis_mg(ibu, hopIdx) {
       console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
                 " and so k = " + k.toFixed(6));
     }
-    // oBA_fresh is oBA per weight of hops, modeled as 0.5 days decay at 20C
-    // estimate obtained by analysis of Maye paper
-    oBA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 0.5));
+    // oBA_fresh is modeled the same way as oAA_fresh
+    oBA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
+
     BAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
-    // 0.022 estimated from analysis of Maye paper; see oAA.tcl
     oBA_percent_init = (BAloss_percent * SMPH.oBA_storageFactor) + oBA_fresh;
     if (SMPH.verbose > 4) {
       console.log("    [oBA] storage factors: fresh=" + oBA_fresh.toFixed(5) +
@@ -1417,11 +1652,11 @@ function compute_oBA_dis_mg(ibu, hopIdx) {
   }
 
   relativeTemp = compute_relativeTemp(ibu, hopIdx);
-  oBA_percent_boilFactor = (ibu.add[hopIdx].BA.value / 100.0) *
-                           ibu.add[hopIdx].freshnessFactor.value *
+  oBA_percent_boilFactor = ibu.add[hopIdx].freshnessFactor.value *
                            SMPH.oBA_boilFactor * relativeTemp;
   // oBA_addition is oBA added to wort, in mg
   oBA_addition = (oBA_percent_init + oBA_percent_boilFactor) *
+                 (ibu.add[hopIdx].BA.value / 100.0) * 
                   ibu.add[hopIdx].weight.value * 1000.0;
 
   // note: solubility limit of oBA is large enough so that all are dissolved
@@ -1442,11 +1677,13 @@ function compute_oBA_dis_mg(ibu, hopIdx) {
 function compute_LF_oBA(ibu, hopIdx) {
   var LF_oBA = 0.0;
 
-  LF_oBA = SMPH.LF_boil * compute_LF_nonIAA_pH(ibu) *
+  LF_oBA = SMPH.oBA_LF_boil * 
+           compute_LF_nonIAA_pH(ibu) *
            compute_LF_OG_SMPH(ibu, hopIdx) * 
            compute_LF_ferment(ibu) * 
            compute_LF_nonIAA_krausen(ibu) * 
-           compute_LF_package(ibu) * SMPH.scale_oBAloss;
+           compute_LF_filtering(ibu) * 
+           compute_LF_age(ibu);
 
   if (LF_oBA > 1.0) LF_oBA = 1.0;
   if (SMPH.verbose > 3) {
@@ -1489,11 +1726,11 @@ function compute_LF_hopPP(ibu) {
   var LF_hopPP = 0.0;
 
   // assume very high solubility limit for PP, so each addition is additive
-  // [PP] should not change during fermentation
-  LF_hopPP = SMPH.LF_hopPP * compute_LF_nonIAA_pH(ibu) *
-             compute_LF_nonIAA_krausen(ibu) * compute_LF_package(ibu);
+  // assume pH has no effect on hop polyphenol concentration
+  // assume krausen affects hop PP the same way as other nonIAA
+  // assume [PP] doesn't change much with age (or filtering)
+  LF_hopPP = SMPH.LF_hopPP *SMPH.ferment_hopPP * compute_LF_nonIAA_krausen(ibu);
 
-  if (LF_hopPP > 1.0) LF_hopPP = 1.0;
   if (SMPH.verbose > 3) {
     console.log("    LF hopPP = " + LF_hopPP.toFixed(4));
   }
@@ -1508,11 +1745,13 @@ function compute_hopPP_beer(ibu, hopIdx) {
   var PP_beer = 0.0;
 
   ibu.add[hopIdx].hopPP_beer = ibu.add[hopIdx].hopPP_wort * 
-                  compute_LF_hopPP(ibu);
+                               compute_LF_hopPP(ibu);
   PP_beer = ibu.add[hopIdx].hopPP_beer;
 
   if (SMPH.verbose > 3) {
     console.log("hop [PP] in finished beer = " + PP_beer.toFixed(4));
+    console.log("    from  wort " + ibu.add[hopIdx].hopPP_wort);
+    console.log("    and  LF " + compute_LF_hopPP(ibu));
   }
   return PP_beer;
 }
@@ -1523,12 +1762,41 @@ function compute_maltPP_beer(ibu) {
   var IBU_malt = 0.0;
   var points = 0.0;
   var PP_malt = 0.0;
+  var pH = ibu.pH.value;
+  var preBoilpH = ibu.pH.value;
+  var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
+  var preBoilIBU = 0.0;
+  var slope = 1.7348;
+  var IBU1 = 0.70;
+  var factor = 0.0;
 
+  // If user specifies pre-boil pH, estimate the post-boil pH
+  if (preOrPostBoilpH == "preBoilpH") {
+    preBoilpH = pH;
+    pH = compute_postBoil_pH(preBoilpH);
+  }
+
+  preBoilpH = 5.75;  // approximate value before pH adjustment
   points = (ibu.OG.value - 1.0) * 1000.0;
-  IBU_malt = points * SMPH.maltPP_slope;
+  preBoilIBU = points * 0.0190;
+  factor = (slope * (preBoilpH - pH) / IBU1) + 1.0;
+  IBU_malt = preBoilIBU * factor;
+  // console.log("computing maltPP:");
+  // console.log("  gravity " + ibu.OG.value);
+  // console.log("  points " + points);
+  // console.log("  pre-boil pH " + preBoilpH);
+  // console.log("  post-boil pH " + pH);
+  // console.log("  correction factor " + factor);
+  // console.log("  IBU before boil " + preBoilIBU);
+  // console.log("  IBU after correction " + IBU_malt);
+
+  // the convertion from IBU to PP is not correct, but in the end we
+  // want IBUs not PP and so it doesn't matter; we just need to undo
+  // the Peacock conversion that we'll do later.
   PP_malt = IBU_malt * 69.68 / 51.2;
+  // console.log("  PP_malt " + PP_malt);
   if (SMPH.verbose > 3) {
-    console.log("malt [PP] in finished beer = " + PP_malt.toFixed(4));
+    console.log("malt IBU  in finished beer = " + IBU_malt.toFixed(4));
   }
   return PP_malt;
 }
@@ -1543,8 +1811,8 @@ function compute_hop_IBU(ibu, hopIdx) {
   var hopPP_beer = ibu.add[hopIdx].hopPP_beer;
 
   hop_IBU = (51.2/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
-                                    (oBA_beer * SMPH.scale_oBA) +
-                                    (hopPP_beer * SMPH.scale_hopPP));
+                                       (oBA_beer * SMPH.scale_oBA) +
+                                       (hopPP_beer * SMPH.scale_hopPP));
   ibu.add[hopIdx].IBU = hop_IBU;
 
   if (ibu.add[hopIdx].AA_init > 0) {
