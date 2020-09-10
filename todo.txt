@@ -1,6 +1,6 @@
 TODO:
 
- . test adding IAA to finished beer, using beer #76 3 quarts D and E
+ + test adding IAA to finished beer, using beer #76 3 quarts D and E
    analyze this "as is" and with 2 IAA additions. 
    make sure to measure drops using IAA not water. 6 samples total
 
@@ -36,192 +36,108 @@ TODO:
     (code: findBestIAAnonIAA_individual.tcl = analyze data per exp)
     update effect of pH blog post: change oBA to oAA
 
- 5.5 modify mIBU javascript to use new pH formula.
++5.5 modify mIBU javascript to use new pH formula.
 
- 6. update blog post on solubility model
++6. update blog post on solubility model
     (code: equation.tcl = print out values from solubility equation)
     (code: getdata.tcl = print out data values subtracting 200ppm)
     (code: solubilityExperimentEstimation.tcl = test various models)
 
- 7. update blog post on solubility at pH 5.2
++7. update blog post on solubility at pH 5.2
     (code: solExp5_2_model.tcl = analyze data)
 
 
- 8. update A Summary of Factors...
++8. update A Summary of Factors...
 
-
-
-
- 9. new blog post on oAA as function of temp
++9. new blog post on oAA as function of temp
     (code: analyze.tcl = analyze data)
     Note PP levels are all same at beginning. 
     Note PP levels increase during the boil, as expected? (see notes below)
 
- 10. re-analyze first 2 CvP experiments using oAA not just nonIAA.
++10. re-analyze first CvP experiments using oAA not just nonIAA.
 
- 11. javascript:
-    - update model for pellets
-    - update finings
++11. FV experiment #1 : analyze
++12. FV experiment #1 : blog post -> don't bother
+
+       ---------------------
+
++12.5 revise oAA and oBA scale factors, re-do (or at least check):
+      + = revised and HTML downloaded
+      o = OK without revisions
+      - = not yet checked
+
+        + a summary of factors...
+        + hopping rate correction based on AA solubility
+        + effect of pH on utilization / IBU as function of pH
+        + alpha-acid solubility and pH 5.2
+        o krausen loss
+        + teamaker / relative contribution of oAA and oBA
+        o specific gravity and IBUs
+        o production of oAA at hop-stand temperatures
+        + CVP : differences
+        + CVP : age (why)
+        + CVP : solubility (no blog post)
+
+       ---------------------
+
+ 13. update "why do pellets have higher IBUs" to include PP results
+     from CVP #6.  Explain pelletFactor of 2.0 in "IBU differences" post.
+
+ 14. lauter experiment #2 : analyze 
+
+ 15. lauter experiment #2 : blog post
+
+ 16. javascript:
+    - update model to include lauter variable
+    - update HTML to allow setting lauter variable
+    - add Lauter experiments to training data (*all* conditions)
     - make sure all ABC match up with recent scripts, e.g.
       solExp_pH5.2/solExp5_2_model.tcl
     - re-run parameter estimation
+    - check mIBU code, make sure API looks good everywhere
+
+       ---------------------
 
 
-
- 12. lauter experiment #2 : analyze 
- 13. lauter experiment #2 : blog post
-
- 14. FV experiment #1 : analyze
- 15. FV experiment #1 : blog post
-
- 16. finings: 
+ 17. finings: 
      analyze IPA analyzed before and after gelatin finings
 
- 16. javascript:
-    - update model to include FV and lauter variables
-    - update HTML to allow setting FV and lauter variables
+ 18. javascript:
     - update HTML/js to allow setting (gelatin) finings
 
 
-
- 17. blog post on CvP with solubility limits, note PP levels don't
+ 19. blog post on CvP with solubility limits, note PP levels don't
     explain increase in IBUs.
     (code: ibu.tcl = analyze IBU data)
     (code: PP.tcl = analyze PP data)
+    OR: don't make this a separate blog post, since it simply
+    conforms with the existing solubility model.  Just include
+    the PP results in the "why do pellets have higher IBUs" blog post.
 
- 18. wrap up all CvP experiments (copy good HTML to new posts, delete old posts)
+
+
+ 20. wrap up all CvP posts (copy good HTML to new posts, delete old posts)
+     update other blog posts on CvP to reflect new analysis
  
- 19. update observations of pH blog post with how pH during the boil
+ 21. update observations of pH blog post with how pH during the boil
      is affected by turbidity of the wort (beer76) and by amount of hops
      used (beer 69)
 
- 20. re-update A Summary of Factors with FV, lauter information, and pellets
+ 22. re-update A Summary of Factors with lauter information, and pellets
+     and note that oAA produced during boil 10% estimate from model
+     is close to that of oBA estimate from literature
 
- 20. double-check javascript, re-run parameter estimation
+ 23. double-check javascript, re-run parameter estimation
 
+
+ 24. write blog posts on taste experiment(s)
+ 25. add results of taste experiment to earlier blog posts
+ 26. make copies of all blog posts, get copied HTML to display correctly
+ 27. scan in copies of all experiments
+ 28. put blog posts on github.
 
  ==========================================================================
 
-
-
- + analyze sampling-experiment data to figure out oAA Exp #1 *-POST results.
-   > mixing in break has negative impact on IBUs
-   > fermentation surface area has positive impact on IBUs
-
- + analyze protein experiment, fit data to formula, figure out how
-   much impact on IAA and nonIAA. (beer61-lauterExperiment)
-   After correcting for volume changes during boil, DME results
-   nearly identical to all-grain results.  Condition B is weird,
-   but C and D very similar.  For BIAB condition A, IAA is 80% of
-   C,D and nonIAA is 70% of C,D.  So impact of trub is similar for
-   both IAA and nonIAA, and 20% reduction with BIAB vs standard or DME.
-
- + analyze oAA Exp #1 PP at 10 and 40: does PP level change during boil?
-   YES.  91 mg/L at 10 min -> 107 mg/L at 40 min  or a 17% increase over 30 min.
-   Or    91 mg/L at 10 min -> 101 mg/L at 40+ min, an 11% increase over 30 min.
-   Is this all hops PP, or does malt PP increase?  (see malt PP analysis)
-   The malt PP levels increase from 222 to 275 in conditions E and F
-   of maltPP experiment, or a 24% increase over 50 minutes, which is
-   equivalent to a 14% increase over 30 minutes.  This 14% increase is in 
-   between the 17% and 11% increase seen in oAA exp.  So, it looks like all of
-   the PP increase during the boil is due to the malt, but this PP increase
-   doesn't translate into an increase in IBUs.  (ie. the PP that are 
-   produced (?) during the boil do not absorb light at 275 nm).  The
-   explanation that this increase is caused by evaporation of wort doesn't
-   hold up... evaporation rate was tiny in both oAA and maltPP experiments.
-
-
- + malt PP beer #72:
-      ANALYZE : OG 1.030 1.050 1.070 x 2 = 6 samples
-                OG 1.030@low pH, 1.050 before and after ferment, 1.070@10,60min
-      6 samples for PP and IBU analysis
-         IBU   PP
-      A: 0.7  70
-      B: 1.6  67
-      C: 1.3  179
-      D: 1.0  142
-      E: 1.6  222
-      F: 2.3  275
-
- + T's stout: take 1 sample immediately after cooling, 1 after resting,
-   and compare both with "standard" IBU value to look at impact of break.
-   also get two more data points for impact of size of FV. (3 samples)
-   Results: opposite of what expected... mixed up samples?
-
- + FV experiment beer #74: 12 samples, @10,20,30,40 min and 8, 16, 24 oz each.
-   (12 samples)
-
- . test adding IAA to finished beer, using beer #74 3 quarts
-   and 3 quarts ferment, analyze this "as is" and with 2 IAA additions.
-   (3 samples)
-   Not nearly as much impact as expected. try again with more drops.
-
-
-
-
- . blog post: impact of fermentation vessel and volume on IBUs
-
- . blog post: how the concentration of hot and cold break during fermentation affects IBUs
-
-
-
- + analyze CVP #6 PP levels as function of hop concentration: 
-   : the PP.tcl script fits the measured PP levels from the estimates
-     of maltPP.tcl for points->IBU and malt IBU<->PP, with some
-     revisions to these estimates.  The first pass assumes hop
-     PP levels of 0.03 the weight of the cone in order to get an
-     overall good fit. This shows pellets have 1.4x more PP than
-     cones.  We then revise the PP.tcl script to have the PP level
-     of weight of the hops depend on if the hops are cones or
-     pellets, with the same ratio (1.4), and re-analyze.  The
-     fit to the data is even better.  Conclusion: pellets have
-     1.4x as many soluble PP as cones, but this can not explain
-     the observed increase in IBUs. (Still need an example of why
-     this doesn't explain it.)
-
- . analyze oAA Exp #1 : rate of oAA production during boil as fn of temp?
-   seems to not change with temp.  And PP levels don't change with temp,
-   either.
-
-
- . AA model: re-analyze AA solubility limit data with new info about oAA
-
- . redo IBU as function of age, with separate IAA and nonIAA components
-   (see CVP experiment looking at how levels change with age... IAA and
-    nonIAA change differently)
-
-
- . change SMPH model to reflect new AA solubility limit model, oAA production
-   as function of temp, PP levels constant(?) over time, malt PP model
-
- . add in functionality for pellets (fix testData.js??)
-
- . extract parameters from SMPH model, evaluate on dev and test data
-
- . if results on dev and test are consistently high/low, include dev and/or
-   test in training data and remove them from dev/test set.
-
-
- . taste experiment: either use expected technique after fix, or get IAA
-   and add to finished beer. (see HopTech web page)
-   98 drops / tsp, 1/8 tsp = 12.25 drops in 5 gallons -> 1 IBU
-   if brew 0.75 gallons, then 1 IBU = 12.25 * 0.75 / 5 = 1.8375 drops
-
- . new experiment: impact of gelatin fining on IBUs
-
-
- . blog: oAA production (?)
- . blog: fermentation vessel effects
- . blog: the concentration of break during fermentation
-
- . blog: estimating AA solubility limit: re-do completely
- . blog: source of increased IBUs in pellets, re-do
- . blog: a summary of factors: add PP data, pellet data
- . blog: taste experiment
-
-
- . SMPH: add fermentation vessel diameter to inputs
-         add break concentration [high, medium, low] to inputs
 
 
  . test all calculators on chrome.
@@ -243,7 +159,6 @@ TODO:
         - create local parameters template (volume of trub left behind, etc)
         - create local process template (output template)
         - create larger system
-        - write results to file
 
 --------------------------------------------------------------------------------
 

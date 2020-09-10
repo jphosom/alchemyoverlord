@@ -585,6 +585,9 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
           ibu.add[addIdx].hopForm = new Object;
           ibu.add[addIdx].hopForm.id = "hopForm"+addNum;
 
+          ibu.add[addIdx].pelletFactor = new Object;
+          ibu.add[addIdx].pelletFactor.id = "pelletFactor"+addNum;
+
           ibu.add[addIdx].freshnessFactor = new Object;
           ibu.add[addIdx].freshnessFactor.id = "freshnessFactor"+addNum;
 
@@ -600,6 +603,11 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         ibu.add[addIdx].AA.value = expValues[kIdx][0];
         ibu.add[addIdx].BA.value = expValues[kIdx][1];
         ibu.add[addIdx].hopForm.value = expValues[kIdx][2];
+        if (expValues.length >= 7) {
+          ibu.add[addIdx].pelletFactor.value = expValues[kIdx][7];
+        } else {
+          ibu.add[addIdx].pelletFactor.value = 1.0;
+        }
         ibu.add[addIdx].freshnessFactor.value = expValues[kIdx][3];
         ibu.add[addIdx].percentLoss.value = expValues[kIdx][4];
         ibu.add[addIdx].weight.value = expValues[kIdx][5];
@@ -616,7 +624,12 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         }
       } else {
       // console.log("setting " + expKeys[kIdx] + " value to " + expValues[kIdx]);
-      ibu[expKeys[kIdx]].value = expValues[kIdx];
+      if (ibu[expKeys[kIdx]]) {
+        ibu[expKeys[kIdx]].value = expValues[kIdx];
+        } else {
+        throw "ERROR: " + expKeys[kIdx] + " is not defined";
+        window.alert("ERROR: " + expKeys[kIdx] + "is not defined");
+        }
       }
     }
 

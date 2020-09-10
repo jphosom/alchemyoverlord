@@ -20,8 +20,8 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4",
                                     // "Util. Exp. #3", "Util. Exp. #4" ];
 // var evaluateTrainingExperiments = [ "Sol. Exp. #4" ];
-// var evaluateTrainingExperiments = [ "ConPel Exp. #1", "ConPel Exp. #2", "ConPel Exp. #3", "ConPel Exp. #4" ];
-// var evaluateTrainingExperiments = [ "ConPel Exp. #6" ];
+// var evaluateTrainingExperiments = [ "ConPel Exp. #1C", "ConPel Exp. #2C", "ConPel Exp. #3C", "ConPel Exp. #4C" ];
+// var evaluateTrainingExperiments = [ "ConPel Exp. #6C", "ConPel Exp. #6P" ];
 // var evaluateTrainingExperiments = [ "Sol. pH 5.2" ];
 // var evaluateTrainingExperiments = [ "Hop Concentration Exp. #1" ];
 // var evaluateTrainingExperiments = [ "pH Exp. #1" ];
@@ -30,7 +30,8 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "IPA, Jun. 2018", "IPA, Jul. 2019", "IPA, Apr. 2020" ];
 // var evaluateTrainingExperiments = [ "Teamaker #1" ];
 // var evaluateTrainingExperiments = [ "oAA as Function of Temperature" ];
-// var evaluateTrainingExperiments = [ "Lauter Exp. #2" ];
+// var evaluateTrainingExperiments = [ "Lauter Exp. #1", "Lauter Exp. #2" ];
+// var evaluateTrainingExperiments = [ "FV Exp. #1" ];
 
 // units *must* be all metric
 
@@ -85,7 +86,7 @@ var trainingData = {
 
             {
                 "param":    "freshnessFactor1",
-                "default":  0.95,
+                "default":  1.00,
                 "method":   "value",
                 "low":      1.00,
                 "high":     1.00,
@@ -737,24 +738,24 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #1": {
-        // volume and OG taken from ConPel Exp. #4, since all experiments should be identical in this regard
+    "ConPel Exp. #1C": {
+        // volume and OG taken from average of all experiments
         "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",
                                   "t=60",  "t=70",  "t=80",  "t=90" ],
         "IBU_list":             [ 14.0,    18.8,    24.2,    26.6,    31.6,
                                   32.8,    36.3,    37.9,    41.6 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,
                                   60.0,    70.0,    80.0,    90.0 ],
-        "volume_list":          [ 31.22,   31.08,   30.95,   30.81,   30.68,
-                                  30.55,   30.42,   30.28, 30.16 ],
-        "OG_list":              [ 1.0388,  1.0390,  1.0391,  1.0393,  1.0395,
-                                  1.03965, 1.0398,  1.0400, 1.0402 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,
+                                  30.38,   30.19,   30.00,   29.81 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,
+                                  1.0396,  1.0399,  1.0401,  1.0404 ],
 
         // citra bought soon after harvest and stored in freezer; package rating AA=14.30%
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 14.30,  3.6, "cones", 0.95,  25.0,  37.8098,   90 ],
+        "add1":        [ 14.30,  3.6, "cones", 0.99,  25.0,  37.8098,   90 ],
 
-        "timeToFirstAddition":  8,      // wait 8 minutes after start of boil
+        "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
         "evaporationRate":      0.795, // (V10=31.22 - V90=30.16) / (80min/60min)
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
@@ -786,17 +787,66 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #2": {
-        // volume and OG taken from ConPel Exp. #4, since all experiments should be identical in this regard
+    "ConPel Exp. #1P": {
+        // volume and OG taken from average of all experiments
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",
+                                  "t=60",  "t=70",  "t=80",  "t=90" ],
+        "IBU_list":             [ 18.7,    24.2,    29.7,    32.1,    37.5,
+                                  39.5,    41.5,    42.4,    44.7 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,
+                                  60.0,    70.0,    80.0,    90.0 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,
+                                  30.38,   30.19,   30.00,   29.81 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,
+                                  1.0396,  1.0399,  1.0401,  1.0404 ],
+
+        // citra 
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [ 14.0,  3.8, "pellets", 1.00,  25.0,  37.8098,   90,        1.9],
+
+        "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
+        "evaporationRate":      0.795, // (V10=31.22 - V90=30.16) / (80min/60min)
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0381,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  14.00,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.95,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #2C": {
+        // volume and OG taken from average of all experiments
         "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50", "t=60" ],
         "IBU_list":             [ 13.9,    17.5,    22.3,    25.0,    27.3,   30.3 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,   60.0 ],
-        "volume_list":          [ 31.22,   31.08,   30.95,   30.81,   30.68,  30.55 ],
-        "OG_list":              [ 1.0388,  1.0390,  1.0391,  1.0393,  1.0395, 1.03965 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,  30.38 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394, 1.0404 ],
 
         // willamette package rating AA 5.0%
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 5.00,  3.10, "cones", 0.95,  37.43,  105.573,   60 ],
+        "add1":        [ 5.00,  3.10, "cones", 1.00,  37.43,  105.573,   60 ],
 
         "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
         "evaporationRate":      0.804, // (V10=31.22 - V60=30.55) / (50min/60min)
@@ -830,17 +880,61 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #3": {
-        // volume and OG taken from ConPel Exp. #4, since all experiments should be identical in this regard
+    "ConPel Exp. #2P": {
+        // volume and OG taken from average of all experiments
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50", "t=60" ],
+        "IBU_list":             [ 16.6,    19.9,    23.2,    26.4,    29.4,   31.0 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,   60.0 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,  30.38 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394, 1.0404 ],
+
+        // willamette package rating AA 4.8%; measured from Brew Laboratory 5.1%
+        //                AA%   BA%   form      freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [ 4.95,  4.00, "pellets", 1.00,  37.43,  105.573,   60,         1.50 ],
+
+        "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
+        "evaporationRate":      0.804, // (V10=31.22 - V60=30.55) / (50min/60min)
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0381,
+        "krausen":              "medium krausen deposits on FV (default)",   // NO swirling of containers during fermentation
+        "beerAge_days":         13,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  4.95,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.95,
+                "method":   "value",
+                "low":      0.95,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #3C": {
+        // volume and OG taken from average of all experiments
         "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60",  "t=70",  "t=80" ],
         "IBU_list":             [ 14.8,    19.1,    23.7,    26.7,    30.4,    35.1,    34.8,    40.1 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0,    70.0,    80.0 ],
-        "volume_list":          [ 31.22,   31.08,   30.95,   30.81,   30.68,   30.55,   30.42,   30.28 ],
-        "OG_list":              [ 1.0388,  1.0390,  1.0391,  1.0393,  1.0395,  1.03965, 1.0398,  1.0400 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38,   30.19,   30.00 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
         // willamette package rating AA 5.0%
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 5.00,  3.10, "cones", 0.95,  37.43,  105.573,   80 ],
+        "add1":        [ 5.00,  3.10, "cones", 1.00,  37.43,  105.573,   80 ],
 
         "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
         "evaporationRate":      0.8057, // (V10=31.22 - V80=30.28) / (70min/60min)
@@ -856,7 +950,7 @@ var trainingData = {
         "search": [
             {
                 "param":    "AA1",
-                "default":  5.0,
+                "default":  5.00,
                 "method":   "relative",
                 "low":      0.90,
                 "high":     1.10,
@@ -874,18 +968,63 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #4": {
+    "ConPel Exp. #3P": {
+        // volume and OG taken from average of all experiments
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60",  "t=70",  "t=80" ],
+        "IBU_list":             [ 16.3,    21.5,    27.6,    28.3,    33.2,    34.7,    35.1,    38.5 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0,    70.0,    80.0 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38,   30.19,   30.00 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
+
+        // willamette package rating AA 4.8%; measured from Brew Laboratory 5.1%
+        //                AA%   BA%   form      freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [ 4.95,  4.00, "pellets", 1.00,  37.43,  105.573,   80,         1.50 ],
+
+        "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
+        "evaporationRate":      0.8057, // (V10=31.22 - V80=30.28) / (70min/60min)
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0381,
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  4.95,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.95,
+                "method":   "value",
+                "low":      0.95,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #4C": {
+        // volume and OG taken from average of all experiments
         "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60",  "t=70",  "t=80" ],
         "IBU_list":             [ 14.2,    19.7,    25.1,    28.6,    31.7,    35.9,    39.6,    43.3 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0,    70.0,    80.0 ],
-        "volume_list":          [ 31.22,   31.08,   30.95,   30.81,   30.68,   30.55,   30.42,   30.28 ],
-        "OG_list":              [ 1.0388,  1.0390,  1.0391,  1.0393,  1.0395,  1.03965, 1.0398,  1.0400 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38,   30.19,   30.00 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
-        // comet package rating AA 10.0%; analysis = AA=10.80%, BA=3.92%, HSI=0.25
+        // comet package rating AA 9.9%; analysis = AA=10.80%, BA=3.92%, HSI=0.25
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 10.00,  3.92, "cones", 1.0,  37.43,  53.312,   80 ],
+        "add1":        [ 10.35,  3.92, "cones", 1.0,  37.43,  53.312,   80 ],
 
-        "timeToFirstAddition":  6,      // wait 6 minutes after start of boil
+        "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
         "evaporationRate":      0.8057, // (V10=31.22 - V80=30.28) / (70min/60min)
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
@@ -899,7 +1038,7 @@ var trainingData = {
         "search": [
             {
                 "param":    "AA1",
-                "default":  10.0,
+                "default":  10.35,
                 "method":   "relative",
                 "low":      0.90,
                 "high":     1.10,
@@ -917,16 +1056,61 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #5": {
+    "ConPel Exp. #4P": {
+        // volume and OG taken from average of all experiments
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60",  "t=70",  "t=80" ],
+        "IBU_list":             [ 24.0,    31.4,    34.6,    40.2,    44.2,    46.7,    49.4,    52.4 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0,    70.0,    80.0 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38,   30.19,   30.00 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
+
+        // comet rating AA 9.92% is average of package rating and AAR labs result
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [ 9.92,  3.7, "pellets", 1.0,  37.43,  53.312,   80,         3.15 ],
+
+        "timeToFirstAddition":  4,      // wait 4 minutes after start of boil
+        "evaporationRate":      0.8057, // (V10=31.22 - V80=30.28) / (70min/60min)
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0381,  // new hydrometer
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         8,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  9.9,
+                "method":   "relative",
+                "low":      0.85,
+                "high":     1.15,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.95,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #5C": {
+        // volume and OG taken from average of all experiments
         "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60" ],
         "IBU_list":             [ 16.4,    21.2,    26.6,    31.3,    35.2,    39.0 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0 ],
-        "volume_list":          [ 30.15,   29.74,   29.34,   28.95,   28.57,   28.21 ],
-        "OG_list":              [ 1.0378,  1.0383,  1.0388,  1.0394,  1.0399,  1.0404 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396 ],
 
         // comet package rating AA 9.9%, measured 9.70% therefore loss factor 0.98, beta acids = 3.17/0.98
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [  9.90,  3.23, "cones", 0.98,  50.0,  54.96,     60 ],
+        "add1":        [  9.90,  3.23, "cones", 0.98,  37.43,  54.96,     60 ],
 
         "timeToFirstAddition":  6,      // wait 6 minutes after start of boil
         "evaporationRate":      1.907,  // (V0=30.567 - V60=28.66) / 1.0hr
@@ -960,7 +1144,51 @@ var trainingData = {
         ]
     },
 
-    "ConPel Exp. #6": {
+    "ConPel Exp. #5P": {
+        // volume and OG taken from average of all experiments
+        "conditions":           [ "t=10",  "t=20",  "t=30",  "t=40",  "t=50",  "t=60" ],
+        "IBU_list":             [ 26.0,    33.6,    37.8,    41.6,    46.9,    49.9 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,    50.0,    60.0 ],
+        "volume_list":          [ 31.36,   31.16,   30.96,   30.76,   30.57,   30.38 ],
+        "OG_list":              [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396 ],
+
+        // comet package rating AA 9.5%
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [  9.5,  3.7, "pellets", 1.0,   37.43,  60.86,     60,         2.21 ],
+
+        "timeToFirstAddition":  6,      // wait 6 minutes after start of boil
+        "evaporationRate":      1.907,  // (V0=30.567 - V60=28.66) / 1.0hr
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   "estimate",
+        "preBoilSG":            1.0375,  // new hydrometer
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         8,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  9.50,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  1.00,
+                "method":   "value",
+                "low":      0.95,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+        ]
+    },
+
+    "ConPel Exp. #6C": {
         "conditions":           [ "A10",   "A20",   "A30",   "A40",
                                   "B10",   "B20",   "B30",   "B40" ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0,
@@ -977,7 +1205,7 @@ var trainingData = {
         // comet package rating AA 9.9%, measured 8.32% before exp, therefore 
         //  loss factor 0.84, beta acids = 3.92 from initial analysis
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [  9.9,  3.92, "cones", 0.84,  50.0,  0.0,       40 ],
+        "add1":        [  9.9,  3.92, "cones", 0.84,  37.43,  0.0,       40 ],
 
         "preOrPostBoilVol":     "postBoilVol",  // will account for evaporation rate
         "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
@@ -996,14 +1224,82 @@ var trainingData = {
                 "param":    "AA1",
                 "default":  10.0,
                 "method":   "value",
-                "low":      10.0,
-                "high":     14.0,
-                "inc":      1.0,
+                "low":      9.0,
+                "high":     13.5,  // got a lot of resins from the end of the bag?
+                "inc":      0.5,
             },
 
             {
                 "param":    "freshnessFactor1",
                 "default":  0.84,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.10,
+            }
+        ]
+    },
+
+    "ConPel Exp. #6P": {
+        "conditions":           [ "C10",   "C20",   "C30",   "C40",
+                                  "D10",   "B20",   "D30",   "D40",
+                                  "E10",   "E20",   "E30",   "E40" ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0,
+                                  10.0,    20.0,    30.0,    40.0,
+                                  10.0,    20.0,    30.0,    40.0 ],
+        "IBU_list":             [ 27.25,   30.25,   36.10,   37.45,
+                                  49.80,   60.10,   70.75,   82.40,
+                                  67.45,   72.45,   81.05,  101.65 ],
+        "weight_list":          [ 18.89,   18.89,   18.89,   18.89,
+                                  50.37,   50.37,   50.37,   50.37,
+                                  75.55,   75.55,   75.55,   75.55 ],
+        "volume_list":          [ 12.206,  12.198,  12.190,  12.182,
+                                  12.072,  12.026,  11.980,  11.935,
+                                  12.117,  12.101,  12.086,  12.071], 
+        "OG_list":              [ 1.0391,  1.0391,  1.0392,  1.0392,  
+                                  1.0392,  1.0393,  1.0394,  1.0396,
+                                  1.0391,  1.0392,  1.0393,  1.0393 ],
+
+        // comet package rating AA 9.9%, measured 9.55% just before exp, therefore 
+        //  loss factor 0.96, beta acids = 3.92 from cones (guess).
+        // pelletFactor of 2.7 is average of CvP #4 (3.15) and CvP #5 (2.21)
+        //                AA%   BA%   form      freshF  %loss  weight(g), boil time, pelletFactor
+        "add1":        [  9.9,  3.92, "pellets", 0.96,   37.43,  0.0,       40,         2.7 ],
+
+        "preOrPostBoilVol":     "postBoilVol",  // will account for evaporation rate
+        "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
+        "evaporationRate":      0.224,  // averaged over all 5 conditions
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.55,   // average over 3 values
+        "preOrPostBoilpH":      "postBoilpH",
+        "krausen":              "mix krausen back in; no loss",   // took samples on same day as clean FV
+        "beerAge_days":         11,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  9.9,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.96,
+                "method":   "value",
+                "low":      0.90,
+                "high":     1.00,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "pelletFactor1",
+                "default":  2.7,
                 "method":   "relative",
                 "low":      0.90,
                 "high":     1.10,
@@ -1427,7 +1723,7 @@ var trainingData = {
         //                Amarillo hops, 2019 harvest, stored in freezer for 4 months,
         //                         package 8.8%, AAR 9.56%; BA and loss from hops.js
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
-        "add1":        [ 9.56,  6.50, "cones", 0.90,  14.0,  24.60,      0 ],
+        "add1":        [ 9.56,  6.50, "cones", 0.963,  14.0,  24.60,      0 ],
 
         "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
         "evaporationRate":      0.268, // evaporation rates measured from vol_10 to vol_60
@@ -1457,19 +1753,65 @@ var trainingData = {
 
     },
 
+    // JPH : volume, OG, evaporationRate, and pH are correct for Condition D (DME) only
+    "Lauter Exp. #1": {
+        "conditions":           [ "D10",   "D20",   "D30",   "D40" ],
+        "IBU_list":             [ 18.0,    24.4,    30.0,    34.8 ],
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 11.30,   10.66,   10.09,   9.58 ],
+        "OG_list":              [ 1.0481,  1.0509,  1.0538,  1.0567 ],
+
+        // comet: assume same as CvP #4C
+        // storage for 270 days at -9'F yields freshF between 0.90 and 0.95, depending on SF
+        //                AA%   BA%   form   freshF  %loss  weight(g), boil time
+        "add1":        [ 10.35, 3.92, "cones", 0.93,  37.43,  20.43,   40 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      3.438, // estimated from change in volume during boil
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.74,  // for Condition D ONLY : JPH
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":         10,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  10.35,
+                "method":   "relative",
+                "low":      0.90,
+                "high":     1.10,
+                "inc":      0.05,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.93,
+                "method":   "value",
+                "low":      0.90,
+                "high":     1.00,
+                "inc":      0.05,
+            }
+
+        ]
+    },
+
     "Lauter Exp. #2": {
         "conditions":           [ "C10",   "C20",   "C30",   "C40" ],
         "IBU_list":             [ 16.8,    23.4,    29.3,    32.8 ],
         "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
-        "volume_list":          [ 12.32,   12.28,   12.25,   12.21 ],
-        "OG_list":              [ 1.0413,  1.0780,  1.0782,  1.0424 ],
+        "volume_list":          [ 12.32,   12.18,   12.04,   11.91 ],
+        "OG_list":              [ 1.0419,  1.0423,  1.0428,  1.0433 ],
 
         // cascade 2018 analysis: AA 6.4%, store 555 days @ -9'F SF 0.5 -> decay 0.85
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
         "add1":        [  6.40, 5.75, "cones", 0.85,  50.0,  37.57,    40 ],
 
         "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
-        "evaporationRate":      0.284, // estimated from OG experiments
+        "evaporationRate":      0.811, // estimated from change in volume during boil
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
         "pH":                   5.69,
@@ -1495,6 +1837,52 @@ var trainingData = {
                 "method":   "value",
                 "low":      0.85,
                 "high":     0.95,
+                "inc":      0.05,
+            }
+
+        ]
+    },
+
+    "FV Exp. #1": {
+        "conditions":           [ "B10",   "B20",   "B30",   "B40" ],
+        "IBU_list":             [ 17.7,    24.6,    32.5,    39.9 ],  // 16-oz fermentation
+        "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
+        "volume_list":          [ 14.94,   14.80,   14.67,   14.54 ],
+        "OG_list":              [ 1.0404,  1.0408,  1.0411,  1.0415 ],
+
+        // cascade 2017 analysis: AA 7.7% is average of 6.89% and 8.5%; wide range
+        //                        BA 5.75% is average of 5.64% and 6.2%
+        //                        freshness: store 2.5 years in freezer -> 0.80
+        //                AA%   BA%   form    freshF  %loss  weight(g), boil time
+        "add1":        [  7.70, 5.9, "cones",  0.80,   50.0,  42.25,    40 ],
+
+        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
+        "evaporationRate":      0.284, // estimated from other experiments
+        "whirlpoolTime":        0,
+        "immersionDecayFactor": 2.5,
+        "pH":                   5.77,
+        "preOrPostBoilpH":      "preBoilpH",
+        "krausen":              "medium krausen deposits on FV (default)", // guess
+        "beerAge_days":         9,
+
+        // search parameters:
+        "skipSearch": false,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  7.70,
+                "method":   "value",
+                "low":      6.5,
+                "high":     10.5,
+                "inc":      0.5,
+            },
+
+            {
+                "param":    "freshnessFactor1",
+                "default":  0.80,
+                "method":   "value",
+                "low":      0.75,
+                "high":     0.90,
                 "inc":      0.05,
             }
 

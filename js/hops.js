@@ -469,9 +469,10 @@ var hops = {
     "Comet": {
         "AA":   10.75,
         "BA":    4.50,
-        "loss": 50.00,
+        "loss": 37.43,
         "sources": [ "The Hops List",
                      "John I Haas",
+                     "www.ars.usda.gov/ARSUserFiles/2450/hopcultivars/62013.html",
                      "BSG Hops" ],
         },
     "Crystal": {

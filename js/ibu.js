@@ -89,6 +89,7 @@ var ibu = ibu || {};
 //    . preOrPostBoilpH = if the pH is pre- or post-boil
 //    . add = array of hop additions, containing:
 //        . AA = alpha acid, in percent (scale 0 to 100)
+//        . pellet_oAAboilFactor = increase in oAA boil factor using pellets
 //        . weight = weight of hops added
 //        . boilTime = amount of time that hops spend in the boil (may be neg.)
 //    . krausen = krausen loss factor for IAA 
@@ -1076,7 +1077,9 @@ this.getKrausenValue = function(description) {
 // functions for handling selection of hop variety
 
 //------------------------------------------------------------------------------
-// check if the hop form defaults within each addition are the current default
+// check if the hop form defaults within each addition are the current default.
+// If they are, set to the (new) default value and update freshness factor
+// and pellet factor.
 
 function checkHopFormDefaults() {
   var idx = 0;
@@ -1087,14 +1090,28 @@ function checkHopFormDefaults() {
   // console.log("CHECKING HOP FORM DEFAULTS FOR EACH ADDITION");
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
+    // check hop form
     userSet = ibu.add[arrayIdx].hopForm.userSet;
     // console.log("addition " + idx + " = " + userSet);
     if (!userSet) {
       ibu.add[arrayIdx].hopForm.defaultValue = ibu.defaultHopForm.value;
       common.set(ibu.add[arrayIdx].hopForm,0);
       }
+    // check freshness factor
+    userSet = ibu.add[arrayIdx].freshnessFactor.userSet;
+    if (!userSet) {
+      ibu.add[arrayIdx].freshnessFactor.defaultValue =
+          get_freshnessFactor_default(arrayIdx);
+      common.set(ibu.add[arrayIdx].freshnessFactor,0);
+      }
+    // check pellet factor
+    userSet = ibu.add[arrayIdx].pelletFactor.userSet;
+    if (!userSet) {
+      ibu.add[arrayIdx].pelletFactor.defaultValue =
+          get_pelletFactor_default(arrayIdx);
+      common.set(ibu.add[arrayIdx].pelletFactor,0);
+      }
     }
-
 
   return;
 }
@@ -1102,6 +1119,7 @@ function checkHopFormDefaults() {
 //------------------------------------------------------------------------------
 // if the user selects a hop form, and if that form is "(default)", 
 // immediately change the value to the current default.
+// Also, update freshness factor and pellet factor if not already set by user.
 
 function checkHopFormDefaults2(arrayIdx) {
   var value = "";
@@ -1120,6 +1138,16 @@ function checkHopFormDefaults2(arrayIdx) {
         document.getElementById(variable.id).style.color = "black";
       }
     }
+  }
+  if (!ibu.add[arrayIdx].freshnessFactor.userSet) {
+    ibu.add[arrayIdx].freshnessFactor.defaultValue =
+        get_freshnessFactor_default(arrayIdx);
+    common.set(ibu.add[arrayIdx].freshnessFactor,0);
+  }
+  if (!ibu.add[arrayIdx].pelletFactor.userSet) {
+    ibu.add[arrayIdx].pelletFactor.defaultValue =
+        get_pelletFactor_default(arrayIdx);
+    common.set(ibu.add[arrayIdx].pelletFactor,0);
   }
   return;
 }
@@ -1174,6 +1202,44 @@ function get_percentLoss_default(arrayIdx) {
     if (hops[variety].loss) {
       value = hops[variety].loss;
     }
+  }
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+
+function get_freshnessFactor_default(arrayIdx) {
+  var value = 0.0;
+  var form = "";
+  var defaultValue = 0.95;  // average of cones and pellets
+
+  form = ibu.add[arrayIdx].hopForm.value;
+  value = defaultValue;
+  if (form == "cones") {
+    value = 0.90;
+  }
+  if (form == "pellets") {
+    value = 1.00;
+  }
+
+  return value;
+}
+
+//------------------------------------------------------------------------------
+
+function get_pelletFactor_default(arrayIdx) {
+  var value = 0.0;
+  var form = "";
+  var defaultValue = 1.0;  // do nothing
+
+  form = ibu.add[arrayIdx].hopForm.value;
+  value = defaultValue;
+  if (form == "cones") {
+    value = 1.00;
+  }
+  if (form == "pellets") {
+    value = 2.00;
   }
 
   return value;
@@ -1505,7 +1571,6 @@ function hopAdditionsSet(updateFunction) {
   var boilTimeDefault = 0.0;
   var constructInputTable = false;
   var constructOutputTable = false;
-  var freshnessFactorDefault = 0.9;
   var idx = 1;
   var numAdd = ibu.numAdditions.value;
   var table = "";
@@ -1649,7 +1714,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].AA.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 8) {
+  if (constructInputTable && ibu.hopTableSize >= 9) {
     table += "</tr> "
     table += "<tr> "
     table += "<td> Beta Acid (%):</td> "
@@ -1657,7 +1722,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".BA";
-    if (constructInputTable && ibu.hopTableSize >= 8) {
+    if (constructInputTable && ibu.hopTableSize >= 9) {
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].BA,1)'> </td> "
     }
     arrayIdx = Number(idx-1);
@@ -1729,9 +1794,40 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].freshnessFactor.min = 0.0;
     ibu.add[arrayIdx].freshnessFactor.max = 1.0;
     ibu.add[arrayIdx].freshnessFactor.description = "hops freshness factor";
-    ibu.add[arrayIdx].freshnessFactor.defaultValue = freshnessFactorDefault;
+    ibu.add[arrayIdx].freshnessFactor.defaultFunction = get_freshnessFactor_default;
+    ibu.add[arrayIdx].freshnessFactor.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].freshnessFactor.defaultColor = ibu.defaultColor;
     ibu.add[arrayIdx].freshnessFactor.updateFunction = updateFunction;
     ibu.add[arrayIdx].freshnessFactor.parent = "ibu";
+  }
+
+  if (constructInputTable && ibu.hopTableSize >= 8) {
+    table += "</tr> ";
+    table += "<tr> ";
+    table += "<td> Pellet Factor: </td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".pelletFactor";
+    if (constructInputTable && ibu.hopTableSize >= 6) {
+      table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].pelletFactor,1)'> </td> "
+    }
+    arrayIdx = Number(idx-1);
+    ibu.add[arrayIdx].pelletFactor = new Object;
+    ibu.add[arrayIdx].pelletFactor.id = tableID;
+    ibu.add[arrayIdx].pelletFactor.inputType = "float";
+    ibu.add[arrayIdx].pelletFactor.userSet = 0;
+    ibu.add[arrayIdx].pelletFactor.precision = 2;
+    ibu.add[arrayIdx].pelletFactor.minPrecision = 2;
+    ibu.add[arrayIdx].pelletFactor.display = "";
+    ibu.add[arrayIdx].pelletFactor.min = 1.0;
+    ibu.add[arrayIdx].pelletFactor.max = 10.0;
+    ibu.add[arrayIdx].pelletFactor.description = "hops pellet factor";
+    ibu.add[arrayIdx].pelletFactor.defaultFunction = get_pelletFactor_default;
+    ibu.add[arrayIdx].pelletFactor.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].pelletFactor.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].pelletFactor.updateFunction = updateFunction;
+    ibu.add[arrayIdx].pelletFactor.parent = "ibu";
   }
 
   if (constructInputTable) {
@@ -1810,6 +1906,7 @@ function hopAdditionsSet(updateFunction) {
     common.set(ibu.add[arrayIdx].BA,0);
     common.set(ibu.add[arrayIdx].percentLoss,0);
     common.set(ibu.add[arrayIdx].freshnessFactor,0);
+    common.set(ibu.add[arrayIdx].pelletFactor,0);
     common.set(ibu.add[arrayIdx].weight,0);
     common.set(ibu.add[arrayIdx].boilTime,0);
   }

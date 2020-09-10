@@ -369,6 +369,8 @@ this.computeIBU_mIBU = function() {
           }
           console.log("    from new effective [AA]=" + effectiveAA.toFixed(2) +
                       ", limit is " + solubilityLimit.toFixed(2));
+          console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " + 
+                      postBoilVolume.toFixed(2));
           // if effective [AA] after new hops addition is above threshold,
           // set [AA] to new limit; otherwise, [AA] is the effective [AA]
           // adjust AAconcent to be the concentration at the end of the boil,

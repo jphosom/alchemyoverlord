@@ -5,7 +5,7 @@
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
-// Version 1.0.1 : November 22, 2018 -- xxx xx, 2019
+// Version 1.0.1 : November 22, 2018 -- xxx xx, 2020
 //         This version is based on the mIBU javascript code in this project,
 //         which has then been modified to implement the SMPH method as
 //         described in the blog post "A Summary of Factors Affecting IBUs".
@@ -16,11 +16,8 @@
 //    - clean up code
 //    - double-check logic
 // 2. re-run parameter estimation
-// 3. update model & HTML to include effects of fement vessel 
-// 4. update model & HTML to include effects of lautering technique
-// 5. pellets: adjustment from cones
-// 6. pellets: oAA percent init for pellets (and oBA percent init for pellets)
-// 7. final: check indentation, change tabs to spaces, alphabetize variables,
+// 3. update model & HTML to include effects of lautering technique
+// 4. final: check indentation, change tabs to spaces, alphabetize variables,
 //           remove unused variables.
 //
 // -----------------------------------------------------------------------------
@@ -56,7 +53,7 @@ this.initialize_SMPH = function() {
     ibu[keys[idx]].updateFunction = SMPH.computeIBU_SMPH;
   }
   ibu.numAdditions.additionalFunctionArgs = SMPH.computeIBU_SMPH;
-  ibu.hopTableSize = 7;   // number of inputs to specify each addition of hops
+  ibu.hopTableSize = 8;   // number of inputs to specify each addition of hops
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
@@ -86,31 +83,30 @@ this.initialize_SMPH = function() {
   this.verbose            = 5;
   this.integrationTime    = 0.1;   // minutes
 
-  this.AA_limit_minLimit  = 225.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_maxLimit  = 415.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 535.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
 
   this.hop_nonExtract     = 1.0;   // some say higher, some say lower than 1.0
-  this.hop_pelletFactor   = 1.20;
   this.hop_baggingFactor  = 1.00;  // from experiment
 
   this.icebathBaseTemp    = 314.00;       // 314.00'K = 40.85'C = 105.53'F
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
   this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
 
-  this.IAA_LF_boil        = 0.51;   // SEARCH
+  this.IAA_LF_boil        = 0.56;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
 
   this.oAA_storageFactor  = 0.22;   // estimate from Maye data
-  this.oAA_boilFactor     = 0.055;  // SEARCH  
+  this.oAA_boilFactor     = 0.05;   // SEARCH  
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same boil loss factor as IAA
-  this.scale_oAA          = 1.093;  // from Maye, Figure 7
+  this.scale_oAA          = 0.9155; // from Maye, Figure 7
 
-  this.oBA_storageFactor  = 0.0;    // SEARCH
+  this.oBA_storageFactor  = 1.00;    // SEARCH
   this.oBA_boilFactor     = 0.10;   // from Stevens p. 500 max 10%
-  this.oBA_LF_boil        = 0.013;  // cumulative oBA scaling is 0.0013 : Teamaker
-  this.scale_oBA          = 1.176;  // from Hough p. 491: 1/0.85
+  this.oBA_LF_boil        = 0.0153; // boilFactor*LF_boil*ferment=0.0013 : Teamaker
+  this.scale_oBA          = 0.85;   // from Hough p. 491: oBA 85% of absorbtion
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
   this.LF_hopPP           = 0.20;   // 20% are soluble, from the literature
@@ -426,30 +422,6 @@ function compute_LF_OG_SMPH(ibu, hopIdx) {
 
   return LF_OG;
 }
-
-//------------------------------------------------------------------------------
-// Compute IAA loss factor (LF) given the form of the hops ("looseCones",
-// "baggedCones", "pellets", "extract")
-// JPH DEBUG: this should be specific to each hop addition.
-// JPH DEBUG: need to figure out if pellets affect IAA or nonIAA
-
-// function compute_LF_form(ibu) {
-//   var LF_hopForm = 0.0;
-//
-//   LF_hopForm = 1.0; // baseline: "extract", as used by Malowicki
-//
-//   if (ibu.hopForm.value == "looseCones" ||
-//       ibu.hopForm.value == "baggedCones") {
-//     LF_hopForm *= SMPH.hop_nonExtract;
-//   }
-//   if (ibu.hopForm.value == "baggedCones") {
-//     LF_hopForm *= SMPH.hop_baggingFactor;
-//   }
-//   if (ibu.hopForm.value == "pellets") {
-//     LF_hopForm *= SMPH.hop_pelletFactor;
-//   }
-//   return LF_hopForm;
-// }
 
 //------------------------------------------------------------------------------
 // Compute IAA loss factor (LF) for fermentation, given amount of flocculation
@@ -1395,7 +1367,8 @@ function compute_LF_nonIAA_pH(ibu) {
 
     // formula from blog post 'The Effect of pH on Utilization and IBUs'
     // LF_pH = (0.8948 * pH) - 4.145;  OLD FORMULA
-    LF_pH = (1.182936 * pH) - 5.80188;
+    // LF_pH = (1.182936 * pH) - 5.80188; with bug in oAA_scaling
+    LF_pH = (1.178506 * pH) - 5.776411
     if (SMPH.verbose > 5) {
       console.log("pH = " + pH + ", LF for nonIAA = " + LF_pH.toFixed(4));
     }
@@ -1435,49 +1408,6 @@ function compute_LF_nonIAA_krausen(ibu) {
   return LF_krausen;
 }
 
-// -----------------------------------------------------------------------------
-// compute temperature at IBU addition, relative to boiling
-
-function compute_relativeTemp(ibu, hopIdx) {
-  var relativeTemp = 0.0;
-
-  // JPH CHECK THIS:
-  if (1) {
-    return 1.0;
-  }
-
-  relativeTemp = 0.0;
-  if (!ibu.add[hopIdx].tempK) {
-    console.log("ERROR: temperature at hop addition not known; assuming RT");
-    return relativeTemp;
-  }
-
-  // Teamaker results at 100'C and 80'C suggest nonIAA similar to 
-  // temperature effect with isomerized alpha acids
-  // but Util Exp #4 says that this estimate is incorrect.
-  // blog post (not yet written) on oAA and temperature (beer70) says no effect
-  if (1) {
-    // 80'C = relative temp of 0.722.  why??
-    var tempC = 0.0;
-    // var relAt80 = 0.722;
-    // relAt80 = 0.444; // from Teamaker experiment comparing 80'C and 100'C
-    // relAt80 = 0.90;  // gives best results on training data
-    var relAt80 = 1.0;
-    tempC = ibu.add[hopIdx].tempK - 273.15;
-    relativeTemp = ((tempC - 80.0)*(1.0 - relAt80)/(100.0 - 80.0)) + relAt80;
-    } else {
-    relativeTemp = 2.39 * Math.pow(10.0,11) * 
-                   Math.exp(-9773.0/ibu.add[hopIdx].tempK);
-    }
-  if (relativeTemp > 1.0) relativeTemp = 1.0;
-  if (relativeTemp < 0.0) relativeTemp = 0.0;
-
-  if (SMPH.verbose > 3) {
-    console.log("    relative temp: " + relativeTemp.toFixed(4));
-  }
-  return relativeTemp;
-}
-
 // ----------- oAA -------------------------------------------------------------
 
 function compute_oAA_dis_mg(ibu, hopIdx, currVolume) {
@@ -1487,62 +1417,70 @@ function compute_oAA_dis_mg(ibu, hopIdx, currVolume) {
   var oAA_fresh = 0.0;
   var oAA_percent_boilFactor = 0.0;
   var oAA_percent_init = 0.0;
+  var oAA_percent = 0.0;
   var ratio = 0.0;
-  var relativeTemp = 0.0;
   var relativeAA = 0.0;
 
-  if (ibu.add[hopIdx].hopForm.value == "pellets") {
-    // JPH DEBUG fix this
-    oAA_percent_init = -10.0;
-    // oAA_percent_init = 0.014;
-  } else {
-    // k is from Garetz
-    ratio = 1.0 - (ibu.add[hopIdx].percentLoss.value / 100.0);
-    k = Math.log(1.0 / ratio) / (365.0 / 2.0);
-    if (SMPH.verbose > 5) {
-      console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
-                " and so k = " + k.toFixed(6));
-    }
-    // oAA_fresh modeled as 3.5 days decay at 20'C, which is then multiplied 
-    // by AA rating.  For Maye paper, average AA of Zeus is 15.75% and SF = 50%,
-    // so 1-(1/exp(0.003798*1*1*3.5) * 0.1575 = 0.002 = 0.2% of weight of hops.
-    // where 0.003798 is k for SF 50%.
-    oAA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
+  // the oAA_percent_init is for cones; the value for pellets is probably
+  // higher (because more surface area), but this (hopefully) rarely comes 
+  // into play because oAA_boil for pellets is much larger.  So, just use the
+  // cones value even if we have pellets.
+  // 'k' is from Garetz
+  ratio = 1.0 - (ibu.add[hopIdx].percentLoss.value / 100.0);
+  k = Math.log(1.0 / ratio) / (365.0 / 2.0);
+  if (SMPH.verbose > 5) {
+    console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
+              " and so k = " + k.toFixed(6));
+  }
+  // oAA_fresh modeled as 3.5 days decay at 20'C, which is then multiplied 
+  // by AA rating.  For Maye paper, average AA of Zeus is 15.75% and SF = 50%,
+  // so 1-(1/exp(0.003798*1*1*3.5) * 0.1575 = 0.002 = 0.2% of weight of hops.
+  // where 0.003798 is k for SF 50%.
+  oAA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
 
-    AAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
-    oAA_percent_init = (AAloss_percent * SMPH.oAA_storageFactor) + oAA_fresh;
-    if (SMPH.verbose > 4) {
-      console.log("    [oAA] storage factors: fresh=" + oAA_fresh.toFixed(5) +
-                ", loss=" + AAloss_percent.toFixed(5) +
-                ", storage=" + SMPH.oAA_storageFactor.toFixed(4) + 
-                ", %init=" + oAA_percent_init.toFixed(5));
-    }
+  AAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
+  oAA_percent_init = (AAloss_percent * SMPH.oAA_storageFactor) + oAA_fresh;
+  if (SMPH.verbose > 4) {
+    console.log("    [oAA] storage factors: fresh=" + oAA_fresh.toFixed(5) +
+              ", loss=" + AAloss_percent.toFixed(5) +
+              ", storage=" + SMPH.oAA_storageFactor.toFixed(4) + 
+              ", %init=" + oAA_percent_init.toFixed(5));
   }
 
-  relativeTemp = compute_relativeTemp(ibu, hopIdx);
-  // JPH turn on or off oAA solubility limit 
+  // the AA available for oxidation is affected by the AA solubility limit;
+  // figure out the relative impact of this solubility limit
   relativeAA = 1.0;
-  if (1) {
-    if (ibu.add[hopIdx].AA_init > 0.0 && currVolume > 0.0) {
-      relativeAA = ibu.add[hopIdx].AA_dis_mg/(ibu.add[hopIdx].AA_init*currVolume);
-    }
+  if (ibu.add[hopIdx].AA_init > 0.0 && currVolume > 0.0) {
+    relativeAA = ibu.add[hopIdx].AA_dis_mg/(ibu.add[hopIdx].AA_init*currVolume);
   }
+
   // console.log("AA : added = " + (ibu.add[hopIdx].AA_init*currVolume).toFixed(3) + 
               // "mg , dissolved = " + ibu.add[hopIdx].AA_dis_mg.toFixed(3) + 
               // "mg, relative = " + relativeAA.toFixed(3));
   // the AA solubility limit only applies to the oAA produced during the boil
   oAA_percent_boilFactor = ibu.add[hopIdx].freshnessFactor.value *
-                           SMPH.oAA_boilFactor * relativeAA * relativeTemp;
+                           SMPH.oAA_boilFactor * relativeAA;
+
+  // if using pellets, the boil factor is increased
+  if (ibu.add[hopIdx].hopForm.value == "pellets") {
+    oAA_percent_boilFactor *= ibu.add[hopIdx].pelletFactor.value;
+  }
+
   if (SMPH.verbose > 4) {
     console.log("    [oAA] boil factor: " + oAA_percent_boilFactor.toFixed(5) +
               " from fresh=" + ibu.add[hopIdx].freshnessFactor.value.toFixed(5) +
               ", boil=" + SMPH.oAA_boilFactor.toFixed(5) + 
-              ", relAA=" + relativeAA.toFixed(5) + 
-              ", relTemp=" + relativeTemp.toFixed(5));
+              ", relAA=" + relativeAA.toFixed(5));
   }
   // oAA_addition is oAA added to wort, in mg
-  oAA_addition = (oAA_percent_init + oAA_percent_boilFactor) *
-                 (ibu.add[hopIdx].AA.value/100.0) * 
+
+  // boiling has no effect on AA that have oxidized prior to boil (FV exp #74)
+  // console.log("INIT = " + oAA_percent_init + ", BOIL = " + oAA_percent_boilFactor);
+  oAA_percent = oAA_percent_boilFactor;
+  if (oAA_percent_init > oAA_percent_boilFactor) {
+    oAA_percent = oAA_percent_init;
+  }
+  oAA_addition = oAA_percent * (ibu.add[hopIdx].AA.value/100.0) * 
                   ibu.add[hopIdx].weight.value * 1000.0;
 
   // note: solubility limit of oAA is large enough so that all are dissolved
@@ -1624,39 +1562,51 @@ function compute_oBA_dis_mg(ibu, hopIdx) {
   var oBA_fresh = 0.0;
   var oBA_percent_boilFactor = 0.0;
   var oBA_percent_init = 0.0;
+  var oBA_percent = 0.0;
   var ratio = 0.0;
-  var relativeTemp = 0.0;
 
-  if (ibu.add[hopIdx].hopForm.value == "pellets") {
-    // JPH DEBUG fix this
-    oBA_percent_init = -10.0;
-    // oBA_percent_init = 0.014;
-  } else {
-    // k is from Garetz
-    ratio = 1.0 - (ibu.add[hopIdx].percentLoss.value / 100.0);
-    k = Math.log(1.0 / ratio) / (365.0 / 2.0);
-    if (SMPH.verbose > 5) {
-      console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
-                " and so k = " + k.toFixed(6));
-    }
-    // oBA_fresh is modeled the same way as oAA_fresh
-    oBA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
+  // the oBA_percent_init is for cones; the value for pellets is probably
+  // higher (because more surface area), but this (hopefully) rarely comes 
+  // into play because oBA_boil for pellets is much larger.  But even this 
+  // doesn't matter, because the oxidized beta acids are almost all (??)
+  // transformed into hulpinic acid.
+  // So, just use the cones value even if we have pellets.
+  // 'k' is from Garetz
+  ratio = 1.0 - (ibu.add[hopIdx].percentLoss.value / 100.0);
+  k = Math.log(1.0 / ratio) / (365.0 / 2.0);
+  if (SMPH.verbose > 5) {
+    console.log("%loss = " + ibu.add[hopIdx].percentLoss.value.toFixed(2) +
+              " and so k = " + k.toFixed(6));
+  }
+  // oBA_fresh is modeled the same way as oAA_fresh
+  oBA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
 
-    BAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
-    oBA_percent_init = (BAloss_percent * SMPH.oBA_storageFactor) + oBA_fresh;
-    if (SMPH.verbose > 4) {
-      console.log("    [oBA] storage factors: fresh=" + oBA_fresh.toFixed(5) +
-                ", loss=" + BAloss_percent.toFixed(5) +
-                ", %init=" + oBA_percent_init.toFixed(5));
-    }
+  BAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
+  oBA_percent_init = (BAloss_percent * SMPH.oBA_storageFactor) + oBA_fresh;
+  if (SMPH.verbose > 4) {
+    console.log("    [oBA] storage factors: fresh=" + oBA_fresh.toFixed(5) +
+              ", loss=" + BAloss_percent.toFixed(5) +
+              ", %init=" + oBA_percent_init.toFixed(5));
   }
 
-  relativeTemp = compute_relativeTemp(ibu, hopIdx);
   oBA_percent_boilFactor = ibu.add[hopIdx].freshnessFactor.value *
-                           SMPH.oBA_boilFactor * relativeTemp;
+                           SMPH.oBA_boilFactor;
+
+  // the following lines might be true, but no data to evaluate either way,
+  // and almost no impact on results:
+  // if (ibu.add[hopIdx].hopForm.value == "pellets") {
+    // oBA_percent_boilFactor *= ibu.add[hopIdx].pelletFactor;
+  // }
+
   // oBA_addition is oBA added to wort, in mg
-  oBA_addition = (oBA_percent_init + oBA_percent_boilFactor) *
-                 (ibu.add[hopIdx].BA.value / 100.0) * 
+
+  // assume that boiling has no effect on BA that have oxidized prior to 
+  // boil (same as AA)
+  oBA_percent = oBA_percent_boilFactor;
+  if (oBA_percent_init > oBA_percent_boilFactor) {
+    oBA_percent = oBA_percent_init;
+  }
+  oBA_addition = oBA_percent * (ibu.add[hopIdx].BA.value / 100.0) * 
                   ibu.add[hopIdx].weight.value * 1000.0;
 
   // note: solubility limit of oBA is large enough so that all are dissolved
@@ -1726,10 +1676,13 @@ function compute_LF_hopPP(ibu) {
   var LF_hopPP = 0.0;
 
   // assume very high solubility limit for PP, so each addition is additive
-  // assume pH has no effect on hop polyphenol concentration
+  // assume pH has effect on hop PP concentration similar to other nonIAA
   // assume krausen affects hop PP the same way as other nonIAA
   // assume [PP] doesn't change much with age (or filtering)
-  LF_hopPP = SMPH.LF_hopPP *SMPH.ferment_hopPP * compute_LF_nonIAA_krausen(ibu);
+  LF_hopPP = SMPH.LF_hopPP * 
+             compute_LF_nonIAA_pH(ibu) * 
+             SMPH.ferment_hopPP * 
+             compute_LF_nonIAA_krausen(ibu);
 
   if (SMPH.verbose > 3) {
     console.log("    LF hopPP = " + LF_hopPP.toFixed(4));
