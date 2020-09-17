@@ -614,6 +614,7 @@ function compute_concent_wort(ibu) {
   var minLimitTempScale = 0.0;
   var newAA  = 0.0;
   var newIAA = 0.0;
+  var origWhirlpoolTime = 0.0;
   var postBoilTime = 0.0;
   var postBoilVolume = 0.0;
   var preAdd_AA = 0.0;
@@ -741,6 +742,7 @@ function compute_concent_wort(ibu) {
   currVolume = initVolume;
   holdTempCounter = 0.0;
   whirlpoolTime = ibu.whirlpoolTime.value;
+  origWhirlpoolTime = whirlpoolTime; // wpTime might be modified; keep a copy
   totalXferTime = 0.0;
   AA_dis_mg = 0.0; // mg of AA dissolved, not ppm to account for volume changes
   IAA_dis_mg= 0.0; // mg of IAA dissolved, not ppm to account for volume changes
@@ -769,11 +771,12 @@ function compute_concent_wort(ibu) {
            postBoilTime < whirlpoolTime) &&
            (!holdTempCheckbox || (holdTempCheckbox && doneHoldTemp))) {
         if (!isTempDecayLinear) {
-          tempK = (ibu.tempExpParamA.value *
-                     Math.exp(-1.0 * ibu.tempExpParamB.value * postBoilTime)) +
-                     expParamC_Kelvin;
+          tempNoBase = tempK - expParamC_Kelvin;
+          tempNoBase = tempNoBase +
+                      (-1.0*ibu.tempExpParamB.value*tempNoBase*integrationTime);
+          tempK = tempNoBase + expParamC_Kelvin;
         } else {
-          tempK = (ibu.tempLinParamA.value * postBoilTime) + linParamB_Kelvin;
+          tempK = tempK + (ibu.tempLinParamA.value * integrationTime);
         }
       }
 
@@ -818,7 +821,7 @@ function compute_concent_wort(ibu) {
       if (holdTempCheckbox && tempK <= holdTempK && !doneHoldTemp) {
         holdTempCounter += integrationTime;
         tempK = holdTempK;
-        if (holdTempCounter > whirlpoolTime) {
+        if (holdTempCounter > origWhirlpoolTime) {
           doneHoldTemp = true;
           if (SMPH.verbose > 2) {
             console.log("Done with post-boil whirlpool; whirlpool time = " +

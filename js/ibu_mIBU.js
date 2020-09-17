@@ -59,6 +59,12 @@
 // Version 1.2.8 : Jun. 9, 2020
 //         . update the effect of pH on auxiliary bittering compounds
 //
+// Version 1.2.9 : Sep. 16, 2020
+//         . three bug fixes, thanks to Marko Heyns at Grainfather:
+//           (a) for solubility limit, [AA] needs to also be based on curr vol.
+//           (b) fix temperature decay when holding hop-stand temperature
+//           (c) compare holdTempCounter with original whirlpool time
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -175,6 +181,7 @@ this.computeIBU_mIBU = function() {
   var nonIaaKrausenLossFactor = 0.0;
   var nonIAAutil = 0.0;
   var OGpoints = 0.0;
+  var origWhirlpoolTime = 0.0;
   var pH = ibu.pH.value;
   var postBoilTime = 0.0;
   var postBoilVolume = 0.0;
@@ -323,6 +330,7 @@ this.computeIBU_mIBU = function() {
   currVolume = initVolume;
   holdTempCounter = 0.0;
   whirlpoolTime = ibu.whirlpoolTime.value;
+  origWhirlpoolTime = whirlpoolTime; // wpTime might be increased; keep a copy
   for (t = boilTime; finished == 0; t = t - integrationTime) {
     // check to see if add hops at this time point.
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
@@ -350,14 +358,16 @@ this.computeIBU_mIBU = function() {
 
         // if use solubility limit, see if we need to change AA concentration
         if (useSolubilityLimit) {
+          // AAconcent is [AA] at post-boil volume.  AAatAdd is [AA] when add
+          AAatAdd = AAconcent * postBoilVolume / currVolume;
           // if [AA] is above threshold, find out what it would be at this
           // point in time if there was no solubility limit.
-          if (AAconcent > solLowerThresh) {
-            effectiveAA = -31800.0 / (AAconcent - 356.67);
+          if (AAatAdd > solLowerThresh) {
+            effectiveAA = -31800.0 / (AAatAdd - 356.67);
           } else {
-            effectiveAA = AAconcent;
+            effectiveAA = AAatAdd;
           }
-          console.log("    from [AA]=" + AAconcent.toFixed(2) +
+          console.log("    from [AA]@currTime=" + AAatAdd.toFixed(2) +
                       ", effectiveAA is " +
                       effectiveAA.toFixed(2), ", then adding " +
                       AAinit.toFixed(2));
@@ -372,8 +382,8 @@ this.computeIBU_mIBU = function() {
           console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " + 
                       postBoilVolume.toFixed(2));
           // if effective [AA] after new hops addition is above threshold,
-          // set [AA] to new limit; otherwise, [AA] is the effective [AA]
-          // adjust AAconcent to be the concentration at the end of the boil,
+          // set [AA] to new limit; otherwise, [AA] is the effective [AA].
+          // Adjust AAconcent to be the concentration at the end of the boil,
           // since that concentration is what the IBU is measuring.
           if (effectiveAA > solLowerThresh && effectiveAA > solubilityLimit) {
             AAconcent = solubilityLimit * currVolume / postBoilVolume;
@@ -421,11 +431,12 @@ this.computeIBU_mIBU = function() {
           postBoilTime < whirlpoolTime) &&
           (!holdTempCheckbox || (holdTempCheckbox && doneHoldTemp))) {
         if (!isTempDecayLinear) {
-          tempK = (ibu.tempExpParamA.value *
-                     Math.exp(-1.0 * ibu.tempExpParamB.value * postBoilTime)) +
-                     expParamC_Kelvin;
+          tempNoBase = tempK - expParamC_Kelvin;
+          tempNoBase = tempNoBase +
+                      (-1.0*ibu.tempExpParamB.value*tempNoBase*integrationTime);
+          tempK = tempNoBase + expParamC_Kelvin;
         } else {
-          tempK = (ibu.tempLinParamA.value * postBoilTime) + linParamB_Kelvin;
+          tempK = tempK + (ibu.tempLinParamA.value * integrationTime);
         }
       }
       // if immersion/icebath AND done with whirlpool, adjust
@@ -470,9 +481,10 @@ this.computeIBU_mIBU = function() {
         tempK = holdTempK;
         // console.log("POST-BOIL HOLDING target " +
                     // (holdTempK-273.15).toFixed(2) +
-                    // ", current temp = " + (tempK-273.15).toFixed(2) +
-                    // ", WP time now " + whirlpoolTime.toFixed(2));
-        if (holdTempCounter > whirlpoolTime) {
+                    // "'C, current temp = " + (tempK-273.15).toFixed(2) +
+                    // "'C, WP time now " + whirlpoolTime.toFixed(2) +
+                    // " and holdTempCounter = " + holdTempCounter.toFixed(2));
+        if (holdTempCounter > origWhirlpoolTime) {
           doneHoldTemp = true;
           console.log("Done with post-boil whirlpool; total whirlpoolTime = " +
                       whirlpoolTime);
