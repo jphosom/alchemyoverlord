@@ -642,6 +642,9 @@ function compute_concent_wort(ibu) {
   var RF_IAA = 0.0;
   var relativeTemp = 0.0;
   var relativeTime = 0.0;
+  var AA_noLimit_mg = 0.0;
+  var AA_noLimit = 0.0;
+  var AA_undis = 0.0;
 
   // ---------------------------------------------------------------------------
   // INITIALIZATION
@@ -945,7 +948,7 @@ function compute_concent_wort(ibu) {
         ibu.add[hopIdx].effectiveSteepTime = 0.0;
 
         if (SMPH.verbose > 2) {
-          console.log("ADDING HOPS ADDITION " + hopIdx + ":");
+          console.log("ADDING HOPS ADDITION " + hopIdx + " at " + t + "min :");
           console.log("  AA=" + ibu.add[hopIdx].AA.value + "%, weight=" +
                       ibu.add[hopIdx].weight.value.toFixed(3) + " grams " +
                       " and [AA]_init = " + AA_init.toFixed(2));
@@ -956,7 +959,6 @@ function compute_concent_wort(ibu) {
         }
         preAdd_AA = AA_dis_mg;
         preAdd_AAundis = AA_undis_mg;
-        AA_dis_mg += AA_init_mg;
 
         // if use solubility limit, see if we need to change AA concentration
         if (useSolubilityLimit) {
@@ -981,66 +983,58 @@ function compute_concent_wort(ibu) {
                     ", AA_limit_minLimit = " + AA_limit_maxLimit.toFixed(4));
             }
           }
-          if (AA_limit_maxLimit > AA_limit_minLimit) {
-            AA_limit_func_A = AA_limit_maxLimit;
-            AA_limit_func_B =
-                 -1.0* Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) / 
-                       AA_limit_minLimit;
-            if (SMPH.verbose > 2) {
-              console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
-                        ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
-            }
-            AA_dis = AA_dis_mg / currVolume;
-            AA_limit = AA_limit_func_A * 
-                       (1.0 - Math.exp(-1.0 * AA_limit_func_B * AA_dis));
-            if (AA_limit < AA_limit_minLimit) {
-              AA_limit = AA_limit_minLimit;
-            }
-          } else {
-            AA_limit = AA_limit_minLimit;
+          if (AA_limit_maxLimit <= AA_limit_minLimit) {
+            AA_limit_maxLimit = AA_limit_minLimit + 0.0001;  // prevent log(<=0)
           }
+          AA_limit_func_A = AA_limit_maxLimit;
+          AA_limit_func_B =
+               -1.0* Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) / 
+                     AA_limit_minLimit;
+          if (SMPH.verbose > 3) {
+            console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
+                      ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
+          }
+
+          // if pre-addition [AA] is above threshold, find out what [AA] would 
+          // be at this point in time if there was no solubility limit
+          AA_dis = AA_dis_mg / currVolume;
+          if (AA_dis > AA_limit_minLimit) {
+            AA_noLimit = -1.0*Math.log(1.0 - (AA_dis/AA_limit_func_A)) /
+                         AA_limit_func_B;
+          } else {
+            AA_noLimit = AA_dis;
+          }
+          if ( SMPH.verbose > 3) {
+            console.log("    [AA] before addition, without limits = " + 
+                        AA_noLimit.toFixed(4));
+          }
+
+          // make the new AA addition to current AA *without* solubility limit
+          AA_noLimit = AA_noLimit + AA_init;
+          AA_noLimit_mg = AA_noLimit * currVolume;
+
+          // and (re-)apply solubility limit, if necessary
+          if (AA_noLimit > AA_limit_minLimit) {
+            AA_dis = AA_limit_func_A * 
+                     (1.0 - Math.exp(-1.0 * AA_limit_func_B * AA_noLimit));
+          } else {
+            AA_dis = AA_noLimit;
+          }
+          AA_dis_mg = AA_dis * currVolume;
+          AA_undis_mg = AA_noLimit_mg - AA_dis_mg;
+          AA_undis = AA_undis_mg / currVolume;
 
           if (SMPH.verbose > 2) {
-            console.log("    AA_limit = " + AA_limit.toFixed(4) + " = " +
-                  AA_limit_func_A.toFixed(4) + " * (1 - exp(-" + 
-                  AA_limit_func_B.toFixed(6) + "*" + AA_dis.toFixed(4) + "))");
-          }
-
-          AA_dis = AA_dis_mg / currVolume;
-          if (AA_dis > AA_limit) {
-            AA_undis_mg = (AA_dis - AA_limit) * currVolume;
-            AA_dis_mg = AA_limit * currVolume;
-            AA_dis = AA_limit;
+            console.log("    [AA]_dis = " + AA_dis.toFixed(4) + " = " +
+                  AA_dis_mg.toFixed(4) + " / " + currVolume.toFixed(6));
           }
 
           // get dissolved AA in mg for this addition of hops
           ibu.add[hopIdx].AA_dis_mg = AA_dis_mg - preAdd_AA;
           ibu.add[hopIdx].AA_undis_mg = AA_undis_mg - preAdd_AAundis;
 
-          // AA_dis_mg can be negative. If already above saturation limit and
-          // add a smaller amount of AA than previous addition, then
-          // AA_dis_mg can be (before adjustment) smaller than it was
-          // in the previous adjustment, which lowers AA_limit, which
-          // lowers the adjusted AA concentration, which makes AA_dis_mg 
-          // negative.  The easiest solution is to move this negative 
-          // amount into the previous hop addition(s).
-          if (ibu.add[hopIdx].AA_dis_mg < 0) {
-            console.log("Info: correcting negative [AA] = " + 
-                        ibu.add[hopIdx].AA_dis_mg.toFixed(4));
-            diff = ibu.add[hopIdx].AA_dis_mg;
-            for (revIdx = hopIdx-1; revIdx >= 0; revIdx--) {
-              // account for negative [AA] by adjusting previous addition
-              ibu.add[revIdx+1].AA_dis_mg = 0.0;
-              ibu.add[revIdx].AA_dis_mg += diff;
-              if (ibu.add[revIdx].AA_dis_mg > 0) {
-                break;
-              }
-              diff = ibu.add[revIdx].AA_dis_mg;
-            }
-            if (revIdx < 0) {
-              console.log("Warning: can't correct negative [AA]: " + diff);
-            }
-          }
+          // JPH : this block of code is no longer correct, but we're
+          // not using 'undis' anymore, so it should be removed anyway.
           if (ibu.add[hopIdx].AA_undis_mg < 0) {
             console.log("Info: correcting negative [AA] (undis) = " + 
                         ibu.add[hopIdx].AA_undis_mg.toFixed(4));
@@ -1065,7 +1059,10 @@ function compute_concent_wort(ibu) {
                         " at " + tempC.toFixed(2) +
                         "'C, [AA]_dissolved = "+ AA_dis.toFixed(4));
           }
-        } // use solubility limit?
+        } else {
+          // don't use solubility limit, just accumulate AA
+          AA_dis_mg += AA_init_mg;
+        }
 
         // record the temperature at which hops were added, for later
         // oAA and oBA estimates

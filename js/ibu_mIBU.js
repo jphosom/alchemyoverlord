@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // ibu_mIBU.js : JavaScript for AlchemyOverlord web page, mIBU sub-page
 // Written by John-Paul Hosom
-// Copyright © 2018 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018, 2019, 2020 by John-Paul Hosom, all rights reserved.
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
@@ -64,6 +64,10 @@
 //           (a) for solubility limit, [AA] needs to also be based on curr vol.
 //           (b) fix temperature decay when holding hop-stand temperature
 //           (c) compare holdTempCounter with original whirlpool time
+// 
+// Version 1.2.10 : Sep. 20, 2020
+//         . update the solubility limit model to be in sync with latest results
+//         . update pH-related nonIAA losses to be in sync with latest results
 //
 // TODO:
 // 1. add correction factor for pellets
@@ -137,6 +141,11 @@ this.computeIBU_mIBU = function() {
   var AAconcent = 0.0;
   var AAinit = 0.0;
   var AAinitTotal = 0.0;
+  var AA_limit_func_A = 0.0;
+  var AA_limit_func_B = 0.0;
+  var AA_limit_minLimit = 240.0;
+  var AA_limit_maxLimit = 490.0;
+  var AA_noLimit = 0.0;
   var addIBUoutput = 0.0;
   var additionTime = 0.0;
   var addUtilOutput = 0.0;
@@ -152,7 +161,6 @@ this.computeIBU_mIBU = function() {
   var decayRate = 0.0;
   var degreeU = 0.0;
   var doneHoldTemp = false;
-  var effectiveAA = 0.0;
   var expParamC_Kelvin = 0.0;
   var factor = 0.0;
   var finalVolume = 0.0;
@@ -192,8 +200,6 @@ this.computeIBU_mIBU = function() {
   var relRate = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
-  var solLowerThresh = 180.0;
-  var solubilityLimit = 0.0;
   var subBoilEvapRate = 0.0;
   var t = 0.0;
   var tempC = 0.0;
@@ -358,37 +364,44 @@ this.computeIBU_mIBU = function() {
 
         // if use solubility limit, see if we need to change AA concentration
         if (useSolubilityLimit) {
+          // compute AA limit function parameters
+          AA_limit_func_A = AA_limit_maxLimit;
+          AA_limit_func_B = 
+               -1.0 * Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) / 
+               AA_limit_minLimit;
           // AAconcent is [AA] at post-boil volume.  AAatAdd is [AA] when add
           AAatAdd = AAconcent * postBoilVolume / currVolume;
-          // if [AA] is above threshold, find out what it would be at this
+          // if pre-add [AA] is above thresh, find out what it would be at this
           // point in time if there was no solubility limit.
-          if (AAatAdd > solLowerThresh) {
-            effectiveAA = -31800.0 / (AAatAdd - 356.67);
+          if (AAatAdd > AA_limit_minLimit) {
+            AA_noLimit = -1.0 * Math.log(1.0 - (AAatAdd/AA_limit_func_A)) /
+                         AA_limit_func_B;
           } else {
-            effectiveAA = AAatAdd;
+            AA_noLimit = AAatAdd;
           }
           console.log("    from [AA]@currTime=" + AAatAdd.toFixed(2) +
-                      ", effectiveAA is " +
-                      effectiveAA.toFixed(2), ", then adding " +
+                      ", [AA] with no solubility limit is " +
+                      AA_noLimit.toFixed(2), ", then adding " +
                       AAinit.toFixed(2));
-          effectiveAA = effectiveAA + AAinit;
-          if (effectiveAA > solLowerThresh) {
-            solubilityLimit = (-31800.0/effectiveAA) + 356.67;
+          AA_noLimit = AA_noLimit + AAinit;
+          if (AA_noLimit > AA_limit_minLimit) {
+            solubilityLimit = AA_limit_func_A *
+                              (1.0 - Math.exp(-1.0*AA_limit_func_B*AA_noLimit));
           } else {
-            solubilityLimit = solLowerThresh;
+            solubilityLimit = AA_limit_minLimit;
           }
-          console.log("    from new effective [AA]=" + effectiveAA.toFixed(2) +
+          console.log("    from [AA] without limits=" + AA_noLimit.toFixed(2) +
                       ", limit is " + solubilityLimit.toFixed(2));
           console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " + 
                       postBoilVolume.toFixed(2));
-          // if effective [AA] after new hops addition is above threshold,
-          // set [AA] to new limit; otherwise, [AA] is the effective [AA].
+          // if [AA] after new hops addition (without limit) is above threshold,
+          // set [AA] to new limit.
           // Adjust AAconcent to be the concentration at the end of the boil,
           // since that concentration is what the IBU is measuring.
-          if (effectiveAA > solLowerThresh && effectiveAA > solubilityLimit) {
+          if (AA_noLimit > AA_limit_minLimit && AA_noLimit > solubilityLimit) {
             AAconcent = solubilityLimit * currVolume / postBoilVolume;
           } else {
-            AAconcent = effectiveAA * currVolume / postBoilVolume;
+            AAconcent = AA_noLimit * currVolume / postBoilVolume;
           }
           console.log("    after addition, AAconcent = " +AAconcent.toFixed(4));
         } else {
@@ -596,7 +609,7 @@ this.computeIBU_mIBU = function() {
     }
     // compute loss factors for IAA and nonIAA
     IAAlossFactor = (0.0710 * pH) + 0.592;
-    nonIAAlossFactor = (1.182936 * pH) - 5.80188;
+    nonIAAlossFactor = (1.178506 * pH) - 5.776411;
     console.log("  post-boil pH = " + pH.toFixed(2));
     console.log("  IAA loss factor = " + IAAlossFactor.toFixed(4));
     console.log("  nonIAA loss factor = " + nonIAAlossFactor.toFixed(4));

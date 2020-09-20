@@ -80,6 +80,8 @@ TODO:
 
        ---------------------
 
+ 12.75 add new 2020 hop varieties
+
  13. update "why do pellets have higher IBUs" to include PP results
      from CVP #6.  Explain pelletFactor of 2.0 in "IBU differences" post.
 
