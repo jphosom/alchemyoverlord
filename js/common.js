@@ -451,6 +451,16 @@ this.convertGramsToOunces = function(input) {
   return output;
 }
 
+this.convertTspToMl = function(input) {
+  var output = input * 4.92892;
+  return output;
+}
+
+this.convertMlToTsp = function(input) {
+  var output = input / 4.92892;
+  return output;
+}
+
 //------------------------------------------------------------------------------
 // SAVE AND LOAD VALUES (without filesystem)
 

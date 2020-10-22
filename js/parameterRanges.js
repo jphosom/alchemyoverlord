@@ -20,32 +20,24 @@ var params = {
 
             {
                 "param":    "oAA_storageFactor",
-                "default":  0.22,
+                "default":  0.40,
                 "low":      0.20,
                 "high":     0.60,
                 "inc":      0.20,
             },
 
             {
-                "param":    "oBA_storageFactor",
-                "default":  0.00,
-                "low":      0.00,
-                "high":     1.00,
-                "inc":      0.50,
-            },
-
-            {
                 "param":    "AA_limit_minLimit",
-                "default":  220.0,
-                "low":      150.0,
+                "default":  200.0,
+                "low":      100.0,
                 "high":     300.0,
                 "inc":      50.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  400.0,
-                "low":      400.0,
+                "default":  500.0,
+                "low":      300.0,
                 "high":     700.0,
                 "inc":      100.0,
             },
@@ -78,18 +70,10 @@ var params = {
             },
 
             {
-                "param":    "oBA_storageFactor",
-                "default":  0.00,
-                "low":      0.00,
-                "high":     1.00,
-                "inc":      0.25,
-            },
-
-            {
                 "param":    "AA_limit_minLimit",
-                "default":  250.0,
-                "low":      200.0,
-                "high":     300.0,
+                "default":  200.0,
+                "low":      150.0,
+                "high":     250.0,
                 "inc":      25.0,
             },
 
@@ -129,26 +113,18 @@ var params = {
             },
 
             {
-                "param":    "oBA_storageFactor",
-                "default":  1.00,
-                "low":      0.80,
-                "high":     1.00,
-                "inc":      0.20,
-            },
-
-            {
                 "param":    "AA_limit_minLimit",
-                "default":  225.0,
-                "low":      200.0,
-                "high":     260.0,
+                "default":  200.0,
+                "low":      160.0,
+                "high":     240.0,
                 "inc":      20.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  500.0,
-                "low":      400.0,
-                "high":     600.0,
+                "default":  600.0,
+                "low":      500.0,
+                "high":     700.0,
                 "inc":      100.0,
             },
 
@@ -160,7 +136,7 @@ var params = {
                 "default":  0.50,
                 "low":      0.48,
                 "high":     0.52,
-                "inc":      0.01,
+                "inc":      0.02,
             },
 
             {
@@ -174,32 +150,24 @@ var params = {
             {
                 "param":    "oAA_storageFactor",
                 "default":  0.40,
-                "low":      0.30,
-                "high":     0.50,
-                "inc":      0.05,
-            },
-
-            {
-                "param":    "oBA_storageFactor",
-                "default":  0.80,
-                "low":      0.70,
-                "high":     0.90,
-                "inc":      0.05,
+                "low":      0.36,
+                "high":     0.44,
+                "inc":      0.02,
             },
 
             {
                 "param":    "AA_limit_minLimit",
-                "default":  240.0,
-                "low":      200.0,
-                "high":     280.0,
-                "inc":      20.0,
+                "default":  180.0,
+                "low":      170.0,
+                "high":     220.0,
+                "inc":      10.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  500.0,
-                "low":      450.0,
-                "high":     550.0,
+                "default":  600.0,
+                "low":      500.0,
+                "high":     650.0,
                 "inc":      25.0,
             },
 
@@ -223,33 +191,25 @@ var params = {
 
             {
                 "param":    "oAA_storageFactor",
-                "default":  0.40,
-                "low":      0.39,
-                "high":     0.41,
-                "inc":      0.01,
-            },
-
-            {
-                "param":    "oBA_storageFactor",
-                "default":  0.80,
-                "low":      0.79,
-                "high":     0.81,
+                "default":  0.42,
+                "low":      0.41,
+                "high":     0.43,
                 "inc":      0.01,
             },
 
             {
                 "param":    "AA_limit_minLimit",
-                "default":  220.0,
+                "default":  210.0,
                 "low":      200.0,
-                "high":     240.0,
+                "high":     230.0,
                 "inc":      5.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  525.0,
-                "low":      500.0,
-                "high":     550.0,
+                "default":  550.0,
+                "low":      520.0,
+                "high":     580.0,
                 "inc":      10.0,
             },
         ],
@@ -257,41 +217,33 @@ var params = {
         "none": [
             {
                 "param":    "IAA_LF_boil",
-                "default":  0.51,
-                "low":      0.51,
-                "high":     0.51,
+                "default":  0.50,
+                "low":      0.50,
+                "high":     0.50,
                 "inc":      0.01,
             },
 
             {
                 "param":    "oAA_boilFactor",
-                "default":  0.11,
-                "low":      0.11,
-                "high":     0.11,
+                "default":  0.12,
+                "low":      0.12,
+                "high":     0.12,
                 "inc":      0.01,
             },
 
             {
                 "param":    "oAA_storageFactor",
-                "default":  0.39,
-                "low":      0.39,
-                "high":     0.39,
+                "default":  0.42,
+                "low":      0.42,
+                "high":     0.42,
                 "inc":      0.01,
             },
 
             {
-                "param":    "oBA_storageFactor",
-                "default":  0.79,
-                "low":      0.79,
-                "high":     0.79,
-                "inc":      0.10,
-            },
-
-            {
                 "param":    "AA_limit_minLimit",
-                "default":  220.0,
-                "low":      220.0,
-                "high":     220.0,
+                "default":  215.0,
+                "low":      215.0,
+                "high":     215.0,
                 "inc":      10.0,
             },
 

@@ -1753,25 +1753,32 @@ var trainingData = {
 
     },
 
-    // JPH : volume, OG, evaporationRate, and pH are correct for Condition D (DME) only
     "Lauter Exp. #1": {
-        "conditions":           [ "D10",   "D20",   "D30",   "D40" ],
-        "IBU_list":             [ 18.0,    24.4,    30.0,    34.8 ],
-        "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
-        "volume_list":          [ 11.30,   10.66,   10.09,   9.58 ],
-        "OG_list":              [ 1.0481,  1.0509,  1.0538,  1.0567 ],
+        "conditions":           [ "A10",  "A20",  "A30",  "A40",   "B10",  "B20",  "B30",  "B40",
+                                  "C10",  "C20",  "C30",  "C40",   "D10",  "D20",  "D30",  "D40" ],
+        "IBU_list":             [ 13.6,   16.4,   19.6,   22.4,    16.4,   20.9,   25.9,   29.9,
+                                  18.4,   22.3,   26.0,   30.0,    18.0,   24.4,   30.0,   34.8 ],
+        "time_list":            [ 10.0,   20.0,   30.0,   40.0,    10.0,   20.0,   30.0,   40.0,
+                                  10.0,   20.0,   30.0,   40.0,    10.0,   20.0,   30.0,   40.0 ],
+        "volume_list":          [ 12.15,  12.09,  12.02,  11.96,   12.08,  11.94,  11.81,  11.68,
+                                  12.13,  12.00,  11.88,  11.77,   11.52,  10.87,  10.29,  9.76 ],
+        "OG_list":              [ 1.0455, 1.0458, 1.0460, 1.0463,  1.0458, 1.0463, 1.0469, 1.0474,
+                                  1.0467, 1.0472, 1.0476, 1.0481,  1.0481, 1.0509, 1.0538, 1.0567 ],
+        "pH_list":              [ 5.521,  5.492,  5.464,  5.435,   5.513,  5.485,  5.457,  5.430,
+                                  5.510,  5.490,  5.470,  5.450,   5.718,  5.695,  5.673,  5.650 ],
+        "wortClarity_list":     [ 0.655,  0.655,  0.655,  0.655,   0.993,  0.993,  0.993,  0.993,
+                                  0.993,  0.993,  0.993,  0.993,   1.088,  1.088,  1.088,  1.088 ],
 
-        // comet: assume same as CvP #4C
+        // comet: same as CvP #4C
         // storage for 270 days at -9'F yields freshF between 0.90 and 0.95, depending on SF
         //                AA%   BA%   form   freshF  %loss  weight(g), boil time
         "add1":        [ 10.35, 3.92, "cones", 0.93,  37.43,  20.43,   40 ],
 
-        "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
-        "evaporationRate":      3.438, // estimated from change in volume during boil
+        "timeToFirstAddition":  5,      // wait 5 minutes after start of boil
+        "evaporationRate":      0.0238, // average from 4 estimates
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
-        "pH":                   5.74,  // for Condition D ONLY : JPH
-        "preOrPostBoilpH":      "preBoilpH",
+        "preOrPostBoilpH":      "postBoilpH",
         "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 
@@ -1800,22 +1807,30 @@ var trainingData = {
     },
 
     "Lauter Exp. #2": {
-        "conditions":           [ "C10",   "C20",   "C30",   "C40" ],
-        "IBU_list":             [ 16.8,    23.4,    29.3,    32.8 ],
-        "time_list":            [ 10.0,    20.0,    30.0,    40.0 ],
-        "volume_list":          [ 12.32,   12.18,   12.04,   11.91 ],
-        "OG_list":              [ 1.0419,  1.0423,  1.0428,  1.0433 ],
+        "conditions":           [ "A10",  "A20",  "A30",  "A40",   "B10",  "B20",  "B30",  "B40",
+                                  "C10",  "C20",  "C30",  "C40" ],
+        "IBU_list":             [ 17.4,   22.3,   26.4,   30.9,    20.9,   27.4,   33.1,   37.5,
+                                  16.8,   23.4,   29.3,   32.8 ],
+        "time_list":            [ 10.0,   20.0,   30.0,   40.0,    10.0,   20.0,   30.0,   40.0,
+                                  10.0,   20.0,   30.0,   40.0 ],
+        "volume_list":          [ 12.24,  12.24,  12.24,  12.24,   12.49,  12.37,  12.24,  12.13,
+                                  12.35,  12.27,  12.19,  12.11 ],
+        "OG_list":              [ 1.0411, 1.0411, 1.0411, 1.0411,  1.0423, 1.0428, 1.0432, 1.0436,
+                                  1.0416, 1.0418, 1.0421, 1.0424 ],
+        "pH_list":              [ 5.679,  5.671,  5.663,  5.655,   5.661,  5.636,  5.612,  5.587,
+                                  5.656,  5.643,  5.629,  5.615 ],
+        "wortClarity_list":     [ 0.944,  0.944,  0.944,  0.944,   1.295,  1.295,  1.295,  1.295,
+                                  1.020,  1.020,  1.020,  1.020 ],
 
         // cascade 2018 analysis: AA 6.4%, store 555 days @ -9'F SF 0.5 -> decay 0.85
         //                AA%   BA%   form    freshF  %loss  weight(g), boil time
         "add1":        [  6.40, 5.75, "cones", 0.85,  50.0,  37.57,    40 ],
 
         "timeToFirstAddition":  5,     // wait 5 minutes after start of boil
-        "evaporationRate":      0.811, // estimated from change in volume during boil
+        "evaporationRate":      0.007, // estimated from three conditions
         "whirlpoolTime":        0,
         "immersionDecayFactor": 2.5,
-        "pH":                   5.69,
-        "preOrPostBoilpH":      "preBoilpH",
+        "preOrPostBoilpH":      "postBoilpH",
         "krausen":              "mix krausen back in; no loss",   // swirling of containers during fermentation
         "beerAge_days":         10,
 

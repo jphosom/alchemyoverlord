@@ -115,35 +115,6 @@ Version 1.0.1 : Nov. 22, 2018
   </p>
 
   <p>
-  <b>Post-Boil Temperature Decrease:</b><br>
-  <span style="margin-left:3em">
-  Post-Boil Wort Temperature Decay Function:
-  <input type="radio" id="tempDecayLinear" value="tempDecayLinear" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off">linear or
-  <input type="radio" id="tempDecayExponential" value="tempDecayExponential" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off" checked>exponential decay
-  <br>
-  </span>
-  <span style="margin-left:3em">
-  &emsp;&emsp;
-  temperature (<span id="tempUnits">&deg;F</span>) = <span id="tempDecayFormula">TO_BE_CHANGED</span>
-  </span>
-  </p>
-
-  <p style="margin-left:3em">
-  Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 autocomplete="off" id="ibu.whirlpoolTime" onchange="common.set(ibu.whirlpoolTime, 1)"></span> minutes<br>
-  <span style="margin-left:3em">
-  <span id="holdTempColor" style="color:#b1b1cd">
-  <input type="checkbox" id="ibu.holdTempCheckbox" onchange="common.set(ibu.holdTempCheckbox, 1)"> quickly cool to <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.holdTemp" onchange="common.set(ibu.holdTemp, 1)"><span id="holdTempUnits">&deg;F</span>, then hold at this temperature during hop-stand time<br>
-  </span>
-  </span>
-  </p>
-
-  <p style="margin-left:3em">Forced Cooling Method:<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayImmersion" value="forcedDecayImmersion" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.immersionDecayFactor" onchange="common.set(ibu.immersionDecayFactor,1)"></span>)<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayCounterflow" value="forcedDecayCounterflow" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.counterflowRate" onchange="common.set(ibu.counterflowRate,1)"></span> <span id="rateUnits">gallons/min</span>)<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayIcebath" value="forcedDecayIcebath" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.icebathDecayFactor" onchange="common.set(ibu.icebathDecayFactor,1)"></span>)<br>
-  </p>
-
-  <p>
   <b>Hops:</b>
   <table style="margin-left:3em">
   <tbody>
@@ -189,9 +160,51 @@ Version 1.0.1 : Nov. 22, 2018
   </div>
 
   <p>
+  <b>Post-Boil Temperature Decrease:</b><br>
+  <span style="margin-left:3em">
+  Post-Boil Wort Temperature Decay Function:
+  <input type="radio" id="tempDecayLinear" value="tempDecayLinear" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off">linear or
+  <input type="radio" id="tempDecayExponential" value="tempDecayExponential" name="ibu.tempDecayType" onclick="common.set(ibu.tempDecayType,1)" autocomplete="off" checked>exponential decay
+  <br>
+  </span>
+  <span style="margin-left:3em">
+  &emsp;&emsp;
+  temperature (<span id="tempUnits">&deg;F</span>) = <span id="tempDecayFormula">TO_BE_CHANGED</span>
+  </span>
+  </p>
+
+  <p style="margin-left:3em">
+  Whirlpool and/or Hop Stand Time: <span id="whirlpoolTimeField"><input type="text" STYLE="text-align:right", size=4 autocomplete="off" id="ibu.whirlpoolTime" onchange="common.set(ibu.whirlpoolTime, 1)"></span> minutes<br>
+  <span style="margin-left:3em">
+  <span id="holdTempColor" style="color:#b1b1cd">
+  <input type="checkbox" id="ibu.holdTempCheckbox" onchange="common.set(ibu.holdTempCheckbox, 1)"> quickly cool to <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.holdTemp" onchange="common.set(ibu.holdTemp, 1)"><span id="holdTempUnits">&deg;F</span>, then hold at this temperature during hop-stand time<br>
+  </span>
+  </span>
+  </p>
+
+  <p style="margin-left:3em">Forced Cooling Method:<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayImmersion" value="forcedDecayImmersion" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.immersionDecayFactor" onchange="common.set(ibu.immersionDecayFactor,1)"></span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayCounterflow" value="forcedDecayCounterflow" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.counterflowRate" onchange="common.set(ibu.counterflowRate,1)"></span> <span id="rateUnits">gallons/min</span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayIcebath" value="forcedDecayIcebath" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.icebathDecayFactor" onchange="common.set(ibu.icebathDecayFactor,1)"></span>)<br>
+  </p>
+
+  <p>
   <b>Fermentation and Conditioning:</b>
   <table style="margin-left:3em">
   <tbody>
+  <tr>
+    <td>Wort Clarity into Fermentor:</td>
+    <td><select style="width:17em;" id="ibu.wortClarity" onchange="common.set(ibu.wortClarity, 1)">
+    <option value="very clear">very clear</option>
+    <option value="clear">clear</option>
+    <option value="somewhat clear">somewhat clear</option>
+    <option value="average (default)" selected>average (default)</option>
+    <option value="somewhat cloudy">somewhat cloudy</option>
+    <option value="cloudy">cloudy</option>
+    <option value="very cloudy">very cloudy</option>
+    </select>
+    </td>
+  </tr>
   <tr>
     <td>Krausen Loss:</td>
     <td><select style="width:24em;" id="ibu.krausen" onchange="common.set(ibu.krausen, 1)">
@@ -210,9 +223,19 @@ Version 1.0.1 : Nov. 22, 2018
     <td>Yeast Flocculation:</td>
     <td><select style="width:11em;" id="ibu.flocculation" onchange="common.set(ibu.flocculation, 1)">
     <option value="high">high</option>
-    <option value="medium">medium</option>
+    <option value="medium" selected>medium</option>
     <option value="low">low</option>
     </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Finings:</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.finingsAmount" onchange="common.set(ibu.finingsAmount, 1)"> 
+        <span id="finingsUnits">tsp</span> of 
+      <select style="width:10em;" id="ibu.finingsType" onchange="common.set(ibu.finingsType, 1)">
+        <option value="nothing" selected>nothing</option>
+        <option value="gelatin">gelatin</option>
+      </select>
     </td>
   </tr>
   <tr>

@@ -23,6 +23,7 @@
 //                                this target temperature.
 // Version 1.2.5 : Jun 18, 2019 : add krausen loss factor
 // Version 1.2.6 : Jul 12, 2019 : add hop variety selection, hop form default
+// Version 1.2.7 : Oct 10, 2020 : add wort clarity and (gelatin) finings
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -67,6 +68,7 @@ var ibu = ibu || {};
 //    . OG = original gravity (specific gravity at the end of the boil)
 //    . wortLossVolume = amount of wort left behind after post-boil transfer
 //    . topoffVolume = amount of water added when doing a partial boil
+//    . wortClarity = general description of how clear/cloudy the wort is
 //    . tempLinParamA = temperature decay parameter: linear formula, slope
 //    . tempLinParamB = temperature decay parameter: linear formula, intercept
 //    . tempExpParamA = temperature decay parameter: exponential formula, scale
@@ -95,6 +97,8 @@ var ibu = ibu || {};
 //    . krausen = krausen loss factor for IAA 
 //    . flocculation = degree of yeast flocculation (low, medium, high)
 //    . filtering = micron rating of the filter, or no filtering
+//    . finingsAmount = amount of finings added
+//    . finingsType = type of finings
 //    . beerAge_days = age of the beer, in days, measured from start of ferment.
 //
 //    public functions:
@@ -125,6 +129,7 @@ ibu._construct = function() {
   this.OG                   = new Object();
   this.wortLossVolume       = new Object();
   this.topoffVolume         = new Object();
+  this.wortClarity          = new Object();
 
   this.tempLinParamA        = new Object();
   this.tempLinParamB        = new Object();
@@ -157,6 +162,8 @@ ibu._construct = function() {
   this.krausen              = new Object();
   this.flocculation         = new Object();
   this.filtering            = new Object();
+  this.finingsAmount        = new Object();
+  this.finingsType          = new Object();
   this.beerAge_days         = new Object();
 
   //----------------------------------------------------------------------------
@@ -338,6 +345,15 @@ ibu._construct = function() {
   this.topoffVolume.max = 500.0;
   this.topoffVolume.description = "added water";
   this.topoffVolume.defaultValue = 0.0;
+
+  // wortClarity
+  this.wortClarity.id = "ibu.wortClarity";
+  this.wortClarity.inputType = "select";
+  this.wortClarity.value = "average (default)";
+  this.wortClarity.userSet = 0;
+  this.wortClarity.display = "average (default)";
+  this.wortClarity.description = "wort clarity IAA loss factor";
+  this.wortClarity.defaultValue = "average (default)";
 
   // temperature decay linear : param A
   this.tempLinParamA.id = "ibu.tempLinParamA";
@@ -634,6 +650,31 @@ ibu._construct = function() {
   this.filtering.description = "filtering";
   this.filtering.defaultValue = "none";
 
+  // finingsAmount
+  this.finingsAmount.id = "ibu.finingsAmount";
+  this.finingsAmount.inputType = "float";
+  this.finingsAmount.convertToMetric = common.convertTspToMl;
+  this.finingsAmount.convertToImperial = common.convertMlToTsp;
+  this.finingsAmount.value = 0.0;
+  this.finingsAmount.userSet = 0;
+  this.finingsAmount.precision = 1;
+  this.finingsAmount.minPrecision = 0;
+  this.finingsAmount.display = "";
+  this.finingsAmount.min = 0.0;
+  this.finingsAmount.max = 5000.0;
+  this.finingsAmount.description = "amount of finings added";
+  this.finingsAmount.defaultValue = 0.0;
+  this.finingsAmount.additionalFunction = setFiningsUnits;
+
+  // finingsType
+  this.finingsType.id = "ibu.finingsType";
+  this.finingsType.inputType = "select";
+  this.finingsType.value = "nothing";
+  this.finingsType.userSet = 0;
+  this.finingsType.display = "nothing";
+  this.finingsType.description = "type of fining agent";
+  this.finingsType.defaultValue = "nothing";
+
   // beerAge_days
   this.beerAge_days.id = "ibu.beerAge_days";
   this.beerAge_days.inputType = "int";
@@ -706,6 +747,7 @@ function setUnits() {
     common.set(ibu.tempExpParamC, 0);
     common.set(ibu.holdTemp, 0);
     common.set(ibu.counterflowRate, 0);
+    common.set(ibu.finingsAmount, 0);
     for (idx = 0; idx < ibu.add.length; idx++) {
       common.set(ibu.add[idx].weight, 0);
     }
@@ -760,6 +802,7 @@ function setUnits() {
     common.set(ibu.tempExpParamC, 0);
     common.set(ibu.holdTemp, 0);
     common.set(ibu.counterflowRate, 0);
+    common.set(ibu.finingsAmount, 0);
     for (idx = 0; idx < ibu.add.length; idx++) {
       common.set(ibu.add[idx].weight, 0);
     }
@@ -1037,6 +1080,51 @@ function setPreOrPostBoilpH() {
   console.log("SET PRE- or POST-BOIL pH TO " + value);
 
   return;
+}
+
+//------------------------------------------------------------------------------
+// set the units of finings
+
+function setFiningsUnits() {
+  if (!document.getElementById('finingsUnits')) {
+    return;
+  }
+
+  if (ibu.units.value == "metric") {
+    document.getElementById('finingsUnits').innerHTML = "ml";
+  } else {
+    document.getElementById('finingsUnits').innerHTML = "tsp";
+  }
+  return;
+}
+
+//------------------------------------------------------------------------------
+// map wortClarity description to numerical value
+
+this.getWortClarityValue = function(description) {
+  var value = 1.0;
+
+  if (description == "very clear")
+    value = 1.30;
+  else if (description == "clear")
+    value = 1.20;
+  else if (description == "somewhat clear")
+    value = 1.10;
+  else if (description == "average (default)")
+    value = 1.00;
+  else if (description == "somewhat cloudy")
+    value = 0.90;
+  else if (description == "cloudy")
+    value = 0.80;
+  else if (description == "very cloudy")
+    value = 0.70;
+  else if (!isNaN(parseFloat(description)))
+    value = parseFloat(description);
+  else {
+    console.log("ERROR: can't find suitable description for wort clarity: " + 
+                 description);
+  }
+  return value;
 }
 
 //------------------------------------------------------------------------------

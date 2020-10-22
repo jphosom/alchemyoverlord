@@ -114,11 +114,14 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   var volume_list = [];
   var OG_list = [];
   var pH_list = [];
+  var wortClarity_list = [];
   var fresh_list = [];
   var postBoil_time_list = [];
   var postBoil_temp_list = [];
   var weight_list = [];
   var weight2_list = [];
+  var boilTime_list = [];
+  var boilTime2_list = [];
   var cIdx = 0;
   var addIdx = 0;
   var addStr = "";
@@ -147,7 +150,8 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   // get lists of values for each condition. All experiments must have
   // 'conditions' and 'IBU_list'; other lists are optional.
   // The code is currently set up for at most 2 hop additions, specified
-  // in weight_list[] and weight2_list[].
+  // in weight_list[] and weight2_list[], and optionally in
+  // boilTime_list[] and boilTime2_list[].
   conditionsList = expData["conditions"];
   IBU_list = expData["IBU_list"];
   if (expData["IAA_list"]) {
@@ -161,6 +165,9 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   }
   if (expData["pH_list"]) {
     pH_list = expData["pH_list"];
+  }
+  if (expData["wortClarity_list"]) {
+    wortClarity_list = expData["wortClarity_list"];
   }
   if (expData["fresh_list"]) {
     fresh_list = expData["fresh_list"];
@@ -183,6 +190,15 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   if (expData["weight2_list"]) {
     weight2_list = expData["weight2_list"];
   }
+  if (expData["boilTime_list"]) {
+    boilTime_list = expData["boilTime_list"];
+  }
+  if (expData["boilTime1_list"]) {
+    boilTime_list = expData["boilTime1_list"];
+  }
+  if (expData["boilTime2_list"]) {
+    boilTime2_list = expData["boilTime2_list"];
+  }
 
   // evaluate each condition, getting total error and table of all results
   htmlResults = "";
@@ -200,6 +216,9 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     }
     if (pH_list.length > 0) {
       ibu.pH.value = pH_list[cIdx];
+    }
+    if (wortClarity_list.length > 0) {
+      ibu.wortClarity.value = wortClarity_list[cIdx];
     }
 
     // assume that freshness factor in list applies to all hop additions
@@ -219,6 +238,18 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     else if (weight2_list.length > 0) {
       ibu.add[0].weight.value = weight_list[cIdx];
       ibu.add[1].weight.value = weight2_list[cIdx];
+    }
+
+    // assume that boilTime in boilTime_list applies to all additions
+    if (boilTime_list.length > 0 && boilTime2_list.length == 0) {
+      for (aIdx = 0; aIdx < ibu.numAdditions.value; aIdx++) {
+        ibu.add[aIdx].boilTime.value = boilTime_list[cIdx];
+      }
+    }
+    // otherwise, there should be boilTime1_list and boilTime2_list...
+    else if (boilTime2_list.length > 0) {
+      ibu.add[0].boilTime.value = boilTime_list[cIdx];
+      ibu.add[1].boilTime.value = boilTime2_list[cIdx];
     }
 
     if (postBoil_time_list.length > 0) {
@@ -272,7 +303,10 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
       // time value specified in the array of hop values, index 6.
       for (addIdx = 0; addIdx < numAdd; addIdx++) {
         addStr = "add"+(addIdx+1);
-        ibu.add[addIdx].boilTime.value = expData[addStr][6];
+        if ((addIdx == 0 && boilTime_list.length == 0) ||
+            (addIdx == 1 && boilTime2_list.length == 0) || addIdx > 1) {
+          ibu.add[addIdx].boilTime.value = expData[addStr][6];
+        }
       }
     }
 

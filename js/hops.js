@@ -33,6 +33,12 @@ var hops = {
         "sources": [ "The Hops List",
                      "Fresh Hops" ],
         },
+    "Altus™": {
+        "AA":   16.75,
+        "BA":    4.60,
+        "sources": [ "BYO Vol. 26 No. 6 Oct. 2020",
+                     "Hopsteiner" ],
+        },
     "Amallia": {
         "AA":    7.25,
         "BA":    6.25,
@@ -475,6 +481,12 @@ var hops = {
                      "www.ars.usda.gov/ARSUserFiles/2450/hopcultivars/62013.html",
                      "BSG Hops" ],
         },
+    "Contessa™": {
+        "AA":    4.00,
+        "BA":    6.20,
+        "sources": [ "BYO Vol. 26 No. 6 Oct. 2020",
+                     "Hopsteiner" ],
+        },
     "Crystal": {
         "AA":    4.40,
         "BA":    6.00,
@@ -612,6 +624,12 @@ var hops = {
         "sources": [ "The Hops List",
                      "John I Haas",
                      "BSG Hops" ],
+        },
+    "Elixer": {
+        "AA":    6.00,
+        "BA":    5.00,
+        "sources": [ "BYO Vol. 26 No. 6 Oct. 2020",
+                     "Yakima Valley Hops" ],
         },
     "Ella™": {
         "AA":   14.50,
@@ -1754,6 +1772,12 @@ var hops = {
         "BA":    5.15,
         "sources": [ "Hop Head Farms",
                      "Michigan Hop Alliance" ],
+        },
+    "Sultana™": {
+        "AA":   14.25,
+        "BA":    4.35,
+        "sources": [ "BYO Vol. 26 No. 6 Oct. 2020: same as Denali",
+                     "Hopsteiner" ],
         },
     "Summer": {
         "AA":    6.00,

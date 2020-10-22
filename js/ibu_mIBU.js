@@ -69,6 +69,9 @@
 //         . update the solubility limit model to be in sync with latest results
 //         . update pH-related nonIAA losses to be in sync with latest results
 //
+// Version 1.2.11 : Oct. 10, 2020
+//         . add adjustment factor for wort clarity
+//
 // TODO:
 // 1. add correction factor for pellets
 // -----------------------------------------------------------------------------
@@ -110,6 +113,7 @@ this.initialize_mIBU = function() {
   common.set(ibu.boilTime, 0);
   common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
+  common.set(ibu.wortClarity, 0);
   common.set(ibu.tempDecayType, 0);
   common.set(ibu.whirlpoolTime, 0);
   common.set(ibu.immersionDecayFactor, 0);
@@ -229,8 +233,9 @@ this.computeIBU_mIBU = function() {
               ", kettle opening = " + ibu.kettleOpening.value);
 
   console.log("evaporation rate = " + ibu.evaporationRate.value +
-              ", post-boil volume = " + postBoilVolume +
-              ", OG = " + ibu.OG.value);
+              ", post-boil volume = " + postBoilVolume);
+  console.log("OG = " + ibu.OG.value + 
+              ", wort clarity = " + ibu.wortClarity.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
 
@@ -587,18 +592,19 @@ this.computeIBU_mIBU = function() {
     t = Number(t.toFixed(4));
   }
 
+  // In the following adjustments, we'll assume that boil gravity
+  // affects IAA and nonIAA equally, so we include "bigness factor" in 
+  // the utilization of nonIAA
+  bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
+  console.log("  bigness factor = " + bignessFactor.toFixed(4));
+  console.log("  from average specific gravity " + SG);
+
   // if specified, apply pH correct to IBUs
   if (use_pH) {
     console.log("Adjusting IBUs based on pH...");
     console.log("  original util = " + U.toFixed(4));
     console.log("  original IBU  = " + IBU.toFixed(2));
     // separate utilization into IAA and nonIAA components (very approximate).
-    // We'll assume that the boil gravity affects IAA and nonIAA equally,
-    // so we include the "bigness factor" in the threshold for IAA
-    bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
-    console.log("  bigness factor = " + bignessFactor.toFixed(4));
-    console.log("  from average specific gravity " + SG);
-
     // If pre-boil pH, estimate the post-boil pH which is the
     // one we want to base losses on.  Estimate that the pH drops by
     // about 0.1 units per hour... this is a ballpark estimate.
@@ -646,23 +652,20 @@ this.computeIBU_mIBU = function() {
     IBU = totalIBU;
     console.log("  modified total util = " + U.toFixed(4));
     console.log("  modified total IBU  = " + IBU.toFixed(2));
-    console.log("");
+    console.log(" ");
   }
 
-  // adjust IBUs based on krausen loss
-  console.log("Adjusting IBUs based on krausen loss...");
-  // separate utilization into IAA and nonIAA components (very approximate).
-  // We'll assume that the boil gravity affects IAA and nonIAA equally,
-  // so we include the "bigness factor" in the threshold for IAA
-  bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
-
+  // adjust IBUs based on krausen loss and wort clarity
+  console.log("Adjusting IBUs based on krausen loss and wort clarity...");
   // compute loss factors for IAA and nonIAA
   iaaKrausenLossFactor = ibu.getKrausenValue(ibu.krausen.value);
   iaaKrausenLoss = (1.0 - iaaKrausenLossFactor);  // in percent
   nonIaaKrausenLoss = iaaKrausenLoss * 2.27;      // from krausen blog post
   nonIaaKrausenLossFactor = (1.0 - nonIaaKrausenLoss);
+  iaaWortClarityLossFactor = ibu.getWortClarityValue(ibu.wortClarity.value);
   console.log("  IAA loss factor = " + iaaKrausenLossFactor.toFixed(4));
   console.log("  nonIAA loss factor = " + nonIaaKrausenLossFactor.toFixed(4));
+  console.log("  wort clarity factor = " + iaaWortClarityLossFactor.toFixed(4));
 
   // Adjust utilization and IBUs for each separate addition.
   // Accumulate separate additions for total
@@ -678,6 +681,7 @@ this.computeIBU_mIBU = function() {
       IAAutil = 0.0;
     }
     IAAutil *= iaaKrausenLossFactor;
+    IAAutil *= iaaWortClarityLossFactor;
     nonIAAutil *= nonIaaKrausenLossFactor;
     ibu.add[hopIdx].U = IAAutil + nonIAAutil;
     ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
@@ -689,7 +693,7 @@ this.computeIBU_mIBU = function() {
   IBU = totalIBU;
   console.log("  modified total util = " + U.toFixed(4));
   console.log("  modified total IBU  = " + IBU.toFixed(2));
-  console.log("");
+  console.log(" ");
 
   // adjust IBUs based on wort/trub loss and topoff volume added
   finalVolume = postBoilVolume - ibu.wortLossVolume.value;

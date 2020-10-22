@@ -7,6 +7,7 @@
 
 var evaluateTestExperiments = [ ];  // null list means evaluate on all
 // var evaluateTestExperiments = [ "Tiffany's Stout, May 2019 large fermenter" ];
+// var evaluateTestExperiments = [ "Taste Experiment #1" ];
 
 // units *must* be all metric
 
@@ -137,5 +138,87 @@ var testData = {
        ],
     },
 
+    "Taste Experiment #1": {
+        "conditions":            [ "A",   "B",   "C",   "D"   ],
+        "IBU_list":              [ 20.2,  21.4,  21.2,  18.7  ],
+        "weight1_list":          [ 10.30,  7.77,  5.14,  2.71 ],
+        "weight2_list":          [ 21.70, 21.70, 21.70, 21.70 ],
+        "boilTime1_list":        [ 40,    40,    40,    40 ],
+        "boilTime2_list":        [ 1,      5,    10,    15 ],
+        "boilTime":              45,            // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            12.0,          // average post-boil volume from four experiments (see volume.tcl)
+        "preOrPostBoilVol":      "postBoilVol", // since first 5 minutes have lid off, faster evaporation
+        "OG":                    1.0346,        // average of four measured values
+        "pH":                    5.33,          // average of four measured values
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "krausen":               "minor krausen deposits on FV",  // daily swirling to reduce krausen
+        "wortClarity":           1.3,         // rested wort, then decanted only top layer to get as clear as possible
+        "beerAge_days":          7,
+
+        // 2019 Amarillo hops, analyzed AA 9.56%.  Stored for ~10 months at -15'F with SF 0.75 -> FF 0.98
+        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        "add1":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
+        "add2":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
+
+
+        "kettleDiameter":        30.074,  // 5G aluminum kettle
+        "kettleOpening":         30.074,
+        "evaporationRate":       0.029,   // median from all four experiments
+        "immersionDecayFactor":  0.25,    // average decay function exponential, from 0 to 5 min post boil
+        "forcedDecayType":       "forcedDecayImmersion",
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  9.56,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+             },
+       ],
+    },
+
+    "Taste Experiment #2": {
+        "conditions":            [ "A",   "B",   "C",   "D"   ],
+        "IBU_list":              [ 23.6,  24.5,  23.0,  22.8  ],
+        "weight1_list":          [ 10.75,  8.20,  5.25,  0.0  ],
+        "weight2_list":          [ 24.10, 24.10, 24.10, 24.10 ],
+        "boilTime1_list":        [ 40,    40,    40,    40 ],
+        "boilTime2_list":        [ 1,      5,    10,    20 ],
+        "boilTime":              45,            // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            11.4125,       // average post-boil volume from four experiments (see volume.tcl)
+        "preOrPostBoilVol":      "postBoilVol", // since first 5 minutes have lid off, faster evaporation
+        "OG":                    1.0363,        // average of four measured values
+        "pH":                    5.32,          // average of four measured values
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "krausen":               "minor krausen deposits on FV",  // daily swirling to reduce krausen
+        "wortClarity":           1.3,         // rested wort, then decanted only top layer to get as clear as possible
+        "beerAge_days":          8,
+
+        // 2019 Amarillo hops, analyzed AA 9.56%.  Stored for ~10 months at -15'F with SF 0.75 -> FF 0.98
+        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        "add1":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
+        "add2":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
+
+        "kettleDiameter":        30.074,  // 5G aluminum kettle
+        "kettleOpening":         30.074,
+        "evaporationRate":       0.046,   // median from all four experiments
+        "immersionDecayFactor":  0.25,    // average decay function exponential, from first experiment
+        "forcedDecayType":       "forcedDecayImmersion",
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  9.56,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+             },
+       ],
+    },
 };
 

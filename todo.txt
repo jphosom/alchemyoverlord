@@ -56,12 +56,20 @@ TODO:
 
 +10. re-analyze first CvP experiments using oAA not just nonIAA.
 
-+11. FV experiment #1 : analyze
-+12. FV experiment #1 : blog post -> don't bother
++11. blog post on CvP with solubility limits, note PP levels don't
+    explain increase in IBUs.
+    (code: ibu.tcl = analyze IBU data)
+    (code: PP.tcl = analyze PP data)
+    OR: don't make this a separate blog post, since it simply
+    conforms with the existing solubility model.  Just include
+    the PP results in the "why do pellets have higher IBUs" blog post.
+
++12. FV experiment #1 : analyze
++13. FV experiment #1 : blog post -> don't bother
 
        ---------------------
 
-+12.5 revise oAA and oBA scale factors, re-do (or at least check):
++14. revise oAA and oBA scale factors, re-do (or at least check):
       + = revised and HTML downloaded
       o = OK without revisions
       - = not yet checked
@@ -80,63 +88,64 @@ TODO:
 
        ---------------------
 
- 12.75 add new 2020 hop varieties
-
- 13. update "why do pellets have higher IBUs" to include PP results
++15. update "why do pellets have higher IBUs" to include PP results
      from CVP #6.  Explain pelletFactor of 2.0 in "IBU differences" post.
 
- 14. lauter experiment #2 : analyze 
++16. lauter experiment #2 : analyze 
 
- 15. lauter experiment #2 : blog post
++17. finings: 
+     analyze IPA and Kolsch analyzed before and after gelatin finings
+     exp(-0.004349*x) where x is gelatin in ml (5 ml/tsp)
 
- 16. javascript:
-    - update model to include lauter variable
-    - update HTML to allow setting lauter variable
-    - add Lauter experiments to training data (*all* conditions)
-    - make sure all ABC match up with recent scripts, e.g.
-      solExp_pH5.2/solExp5_2_model.tcl
-    - re-run parameter estimation
-    - check mIBU code, make sure API looks good everywhere
++18. lauter experiment #2 : blog post polished draft
 
-       ---------------------
++19. add new 2020 hop varieties
 
+ 20. javascript:
+    + update SMPH / mIBU model and HTML to include lauter variable
+    + update SMPH model and HTML to include finings (skip mIBU; too complicated)
+    + add Taste experiments to test data
+    + add Lauter experiments to training data (*all* conditions)
+    + re-run parameter estimation
 
- 17. finings: 
-     analyze IPA analyzed before and after gelatin finings
+ 21. review and publish lauter experiment #2
+    + review entire article
+    + modify wort clarity HTML to put it by fermentation, not boil
+    + re-review entire article, publish
+    + update mIBU HTML
 
- 18. javascript:
-    - update HTML/js to allow setting (gelatin) finings
-
-
- 19. blog post on CvP with solubility limits, note PP levels don't
-    explain increase in IBUs.
-    (code: ibu.tcl = analyze IBU data)
-    (code: PP.tcl = analyze PP data)
-    OR: don't make this a separate blog post, since it simply
-    conforms with the existing solubility model.  Just include
-    the PP results in the "why do pellets have higher IBUs" blog post.
-
-
-
- 20. wrap up all CvP posts (copy good HTML to new posts, delete old posts)
-     update other blog posts on CvP to reflect new analysis
+ 22. wrap up all CvP posts
+     update summary of factors to reflect new analysis
  
- 21. update observations of pH blog post with how pH during the boil
-     is affected by turbidity of the wort (beer76) and by amount of hops
-     used (beer 69)
+ 23. javascript:
+    - update mIBU to have pellets info
 
- 22. re-update A Summary of Factors with lauter information, and pellets
+ 24. update observations of pH blog post with how pH during the boil
+     is affected by amount of hops used (beer 69)
+
+ 25. re-update A Summary of Factors with lauter information, and pellets
      and note that oAA produced during boil 10% estimate from model
      is close to that of oBA estimate from literature
 
- 23. double-check javascript, re-run parameter estimation
+ 26. double-check javascript
+    - re-run parameter estimation
+    - check mIBU code, make sure API looks good everywhere
+    - make sure all ABC match up with recent scripts, e.g.
+      solExp_pH5.2/solExp5_2_model.tcl
+    - clean up code (tabs, indentation, etc)
 
 
- 24. write blog posts on taste experiment(s)
- 25. add results of taste experiment to earlier blog posts
- 26. make copies of all blog posts, get copied HTML to display correctly
  27. scan in copies of all experiments
- 28. put blog posts on github.
+
+ 28. write blog posts on taste experiments
+
+ 29. add results of taste experiment to earlier blog posts
+
+ 30. make copies of all blog posts, get copied HTML to display correctly
+
+ 30. put blog posts on github.
+
+ 32. oBA experiment #2
 
  ==========================================================================
 

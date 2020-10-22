@@ -61,6 +61,7 @@ this.initialize_SMPH = function() {
   common.set(ibu.boilTime, 0);
   common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
+  common.set(ibu.wortClarity, 0);
   common.set(ibu.tempDecayType, 0);
   common.set(ibu.whirlpoolTime, 0);
   common.set(ibu.immersionDecayFactor, 0);
@@ -77,14 +78,15 @@ this.initialize_SMPH = function() {
   common.set(ibu.krausen, 0);
   common.set(ibu.flocculation, 0);
   common.set(ibu.filtering, 0);
+  common.set(ibu.finingsType, 0);
   common.set(ibu.beerAge_days, 0);
 
   // set parameters of the SMPH model here:
   this.verbose            = 5;
   this.integrationTime    = 0.1;   // minutes
 
-  this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_maxLimit  = 535.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_minLimit  = 220.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 530.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
 
@@ -95,15 +97,15 @@ this.initialize_SMPH = function() {
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
   this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
 
-  this.IAA_LF_boil        = 0.56;   // SEARCH
+  this.IAA_LF_boil        = 0.50;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
 
-  this.oAA_storageFactor  = 0.22;   // estimate from Maye data
-  this.oAA_boilFactor     = 0.05;   // SEARCH  
+  this.oAA_storageFactor  = 0.42;   // estimate 0.22 frm Maye data, then SEARCH
+  this.oAA_boilFactor     = 0.12;   // SEARCH  
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same boil loss factor as IAA
   this.scale_oAA          = 0.9155; // from Maye, Figure 7
 
-  this.oBA_storageFactor  = 1.00;    // SEARCH
+  this.oBA_storageFactor  = 0.00;   // mostly irrelevant, such low impact
   this.oBA_boilFactor     = 0.10;   // from Stevens p. 500 max 10%
   this.oBA_LF_boil        = 0.0153; // boilFactor*LF_boil*ferment=0.0013 : Teamaker
   this.scale_oBA          = 0.85;   // from Hough p. 491: oBA 85% of absorbtion
@@ -159,6 +161,7 @@ this.computeIBU_SMPH = function() {
     console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
     console.log("krausen factor = " + ibu.krausen.value);
+    console.log("wort clarity = " + ibu.wortClarity.value);
   }
 
   // initialize outputs from each hop addition to zero
@@ -468,6 +471,32 @@ function compute_LF_filtering(ibu) {
 }
 
 //------------------------------------------------------------------------------
+// Compute loss factor (LF) for finings
+
+function compute_LF_finings(ibu) {
+  var LF_finings = 0.0;
+  var finingsMlPerLiter = 0.0;
+  var postBoilVolume = 0.0;
+
+  LF_finings = 1.0;
+  if (!isNaN(ibu.finingsAmount.value)) {
+    postBoilVolume = ibu.getPostBoilVolume();
+    finingsMlPerLiter = ibu.finingsAmount.value / postBoilVolume;
+    if (ibu.finingsType.value == "gelatin") {
+      // exponential decay factor from 'gelatin' subdirectory, data.txt
+      LF_finings = Math.exp(-0.09713 * finingsMlPerLiter);
+    }
+  }
+  if (SMPH.verbose > 5) {
+    console.log("LF finings : " + LF_finings.toFixed(4) + " from " +
+                ibu.finingsAmount.value.toFixed(3) + " ml of " + 
+                ibu.finingsType.value + " in " + 
+                postBoilVolume.toFixed(2) + " l post-boil");
+  }
+  return LF_finings;
+}
+
+//------------------------------------------------------------------------------
 // Compute loss factor (LF) for age of the beer
 
 function compute_LF_age(ibu) {
@@ -490,6 +519,21 @@ function compute_LF_age(ibu) {
     console.log("LF age : " + LF_age.toFixed(4));
   }
   return LF_age;
+}
+
+// -----------------------------------------------------------------------------
+// compute loss factor for IAA components caused by wort turbidity
+
+function compute_LF_IAA_wortClarity(ibu) {
+  var description = ibu.wortClarity.value;
+  var LF_wortClarity = 1.0;
+  var OG = 0.0;
+  var pts = 0.0;
+  var scale = 0.0;
+
+  LF_wortClarity = ibu.getWortClarityValue(description);
+
+  return LF_wortClarity;
 }
 
 // -----------------------------------------------------------------------------
@@ -518,15 +562,19 @@ function compute_LF_IAA(ibu, hopIdx) {
     console.log("    IAA LF: LF_boil=" + SMPH.IAA_LF_boil.toFixed(4) +
               ", LF_pH=" + compute_LF_IAA_pH(ibu).toFixed(4) + 
               ", LF_OG=" + compute_LF_OG_SMPH(ibu, hopIdx).toFixed(4) + 
+              ", LF_clarity=" + compute_LF_IAA_wortClarity(ibu).toFixed(4) + 
               ", LF_ferment=" + compute_LF_ferment(ibu).toFixed(4) +
               ", LF_krausen=" + compute_LF_IAA_krausen(ibu).toFixed(4) +
+              ", LF_finings=" + compute_LF_finings(ibu).toFixed(4) + 
               ", LF_filtering=" + compute_LF_filtering(ibu).toFixed(4) + 
               ", LF_age=" + compute_LF_age(ibu).toFixed(4));
   }
   LF_IAA = SMPH.IAA_LF_boil * compute_LF_IAA_pH(ibu) * 
            compute_LF_OG_SMPH(ibu, hopIdx) * 
+           compute_LF_IAA_wortClarity(ibu) * 
            compute_LF_ferment(ibu) * compute_LF_IAA_krausen(ibu) * 
-           compute_LF_filtering(ibu) * compute_LF_age(ibu);
+           compute_LF_finings(ibu) * compute_LF_filtering(ibu) * 
+           compute_LF_age(ibu);
   if (SMPH.verbose > 3) {
     console.log("      LF IAA : " + LF_IAA.toFixed(4));
   }
@@ -1517,6 +1565,7 @@ function compute_LF_oAA(ibu, hopIdx) {
            compute_LF_OG_SMPH(ibu, hopIdx) * 
            compute_LF_ferment(ibu) * 
            compute_LF_nonIAA_krausen(ibu) * 
+           compute_LF_finings(ibu) *
            compute_LF_filtering(ibu) *
            compute_LF_age(ibu);
   if (LF_oAA > 1.0) LF_oAA = 1.0;
@@ -1527,6 +1576,7 @@ function compute_LF_oAA(ibu, hopIdx) {
                                  compute_LF_OG_SMPH(ibu, hopIdx) + ", " + 
                                  compute_LF_ferment(ibu) + ", " + 
                                  compute_LF_nonIAA_krausen(ibu) + ", " + 
+                                 compute_LF_finings(ibu) + ", " + 
                                  compute_LF_filtering(ibu) + ", " + 
                                  compute_LF_age(ibu));
   }
@@ -1632,6 +1682,7 @@ function compute_LF_oBA(ibu, hopIdx) {
            compute_LF_OG_SMPH(ibu, hopIdx) * 
            compute_LF_ferment(ibu) * 
            compute_LF_nonIAA_krausen(ibu) * 
+           compute_LF_finings(ibu) * 
            compute_LF_filtering(ibu) * 
            compute_LF_age(ibu);
 
@@ -1677,12 +1728,14 @@ function compute_LF_hopPP(ibu) {
 
   // assume very high solubility limit for PP, so each addition is additive
   // assume pH has effect on hop PP concentration similar to other nonIAA
-  // assume krausen affects hop PP the same way as other nonIAA
-  // assume [PP] doesn't change much with age (or filtering)
+  // assume krausen, finings, filtering affect hop PP the same as other nonIAA
+  // assume [PP] doesn't change much with age 
   LF_hopPP = SMPH.LF_hopPP * 
              compute_LF_nonIAA_pH(ibu) * 
              SMPH.ferment_hopPP * 
-             compute_LF_nonIAA_krausen(ibu);
+             compute_LF_nonIAA_krausen(ibu) *
+             compute_LF_finings(ibu) *
+             compute_LF_filtering(ibu);
 
   if (SMPH.verbose > 3) {
     console.log("    LF hopPP = " + LF_hopPP.toFixed(4));
@@ -1747,6 +1800,10 @@ function compute_maltPP_beer(ibu) {
   // want IBUs not PP and so it doesn't matter; we just need to undo
   // the Peacock conversion that we'll do later.
   PP_malt = IBU_malt * 69.68 / 51.2;
+
+  // decrease the IBU by the amount of finings added
+  PP_malt = PP_malt * compute_LF_finings(ibu);
+
   // console.log("  PP_malt " + PP_malt);
   if (SMPH.verbose > 3) {
     console.log("malt IBU  in finished beer = " + IBU_malt.toFixed(4));
