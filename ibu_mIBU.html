@@ -18,6 +18,7 @@ Version 1.2.8 : Jun  9, 2020
 Version 1.2.9 : Sep 16, 2020
 Version 1.2.10 : Sep 20, 2020
 Version 1.2.11 : Oct 21, 2020
+Version 1.2.12 : Oct 31, 2020
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -52,6 +53,10 @@ Version 1.2.11 : Oct 21, 2020
   based on the experiment described in
   <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
   The Impact of Krausen Loss on IBUs</a>.
+  The correction of IBU values when using pellets is yet another modification,
+  based on the experiments described in
+  <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
+  Hop Cones vs. Pellets: IBU Differences</a>.
   This calculator is described in more detail in
   <a href="https://alchemyoverlord.wordpress.com/2018/05/07/an-on-line-calculator-for-the-mibu-technique/">
   An On-Line Calculator for the mIBU Technique</a>.
@@ -137,6 +142,14 @@ Version 1.2.11 : Oct 21, 2020
   <tr>
     <td>Global IBU Scaling Factor:</td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.scalingFactor" onchange="common.set(ibu.scalingFactor,1)"></td>
+  </tr>
+  <tr>
+    <td>Default Hop Form:</td>
+    <td><select style="width:8em;" id="ibu.defaultHopForm" onchange="common.set(ibu.defaultHopForm, 1)">
+    <option value="cones" selected>cones</option>
+    <option value="pellets">pellets</option>
+    </select>
+    </td>
   </tr>
   </tbody>
   </table>
@@ -287,7 +300,8 @@ cooling with immersion chiller.<br>
 <b>1.2.8</b>: (2020-Jun-09) Minor update to the effect of pH on auxiliary bittering compounds.<br>
 <b>1.2.9</b>: (2020-Sep-16) Many thanks to Marko Heyns at <a href="https://grainfather.com/">Grainfather</a> for finding several bugs related to the solubility limit and temperature decay!<br>
 <b>1.2.10</b>: (2020-Sep-20) Update solubility-limit model and pH-loss model</br>
-<b>1.2.11</b>: (2020-Oct-21) Add adjustment factor for wort clarity
+<b>1.2.11</b>: (2020-Oct-21) Add adjustment factor for wort clarity<br>
+<b>1.2.12</b>: (2020-Oct-31) Add adjustment factor for pellets<br>
 </small>
 
 <p>

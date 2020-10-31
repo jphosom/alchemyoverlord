@@ -72,8 +72,9 @@
 // Version 1.2.11 : Oct. 10, 2020
 //         . add adjustment factor for wort clarity
 //
-// TODO:
-// 1. add correction factor for pellets
+// Version 1.2.12 : Oct. 31, 2020
+//         . add adjustment factor for hop pellets
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -105,7 +106,7 @@ this.initialize_mIBU = function() {
     ibu[keys[idx]].updateFunction = mIBU.computeIBU_mIBU;
   }
   ibu.numAdditions.additionalFunctionArgs = mIBU.computeIBU_mIBU;
-  ibu.hopTableSize = 3; // compact table: AA%, weight, boilTime
+  ibu.hopTableSize = 4; // compact table: cones/pellets, AA%, weight, boilTime
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
@@ -636,7 +637,7 @@ this.computeIBU_mIBU = function() {
       }
       console.log("    before losses: IAAutil = " + IAAutil.toFixed(4) +
                   "; nonIAAutil = " + nonIAAutil.toFixed(4));
-       IAAutil *= IAAlossFactor;
+      IAAutil *= IAAlossFactor;
       nonIAAutil *= nonIAAlossFactor;
       console.log("    after  losses: IAAutil = " + IAAutil.toFixed(4) +
                   "; nonIAAutil = " + nonIAAutil.toFixed(4));
@@ -655,8 +656,13 @@ this.computeIBU_mIBU = function() {
     console.log(" ");
   }
 
-  // adjust IBUs based on krausen loss and wort clarity
-  console.log("Adjusting IBUs based on krausen loss and wort clarity...");
+  // Adjust IBUs based on krausen loss, wort clarity, and pellets/cones.
+  // The adjustment for pellets will be a bit on the high side because
+  // this code only looks at IAA and nonIAA.  While the majority of nonIAA
+  // are oxidized alpha acids (oAA), the scaling factor of 2.0 for oAA
+  // being applied to *all* nonIAA is an overcorrection.  But the impact
+  // on results is probably just 1 or 2 IBUs.
+  console.log("Adjusting IBUs based on krausen loss, wort clarity, pellets...");
   // compute loss factors for IAA and nonIAA
   iaaKrausenLossFactor = ibu.getKrausenValue(ibu.krausen.value);
   iaaKrausenLoss = (1.0 - iaaKrausenLossFactor);  // in percent
@@ -683,6 +689,9 @@ this.computeIBU_mIBU = function() {
     IAAutil *= iaaKrausenLossFactor;
     IAAutil *= iaaWortClarityLossFactor;
     nonIAAutil *= nonIaaKrausenLossFactor;
+    if (ibu.add[hopIdx].hopForm.value == "pellets") {
+      nonIAAutil *= 2.0;  // from post Hop Cones vs Pellets: IBU Differences
+    }
     ibu.add[hopIdx].U = IAAutil + nonIAAutil;
     ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
 

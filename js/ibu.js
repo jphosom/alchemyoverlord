@@ -1760,7 +1760,6 @@ function hopAdditionsSet(updateFunction) {
     if (constructInputTable && ibu.hopTableSize >= 4) {
       table += "<td> <select style='width:7.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopForm,1)'> <option value='cones'>cones</option> <option value='pellets'>pellets</option> <option value='(default)'>(default)</option></td> "
     }
-    arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].hopForm = new Object;
     ibu.add[arrayIdx].hopForm.id = tableID;
     ibu.add[arrayIdx].hopForm.inputType = "select";
@@ -1813,7 +1812,6 @@ function hopAdditionsSet(updateFunction) {
     if (constructInputTable && ibu.hopTableSize >= 9) {
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].BA,1)'> </td> "
     }
-    arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].BA = new Object;
     ibu.add[arrayIdx].BA.id = tableID;
     ibu.add[arrayIdx].BA.inputType = "float";
@@ -1842,7 +1840,6 @@ function hopAdditionsSet(updateFunction) {
     if (constructInputTable && ibu.hopTableSize >= 7) {
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].percentLoss,1)'> </td> "
     }
-    arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].percentLoss = new Object;
     ibu.add[arrayIdx].percentLoss.id = tableID;
     ibu.add[arrayIdx].percentLoss.inputType = "float";
@@ -1871,7 +1868,6 @@ function hopAdditionsSet(updateFunction) {
     if (constructInputTable && ibu.hopTableSize >= 6) {
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].freshnessFactor,1)'> </td> "
     }
-    arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].freshnessFactor = new Object;
     ibu.add[arrayIdx].freshnessFactor.id = tableID;
     ibu.add[arrayIdx].freshnessFactor.inputType = "float";
@@ -1900,7 +1896,6 @@ function hopAdditionsSet(updateFunction) {
     if (constructInputTable && ibu.hopTableSize >= 6) {
       table += "<td> <input type='text' size='12' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].pelletFactor,1)'> </td> "
     }
-    arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].pelletFactor = new Object;
     ibu.add[arrayIdx].pelletFactor.id = tableID;
     ibu.add[arrayIdx].pelletFactor.inputType = "float";

@@ -138,6 +138,55 @@ var testData = {
        ],
     },
 
+    "Kolshish, Sep. 2020": {
+        "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 26.0 ],
+
+        "boilTime":              65,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            22.33,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.053,
+
+        "pH":                    5.26,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+
+        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        "add1":        [  2.8,  5.0, "pellets", 1.00,   40.0,     56.70,     60 ],  // tettnang
+        "add2":        [  3.8,  4.0, "pellets", 1.00,   45.0,     56.70,     10 ],  // hallertau
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         37.148,
+        "evaporationRate":       4.20,
+        "immersionDecayFactor":  0.4283,
+        "forcedDecayType":       "forcedDecayImmersion",
+        "wortClarity":           1.10,
+        "finingsType":           "gelatin",
+        "finingsAmount":         10.0,
+        "beerAge_days":          10,
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  2.80,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.20,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  3.80,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.20,
+             },
+       ],
+    },
+
+
     "Taste Experiment #1": {
         "conditions":            [ "A",   "B",   "C",   "D"   ],
         "IBU_list":              [ 20.2,  21.4,  21.2,  18.7  ],

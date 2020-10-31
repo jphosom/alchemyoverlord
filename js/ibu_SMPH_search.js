@@ -637,10 +637,10 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         ibu.add[addIdx].AA.value = expValues[kIdx][0];
         ibu.add[addIdx].BA.value = expValues[kIdx][1];
         ibu.add[addIdx].hopForm.value = expValues[kIdx][2];
-        if (expValues.length >= 7) {
+        if (expValues[kIdx].length > 7) {
           ibu.add[addIdx].pelletFactor.value = expValues[kIdx][7];
         } else {
-          ibu.add[addIdx].pelletFactor.value = 1.0;
+          ibu.add[addIdx].pelletFactor.value = 2.0;
         }
         ibu.add[addIdx].freshnessFactor.value = expValues[kIdx][3];
         ibu.add[addIdx].percentLoss.value = expValues[kIdx][4];

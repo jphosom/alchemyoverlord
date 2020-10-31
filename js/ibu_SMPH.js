@@ -1052,9 +1052,10 @@ function compute_concent_wort(ibu) {
           } else {
             AA_noLimit = AA_dis;
           }
-          if ( SMPH.verbose > 3) {
+          if (SMPH.verbose > 3) {
             console.log("    [AA] before addition, without limits = " + 
                         AA_noLimit.toFixed(4));
+            console.log("    adding " + AA_init.toFixed(4) + " ppm of AA");
           }
 
           // make the new AA addition to current AA *without* solubility limit
