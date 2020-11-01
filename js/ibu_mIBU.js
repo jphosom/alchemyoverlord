@@ -75,6 +75,9 @@
 // Version 1.2.12 : Oct. 31, 2020
 //         . add adjustment factor for hop pellets
 //
+// Version 1.2.13 : Nov. 1, 2020
+//         . stop when degree of utilization reaches 0.01 instead of 0.001
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -522,11 +525,11 @@ this.computeIBU_mIBU = function() {
 
       // this function from post 'an analysis of sub-boiling hop utilization'
       degreeU = 2.39 * Math.pow(10.0, 11.0) * Math.exp(-9773.0 / tempK);
-      // stop modeling if degree of utilization is less than 0.001
+      // stop modeling if degree of utilization is less than 0.01 (temp=41.1'C)
       if (degreeU > 1.0) {
         degreeU = 1.0;
       }
-      if (degreeU < 0.001) {
+      if (degreeU < 0.01) {
         finished = 1;
       }
 
