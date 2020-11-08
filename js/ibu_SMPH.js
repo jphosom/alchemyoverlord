@@ -328,8 +328,8 @@ function compute_RF_IAA(ibu) {
 // Estimate post-boil pH from pre-boil pH
 
 function compute_postBoil_pH(preBoilpH) {
-  var slopeSlope = -0.003927872518870565;
-  var slopeIntercept = 0.018625896934116128;
+  var slopeSlope = -0.002800223086542374;
+  var slopeIntercept = 0.013184013161963867;
   var pH = preBoilpH;
 
   pH = (preBoilpH * ((slopeSlope * ibu.boilTime.value) + 1.0)) +

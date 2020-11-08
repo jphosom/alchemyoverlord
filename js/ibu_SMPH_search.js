@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // ibu_SMPH_search.js : JavaScript for AlchemyOverlord webpage, SMPH search page
 // Written by John-Paul Hosom
-// Copyright © 2018 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018-2020 by John-Paul Hosom, all rights reserved.
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //

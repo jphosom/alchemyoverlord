@@ -78,6 +78,13 @@
 // Version 1.2.13 : Nov. 1, 2020
 //         . stop when degree of utilization reaches 0.01 instead of 0.001
 //
+// Version 1.2.14 : Nov. 7, 2020
+//         . bug fix thanks to Marko Heyns at Grainfather:
+//           apply alpha-acid solubility limit to pellet increase
+//         . change pellets from a factor of 2.0 to 2.0 * 0.8
+//         . make sure no division by zero
+//         . minor code cleanup
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -146,13 +153,15 @@ this.initialize_mIBU = function() {
 
 this.computeIBU_mIBU = function() {
   var AA = 0.0;
+  var AAatAdd = 0.0;
   var AAconcent = 0.0;
+  var AAdis = 0.0;
   var AAinit = 0.0;
   var AAinitTotal = 0.0;
   var AA_limit_func_A = 0.0;
   var AA_limit_func_B = 0.0;
-  var AA_limit_minLimit = 240.0;
   var AA_limit_maxLimit = 490.0;
+  var AA_limit_minLimit = 240.0;
   var AA_noLimit = 0.0;
   var addIBUoutput = 0.0;
   var additionTime = 0.0;
@@ -180,8 +189,9 @@ this.computeIBU_mIBU = function() {
   var hopIdx = 0;
   var iaaKrausenLoss = 0.0;
   var iaaKrausenLossFactor = 0.0;
-  var IAAlossFactor = 0.0;
-  var IAAutil = 0.0;
+  var iaaLossFactor = 0.0;
+  var iaaUtil = 0.0;
+  var iaaWortClarityLossFactor = 0.0;
   var IBU = 0.0;
   var IBUtopoffScale = 0.0;
   var icebathBaseTemp = 314.00; // 40.85'C = 105.53'F
@@ -192,10 +202,10 @@ this.computeIBU_mIBU = function() {
   var isTempDecayLinear = 0;
   var k = 0.0;
   var linParamB_Kelvin = 0.0;
-  var nonIAAlossFactor = 0.0;
+  var nonIaaLossFactor = 0.0;
   var nonIaaKrausenLoss = 0.0;
   var nonIaaKrausenLossFactor = 0.0;
-  var nonIAAutil = 0.0;
+  var nonIaaUtil = 0.0;
   var OGpoints = 0.0;
   var origWhirlpoolTime = 0.0;
   var pH = ibu.pH.value;
@@ -204,10 +214,12 @@ this.computeIBU_mIBU = function() {
   var preAddConcent = 0.0;
   var preBoilpH = 0.0;
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
+  var ratio = 0.0;
   var relativeVolume = 0.0;
   var relRate = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
+  var solubilityLimit = 0.0;
   var subBoilEvapRate = 0.0;
   var t = 0.0;
   var tempC = 0.0;
@@ -292,6 +304,7 @@ this.computeIBU_mIBU = function() {
                 ", weight=" + ibu.add[hopIdx].weight.value +
                 ", time=" + ibu.add[hopIdx].boilTime.value);
     ibu.add[hopIdx].AAinit = 0.0;
+    ibu.add[hopIdx].AAdis = 0.0;
     ibu.add[hopIdx].AAcurr = 0.0;
     ibu.add[hopIdx].IBU = 0.0;
     ibu.add[hopIdx].U = 0.0;
@@ -306,7 +319,11 @@ this.computeIBU_mIBU = function() {
               "/60.0 * " + boilTime + ") = " + initVolume.toFixed(4));
   averageVolume = (initVolume + postBoilVolume) / 2.0;
   OGpoints = (ibu.OG.value - 1.0) * 1000.0;
-  SGpoints = OGpoints * postBoilVolume / averageVolume;
+  if (averageVolume > 0.0) {
+    SGpoints = OGpoints * postBoilVolume / averageVolume;
+  } else {
+    SGpoints = 0.0;
+  }
   SG = (SGpoints / 1000.0) + 1.0;
   console.log("OG is " + ibu.OG.value + ", post-boil volume is " +
               postBoilVolume.toFixed(4) + " and initial volume is " +
@@ -403,14 +420,18 @@ this.computeIBU_mIBU = function() {
                       ", limit is " + solubilityLimit.toFixed(2));
           console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " + 
                       postBoilVolume.toFixed(2));
-          // if [AA] after new hops addition (without limit) is above threshold,
-          // set [AA] to new limit.
-          // Adjust AAconcent to be the concentration at the end of the boil,
-          // since that concentration is what the IBU is measuring.
-          if (AA_noLimit > AA_limit_minLimit && AA_noLimit > solubilityLimit) {
-            AAconcent = solubilityLimit * currVolume / postBoilVolume;
+          if (postBoilVolume > 0.0) {
+            // if [AA] after new hops addition (w/out limit) is above threshold,
+            // set [AA] to new limit.
+            // Adjust AAconcent to be the concentration at the end of the boil,
+            // since that concentration is what the IBU is measuring.
+            if (AA_noLimit > AA_limit_minLimit && AA_noLimit> solubilityLimit) {
+              AAconcent = solubilityLimit * currVolume / postBoilVolume;
+            } else {
+              AAconcent = AA_noLimit * currVolume / postBoilVolume;
+            }
           } else {
-            AAconcent = AA_noLimit * currVolume / postBoilVolume;
+            AAconcent = 0.0;
           }
           console.log("    after addition, AAconcent = " +AAconcent.toFixed(4));
         } else {
@@ -427,6 +448,11 @@ this.computeIBU_mIBU = function() {
                       currentAddition.toFixed(4));
         }
         ibu.add[hopIdx].AAcurr = currentAddition;
+        if (currVolume > 0.0) {
+          ibu.add[hopIdx].AAdis  = currentAddition * postBoilVolume/currVolume;
+        } else {
+          ibu.add[hopIdx].AAdis  = 0.0;
+        }
       }
     }
 
@@ -519,8 +545,12 @@ this.computeIBU_mIBU = function() {
 
       // adjust current volume due to evaporation at below-boiling temps
       // if sub-boiling, estimate evaporation rate
-      relRate = (0.0243 * Math.exp(0.0502 * 100.0)) / ibu.evaporationRate.value;
-      subBoilEvapRate = relRate* 0.0243 * Math.exp(0.0502 * tempC); // liters/hr
+      if (ibu.evaporationRate.value > 0.0) {
+        relRate = (0.0243 * Math.exp(0.0502*100.0)) / ibu.evaporationRate.value;
+        subBoilEvapRate = relRate* 0.0243* Math.exp(0.0502* tempC); // liters/hr
+      } else {
+        subBoilEvapRate = 0.0;
+      }
       currVolume -= subBoilEvapRate/60.0 * integrationTime;
 
       // this function from post 'an analysis of sub-boiling hop utilization'
@@ -618,11 +648,11 @@ this.computeIBU_mIBU = function() {
       pH = preBoilpH - (boilTime * 0.10 / 60.0);
     }
     // compute loss factors for IAA and nonIAA
-    IAAlossFactor = (0.0710 * pH) + 0.592;
-    nonIAAlossFactor = (1.178506 * pH) - 5.776411;
+    iaaLossFactor = (0.0710 * pH) + 0.592;
+    nonIaaLossFactor = (1.178506 * pH) - 5.776411;
     console.log("  post-boil pH = " + pH.toFixed(2));
-    console.log("  IAA loss factor = " + IAAlossFactor.toFixed(4));
-    console.log("  nonIAA loss factor = " + nonIAAlossFactor.toFixed(4));
+    console.log("  IAA loss factor = " + iaaLossFactor.toFixed(4));
+    console.log("  nonIAA loss factor = " + nonIaaLossFactor.toFixed(4));
 
     // Adjust utilization and IBUs for each separate addition.
     // Accumulate separate additions for total
@@ -630,21 +660,21 @@ this.computeIBU_mIBU = function() {
     totalIBU = 0.0;
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
       console.log("  hop addition " + hopIdx + ":");
-      nonIAAutil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
-      IAAutil = ibu.add[hopIdx].U - nonIAAutil;
+      nonIaaUtil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
+      iaaUtil = ibu.add[hopIdx].U - nonIaaUtil;
       // if estimated utilization from IAA < 0, reduce nonIAA utilization.
       // another option would be to just set IAA utilization to zero.
-      if (IAAutil < 0.0) {
-        nonIAAutil += IAAutil;
-        IAAutil = 0.0;
+      if (iaaUtil < 0.0) {
+        nonIaaUtil += iaaUtil;
+        iaaUtil = 0.0;
       }
-      console.log("    before losses: IAAutil = " + IAAutil.toFixed(4) +
-                  "; nonIAAutil = " + nonIAAutil.toFixed(4));
-      IAAutil *= IAAlossFactor;
-      nonIAAutil *= nonIAAlossFactor;
-      console.log("    after  losses: IAAutil = " + IAAutil.toFixed(4) +
-                  "; nonIAAutil = " + nonIAAutil.toFixed(4));
-      ibu.add[hopIdx].U = IAAutil + nonIAAutil;
+      console.log("    before losses: iaaUtil = " + iaaUtil.toFixed(4) +
+                  "; nonIaaUtil = " + nonIaaUtil.toFixed(4));
+      iaaUtil *= iaaLossFactor;
+      nonIaaUtil *= nonIaaLossFactor;
+      console.log("    after  losses: iaaUtil = " + iaaUtil.toFixed(4) +
+                  "; nonIaaUtil = " + nonIaaUtil.toFixed(4));
+      ibu.add[hopIdx].U = iaaUtil + nonIaaUtil;
       ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
       console.log("    U = " + ibu.add[hopIdx].U.toFixed(4) +
                   "; IBU = " + ibu.add[hopIdx].IBU.toFixed(2));
@@ -681,21 +711,36 @@ this.computeIBU_mIBU = function() {
   totalU = 0.0;
   totalIBU = 0.0;
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-    nonIAAutil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
-    IAAutil = ibu.add[hopIdx].U - nonIAAutil;
+    nonIaaUtil = 0.048 * bignessFactor;  // 0.048 from 'Summary of Factors'
+    iaaUtil = ibu.add[hopIdx].U - nonIaaUtil;
     // if estimated utilization from IAA < 0, reduce nonIAA utilization.
     // another option would be to just set IAA utilization to zero.
-    if (IAAutil < 0.0) {
-      nonIAAutil += IAAutil;
-      IAAutil = 0.0;
+    if (iaaUtil < 0.0) {
+      nonIaaUtil += iaaUtil;
+      iaaUtil = 0.0;
     }
-    IAAutil *= iaaKrausenLossFactor;
-    IAAutil *= iaaWortClarityLossFactor;
-    nonIAAutil *= nonIaaKrausenLossFactor;
+    iaaUtil *= iaaKrausenLossFactor;
+    iaaUtil *= iaaWortClarityLossFactor;
+    nonIaaUtil *= nonIaaKrausenLossFactor;
+
+    if (ibu.add[hopIdx].AAinit > 0.0) {
+      ratio = ibu.add[hopIdx].AAdis / ibu.add[hopIdx].AAinit;
+    } else {
+      ratio = 0.0;
+    }
+    console.log("    for hop index " + hopIdx + ": [AA]init = " + 
+                ibu.add[hopIdx].AAinit.toFixed(3) + ", [AA]dis = " +
+                ibu.add[hopIdx].AAdis.toFixed(3) + ", ratio = " + 
+                ratio.toFixed(4));
     if (ibu.add[hopIdx].hopForm.value == "pellets") {
-      nonIAAutil *= 2.0;  // from post Hop Cones vs Pellets: IBU Differences
+      // from post Hop Cones vs Pellets: IBU Differences oAA increase by ~2
+      // and (from The Relative Contribution) oAA are roughly 80% of the nonIAA
+      // and also apply alpha-acid solubility limit to the amount of increase
+      nonIaaUtil *= ratio*2.0*0.80;
+      console.log("  pellets increase nonIAA by " + (ratio * 1.6).toFixed(3));
     }
-    ibu.add[hopIdx].U = IAAutil + nonIAAutil;
+
+    ibu.add[hopIdx].U = iaaUtil + nonIaaUtil;
     ibu.add[hopIdx].IBU = ibu.add[hopIdx].U * ibu.add[hopIdx].AAinit;
 
     totalU += ibu.add[hopIdx].U;

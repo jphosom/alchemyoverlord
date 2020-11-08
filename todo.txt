@@ -101,38 +101,40 @@ TODO:
 
 +19. add new 2020 hop varieties
 
- 20. javascript:
++20. javascript:
     + update SMPH / mIBU model and HTML to include lauter variable
     + update SMPH model and HTML to include finings (skip mIBU; too complicated)
     + add Taste experiments to test data
     + add Lauter experiments to training data (*all* conditions)
     + re-run parameter estimation
 
- 21. review and publish lauter experiment #2
++21. review and publish lauter experiment #2
     + review entire article
     + modify wort clarity HTML to put it by fermentation, not boil
     + re-review entire article, publish
-    + update mIBU HTML
 
- 22. wrap up all CvP posts
-     update summary of factors to reflect new analysis
++22. javascript:
+    + update mIBU to have pellets info
+
++23. cones vs pellets:
+    + wrap up and publish all CvP posts
  
- 23. javascript:
-    - update mIBU to have pellets info
-
- 24. update observations of pH blog post with how pH during the boil
-     is affected by amount of hops used (beer 69)
-
- 25. re-update A Summary of Factors with lauter information, and pellets
-     and note that oAA produced during boil 10% estimate from model
-     is close to that of oBA estimate from literature
+ 24. updates to other blog posts
+    + update observations of pH blog post with how pH during the boil
+      is affected by amount of hops used (beer 69)
+    + update pH as a function of hopping rate in stats.tcl
+      (see pH_function_of_temp/evaluate_pH.tcl... not needed)
+    - re-update A Summary of Factors with lauter information, and pellets
+      and note that oAA produced during boil 10% estimate from model
+      is close to that of oBA estimate from literature
+    - update summary of factors to reflect new analysis, parameter results
 
  26. double-check javascript
-    - re-run parameter estimation
     - check mIBU code, make sure API looks good everywhere
     - make sure all ABC match up with recent scripts, e.g.
       solExp_pH5.2/solExp5_2_model.tcl
     - clean up code (tabs, indentation, etc)
+    - re-run parameter estimation... should get same results
 
 
  27. scan in copies of all experiments

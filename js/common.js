@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // common.js : JavaScript for AlchemyOverlord web page, common functions
 // Written by John-Paul Hosom
-// Copyright © 2018 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018-2020 by John-Paul Hosom, all rights reserved.
 //
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
 // Version 1.2.1 : Jul 18, 2018 : add support for checkbox

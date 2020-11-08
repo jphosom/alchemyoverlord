@@ -2,7 +2,7 @@
 // ibu.js : JavaScript for AlchemyOverlord web page, IBU-related functions
 //          but not specific estimation methods.
 // Written by John-Paul Hosom
-// Copyright © 2018 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018-2020 by John-Paul Hosom, all rights reserved.
 //
 // Version 1.0.0 : January 30, 2017
 // Version 1.0.1 : May 6, 2018
@@ -24,6 +24,7 @@
 // Version 1.2.5 : Jun 18, 2019 : add krausen loss factor
 // Version 1.2.6 : Jul 12, 2019 : add hop variety selection, hop form default
 // Version 1.2.7 : Oct 10, 2020 : add wort clarity and (gelatin) finings
+// Version 1.2.8 : Nov  7, 2020 : add hop addition variables for mIBU
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -1996,6 +1997,9 @@ function hopAdditionsSet(updateFunction) {
 
   // initialize outputs to zero
   for (idx = 1; idx <= numAdd; idx++) {
+    ibu.add[arrayIdx].AAinit = 0.0;
+    ibu.add[arrayIdx].AAdis = 0.0;
+    ibu.add[arrayIdx].AAcurr = 0.0;
     ibu.add[arrayIdx].AA_init_concent = 0.0;
     ibu.add[arrayIdx].AA_dis_mg = 0.0;
     ibu.add[arrayIdx].IBU = 0.0;

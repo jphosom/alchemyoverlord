@@ -559,7 +559,7 @@ var developmentData = {
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
         "add1":        [ 8.4,   5.0,  "cones", 0.92,   50.00,    56.70,     35 ], // cascade, unknown year
         "add2":        [ 8.4,   5.0,  "cones", 0.92,   50.00,    56.70,      0 ], // cascade, unknown year
-        "add3":        [ 9.0,   6.5,  "cones", 0.99,    4.00,    85.05,      0 ], // amarillo 2016 crop
+        "add3":        [ 9.0,   6.5,  "cones", 0.99,   14.00,    85.05,      0 ], // amarillo 2016 crop
         "add4":        [ 12.3,  3.75, "cones", 0.97,   25.00,    85.05,      0 ], // citra 2016 crop; BA=guess
         "add5":        [ 13.7,  4.0,  "cones", 0.97,   25.00,    85.05,      0 ], // simcoe 2016 crop; BA=package
 
