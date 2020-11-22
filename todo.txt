@@ -119,7 +119,17 @@ TODO:
 +23. cones vs pellets:
     + wrap up and publish all CvP posts
  
- 24. updates to other blog posts
+ 24. double-check javascript
+    + check mIBU code, make sure API looks good everywhere
+    + make sure all ABC match up with recent scripts, e.g.
+      solExp_pH5.2/solExp5_2_model.tcl
+    + clean up code (tabs, indentation, etc) 
+          ibu_SMPH_search.js
+          data.js
+    + re-run parameter estimation
+    + update SMPH HTML
+
+ 25. updates to other blog posts
     + update observations of pH blog post with how pH during the boil
       is affected by amount of hops used (beer 69)
     + update pH as a function of hopping rate in stats.tcl
@@ -129,25 +139,17 @@ TODO:
       is close to that of oBA estimate from literature
     - update summary of factors to reflect new analysis, parameter results
 
- 26. double-check javascript
-    - check mIBU code, make sure API looks good everywhere
-    - make sure all ABC match up with recent scripts, e.g.
-      solExp_pH5.2/solExp5_2_model.tcl
-    - clean up code (tabs, indentation, etc)
-    - re-run parameter estimation... should get same results
+ 26. scan in copies of all experiments
 
+ 27. write blog posts on taste experiments
 
- 27. scan in copies of all experiments
+ 28. add results of taste experiment to earlier blog posts
 
- 28. write blog posts on taste experiments
-
- 29. add results of taste experiment to earlier blog posts
-
- 30. make copies of all blog posts, get copied HTML to display correctly
+ 29. make copies of all blog posts, get copied HTML to display correctly
 
  30. put blog posts on github.
 
- 32. oBA experiment #2
+ 31. oBA experiment #2
 
  ==========================================================================
 

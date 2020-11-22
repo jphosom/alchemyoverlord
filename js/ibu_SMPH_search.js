@@ -5,9 +5,7 @@
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
-// Version 1.0.1 : November 22, 2018
-//         This version is based on the mIBU javascript code in this project,
-//         which has then been modified to implement the SMPH method.
+// Version 1.0.1 : November 22, 2018 - November 22, 2020
 //
 // -----------------------------------------------------------------------------
 
@@ -15,8 +13,6 @@
 
 var SMPHsearch = SMPHsearch || {};
 
-// TODO: check all variables, organize
-//       check variable names for meaningfulness
 //       change tabs to spaces, standardize tab indentation
 //       make sure console.log() statements are meaningful and verbosity good
 
@@ -79,19 +75,19 @@ this.resetIBUvalues = function() {
       continue;
     }
 
-  if ("defaultValue" in ibu[keys[idx]]) {
-    defaultValue = ibu[keys[idx]].defaultValue;
+    if ("defaultValue" in ibu[keys[idx]]) {
+      defaultValue = ibu[keys[idx]].defaultValue;
     } else if ("defaultFunction" in ibu[keys[idx]]) {
-    defaultValue = ibu[keys[idx]].defaultFunction(ibu[keys[idx]].defaultArgs);
+      defaultValue = ibu[keys[idx]].defaultFunction(ibu[keys[idx]].defaultArgs);
     } else {
-    console.log("ERROR: can't find default value, setting to zero");
-    defaultValue = 0.0;
+      console.log("ERROR: can't find default value, setting to zero");
+      defaultValue = 0.0;
     }
 
-  if (SMPH.verbose >= 2) {
-    console.log("resetting " + ibu[keys[idx]].id + " to " + defaultValue);
+    if (SMPH.verbose >= 2) {
+      console.log("resetting " + ibu[keys[idx]].id + " to " + defaultValue);
     }
-  ibu[keys[idx]].value = defaultValue;
+    ibu[keys[idx]].value = defaultValue;
   }
 
   // remove any hop additions
@@ -107,45 +103,45 @@ this.resetIBUvalues = function() {
 
 this.evaluateAllConditionsInExperiment = function(expName, expData,
              ibu, numAdd, timeToFirstAddition, preBoilSG) {
-  var conditionsList = [];
-  var IBU_list = [];
-  var IAA_list = [];
-  var time_list = [];
-  var volume_list = [];
-  var OG_list = [];
-  var pH_list = [];
-  var wortClarity_list = [];
-  var fresh_list = [];
-  var postBoil_time_list = [];
-  var postBoil_temp_list = [];
-  var weight_list = [];
-  var weight2_list = [];
+  var addIdx = 0;
+  var addStr = "";
+  var aIdx = 0;
   var boilTime_list = [];
   var boilTime2_list = [];
   var cIdx = 0;
-  var addIdx = 0;
-  var addStr = "";
+  var conditionsList = [];
   var corrIBU = 0.0;
   var diff = 0.0;
-  var IAAdiff = 0.0;
-  var totalExpErr = 0.0;
-  var numExpConditions = 0;
-  var totalExpRMS = 0.0;
-  var aIdx = 0;
+  var fresh_list = [];
   var htmlResults = "";
-  var maxDiff = 0.0;
-  var origBoilTime = 0.0;
-  var preBoil_pH = 0.0;
-  var postBoil_pH = 0.0;
-  var keys = Object.keys(ibu);
+  var IAAdiff = 0.0;
+  var IAA_list = [];
+  var IBU_list = [];
   var idx = 0;
-  var totalHopBoilTime = 0.0;
-  var totalTime = 0.0;
+  var keys = Object.keys(ibu);
+  var maxDiff = 0.0;
+  var numExpConditions = 0;
+  var OG_list = [];
+  var origBoilTime = 0.0;
+  var pH_list = [];
+  var postBoil_pH = 0.0;
+  var postBoil_temp_list = [];
+  var postBoil_time_list = [];
+  var preBoil_pH = 0.0;
   var realHopBoilTime = 0.0;
   var resetTempExpParamB = false;
   var resetTempLinParamA = false;
-  var slopeSlope = -0.003927872518870565;
-  var slopeIntercept = 0.018625896934116128;
+  var slopeSlope = -0.002800223086542374;
+  var slopeIntercept = 0.013184013161963867;
+  var time_list = [];
+  var totalExpErr = 0.0;
+  var totalExpRMS = 0.0;
+  var totalHopBoilTime = 0.0;
+  var totalTime = 0.0;
+  var volume_list = [];
+  var weight_list = [];
+  var weight2_list = [];
+  var wortClarity_list = [];
 
   // get lists of values for each condition. All experiments must have
   // 'conditions' and 'IBU_list'; other lists are optional.
@@ -279,9 +275,9 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
         // if realHopBoilTime < 0, then the hops are never added in this cond.
         if (realHopBoilTime > 0) {
           ibu.add[addIdx].boilTime.value = realHopBoilTime;
-          } else {
+        } else {
           ibu.add[addIdx].boilTime.value = 0;
-          }
+        }
         // if we have more than one hop addition, but the weights for the
         // second hop addition are not specified in weight2_list[], then
         // set the weight to zero if the hops are never added to the boil
@@ -289,10 +285,10 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
         if (addIdx > 0 && weight2_list.length == 0) {
           if (realHopBoilTime < 0.0) {
             ibu.add[addIdx].weight.value = 0.0;
-            } else {
+          } else {
             ibu.add[addIdx].weight.value = expData[addStr][5];
-            }
           }
+        }
         // console.log("  addition " + addIdx + " has boil time " +
         //             ibu.add[addIdx].boilTime.value.toFixed(2) +
         //             " based on full boil time " + expData[addStr][6] +
@@ -320,7 +316,7 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
       // then, estimate reduction in (post-boil) pH due to boil time,
       totalTime = ibu.boilTime.value; // already includes time to 1st addition
       postBoil_pH = (preBoil_pH * ((slopeSlope * totalTime) + 1.0)) +
-                                 (slopeIntercept * totalTime);
+                                   (slopeIntercept * totalTime);
       // console.log("set pH to " + postBoil_pH.toFixed(4) +
                   // " from pre-boil pH " + preBoil_pH.toFixed(4) +
                   // ", based on SG=" + preBoilSG.toFixed(4) +
@@ -359,7 +355,15 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
 
     // compute IBU value using SMPH model (make sure no verbosity)
     SMPH.verbose = 0;
+    SMPH.integrationTime = 0.1;  // speed up search
     SMPH.computeIBU_SMPH();
+    // uncomment the following to compute mIBU instead of SMPH:
+    // mIBU.verbose = 0;
+    // mIBU.integrationTime = 0.1;
+    // mIBU.computeIBU_mIBU();
+    // uncomment the following to compute Tinseth formula instead of SMPH:
+    // Tinseth.verbose = 0;
+    // Tinseth.computeIBU_Tinseth();
 
     // create output values and table of results
     diff = ibu.IBU - corrIBU;
@@ -399,10 +403,10 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     ibu.boilTime.value = origBoilTime;
     if (resetTempExpParamB) {
       ibu.tempExpParamB.value = -1.0;
-      }
+    }
     if (resetTempLinParamA) {
       ibu.tempLinParamA.value = -1.0;
-      }
+    }
   }
 
   htmlResults += "</table> "
@@ -418,18 +422,18 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
 
 this.recurseExperimentSettings = function(expList, expData, ibu, numAdd,
             timeToFirstAddition, preBoilSG, searchData, res) {
-  var resList = [];
-  var bestResList = [];
-  var pIdx = 0;
-  var origCurrSettings = null;
-  var currSearch = null;
-  var remain = null;
-  var v = 0.0;
-  var addStr = "";
   var addIdx = 0;
-  var low = 0.0;
+  var addStr = "";
+  var bestResList = [];
+  var currSearch = null;
   var high = 0.0;
   var inc = 0.0;
+  var low = 0.0;
+  var origCurrSettings = null;
+  var pIdx = 0;
+  var remain = null;
+  var resList = [];
+  var v = 0.0;
 
   if (searchData == "") {
     // if no other parameters to search, compute IBUs and evaluate error.
@@ -443,53 +447,53 @@ this.recurseExperimentSettings = function(expList, expData, ibu, numAdd,
       res.htmlResult = resList[2];
       res.maxDiff = resList[3];
       res.bestParams = res.currSettings;
-      }
+    }
     return;
   } else {
-  // otherwise, continue to call recurseExperimentSettings() with additional
-  // search parameters
-  currSearch = searchData[0];
-  remain = searchData.slice(1);  // get remaining items
-  // call recursive evaluation function on each point in searchData[0]
-  low = currSearch.low;
-  high = currSearch.high;
-  if (isNaN(currSearch.inc)) currSearch.inc = 0.0;
-  inc = currSearch.inc;
-  if (currSearch.method == "relative") {
-    low = currSearch.default * currSearch.low;
-    high = currSearch.default * currSearch.high + 0.001;  // add epsilon
-    inc = currSearch.default * currSearch.inc;
-    if (inc == 0.0) inc = (high - low) / 10.0;
-  }
-  if (currSearch.method == "offset") {
-    low = currSearch.default + currSearch.low;
-    high = currSearch.default + currSearch.high;
+    // otherwise, continue to call recurseExperimentSettings() with additional
+    // search parameters
+    currSearch = searchData[0];
+    remain = searchData.slice(1);  // get remaining items
+    // call recursive evaluation function on each point in searchData[0]
+    low = currSearch.low;
+    high = currSearch.high;
+    if (isNaN(currSearch.inc)) currSearch.inc = 0.0;
     inc = currSearch.inc;
-    if (inc == 0.0) inc = (high - low) / 10.0;
-  }
-  if (inc == 0.0) inc = 0.001;  // if high and low are same, no infinite loop
-  console.log("searching " + low + " to " + high + " with inc " + inc);
-  for (v = low; v <= high; v += inc) {
-    // prevent floating-point drift by forcing all values to 4 decimal points
-    v = Number(v.toFixed(4));
-
-    // set value in ibu object,
-    // checking to see if setting is for a hop addition (addStr)
-    addStr = currSearch.param.match(/(.+)(\d+)/);
-    if (addStr) {
-      addIdx = parseInt(addStr[2])-1;
-      ibu.add[addIdx][addStr[1]].value = v;
-    } else {
-      ibu[currSearch.param].value = v;
+    if (currSearch.method == "relative") {
+      low = currSearch.default * currSearch.low;
+      high = currSearch.default * currSearch.high + 0.001;  // add epsilon
+      inc = currSearch.default * currSearch.inc;
+      if (inc == 0.0) inc = (high - low) / 10.0;
     }
+    if (currSearch.method == "offset") {
+      low = currSearch.default + currSearch.low;
+      high = currSearch.default + currSearch.high;
+      inc = currSearch.inc;
+      if (inc == 0.0) inc = (high - low) / 10.0;
+    }
+    if (inc == 0.0) inc = 0.001;  // if high and low are same, no infinite loop
+    console.log("searching " + low + " to " + high + " with inc " + inc);
+    for (v = low; v <= high; v += inc) {
+      // prevent floating-point drift by forcing all values to 4 decimal points
+      v = Number(v.toFixed(4));
 
-    // add current search parameter and value to the list, and keep recursing
-    origCurrSettings = res.currSettings;
-    res.currSettings = res.currSettings + currSearch.param + "=" + v + ", ";
-    this.recurseExperimentSettings(expList, expData, ibu, numAdd,
-                     timeToFirstAddition, preBoilSG, remain, res);
-    // remove current search parameter from the list so they don't accumulate
-    res.currSettings = origCurrSettings;
+      // set value in ibu object,
+      // checking to see if setting is for a hop addition (addStr)
+      addStr = currSearch.param.match(/(.+)(\d+)/);
+      if (addStr) {
+        addIdx = parseInt(addStr[2])-1;
+        ibu.add[addIdx][addStr[1]].value = v;
+      } else {
+        ibu[currSearch.param].value = v;
+      }
+
+      // add current search parameter and value to the list, and keep recursing
+      origCurrSettings = res.currSettings;
+      res.currSettings = res.currSettings + currSearch.param + "=" + v + ", ";
+      this.recurseExperimentSettings(expList, expData, ibu, numAdd,
+                       timeToFirstAddition, preBoilSG, remain, res);
+      // remove current search parameter from the list so they don't accumulate
+      res.currSettings = origCurrSettings;
     }
   }
 
@@ -500,45 +504,45 @@ this.recurseExperimentSettings = function(expList, expData, ibu, numAdd,
 
 this.evaluateAllExperiments = function(expIdxList, parameters,
                               expList, expData) {
-  var eIdx = 0; // experiment index
-  var kIdx = 0;
-  var isList = 0;
-  var condition = "";
-  var results = "";
-  var cIdx = 0;
-  var expKeys;
-  var expValues;
-  var timeToFirstAddition = 0.0;
-  var preBoilSG = 0.0;
-  var addStr = "";
   var addIdx = 0;
   var addNum = 0;
   var addNumStr = "";
-  var numAdd = 0;
+  var addStr = "";
+  var bestParams = "";
+  var cIdx = 0;
+  var condition = "";
   var corrIBU = 0.0;
+  var currSettings = "";
+  var d = new Date();
   var diff = 0.0;
+  var eIdx = 0; // experiment index
+  var expKeys;
+  var expResults = "";
+  var expValues;
+  var globalHtmlResult = "";
+  var globalRMS = 0.0;
+  var idx = 0;
+  var isList = 0;
+  var kIdx = 0;
+  var maxDiff = 0.0;
+  var maxDiffExp = "";
+  var maxDiffGlobal = 0.0;
+  var n = "";
+  var numAdd = 0;
+  var numConditionsGlobal = 0.0;
+  var numExpConditions = 0;
+  var paramList = [];
+  var preBoilSG = 0.0;
+  var res = new Object();
+  var results = "";
+  var resultsId = "";
+  var searchData = "";
+  var selectIdx = 0;
+  var skipSearch = false;
+  var timeToFirstAddition = 0.0;
+  var totalErrGlobal = 0.0;
   var totalExpErr = 0.0;
   var totalExpRMS = 0.0;
-  var numExpConditions = 0;
-  var idx = 0;
-  var selectIdx = 0;
-  var searchData = "";
-  var currSettings = "";
-  var bestParams = "";
-  var res = new Object();
-  var d = new Date();
-  var n = "";
-  var resultsId = "";
-  var expResults = "";
-  var maxDiff = 0.0;
-  var maxDiffGlobal = 0.0;
-  var totalErrGlobal = 0.0;
-  var numConditionsGlobal = 0.0;
-  var maxDiffExp = "";
-  var globalRMS = 0.0;
-  var skipSearch = false;
-  var globalHtmlResult = "";
-  var paramList = [];
 
   // loop over all experiments
   maxDiffGlobal = 0.0;
@@ -590,7 +594,7 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         searchData = expValues[kIdx];
         if (skipSearch) {
           searchData = [];
-          }
+        }
         continue;
       } else if (expKeys[kIdx] == "conditions") {
         continue;
@@ -604,7 +608,7 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         // console.log("adding hops " + addNum + " with " + expValues[kIdx]);
         if (addNum > numAdd) {
           numAdd = addNum;
-          }
+        }
         addIdx = addNum - 1;
         if (numAdd > ibu.numAdditions.value) {
           ibu.numAdditions.value = numAdd;
@@ -658,11 +662,11 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         }
       } else {
       // console.log("setting " + expKeys[kIdx] + " value to " + expValues[kIdx]);
-      if (ibu[expKeys[kIdx]]) {
-        ibu[expKeys[kIdx]].value = expValues[kIdx];
+        if (ibu[expKeys[kIdx]]) {
+          ibu[expKeys[kIdx]].value = expValues[kIdx];
         } else {
-        throw "ERROR: " + expKeys[kIdx] + " is not defined";
-        window.alert("ERROR: " + expKeys[kIdx] + "is not defined");
+          throw "ERROR: " + expKeys[kIdx] + " is not defined";
+          window.alert("ERROR: " + expKeys[kIdx] + "is not defined");
         }
       }
     }
@@ -734,44 +738,41 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
 // initialize the search for model parameters
 
 this.init_SMPH_search = function() {
+  var d = new Date();
+  var developmentExpIdxList = [];
+  var developmentExpData = Object.values(developmentData);
+  var developmentExpList = Object.keys(developmentData);
   var divHtml = "";
   var eIdx = 0;
-  var d = new Date();
-  var n = "";
-  var trainExpList = Object.keys(trainingData);
-  var trainExpData = Object.values(trainingData);
-  var trainExpIdxList = [];
-  var developmentExpIdxList = [];
-  var developmentExpList = Object.keys(developmentData);
-  var developmentExpData = Object.values(developmentData);
-  var testExpIdxList = [];
-  var testExpList = Object.keys(testData);
-  var testExpData = Object.values(testData);
-  var evalTrainExpList = [];
   var evalDevelopmentExpList = [];
+  var evalParamList = null;
   var evalTestExpList = [];
-  var selectIdx = 0;
+  var evalTrainExpList = [];
   var idx = 0;
-  var d = new Date();
+  var item = "";
+  var kIdx = 0;
+  var kvList = null;
   var n = "";
-  var progressText = "";
-  var divHtml = "";
+  var newList = [];
   var paramKeys = [];
   var paramObs = null;
   var pIdx = 0;
-  var evalParamList = null;
-  var kvList = null;
-  var newList = [];
+  var progressText = "";
+  var selectIdx = 0;
+  var trainExpList = Object.keys(trainingData);
+  var trainExpData = Object.values(trainingData);
+  var trainExpIdxList = [];
+  var testExpIdxList = [];
+  var testExpList = Object.keys(testData);
+  var testExpData = Object.values(testData);
   var v = 0.0;
-  var idx = 0;
-  var kIdx = 0;
-  var item = "";
 
   progressText = "click on a 'search type' button above " +
                  "to start the parameter search";
   document.getElementById('progress').innerHTML = progressText;
 
   Tinseth.initialize_Tinseth();  // need Tinseth for evaluating Tinseth model
+  mIBU.initialize_mIBU();        // if using mIBU instead of SMPH
   SMPH.initialize_SMPH();
 
   n = d.toLocaleTimeString();
@@ -782,13 +783,13 @@ this.init_SMPH_search = function() {
   divHtml = "<div id='resultsGlobal'></div> "
   for (eIdx = 0; eIdx < trainExpList.length; eIdx++) {
     divHtml += "<div id='results"+trainExpList[eIdx]+"'></div> "
-    }
+  }
   for (eIdx = 0; eIdx < developmentExpList.length; eIdx++) {
     divHtml += "<div id='results"+developmentExpList[eIdx]+"'></div> "
-    }
+  }
   for (eIdx = 0; eIdx < testExpList.length; eIdx++) {
     divHtml += "<div id='results"+testExpList[eIdx]+"'></div> "
-    }
+  }
   document.getElementById('resultsTableDiv').innerHTML = divHtml;
 
   paramKeys = Object.keys(params);
@@ -875,14 +876,15 @@ this.init_SMPH_search = function() {
       newList = [];
       for (kIdx = 0; kIdx < kvList.length; kIdx++) {
         item = kvList[kIdx];
-        for (v = evalParamList[idx].low; v <= evalParamList[idx].high;
+        for (v = evalParamList[idx].low; 
+             v <= evalParamList[idx].high+(evalParamList[idx].inc/2);
              v += evalParamList[idx].inc) {
           v = Number(v.toFixed(3));
           newList.push(item + ":" + evalParamList[idx].param + "=" + v);
-          }
         }
-      kvList = newList;
       }
+      kvList = newList;
+    }
     console.log("PARAMETER SEARCH LIST LENGTH: " + kvList.length);
     this.searchList.push(paramKeys[pIdx]);
     this.paramList.push(kvList);
@@ -904,30 +906,30 @@ this.init_SMPH_search = function() {
 // of experiments.
 
 this.increment_SMPH_search = function(searchType) {
-  var item = "";
-  var trainExpList = Object.keys(trainingData);
-  var trainExpData = Object.values(trainingData);
-  var developmentExpList = Object.keys(developmentData);
-  var developmentExpData = Object.values(developmentData);
-  var testExpList = Object.keys(testData);
-  var testExpData = Object.values(testData);
-  var res = null;
-  var resList = [];
   var d = new Date();
-  var n = "";
-  var pIdx = 0;
-  var progressText = "";
-  var typeIdx = 0;
-  var percentDone = 0;
+  var developmentExpData = Object.values(developmentData);
+  var developmentExpList = Object.keys(developmentData);
+  var elapsedHrs = 0.0;
+  var elapsedMin = 0.0;
+  var elapsedSec = 0.0;
+  var estDate = "";
+  var estimate = 0.0;
   var expIdxList = [];
+  var item = "";
+  var n = "";
   var paramKeys = [];
   var paramValueList = [];
+  var percentDone = 0;
+  var pIdx = 0;
+  var progressText = "";
+  var res = null;
   var regexpRes = [];
-  var elapsedSec = 0.0;
-  var elapsedMin = 0.0;
-  var elapsedHrs = 0.0;
-  var estimate = 0.0;
-  var estDate = "";
+  var resList = [];
+  var testExpData = Object.values(testData);
+  var testExpList = Object.keys(testData);
+  var trainExpData = Object.values(trainingData);
+  var trainExpList = Object.keys(trainingData);
+  var typeIdx = 0;
 
   // if searchIndex == -1, then initialize for search
   if (this.searchIndex == -1) {
@@ -948,7 +950,7 @@ this.increment_SMPH_search = function(searchType) {
         SMPHsearch.increment_SMPH_search(searchType);
      }, 0);
     return;
-    }
+  }
 
   // find the search type (coarse, fine, etc.) index into list
   paramKeys = Object.keys(params);
@@ -956,32 +958,32 @@ this.increment_SMPH_search = function(searchType) {
     if (searchType != "development" && searchType != "test" &&
         paramKeys[typeIdx] == searchType) {
       break;
-      }
+    }
     if ((searchType == "development" || searchType == "test") &&
          paramKeys[typeIdx] == "none") {
       break;
-      }
     }
+  }
   if (typeIdx >= paramKeys.length) {
     console.log("Error: search type not found");
     return;
-    }
+  }
 
   // determine if done with entire search
   if (this.searchIndex >= this.paramList[typeIdx].length) {
     console.log("done");
     this.searchIndex = -1;
     return;
-    }
+  }
 
   // get the list of index values into experiment parameters
   if (searchType == "development") {
     expIdxList = this.developmentExpIdxList[typeIdx];
-    } else if (searchType == "test") {
+  } else if (searchType == "test") {
     expIdxList = this.testExpIdxList[typeIdx];
-    } else {
+  } else {
     expIdxList = this.trainExpIdxList[typeIdx];
-    }
+  }
 
 
   // get current settings to evaluate during this increment
@@ -993,19 +995,19 @@ this.increment_SMPH_search = function(searchType) {
     regexpRes = paramValueList[pIdx].split("=");
     // console.log("    setting " + regexpRes[0] + " to " + regexpRes[1]);
     SMPH[regexpRes[0]] = Number(regexpRes[1]);
-    }
+  }
 
   // evaluate all experiments with these parameter settings
   if (searchType == "development") {
     resList = this.evaluateAllExperiments(expIdxList, item,
                                    developmentExpList, developmentExpData);
-    } else if (searchType == "test") {
+  } else if (searchType == "test") {
     resList = this.evaluateAllExperiments(expIdxList, item,
                                    testExpList, testExpData);
-    } else {
+  } else {
     resList = this.evaluateAllExperiments(expIdxList, item,
                                    trainExpList, trainExpData);
-    }
+  }
 
   // update based on results
   resList.numCombinations += 1;
@@ -1014,7 +1016,7 @@ this.increment_SMPH_search = function(searchType) {
     this.minError = resList[0];
     this.bestParams = item;
     document.getElementById('resultsGlobal').innerHTML = resList[1];
-    }
+  }
 
   d = new Date();
   n = d.toLocaleTimeString();
@@ -1048,13 +1050,13 @@ this.increment_SMPH_search = function(searchType) {
   if (estimate > 60 * 60) {
     progressText += "estimated duration = " +
                     (estimate/(60*60)).toFixed(2) + " hours<br>";
-    } else if (estimate > 60.0) {
+  } else if (estimate > 60.0) {
     progressText += "estimated duration = " +
                     (estimate/(60)).toFixed(2) + " minutes<br>";
-    } else {
+  } else {
     progressText += "estimated duration = " +
                      estimate.toFixed(2) + " seconds<br>";
-    }
+  }
   estDate = new Date((estimate*1000) + this.beginDate);
   progressText += "estimated finish at " +
                    estDate.toLocaleTimeString() + "<br>";

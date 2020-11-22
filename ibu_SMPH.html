@@ -3,8 +3,8 @@
 <!-- -------------------------------------------------------------------------
 ibu_SMPH.html : HTML for AlchemyOverlord web page, SMPH sub-page
 Written by John-Paul Hosom
-Copyright © 2018 by John-Paul Hosom, all rights reserved.
-Version 1.0.1 : Nov. 22, 2018
+Copyright © 2018,2019,2020 by John-Paul Hosom, all rights reserved.
+Version 1.0.1 : Nov. 22, 2018 to Nov. 22, 2020
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -17,18 +17,34 @@ Version 1.0.1 : Nov. 22, 2018
 <div id="content">
   <h2>IBU Calculator Using SMPH</h2>
   <p>This page provides a calculator for predicting IBUs using the SMPH
-  method, which is described in a blog post
-  <a href="BADLINK">
-  "BAD LINK"</a>.  This method accounts separately for the contributions
-  from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds" (or
-  nonIAA).  It is based in large part on work published by Val Peacock,
+  method. The techniques used in this method are described in the blog post
+  <a href="https://alchemyoverlord.wordpress.com/2017/01/03/a-summary-of-factors-affecting-ibus/">
+  "A Summary of Factors Affecting IBUs"</a>.
+  This method accounts separately for the contributions
+  from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds"
+  (ABC or nonIAA).  It is based in large part on work published by Val Peacock,
   Tom Shellhammer, and Mark Malowicki, as well as my own experiments.  This
   calculator takes into account utilization from any hop stand or whirlpool,
   as well as the time it takes to cool the wort using an immersion chiller,
-  counterflow chiller, or ice bath.</p>
-  <p>This calculator is described in more detail in
-  <a href="BADLINK">
-  BAD LINK</a>.
+  counterflow chiller, or ice bath.
+  This calculator has an optional alpha-acid solubility limit, based on
+  experiments described in
+  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
+  The (optional) correction of IBU values based on wort pH is based on the
+  experiment described in
+  <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
+  The Effect of pH on Utilization and IBUs</a>.
+  The (optional) correction of IBU values based on wort clarity is described in
+  <a href="https://alchemyoverlord.wordpress.com/2020/10/21/how-lautering-and-wort-clarity-affect-ibus/">
+  How Lautering and Wort Clarity Affect IBUs</a>.
+  The (optional) correction of IBU values based on krausen loss is based on the
+  experiment described in
+  <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
+  The Impact of Krausen Loss on IBUs</a>.
+  The correction of IBU values when using pellets is based on the experiments described in
+  <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
+  Hop Cones vs. Pellets: IBU Differences</a>.
   </p>
 
   <p>
@@ -42,7 +58,13 @@ Version 1.0.1 : Nov. 22, 2018
   the "linear" function, but the linear function is easier to conceptualize
   (e.g. a decrease of 1.74&deg;F per minute).  If your measured decrease in
   wort temperature is not modeled well by these defaults, feel free to
-  change them.  To get back to a default value, enter 'd'.
+  change them.
+  </p>
+  <p>
+  To get back to a default value, enter 'd'.  To save settings to a text file
+  or load them from a file, use the "Save" and "Load" buttons near the bottom
+  of this page.  To clear all settings, use the "clear" button at the
+  bottom of this page.
   </p>
 
   <h3>Inputs:</h3>
@@ -92,7 +114,7 @@ Version 1.0.1 : Nov. 22, 2018
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.evaporationRate" onchange="common.set(ibu.evaporationRate, 1)"></td>
   </tr>
   <tr>
-    <td>Wort Volume (<span id="wortVolumeUnits">G</span>):</td>
+    <td>Wort Volume (<span id="wortVolumeUnits">G</span> @ room temp.):</td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortVolume" onchange="common.set(ibu.wortVolume, 1)">
     <input type="radio" value="preBoilVol" id="preBoilVol" name="ibu.preOrPostBoilVol" onclick="common.set(ibu.preOrPostBoilVol,1)" autocomplete="off">pre-boil or
     <input type="radio" value="postBoilVol" id="postBoilVol" name="ibu.preOrPostBoilVol" onclick="common.set(ibu.preOrPostBoilVol,1)" autocomplete="off" checked>post-boil volume</td>
@@ -230,8 +252,8 @@ Version 1.0.1 : Nov. 22, 2018
   </tr>
   <tr>
     <td>Finings:</td>
-    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.finingsAmount" onchange="common.set(ibu.finingsAmount, 1)"> 
-        <span id="finingsUnits">tsp</span> of 
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.finingsAmount" onchange="common.set(ibu.finingsAmount, 1)">
+        <span id="finingsUnits">tsp</span> of
       <select style="width:10em;" id="ibu.finingsType" onchange="common.set(ibu.finingsType, 1)">
         <option value="nothing" selected>nothing</option>
         <option value="gelatin">gelatin</option>
@@ -269,7 +291,7 @@ SMPH.initialize_SMPH();
 <table style="margin-left:3em">
   <tbody>
   <tr>
-  <td>Save to File:</td> 
+  <td>Save to File:</td>
   <td><button type="button" onclick="common.saveToFile('IBU_SMPH.txt')">Browse... </button></td>
   </tr>
   <tr>
@@ -285,7 +307,7 @@ SMPH.initialize_SMPH();
 <small>
 <a name="versions"></a>
 <h4>Versions:</h4>
-<b>1.0.1</b>: (2018-Nov-22)  Initial version.<br>
+<b>1.0.1</b>: (2018-Nov-22 to 2020-Nov-22)  Initial version.<br>
 </small>
 
 <p>
@@ -303,8 +325,8 @@ Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
 <small>Copyright &copy; 2018-2020 John-Paul Hosom, all rights reserved.
-All product and company names are trademarks&trade; or registered&reg; 
-trademarks of their respective holders. Use of these names does not imply 
+All product and company names are trademarks&trade; or registered&reg;
+trademarks of their respective holders. Use of these names does not imply
 any affiliation with, endorsement of, or endorsement by them.
 <p>
 While I hope that you find this page useful, I make no guarantees about

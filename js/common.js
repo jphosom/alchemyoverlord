@@ -7,6 +7,7 @@
 // Version 1.2.1 : Jul 18, 2018 : add support for checkbox
 // Version 1.2.2 : Dec 29, 2018 : add support for 'select', float or string
 // Version 1.3.2 : Feb 20, 2020 : add support for saving/loading files
+// Version 1.3.3 : Nov 22, 2020 : add tsp/ml conversion; minor cleanup
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -37,6 +38,8 @@ var common = common || {};
 //   . convertCelsiusToKelvin()
 //   . convertOuncesToGrams()
 //   . convertGramsToOunces()
+//   . convertTspToMl()
+//   . convertMlToTsp()
 //
 //   FUNCTIONS FOR SAVING AND LOADING PARAMETERS:
 //   . clearSavedValues()
@@ -44,6 +47,8 @@ var common = common || {};
 //   . unsetSavedValue()
 //   . getSavedValue()
 //   . existsSavedValue()
+//   . saveToFile()
+//   . loadFromFile()
 
 common._construct = function() {
 
@@ -163,8 +168,8 @@ this.set = function(variable, haveUserInput) {
   var defaultValue;
   var idx = 0;
   var inputString = "";
-  var savedValueExists;
   var savedValue;
+  var savedValueExists;
 
   console.log("\n");
   console.log("------------------- SET " + variable.id + " ------------------");
@@ -190,7 +195,7 @@ this.set = function(variable, haveUserInput) {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
       check = validateFloatOrString(variable, inputString);
-      console.log("  validate = " + check.valid + ", " + check.useDefaultValue);
+      // console.log("  validate = "+check.valid+", " +check.useDefaultValue);
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
@@ -198,7 +203,7 @@ this.set = function(variable, haveUserInput) {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
       check = validate(variable, inputString);
-      console.log("  validate = " + check.valid + ", " + check.useDefaultValue);
+      // console.log("  validate = "+check.valid + ", "+check.useDefaultValue);
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
@@ -214,16 +219,15 @@ this.set = function(variable, haveUserInput) {
       variable.precision = saved.precision;
     }
     variable.userSet = 1;
-    console.log("SETTING VALUE TO OLD VALUE: " + variable.value);
+    console.log("setting value to saved value: " + variable.value);
   } else if (!haveUserInput ||
              (haveUserInput && (check.useDefaultValue || !check.valid))) {
-    console.log("SETTING VALUE TO DEFAULT");
     if ("defaultFunction" in variable) {
       defaultValue = variable.defaultFunction(variable.defaultArgs);
-      console.log("  default is " + defaultValue);
     } else {
       defaultValue = variable.defaultValue;
     }
+    console.log("setting value to default: " + defaultValue);
     variable.value = defaultValue;
     variable.userSet = 0;
     if ("precision" in variable) {
@@ -231,7 +235,7 @@ this.set = function(variable, haveUserInput) {
     }
   } else {
     variable.value = check.value;
-    console.log("SET VALUE TO INPUT: " + variable.value);
+    // console.log("set value to input: " + variable.value);
     // get and set the precision
     if ("precision" in variable) {
       variable.precision = common.getPrecision(inputString);
@@ -239,7 +243,7 @@ this.set = function(variable, haveUserInput) {
     // convert to metric, so that 'value' is always in metric
     if (("convertToMetric" in variable) &&
         window[variable.parent]["units"].value == "imperial") {
-      console.log("  converting " + variable.value + " to metric");
+      // console.log("  converting " + variable.value + " to metric");
       variable.value = variable.convertToMetric(variable.value);
       console.log("  metric value is " + variable.value);
     }
@@ -266,7 +270,7 @@ this.set = function(variable, haveUserInput) {
         common.updateHTML(dependent);
       }
     }
-    console.log("(done with dependents)");
+    // console.log("(done with dependents)");
   }
 
   // update HTML
@@ -314,9 +318,9 @@ this.set = function(variable, haveUserInput) {
   if ("additionalFunction" in variable) {
     console.log("Processing additional function : " +
                 variable.additionalFunction.name);
-    if (typeof variable.additionalFunctionArgs != "function") {
-      console.log("args = " + variable.additionalFunctionArgs);
-    }
+    // if (typeof variable.additionalFunctionArgs != "function") {
+      // console.log("args = " + variable.additionalFunctionArgs);
+    // }
     variable.additionalFunction(variable.additionalFunctionArgs);
   }
 
@@ -368,12 +372,12 @@ this.updateHTML = function(variable) {
 
   // update HTML (and font color)
   if (document.getElementById(variable.id)) {
-    if ("precision" in variable) {
-      console.log("UPDATING " + variable.id + " HTML to " + variable.display +
-                " with precision " + variable.precision);
-    } else {
-      console.log("UPDATING " + variable.id + " HTML to " + variable.display);
-    }
+    // if ("precision" in variable) {
+      // console.log("UPDATING "+variable.id + " HTML to " + variable.display +
+                // " with precision " + variable.precision);
+    // } else {
+      // console.log("UPDATING "+variable.id + " HTML to " + variable.display);
+    // }
     document.getElementById(variable.id).value = variable.display;
 
     if ("inputType" in variable) {
@@ -468,7 +472,7 @@ this.clearSavedValues = function() {
   if (typeof(Storage) == "undefined") {
     return true;
   }
-  console.log("CLEARING LOCAL STORAGE:");
+  console.log("CLEARING LOCAL STORAGE");
   // for (var a in localStorage) {
   //   console.log("  variable " + a + " = " + localStorage[a]);
   // }
@@ -553,24 +557,25 @@ this.existsSavedValue = function(variable) {
 // SAVE AND LOAD VALUES TO/FROM FILE
 
 this.saveToFile = function(defaultFilename) {
-  var text = "";
-  var link; // link to object URL to be downloaded
   var data; // blob data
-  var varNameList = [];
-  var varName = "";
+  var link; // link to object URL to be downloaded
+  var text = "";
   var varInfo = "";
+  var varName = "";
+  var varNameList = [];
 
   if (typeof(Storage) == "undefined") {
     window.alert("Can't save to file; no local storage");
     return false;
   }
 
+  console.log("SAVING TO FILE:");
   // create the text data to save by going through all of the local storage
   varNameList = Object.keys(localStorage).sort();
   // console.log("list = " + varNameList);
   text = "";
   for (varName of varNameList) {
-    varInfo = varName + ' = "' + localStorage[varName] + '";\n';
+    varInfo = "  " + varName + ' = "' + localStorage[varName] + '";\n';
     console.log(varInfo);
     text += varInfo;
   }
@@ -608,24 +613,25 @@ this.loadFromFile = function(files) {
 
   reader.onload = function(event) {
     var contents = event.target.result;
-    var keyValueList = contents.split("\n");
-    var key = "";
     var formattedValue = "";
+    var key = "";
+    var keyValueList = contents.split("\n");
     var value = "";
 
     common.clearSavedValues();
+    console.log("LOADING FROM FILE:");
     for (keyValue of keyValueList) {
       key = keyValue.split("=")[0].trim();
       if (key.length > 0) {
         formattedValue = keyValue.split("=")[1].trim();
         // get whatever is between " and "; and put it in 'value'
         value = formattedValue.match(/(")(.+)(";)/)[2];
-        console.log("setting " + key + " = '" + value + "'");
+        console.log("  setting " + key + " = '" + value + "'");
         localStorage.setItem(key, value);
-        }
       }
-     location.reload();
     }
+    location.reload();
+  }
 
   return true;
 }

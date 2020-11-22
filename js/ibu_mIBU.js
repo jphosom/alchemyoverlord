@@ -64,7 +64,7 @@
 //           (a) for solubility limit, [AA] needs to also be based on curr vol.
 //           (b) fix temperature decay when holding hop-stand temperature
 //           (c) compare holdTempCounter with original whirlpool time
-// 
+//
 // Version 1.2.10 : Sep. 20, 2020
 //         . update the solubility limit model to be in sync with latest results
 //         . update pH-related nonIAA losses to be in sync with latest results
@@ -84,6 +84,11 @@
 //         . change pellets from a factor of 2.0 to 2.0 * 0.8
 //         . make sure no division by zero
 //         . minor code cleanup
+//
+// Version 1.2.15 : Nov. 22, 2020
+//         . bug fix of evaporation rate at below-boiling temperatures
+//         . implement more checking of inputs
+//         . if topoff volume is 0, show wortLossVol in gray
 //
 // -----------------------------------------------------------------------------
 
@@ -214,9 +219,10 @@ this.computeIBU_mIBU = function() {
   var preAddConcent = 0.0;
   var preBoilpH = 0.0;
   var preOrPostBoilpH = ibu.preOrPostBoilpH.value;
+  var rateAtTemp = 0.0;
+  var rateAtBoil = 0.0;
   var ratio = 0.0;
   var relativeVolume = 0.0;
-  var relRate = 0.0;
   var SG = 0.0;
   var SGpoints = 0.0;
   var solubilityLimit = 0.0;
@@ -250,7 +256,7 @@ this.computeIBU_mIBU = function() {
 
   console.log("evaporation rate = " + ibu.evaporationRate.value +
               ", post-boil volume = " + postBoilVolume);
-  console.log("OG = " + ibu.OG.value + 
+  console.log("OG = " + ibu.OG.value +
               ", wort clarity = " + ibu.wortClarity.value);
   console.log("wort loss volume = " + ibu.wortLossVolume.value +
               ", topoff volume = " + ibu.topoffVolume.value);
@@ -392,8 +398,8 @@ this.computeIBU_mIBU = function() {
         if (useSolubilityLimit) {
           // compute AA limit function parameters
           AA_limit_func_A = AA_limit_maxLimit;
-          AA_limit_func_B = 
-               -1.0 * Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) / 
+          AA_limit_func_B =
+               -1.0 * Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) /
                AA_limit_minLimit;
           // AAconcent is [AA] at post-boil volume.  AAatAdd is [AA] when add
           AAatAdd = AAconcent * postBoilVolume / currVolume;
@@ -418,7 +424,7 @@ this.computeIBU_mIBU = function() {
           }
           console.log("    from [AA] without limits=" + AA_noLimit.toFixed(2) +
                       ", limit is " + solubilityLimit.toFixed(2));
-          console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " + 
+          console.log("    currV = " + currVolume.toFixed(2) + ", pbVol = " +
                       postBoilVolume.toFixed(2));
           if (postBoilVolume > 0.0) {
             // if [AA] after new hops addition (w/out limit) is above threshold,
@@ -546,8 +552,10 @@ this.computeIBU_mIBU = function() {
       // adjust current volume due to evaporation at below-boiling temps
       // if sub-boiling, estimate evaporation rate
       if (ibu.evaporationRate.value > 0.0) {
-        relRate = (0.0243 * Math.exp(0.0502*100.0)) / ibu.evaporationRate.value;
-        subBoilEvapRate = relRate* 0.0243* Math.exp(0.0502* tempC); // liters/hr
+        rateAtTemp = 0.0243 * Math.exp(0.0502 * tempC); // liters/hr
+        rateAtBoil = 3.679294682; // 0.0243 * Math.exp(0.0502*100.0); // l/hr
+        if (rateAtTemp > rateAtBoil) rateAtTemp = rateAtBoil;
+        subBoilEvapRate = ibu.evaporationRate.value * rateAtTemp / rateAtBoil;
       } else {
         subBoilEvapRate = 0.0;
       }
@@ -627,7 +635,7 @@ this.computeIBU_mIBU = function() {
   }
 
   // In the following adjustments, we'll assume that boil gravity
-  // affects IAA and nonIAA equally, so we include "bigness factor" in 
+  // affects IAA and nonIAA equally, so we include "bigness factor" in
   // the utilization of nonIAA
   bignessFactor = 1.65 * Math.pow(0.000125,(SG-1.0));
   console.log("  bigness factor = " + bignessFactor.toFixed(4));
@@ -728,9 +736,9 @@ this.computeIBU_mIBU = function() {
     } else {
       ratio = 0.0;
     }
-    console.log("    for hop index " + hopIdx + ": [AA]init = " + 
+    console.log("    for hop index " + hopIdx + ": [AA]init = " +
                 ibu.add[hopIdx].AAinit.toFixed(3) + ", [AA]dis = " +
-                ibu.add[hopIdx].AAdis.toFixed(3) + ", ratio = " + 
+                ibu.add[hopIdx].AAdis.toFixed(3) + ", ratio = " +
                 ratio.toFixed(4));
     if (ibu.add[hopIdx].hopForm.value == "pellets") {
       // from post Hop Cones vs Pellets: IBU Differences oAA increase by ~2

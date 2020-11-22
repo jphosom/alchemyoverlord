@@ -36,13 +36,14 @@ var developmentData = {
         "whirlpoolTime":         0,
         "beerAge_days":          20,
 
-        // JPH FIX: cones should be pellets
         //                AA%   BA%   form      freshF  %loss  weight(g),  boil time
-        "add1":        [ 6.1,    2.5, "cones", 0.95,   22.0,     49.61,     60 ], // EKG
-        "add2":        [ 6.1,    2.5, "cones", 0.95,   22.0,     28.35,     10 ], // EKG
+        "add1":        [ 6.1,    2.5, "pellets", 0.95,   22.0,     49.61,     60 ], // EKG
+        "add2":        [ 6.1,    2.5, "pellets", 0.95,   22.0,     28.35,     10 ], // EKG
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
+        "wortClarity":           0.80,    // notes say wort was "cloudy, reddish"
+        "krausen":               0.90,    // overflow?
         "evaporationRate":       4.01,    // estimated from pre-boil SG, post-boil SG, and total boil time
         "immersionDecayFactor":  0.1198,  // estimated from post-boil volume (which is estimated from evaporation rate)
         "forcedDecayType":       "forcedDecayImmersion",
@@ -133,12 +134,11 @@ var developmentData = {
         "whirlpoolTime":         0,
         "beerAge_days":          21,
 
-        // JPH FIX: cones should be pellets
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
-        "add1":        [  3.7,   5.0, "cones", 0.95,   40.0,     14.17,     60 ],  // tettnang
-        "add2":        [  4.1,   4.0, "cones", 0.95,   40.0,     28.35,     60 ],  // hallertau; BA=guess, %loss=guess
-        "add3":        [  5.0,   3.5, "cones", 0.95,   37.5,     7.09,      60 ],  // willamette
-        "add4":        [  3.7,   5.0, "cones", 0.95,   40.0,     14.17,     10 ],  // tettnang
+        "add1":        [  3.7,   5.0, "pellets", 0.95,   40.0,     14.17,     60 ],  // tettnang
+        "add2":        [  4.1,   4.0, "pellets", 0.95,   40.0,     28.35,     60 ],  // hallertau; BA=guess, %loss=guess
+        "add3":        [  5.0,   3.5, "pellets", 0.95,   37.5,     7.09,      60 ],  // willamette
+        "add4":        [  3.7,   5.0, "pellets", 0.95,   40.0,     14.17,     10 ],  // tettnang
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
@@ -238,6 +238,7 @@ var developmentData = {
         "pH":                    5.05, // try pre-boil pH of 5.28
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
+        "krausen":               0.90,    // overflow?
         "beerAge_days":          18,   // days until kegging
 
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
@@ -280,6 +281,7 @@ var developmentData = {
         "pH":                    5.20,
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
+        "krausen":               0.90,    // overflow?
         "beerAge_days":          12,
 
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
@@ -376,6 +378,49 @@ var developmentData = {
         "kettleOpening":         37.148,
         "evaporationRate":       3.46,
         "immersionDecayFactor":  0.4283,  // hydra wort chiller, measured Oct 27 2018
+        "forcedDecayType":       "forcedDecayImmersion",
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  3.90,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  3.90,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+             },
+       ],
+    },
+
+
+    "Tiffany's Stout, May 2019 large fermenter": {
+        "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 21.5 ],
+
+        "boilTime":              72,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            23.583,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.0643,
+        "pH":                    5.15,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          20,
+
+        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        "add1":        [  3.9,   3.5, "cones", 0.90,   38.2,    70.87,      60 ],  // willamette
+        "add2":        [  3.9,   3.5, "cones", 0.90,   38.2,    28.35,      10 ],  // willamette
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         37.148,
+        "evaporationRate":       3.581,
+        "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
 
         "skipSearch":   true,
@@ -716,7 +761,7 @@ var developmentData = {
         "evaporationRate":       4.10,
         "immersionDecayFactor":  0.1015,
         "forcedDecayType":       "forcedDecayImmersion",
-        "krausen":               "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "krausen":               "mix krausen back in; no loss",   // swirling of FV during fermentation
 
 
         "skipSearch":   true,
@@ -798,6 +843,7 @@ var developmentData = {
         "OG":                    1.071,
         "pH":                    5.25,
         "preOrPostBoilpH":       "preBoilpH",
+        "wortClarity":           0.80,    // notes say wort was "still cloudy, why?"
         "whirlpoolTime":         10,
         "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
         "beerAge_days":          24,

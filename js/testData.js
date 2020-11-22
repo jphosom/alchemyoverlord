@@ -6,32 +6,31 @@
 //
 
 var evaluateTestExperiments = [ ];  // null list means evaluate on all
-// var evaluateTestExperiments = [ "Tiffany's Stout, May 2019 large fermenter" ];
 // var evaluateTestExperiments = [ "Taste Experiment #1" ];
 
 // units *must* be all metric
 
 var testData = {
-    "Tiffany's Stout, May 2019 large fermenter": {
+    "Tiffany's Stout, June 2020 large fermenter": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
-        "IBU_list":              [ 21.5 ],
+        "IBU_list":              [ 21.8 ],
 
-        "boilTime":              72,          // time to first addition, plus duration of longest hop steep time
-        "wortVolume":            23.583,
+        "boilTime":              70,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            22.56,
         "preOrPostBoilVol":      "postBoilVol",
-        "OG":                    1.0643,
-        "pH":                    5.15,
+        "OG":                    1.064,
+        "pH":                    5.11,
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
-        "beerAge_days":          20,
+        "beerAge_days":          10,
 
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
-        "add1":        [  3.9,   3.5, "cones", 0.90,   38.2,    70.87,      60 ],  // willamette
-        "add2":        [  3.9,   3.5, "cones", 0.90,   38.2,    28.35,      10 ],  // willamette
+        "add1":        [  6.0,   3.5, "cones", 0.90,   38.2,    42.52,      60 ],  // willamette
+        "add2":        [  6.0,   3.5, "cones", 0.90,   38.2,    28.35,      10 ],  // willamette
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
-        "evaporationRate":       3.581,
+        "evaporationRate":       4.315,
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
 
@@ -138,21 +137,21 @@ var testData = {
        ],
     },
 
-    "Kolshish, Sep. 2020": {
+    "Kolsch, Sep. 2020": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 26.0 ],
 
         "boilTime":              65,          // time to first addition, plus duration of longest hop steep time
         "wortVolume":            22.33,
         "preOrPostBoilVol":      "postBoilVol",
-        "OG":                    1.053,
+        "OG":                    1.0533,
 
-        "pH":                    5.26,
+        "pH":                    5.25,
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
 
         //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
-        "add1":        [  2.8,  5.0, "pellets", 1.00,   40.0,     56.70,     60 ],  // tettnang
+        "add1":        [  2.7,  5.0, "pellets", 1.00,   40.0,     56.70,     60 ],  // tettnang
         "add2":        [  3.8,  4.0, "pellets", 1.00,   45.0,     56.70,     10 ],  // hallertau
 
         "kettleDiameter":        37.148,
@@ -163,13 +162,13 @@ var testData = {
         "wortClarity":           1.10,
         "finingsType":           "gelatin",
         "finingsAmount":         10.0,
-        "beerAge_days":          10,
+        "beerAge_days":          15,
 
         "skipSearch":   true,
         "search": [
              {
                  "param":    "AA1",
-                 "default":  2.80,
+                 "default":  2.70,
                  "method":   "relative",
                  "low":      0.85,
                  "high":     1.15,

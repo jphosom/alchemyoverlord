@@ -25,6 +25,11 @@
 // Version 1.2.6 : Jul 12, 2019 : add hop variety selection, hop form default
 // Version 1.2.7 : Oct 10, 2020 : add wort clarity and (gelatin) finings
 // Version 1.2.8 : Nov  7, 2020 : add hop addition variables for mIBU
+// Version 1.2.9 : Nov 22, 2020 : make sure wortLossVolume < post-boil vol
+//                                make sure post-boil volume never negative
+//                                if added water is 0, show wortLossVol in gray
+//                                make sure holdTemp is never more than boiling
+//                                lots of minor formatting cleanup
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -69,7 +74,6 @@ var ibu = ibu || {};
 //    . OG = original gravity (specific gravity at the end of the boil)
 //    . wortLossVolume = amount of wort left behind after post-boil transfer
 //    . topoffVolume = amount of water added when doing a partial boil
-//    . wortClarity = general description of how clear/cloudy the wort is
 //    . tempLinParamA = temperature decay parameter: linear formula, slope
 //    . tempLinParamB = temperature decay parameter: linear formula, intercept
 //    . tempExpParamA = temperature decay parameter: exponential formula, scale
@@ -91,15 +95,21 @@ var ibu = ibu || {};
 //    . pH = the wort pH, if applying pH correction
 //    . preOrPostBoilpH = if the pH is pre- or post-boil
 //    . add = array of hop additions, containing:
+//        . variety = hop variety, if known
+//        . hopForm = form of the hops (cones, pellets, or default)
 //        . AA = alpha acid, in percent (scale 0 to 100)
-//        . pellet_oAAboilFactor = increase in oAA boil factor using pellets
+//        . BA = beta acid, in percent (scale 0 to 100)
+//        . percentLoss = percent loss of AA when stored 6 mos at room temp
+//        . freshnessFactor = how fresh are the hops? e.g. using Garetz formula
+//        . pelletFactor = increase in oAA boil factor when using pellets
 //        . weight = weight of hops added
 //        . boilTime = amount of time that hops spend in the boil (may be neg.)
-//    . krausen = krausen loss factor for IAA 
+//    . wortClarity = general description of how clear/cloudy the wort is
+//    . krausen = krausen loss factor for IAA
 //    . flocculation = degree of yeast flocculation (low, medium, high)
-//    . filtering = micron rating of the filter, or no filtering
 //    . finingsAmount = amount of finings added
 //    . finingsType = type of finings
+//    . filtering = micron rating of the filter, or no filtering
 //    . beerAge_days = age of the beer, in days, measured from start of ferment.
 //
 //    public functions:
@@ -130,7 +140,6 @@ ibu._construct = function() {
   this.OG                   = new Object();
   this.wortLossVolume       = new Object();
   this.topoffVolume         = new Object();
-  this.wortClarity          = new Object();
 
   this.tempLinParamA        = new Object();
   this.tempLinParamB        = new Object();
@@ -160,6 +169,7 @@ ibu._construct = function() {
   this.add = [];        // array of hops additions
   this.letterList = []; // array of hop variety first letters
 
+  this.wortClarity          = new Object();
   this.krausen              = new Object();
   this.flocculation         = new Object();
   this.filtering            = new Object();
@@ -207,6 +217,8 @@ ibu._construct = function() {
   this.boilTemp.description = "temperature at which water boils";
   this.boilTemp.defaultValue = 100.0;
   this.boilTemp.dependents = [ ibu.tempLinParamB, ibu.tempExpParamC ];
+  this.boilTemp.additionalFunction = checkHoldTemp;
+  this.boilTemp.additionalFunctionArgs = ibu.forcedDecayType;
 
   // kettleDiameter
   this.kettleDiameter.id = "ibu.kettleDiameter";
@@ -271,6 +283,8 @@ ibu._construct = function() {
   this.evaporationRate.display = "";
   this.evaporationRate.min = 0.0;
   this.evaporationRate.max = 500.0;
+  this.evaporationRate.additionalFunction = checkWortLossVolumeAndColor;
+  this.evaporationRate.additionalFunctionArgs = "";
   this.evaporationRate.description = "evaporation rate";
   this.evaporationRate.defaultValue = 3.78541;
 
@@ -288,6 +302,8 @@ ibu._construct = function() {
   this.wortVolume.max = 10000.0;
   this.wortVolume.description = "wort volume";
   this.wortVolume.defaultValue = 19.8734025;
+  this.wortVolume.additionalFunction = checkWortLossVolumeAndColor;
+  this.wortVolume.additionalFunctionArgs = "";
   this.wortVolume.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
                                  ibu.immersionDecayFactor,
                                  ibu.icebathDecayFactor ];
@@ -298,7 +314,7 @@ ibu._construct = function() {
   this.preOrPostBoilVol.value = "postBoilVol";
   this.preOrPostBoilVol.userSet = 0;
   this.preOrPostBoilVol.defaultValue = "postBoilVol";
-  this.preOrPostBoilVol.additionalFunction = setPreOrPostBoilVol;
+  this.preOrPostBoilVol.additionalFunction = checkWortLossVolumeAndColor;
   this.preOrPostBoilVol.additionalFunctionArgs = "";
   this.preOrPostBoilVol.dependents = [ ibu.tempLinParamA, ibu.tempExpParamB,
                                        ibu.immersionDecayFactor,
@@ -331,6 +347,8 @@ ibu._construct = function() {
   this.wortLossVolume.max = 1000.0;
   this.wortLossVolume.description = "volume of wort and trub left in kettle";
   this.wortLossVolume.defaultValue = 0.9463525;
+  this.wortLossVolume.additionalFunction = checkWortLossVolumeAndColor;
+  this.wortLossVolume.additionalFunctionArgs = "";
 
   // topoffVolume
   this.topoffVolume.id = "ibu.topoffVolume";
@@ -346,6 +364,8 @@ ibu._construct = function() {
   this.topoffVolume.max = 500.0;
   this.topoffVolume.description = "added water";
   this.topoffVolume.defaultValue = 0.0;
+  this.topoffVolume.additionalFunction = checkWortLossColor;
+  this.topoffVolume.additionalFunctionArgs = "";
 
   // wortClarity
   this.wortClarity.id = "ibu.wortClarity";
@@ -703,7 +723,7 @@ function setUnits() {
       document.getElementById('boilTempUnits').innerHTML = "&deg;C";
     }
     if (document.getElementById('wortVolumeUnits')) {
-      document.getElementById('wortVolumeUnits').innerHTML = "liters";
+      document.getElementById('wortVolumeUnits').innerHTML = "litres";
     }
     if (document.getElementById('weightUnits')) {
       document.getElementById('weightUnits').innerHTML = "g";
@@ -712,16 +732,16 @@ function setUnits() {
       document.getElementById('tempUnits').innerHTML = "&deg;C";
     }
     if (document.getElementById('rateUnits')) {
-      document.getElementById('rateUnits').innerHTML = "liters/min";
+      document.getElementById('rateUnits').innerHTML = "litres/min";
     }
     if (document.getElementById('wortLossUnits')) {
-      document.getElementById('wortLossUnits').innerHTML = "liters";
+      document.getElementById('wortLossUnits').innerHTML = "litres";
     }
     if (document.getElementById('evaporationUnits')) {
-      document.getElementById('evaporationUnits').innerHTML = "liters/hr";
+      document.getElementById('evaporationUnits').innerHTML = "litres/hr";
     }
     if (document.getElementById('topoffUnits')) {
-      document.getElementById('topoffUnits').innerHTML = "liters";
+      document.getElementById('topoffUnits').innerHTML = "litres";
     }
     if (document.getElementById('kettleDiameterUnits')) {
       document.getElementById('kettleDiameterUnits').innerHTML = "cm";
@@ -813,16 +833,17 @@ function setUnits() {
 }
 
 //==============================================================================
-// FUNCTION RELATED TO VALIDATING INPUTS
+// FUNCTIONS RELATED TO VALIDATING INPUTS
 
 //------------------------------------------------------------------------------
+// check the kettle diameter and opening sizes
 
 function checkDiameterAndOpening(variable) {
 
   if (ibu.kettleDiameter.value < ibu.kettleOpening.value) {
+    var display = variable.value;
     console.log("kettle diam = " + ibu.kettleDiameter.value +
                 ", kettle opening = " + ibu.kettleOpening.value);
-    var display = variable.value;
     if (ibu.units.value == "imperial") {
       display = variable.convertToImperial(display);
     }
@@ -849,18 +870,54 @@ function checkDiameterAndOpening(variable) {
 }
 
 //------------------------------------------------------------------------------
-// check if wort volume is pre-boil or post-boil.
+// check if wort loss volume is valid or not
 
-function setPreOrPostBoilVol() {
-  var idx = 0;
-  var value = ibu.preOrPostBoilVol.value;
+function checkWortLossVolumeAndColor() {
+  var addedWater = ibu.topoffVolume.value;
+  var postBoilVol = 0.0;
+  var variable = ibu.wortLossVolume;
 
-  console.log("SET PRE- or POST-BOIL VOLUME TO " + value);
+  postBoilVol = get_postBoilVolume();
+  if (variable.value > postBoilVol) {
+    window.alert("Wort loss volume can't be greater than post-boil volume. " +
+                 "Setting wort loss volume to post-boil volume.");
+    variable.value = postBoilVol;
+    variable.precision = ibu.wortVolume.precision;
+    variable.userSet = 1;
+    common.updateHTML(variable);
+    common.setSavedValue(variable, 0);
+  }
 
-  return;
+  if (document.getElementById(variable.id)) {
+    if (addedWater > 0) {
+      document.getElementById(variable.id).style.color = "black";
+    } else {
+      document.getElementById(variable.id).style.color = "#b1b1cd";
+    }
+  }
+
+  return true;
 }
 
 //------------------------------------------------------------------------------
+// check if the font color for the wortLossVolume field should be black or gray
+
+function checkWortLossColor() {
+  var addedWater = ibu.topoffVolume.value;
+  var variable = ibu.wortLossVolume;
+
+  if (document.getElementById(variable.id)) {
+    if (addedWater > 0) {
+      document.getElementById(variable.id).style.color = "black";
+    } else {
+      document.getElementById(variable.id).style.color = "#b1b1cd";
+    }
+  }
+  return true;
+}
+
+//------------------------------------------------------------------------------
+// check that the specified boil time matches the hop additions
 
 function checkBoilTime() {
   var doneAlert = false;
@@ -887,12 +944,14 @@ function checkBoilTime() {
 // on the result, set the color of this field.
 
 function checkHoldTemp(forcedDecayType) {
-  var idx = 0;
   var checked = ibu.holdTempCheckbox.value;
+  var idx = 0;
 
-  if (ibu.holdTemp.value > 100.0) {
-    window.alert("maximum temperature of hop stand temperature is boiling.");
-    ibu.holdTemp.value = 100.0;
+  console.log("CHECKING HOLD TEMP " + ibu.holdTemp.value + ", " + ibu.boilTemp.value);
+  if (ibu.holdTemp.value > ibu.boilTemp.value) {
+    window.alert("maximum temperature of hop stand is boiling.");
+    ibu.holdTemp.value = ibu.boilTemp.value;
+    ibu.holdTemp.userSet = 1;
     common.updateHTML(ibu.holdTemp);
     common.setSavedValue(ibu.holdTemp, 1);
     ibu.holdTemp.updateFunction();
@@ -919,87 +978,6 @@ this.checkHoldTempCheckbox = function(forcedDecayType) {
   checkHoldTemp(forcedDecayType);
   return;
 }
-
-//==============================================================================
-// FUNCTIONS TO SET TEMPERATURE DECAY TYPE AND FUNCTION
-
-function construct_tempParam(variable, fieldName, value, valueName,
-                             fnName) {
-  if (!document.getElementById(fieldName)) {
-    return;
-    }
-  // temperature decay function: input field description
-  var formStrP1 = "<span id=\"";
-  var formStrP2 = "\"> <input type=\"text\" STYLE=\"text-align:right\" size=5 value=\"";
-  var formStrP3 = "\" autocomplete=\"off\" id=\"";
-  var formStrP4 = "\" onchange=\"";
-  var formStrP5 = "\"></span>";
-
-  var htmlString = formStrP1+fieldName+formStrP2+value+
-                     formStrP3+valueName+formStrP4+fnName+formStrP5;
-  document.getElementById(fieldName).innerHTML = htmlString;
-
-  if (("userSet" in variable) && ("defaultColor" in variable) &&
-      !variable.userSet)
-    document.getElementById(valueName).style.color = variable.defaultColor;
-  else
-    document.getElementById(valueName).style.color = "black";
-}
-
-//------------------------------------------------------------------------------
-// set type of temperature decay function (linear or exponential)
-// Construct a "dummy" innerHTML for tempDecayFormula that at least contains the
-// spans that we want to construct, with some bogus values.
-// Then, replace the bogus span contents for each variable with real information
-
-function setTempDecayType() {
-  var isExp = false;
-
-  if (ibu.tempDecayType.value == "tempDecayExponential") {
-    isExp = true;
-    }
-
-  if (isExp) {
-    console.log(" ----- SETTING TEMP DECAY TO EXPONENTIAL -----");
-    if (document.getElementById("tempDecayFormula")) {
-      document.getElementById('tempDecayFormula').innerHTML =
-        "<span id=\"tempExpParamA_field\">xxx</span>"+
-        "  &times; exp(-1 &times; <span id=\"tempExpParamB_field\">"+
-        "xxx</span> &times; time) + <span id=\"tempExpParamC_field\">xxx</span>";
-    }
-    common.set(ibu.tempExpParamA, 0);
-    common.set(ibu.tempExpParamB, 0);
-    common.set(ibu.tempExpParamC, 0);
-    construct_tempParam(ibu.tempExpParamA, "tempExpParamA_field",
-      ibu.tempExpParamA.display, "ibu.tempExpParamA",
-      "common.set(ibu.tempExpParamA, 1)");
-    construct_tempParam(ibu.tempExpParamB, "tempExpParamB_field",
-      ibu.tempExpParamB.display, "ibu.tempExpParamB",
-      "common.set(ibu.tempExpParamB, 1)");
-    construct_tempParam(ibu.tempExpParamC, "tempExpParamC_field",
-      ibu.tempExpParamC.display, "ibu.tempExpParamC",
-      "common.set(ibu.tempExpParamC, 1)");
-  } else {
-    console.log(" ----- SETTING TEMP DECAY TO LINEAR -----");
-    if (document.getElementById("tempDecayFormula")) {
-      document.getElementById('tempDecayFormula').innerHTML =
-        "<span id=\"tempLinParamA_field\">xxx</span> &times; time + "+
-        "<span id=\"tempLinParamB_field\">xxx</span>";
-    }
-    common.set(ibu.tempLinParamA, 0);
-    common.set(ibu.tempLinParamB, 0);
-    console.log("tempLinParamA.value = " + ibu.tempLinParamA.value);
-    construct_tempParam(ibu.tempLinParamA, "tempLinParamA_field",
-      ibu.tempLinParamA.display, "ibu.tempLinParamA",
-      "common.set(ibu.tempLinParamA, 1)");
-    construct_tempParam(ibu.tempLinParamB, "tempLinParamB_field",
-      ibu.tempLinParamB.display, "ibu.tempLinParamB",
-      "common.set(ibu.tempLinParamB, 1)");
-  }
-
-  return true;
-}
-
 
 //------------------------------------------------------------------------------
 // check if the solubility-limit checkbox is checked; change the color
@@ -1071,8 +1049,95 @@ function checkpH() {
   return;
 }
 
+//==============================================================================
+// FUNCTIONS TO SET TEMPERATURE DECAY TYPE AND FUNCTION
+
 //------------------------------------------------------------------------------
-// check if wort pH is pre-boil or post-boil.
+// construct HTML for temperature decay input field
+
+function construct_tempParam(variable, fieldName, value, valueName,
+                             fnName) {
+  if (!document.getElementById(fieldName)) {
+    return;
+    }
+  // temperature decay function: input field description
+  var formStrP1 = "<span id=\"";
+  var formStrP2 = "\"> <input type=\"text\" STYLE=\"text-align:right\" size=5 value=\"";
+  var formStrP3 = "\" autocomplete=\"off\" id=\"";
+  var formStrP4 = "\" onchange=\"";
+  var formStrP5 = "\"></span>";
+
+  var htmlString = formStrP1+fieldName+formStrP2+value+
+                     formStrP3+valueName+formStrP4+fnName+formStrP5;
+  document.getElementById(fieldName).innerHTML = htmlString;
+
+  if (("userSet" in variable) && ("defaultColor" in variable) &&
+      !variable.userSet)
+    document.getElementById(valueName).style.color = variable.defaultColor;
+  else
+    document.getElementById(valueName).style.color = "black";
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// set type of temperature decay function (linear or exponential)
+// Construct a "dummy" innerHTML for tempDecayFormula that at least contains the
+// spans that we want to construct, with some bogus values.
+// Then, replace the bogus span contents for each variable with real information
+
+function setTempDecayType() {
+  var isExp = false;
+
+  if (ibu.tempDecayType.value == "tempDecayExponential") {
+    isExp = true;
+    }
+
+  if (isExp) {
+    console.log(" ----- SETTING TEMP DECAY TO EXPONENTIAL -----");
+    if (document.getElementById("tempDecayFormula")) {
+      document.getElementById('tempDecayFormula').innerHTML =
+       "<span id=\"tempExpParamA_field\">xxx</span>"+
+       "  &times; exp(-1 &times; <span id=\"tempExpParamB_field\">"+
+       "xxx</span> &times; time) + <span id=\"tempExpParamC_field\">xxx</span>";
+    }
+    common.set(ibu.tempExpParamA, 0);
+    common.set(ibu.tempExpParamB, 0);
+    common.set(ibu.tempExpParamC, 0);
+    construct_tempParam(ibu.tempExpParamA, "tempExpParamA_field",
+      ibu.tempExpParamA.display, "ibu.tempExpParamA",
+      "common.set(ibu.tempExpParamA, 1)");
+    construct_tempParam(ibu.tempExpParamB, "tempExpParamB_field",
+      ibu.tempExpParamB.display, "ibu.tempExpParamB",
+      "common.set(ibu.tempExpParamB, 1)");
+    construct_tempParam(ibu.tempExpParamC, "tempExpParamC_field",
+      ibu.tempExpParamC.display, "ibu.tempExpParamC",
+      "common.set(ibu.tempExpParamC, 1)");
+  } else {
+    console.log(" ----- SETTING TEMP DECAY TO LINEAR -----");
+    if (document.getElementById("tempDecayFormula")) {
+      document.getElementById('tempDecayFormula').innerHTML =
+        "<span id=\"tempLinParamA_field\">xxx</span> &times; time + "+
+        "<span id=\"tempLinParamB_field\">xxx</span>";
+    }
+    common.set(ibu.tempLinParamA, 0);
+    common.set(ibu.tempLinParamB, 0);
+    construct_tempParam(ibu.tempLinParamA, "tempLinParamA_field",
+      ibu.tempLinParamA.display, "ibu.tempLinParamA",
+      "common.set(ibu.tempLinParamA, 1)");
+    construct_tempParam(ibu.tempLinParamB, "tempLinParamB_field",
+      ibu.tempLinParamB.display, "ibu.tempLinParamB",
+      "common.set(ibu.tempLinParamB, 1)");
+  }
+
+  return true;
+}
+
+//==============================================================================
+// FUNCTIONS TO SET and GET VARIOUS VALUES
+
+//------------------------------------------------------------------------------
+// set wort pH to be pre-boil or post-boil
 
 function setPreOrPostBoilpH() {
   var idx = 0;
@@ -1122,7 +1187,7 @@ this.getWortClarityValue = function(description) {
   else if (!isNaN(parseFloat(description)))
     value = parseFloat(description);
   else {
-    console.log("ERROR: can't find suitable description for wort clarity: " + 
+    console.log("ERROR: can't find suitable description for wort clarity: " +
                  description);
   }
   return value;
@@ -1153,14 +1218,56 @@ this.getKrausenValue = function(description) {
   else if (!isNaN(parseFloat(description)))
     value = parseFloat(description);
   else {
-    console.log("ERROR: can't find suitable description for krausen loss: " + 
+    console.log("ERROR: can't find suitable description for krausen loss: " +
                  description);
   }
   return value;
 }
 
+//------------------------------------------------------------------------------
+// get post-boil volume
+
+function get_postBoilVolume() {
+  var boilTime = ibu.boilTime.value;
+  var evapRate = ibu.evaporationRate.value;
+  var postBoilVolume = 0.0;
+  var preBoilVol = false;
+  var wortVolume = ibu.wortVolume.value;
+
+  if (ibu.preOrPostBoilVol.value == "preBoilVol") {
+    preBoilVol = true;
+  }
+  // if volume is not pre-boil, it is post-boil, which is what we want
+  if (!preBoilVol) {
+    return wortVolume;
+  }
+  // otherwise, it is pre-boil, so we convert from pre- to post-boil volume
+  // NOTE: this does not take into account evaporation that happens while
+  //       the wort is heated but not yet boiling.  This could be fixed,
+  //       but it would mean yet another parameter.  For now, keep it simple.
+  postBoilVolume = wortVolume - (evapRate * boilTime/60.0);
+
+  // make sure volume is never negative
+  if (postBoilVolume < 0.0) {
+    postBoilVolume = 0.0;
+  }
+
+  return postBoilVolume;
+}
 
 //------------------------------------------------------------------------------
+// the public version of the private function... we need both forms because
+// we check it both internally and externally.
+
+this.getPostBoilVolume = function() {
+  var postBoilVolume;
+  postBoilVolume = get_postBoilVolume();
+  return postBoilVolume;
+}
+
+
+//==============================================================================
+// FUNCTIONS RELATED TO HOPS
 
 //------------------------------------------------------------------------------
 // functions for handling selection of hop variety
@@ -1171,10 +1278,10 @@ this.getKrausenValue = function(description) {
 // and pellet factor.
 
 function checkHopFormDefaults() {
+  var arrayIdx = 0;
   var idx = 0;
   var numAdd = ibu.numAdditions.value;
   var userSet = 0;
-  var arrayIdx = 0;
 
   // console.log("CHECKING HOP FORM DEFAULTS FOR EACH ADDITION");
   for (idx = 1; idx <= numAdd; idx++) {
@@ -1185,28 +1292,28 @@ function checkHopFormDefaults() {
     if (!userSet) {
       ibu.add[arrayIdx].hopForm.defaultValue = ibu.defaultHopForm.value;
       common.set(ibu.add[arrayIdx].hopForm,0);
-      }
+    }
     // check freshness factor
     userSet = ibu.add[arrayIdx].freshnessFactor.userSet;
     if (!userSet) {
       ibu.add[arrayIdx].freshnessFactor.defaultValue =
           get_freshnessFactor_default(arrayIdx);
       common.set(ibu.add[arrayIdx].freshnessFactor,0);
-      }
+    }
     // check pellet factor
     userSet = ibu.add[arrayIdx].pelletFactor.userSet;
     if (!userSet) {
       ibu.add[arrayIdx].pelletFactor.defaultValue =
           get_pelletFactor_default(arrayIdx);
       common.set(ibu.add[arrayIdx].pelletFactor,0);
-      }
     }
+  }
 
   return;
 }
 
 //------------------------------------------------------------------------------
-// if the user selects a hop form, and if that form is "(default)", 
+// if the user selects a hop form, and if that form is "(default)",
 // immediately change the value to the current default.
 // Also, update freshness factor and pellet factor if not already set by user.
 
@@ -1242,11 +1349,12 @@ function checkHopFormDefaults2(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get default alpha-acid rating (either general or variety-specific)
 
 function get_AA_default(arrayIdx) {
+  var defaultValue = 8.75;  // average value over many varieties
   var value = 0.0;
   var variety = "";
-  var defaultValue = 8.75;  // average value over many varieties
 
   variety = ibu.add[arrayIdx].variety.value;
   value = defaultValue;
@@ -1261,11 +1369,12 @@ function get_AA_default(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get default beta-acid rating (either general or variety-specific)
 
 function get_BA_default(arrayIdx) {
+  var defaultValue = 5.0;  // approximate value over many varieties
   var value = 0.0;
   var variety = "";
-  var defaultValue = 5.0;  // approximate value over many varieties
 
   variety = ibu.add[arrayIdx].variety.value;
   value = defaultValue;
@@ -1279,11 +1388,12 @@ function get_BA_default(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get default percent loss over 6 months (either general or variety-specific)
 
 function get_percentLoss_default(arrayIdx) {
+  var defaultValue = 32.0;  // average value over many varieties
   var value = 0.0;
   var variety = "";
-  var defaultValue = 32.0;  // average value over many varieties
 
   variety = ibu.add[arrayIdx].variety.value;
   value = defaultValue;
@@ -1297,11 +1407,15 @@ function get_percentLoss_default(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get default freshness factor
+// It is assumed that cones are relatively fresh and stored well, but
+//    not in nitrogen-flushed packaging.
+// It is assumed that pellets are stored in nitrogen-flushed packaging.
 
 function get_freshnessFactor_default(arrayIdx) {
-  var value = 0.0;
-  var form = "";
   var defaultValue = 0.95;  // average of cones and pellets
+  var form = "";
+  var value = 0.0;
 
   form = ibu.add[arrayIdx].hopForm.value;
   value = defaultValue;
@@ -1316,11 +1430,12 @@ function get_freshnessFactor_default(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get the default scaling for pellets
 
 function get_pelletFactor_default(arrayIdx) {
-  var value = 0.0;
-  var form = "";
   var defaultValue = 1.0;  // do nothing
+  var form = "";
+  var value = 0.0;
 
   form = ibu.add[arrayIdx].hopForm.value;
   value = defaultValue;
@@ -1355,42 +1470,41 @@ function setHopVariety(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// build HTML table for hop varieties
 
 function buildHops(tableID, addIdx, selection) {
-  var hopVarieties = Object.keys(hops);
-  var countList = [];
-  var startIndexList = [];
-  var stopIndexList = [];
-  var firstLetter = "";
-  var hIdx = 0;
-  var lIdx = 0;
-  var varietyMenu1 = "";
-  var submenu = "";
-  var limit = 15;
-  var firstLetterInfo = [];
   var count = 0;
-  var startIdx = 0;
+  var countAA = 0.0;
+  var countBA = 0.0;
+  var countLoss = 0.0;
   var endIdx = 0;
-  var secondLetter = "";
+  var firstLetter = "";
+  var firstLetterInfo = [];
+  var hIdx = 0;
+  var hopVarieties = Object.keys(hops);
+  var lIdx = 0;
+  var limit = 15;
+  var letter = "";
   var midIdx = 0;
-  var sIdx = 0;
-  var origStartIdx = 0;
+  var menu = "";
   var origEndIdx = 0;
+  var origStartIdx = 0;
+  var secondLetter = "";
+  var sIdx = 0;
   var splitCount = 0;
   var splitIdx = 0;
-  var menu = "";
-  var letter = "";
+  var startIdx = 0;
+  var submenu = "";
   var sumAA = 0.0;
-  var countAA = 0.0;
   var sumBA = 0.0;
-  var countBA = 0.0;
   var sumLoss = 0.0;
-  var countLoss = 0.0;
+  var verbose = 0;
 
   // if list of hop variety letters hasn't been constructed yet, do so now
   if (ibu.letterList.length == 0) {
     // sort the hop varieties using case-insensitive sorting
-    hopVarieties.sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
+    hopVarieties.sort((a,b) =>
+        a.localeCompare(b, undefined, {sensitivity:'base'}));
     // get all of the first letters from all varieties, creating initial list
     sumAA = 0.0;
     sumBA = 0.0;
@@ -1400,15 +1514,15 @@ function buildHops(tableID, addIdx, selection) {
       if (hops[hopVarieties[hIdx]].AA) {
         sumAA += hops[hopVarieties[hIdx]].AA;
         countAA += 1.0;
-        }
+      }
       if (hops[hopVarieties[hIdx]].BA) {
         sumBA += hops[hopVarieties[hIdx]].BA;
         countBA += 1.0;
-        }
+      }
       if (hops[hopVarieties[hIdx]].loss) {
         sumLoss += hops[hopVarieties[hIdx]].loss;
         countLoss += 1.0;
-        }
+      }
       // search for first letter in current variety
       for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
         if (firstLetter == ibu.letterList[lIdx].letter) {
@@ -1417,7 +1531,7 @@ function buildHops(tableID, addIdx, selection) {
       }
       if (lIdx >= ibu.letterList.length) {
         // if letter doesn't exist yet, create a new entry in letterList
-        firstLetterInfo = 
+        firstLetterInfo =
             { letter:firstLetter, count:1, startIdx:hIdx, endIdx:hIdx };
         ibu.letterList.push(firstLetterInfo);
       } else {
@@ -1426,21 +1540,23 @@ function buildHops(tableID, addIdx, selection) {
         count += 1;
         endIdx = ibu.letterList[lIdx].endIdx;
         endIdx += 1;
-        firstLetterInfo = { letter:firstLetter, count:count, 
+        firstLetterInfo = { letter:firstLetter, count:count,
                             startIdx:ibu.letterList[lIdx].startIdx, endIdx };
         ibu.letterList[lIdx] = firstLetterInfo;
       }
     }
-    console.log("Have data on " + countAA + " varieties of hops");
-    console.log("Average AA  = " + (sumAA / countAA).toFixed(2) + "%");
-    console.log("Average BA  = " + (sumBA / countBA).toFixed(2) + "%");
-    console.log("Average Loss = " + (sumLoss / countLoss).toFixed(2) + "%");
-    console.log("ORIGINAL LETTER LIST: ");
-    for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
-      console.log("  " + ibu.letterList[lIdx].letter + 
-                  " count=" + ibu.letterList[lIdx].count + 
-                  " start=" + ibu.letterList[lIdx].startIdx + 
-                  " end=" + ibu.letterList[lIdx].endIdx);
+    if (verbose) {
+      console.log("Have data on " + countAA + " varieties of hops");
+      console.log("Average AA  = " + (sumAA / countAA).toFixed(2) + "%");
+      console.log("Average BA  = " + (sumBA / countBA).toFixed(2) + "%");
+      console.log("Average Loss = " + (sumLoss / countLoss).toFixed(2) + "%");
+      console.log("ORIGINAL LETTER LIST: ");
+      for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+        console.log("  " + ibu.letterList[lIdx].letter +
+                    " count=" + ibu.letterList[lIdx].count +
+                    " start=" + ibu.letterList[lIdx].startIdx +
+                    " end=" + ibu.letterList[lIdx].endIdx);
+      }
     }
 
     // revise the list, breaking up a letter with too many varieties
@@ -1471,24 +1587,26 @@ function buildHops(tableID, addIdx, selection) {
             continue;
           }
           // update letterList with small grouping
-          firstLetterInfo = 
-              { letter:firstLetter+secondLetter, 
+          firstLetterInfo =
+              { letter:firstLetter+secondLetter,
                 count:count, startIdx:startIdx, endIdx:sIdx-1 };
           ibu.letterList.splice(lIdx+splitIdx, 0, firstLetterInfo);
           startIdx = sIdx;
         }
       }
     }
-    console.log("REVISED LETTER LIST: ");
-    for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
-      console.log("  " + ibu.letterList[lIdx].letter + 
-                  " count=" + ibu.letterList[lIdx].count + 
-                  " start=" + ibu.letterList[lIdx].startIdx + 
-                  " end=" + ibu.letterList[lIdx].endIdx);
+    if (verbose) {
+      console.log("REVISED LETTER LIST: ");
+      for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
+        console.log("  " + ibu.letterList[lIdx].letter +
+                    " count=" + ibu.letterList[lIdx].count +
+                    " start=" + ibu.letterList[lIdx].startIdx +
+                    " end=" + ibu.letterList[lIdx].endIdx);
+      }
     }
   }
 
-  // construct dropdown menu of first letters 
+  // construct dropdown menu of first letters
 
   // specify highest level dropdown menu button
   menu = "<div id='"+tableID+"' class='dropdown'> <button id='ibu.add"+addIdx+".variety' onclick='ibu.varietySelect1(\""+addIdx+"\")' class='dropbtn' value='"+selection+"'>"+selection+"</button><div id='varietyDropdown"+addIdx+"' class='dropdown-content'>";
@@ -1497,7 +1615,7 @@ function buildHops(tableID, addIdx, selection) {
   submenu = "<div id=unspecified class='dropdown'><button onclick='ibu.varietySelect3(\""+addIdx+"\",\"(unspecified)\")' class='dropbtn'>(unspecified)</button></div><br>";
   menu += submenu;
 
-  // for each first letter in varities, construct dropdown menu 
+  // for each first letter in varities, construct dropdown menu
   for (lIdx = 0; lIdx < ibu.letterList.length; lIdx++) {
     letter = ibu.letterList[lIdx].letter;
     submenu = "<div id=letter"+letter+" class='dropdown'><button onclick='ibu.varietySelect2(\""+addIdx+"\",\""+letter+"\")' class='dropbtn'>"+letter+"...</button><div id='varietyDropdown"+addIdx+letter+"'></div></div>";
@@ -1508,11 +1626,12 @@ function buildHops(tableID, addIdx, selection) {
 }
 
 //------------------------------------------------------------------------------
+// function to select hop variety at first level
 
 this.varietySelect1 = function(addIdx) {
-  var selection = "";
   var dropdownMenu = "varietyDropdown" + addIdx;
   var origClassList = document.getElementById(dropdownMenu).classList;
+  var selection = "";
 
   // user clicked on top-level dropdown menu button, so show the menu
   console.log("clicked on first-level dropdown for addition " + addIdx);
@@ -1520,9 +1639,9 @@ this.varietySelect1 = function(addIdx) {
   // get the current selection associated with the hop addition
   selection = document.getElementById("ibu.add"+addIdx+".variety").innerHTML;
 
-  // rebuild the first-level menu in case the user selected a letter 
+  // rebuild the first-level menu in case the user selected a letter
   // and then changed their mind and selected the original item.
-  document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML = 
+  document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML =
         buildHops("ibu.add"+addIdx+".varietyMenu", addIdx, selection);
 
   // note: simply toggling 'show' doesn't work; need to know if the
@@ -1541,21 +1660,19 @@ this.varietySelect1 = function(addIdx) {
 }
 
 //------------------------------------------------------------------------------
+// function to select hop variety at second level
 
 this.varietySelect2 = function(addIdx, letter) {
-  var varietyId1 = "";  // ID of first-level dropdown for variety
-  var varietyId2 = "";  // ID of second-level dropdown for variety (letter)
-  var allDropdowns = null;
-  var openDropdown = null;
-  var id = null;
-  var submenu = "";
-  var hopVarieties = Object.keys(hops);
+  var endIdx = 0;
   var hIdx = 0;
+  var hopVarieties = Object.keys(hops);
   var lIdx = 0;
   var startIdx = 0;
-  var endIdx = 0;
+  var submenu = "";
+  var varietyId1 = "";  // ID of first-level dropdown for variety
+  var varietyId2 = "";  // ID of second-level dropdown for variety (letter)
 
-  // user clicked on second-level dropdown menu button, so show the 
+  // user clicked on second-level dropdown menu button, so show the
   // specific varieties associated with this letter
   console.log("clicked on second-level dropdown");
 
@@ -1586,23 +1703,22 @@ this.varietySelect2 = function(addIdx, letter) {
 }
 
 //------------------------------------------------------------------------------
+// function to select hop variety at third level
 
 this.varietySelect3 = function(addIdx, variety) {
-  // user clicked on third-level (final) dropdown menu button, so 
+  // user clicked on third-level (final) dropdown menu button, so
   // set the hop variety
-  var tableID = "";
-  var submenu = "";
-  var varietyId1 = "";
   var arrayIdx = 0;
+  var tableID = "";
 
-  console.log("clicked on third-level dropdown, addIdx = " + 
+  console.log("clicked on third-level dropdown, addIdx = " +
                 addIdx + " variety : " + variety);
   tableID = "ibu.add"+addIdx+".variety";
   // document.getElementById(tableID).innerHTML = variety;
 
   // rebuild pulldown menu to choose any letter (and set the variety in ibu)
   tableID = "ibu.add"+addIdx+".varietyMenu";
-  document.getElementById(tableID).innerHTML = 
+  document.getElementById(tableID).innerHTML =
       buildHops(tableID, addIdx, variety);
 
   arrayIdx = Number(addIdx-1);
@@ -1616,13 +1732,14 @@ this.varietySelect3 = function(addIdx, variety) {
 }
 
 //------------------------------------------------------------------------------
+// hide hop-selection dropdown buttons if click on something else
 
 window.onclick = function(event) {
+  var addIdx = "";
+  var allDropdowns = null;
   var idx = 0;
   var openDropdown = null;
-  var allDropdowns = null;
   var selection = "";
-  var addIdx = "";
 
   // if click not on dropdown menu button, hide all dropdown menu(s)
   if (!event.target.matches('.dropbtn')) {
@@ -1635,10 +1752,10 @@ window.onclick = function(event) {
         // get the addition index of the dropdown menu
         addIdx = openDropdown.id.match('(?:Dropdown)([0-9]+)')[1];
         // get the current selection associated with the hop addition
-        selection = document.getElementById("ibu.add"+addIdx+"variety").innerHTML;
-        // rebuild the top-level hop-selection menu and set the selection 
+        selection = document.getElementById("ibu.add"+addIdx+".variety").innerHTML;
+        // rebuild the top-level hop-selection menu and set the selection
         // to the current selection
-        document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML = 
+        document.getElementById("ibu.add"+addIdx+".varietyMenu").innerHTML =
             buildHops("ibu.add"+addIdx+".varietyMenu", addIdx, selection);
         // set the current selection to black (otherwise it remains gray)
         document.getElementById("ibu.add"+addIdx+".variety").style.color = "black";
@@ -1657,19 +1774,18 @@ window.onclick = function(event) {
 
 function hopAdditionsSet(updateFunction) {
   var arrayIdx = 0;
-  var boilTimeDefault = 0.0;
   var constructInputTable = false;
   var constructOutputTable = false;
+  var currentVariety = "";
   var idx = 1;
   var numAdd = ibu.numAdditions.value;
   var table = "";
   var tableID = "";
   var units = 0;
   var varietyDefault = "(unspecified)";
+  var varietyMenu = "";
   var weightDefault = 0.0;
   var weightUnits = 0;
-  var varietyMenu = "";
-  var currentVariety = "";
 
   console.log(" ------ SETTING HOPS ADDITIONS ------ ");
   if (ibu.hopTableSize == null) {
@@ -1982,7 +2098,6 @@ function hopAdditionsSet(updateFunction) {
 
   // get correct values for table, either defaults or set values
   for (idx = 1; idx <= numAdd; idx++) {
-    var AA_percent_boil = 0.0;
     arrayIdx = Number(idx-1);
     common.set(ibu.add[arrayIdx].variety,0);
     common.set(ibu.add[arrayIdx].hopForm,0);
@@ -1995,22 +2110,11 @@ function hopAdditionsSet(updateFunction) {
     common.set(ibu.add[arrayIdx].boilTime,0);
   }
 
-  // initialize outputs to zero
+  // initialize some outputs to zero
+  // each method (mIBU, SMPH) has additional variables
   for (idx = 1; idx <= numAdd; idx++) {
-    ibu.add[arrayIdx].AAinit = 0.0;
-    ibu.add[arrayIdx].AAdis = 0.0;
-    ibu.add[arrayIdx].AAcurr = 0.0;
-    ibu.add[arrayIdx].AA_init_concent = 0.0;
-    ibu.add[arrayIdx].AA_dis_mg = 0.0;
     ibu.add[arrayIdx].IBU = 0.0;
     ibu.add[arrayIdx].U = 0.0;
-    ibu.add[arrayIdx].IAA_dis_mg = 0.0;
-    ibu.add[arrayIdx].IAA_xfer_mg = 0.0;
-    ibu.add[arrayIdx].IAA_concent_wort = 0.0;
-    ibu.add[arrayIdx].oAA_concent_boil = 0.0;
-    ibu.add[arrayIdx].oBA_concent_boil = 0.0;
-    ibu.add[arrayIdx].PP_beer = 0.0;
-    ibu.add[arrayIdx].tempK = 0.0;
   }
   ibu.IBU = 0.0;
   ibu.U = 0.0;
@@ -2062,38 +2166,6 @@ function hopAdditionsSet(updateFunction) {
 
 //==============================================================================
 // FUNCTIONS FOR COMPUTING DEFAULT VALUES
-
-function get_postBoilVolume() {
-  var boilTime = ibu.boilTime.value;
-  var evapRate = ibu.evaporationRate.value;
-  var postBoilVolume = 0.0;
-  var preBoilVol = false;
-  var wortVolume = ibu.wortVolume.value;
-
-  if (ibu.preOrPostBoilVol.value == "preBoilVol") {
-    preBoilVol = true;
-  }
-  // if volume is not pre-boil, it is post-boil, which is what we want
-  if (!preBoilVol) {
-    return wortVolume;
-  }
-  // otherwise, it is pre-boil, so we convert from pre- to post-boil volume
-  // NOTE: this does not take into account evaporation that happens while
-  //       the wort is heated but not yet boiling.  This could be fixed,
-  //       but it would mean yet another parameter.  For now, keep it simple.
-  postBoilVolume = wortVolume - (evapRate * boilTime/60.0);
-  return postBoilVolume;
-}
-
-//------------------------------------------------------------------------------
-// the public version of the private function... we need both forms because
-// we check it both internally and externally.
-
-this.getPostBoilVolume = function() {
-  var postBoilVolume;
-  postBoilVolume = get_postBoilVolume();
-  return postBoilVolume;
-}
 
 //------------------------------------------------------------------------------
 // get default for immersion chiller
@@ -2212,5 +2284,4 @@ function get_tempLinParamA_default() {
 
 }
 ibu._construct();
-
 
