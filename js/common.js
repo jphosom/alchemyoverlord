@@ -325,8 +325,12 @@ this.set = function(variable, haveUserInput) {
   }
 
   // if we have user input, then update now
-  if (haveUserInput) {
-    variable.updateFunction();
+  if (haveUserInput && variable.updateFunction != undefined) {
+    if (variable.updateFunctionArgs == undefined) {
+      variable.updateFunction();
+    } else {
+      variable.updateFunction(variable.updateFunctionArgs);
+    }
   }
 }
 

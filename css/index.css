@@ -218,3 +218,36 @@ div[id^="letter"] {
   width:11.5ex;
   background:lightgray;
 }
+
+
+/*----------------------------------------------------------------------------*/
+/* for perceptual-comparison page, define tables */
+
+.diffTestTableName {
+  table-layout: fixed;
+  // border: 1px solid red;
+}
+
+.diffTestTableLeftItem {
+  // border: 1px solid blue;
+  padding: 0px 1em 0px 0em;
+  width: 20%
+}
+
+.diffTestTableCenterItem {
+  // border: 1px solid grey;
+}
+.diffTestTableRightItem {
+  // border: 1px solid blue;
+  padding: 0px 0em 0px 1em;
+  width: 20%
+}
+
+#diffTest.sim2AFC {
+	width:5em;
+  background:red;
+	min-width:5em;
+	max-width:5em;
+}
+
+
