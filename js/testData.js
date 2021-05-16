@@ -186,6 +186,56 @@ var testData = {
     },
 
 
+    "IPA, Jan. 2021": {
+        "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 38.8 ],
+
+        "boilTime":              68,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            22.71,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.0645,
+
+        "pH":                    5.29,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+
+        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        "add1":        [  5.0,  2.4, "pellets", 1.00,   34.0,     85.05,     60 ],  // EKG
+        "add2":        [  3.0,  2.5, "pellets", 1.00,   25.0,     56.70,     45 ],  // fuggle
+        "add3":        [  5.0,  2.4, "pellets", 1.00,   35.0,     28.35,     10 ],  // EKG
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         37.148,
+        "evaporationRate":       3.80,
+        "immersionDecayFactor":  0.4283,
+        "forcedDecayType":       "forcedDecayImmersion",
+        "wortClarity":           1.00,
+        "finingsType":           "gelatin",
+        "finingsAmount":         5.0,
+        "beerAge_days":          18,
+
+        "skipSearch":   true,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  5.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.20,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  3.00,
+                 "method":   "relative",
+                 "low":      0.85,
+                 "high":     1.15,
+                 "inc":      0.20,
+             },
+       ],
+    },
+
+
     "Taste Experiment #1": {
         "conditions":            [ "A",   "B",   "C",   "D"   ],
         "IBU_list":              [ 20.2,  21.4,  21.2,  18.7  ],

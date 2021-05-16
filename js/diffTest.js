@@ -132,7 +132,7 @@ this.initialize_diffTest = function() {
   this.simTestOneTrial_delay.max = 60.0;
   this.simTestOneTrial_delay.description ="simulation delay for one-trial test";
   this.simTestOneTrial_delay.defaultValue = 1.0;
-  this.simTestOneTrial_delay.updateFunction = 
+  this.simTestOneTrial_delay.updateFunction =
        diffTest.initPlotPerceptualTestOneTrial;
   this.simTestOneTrial_delay.updateFunctionArgs = [true, false];
 
@@ -147,7 +147,7 @@ this.initialize_diffTest = function() {
   this.simTestMultiTrial_T.max = 10000;
   this.simTestMultiTrial_T.description = "number of test cases in one trial";
   this.simTestMultiTrial_T.defaultValue = 200;
-  this.simTestMultiTrial_T.updateFunction = 
+  this.simTestMultiTrial_T.updateFunction =
        diffTest.initPlotPerceptualTestMultiTrial;
   this.simTestMultiTrial_T.updateFunctionArgs = [true, false];
 
@@ -162,7 +162,7 @@ this.initialize_diffTest = function() {
   this.simTestMultiTrial_delay.description =
        "simulation delay for multiple-trial test";
   this.simTestMultiTrial_delay.defaultValue = 0.0;
-  this.simTestMultiTrial_delay.updateFunction = 
+  this.simTestMultiTrial_delay.updateFunction =
        diffTest.initPlotPerceptualTestMultiTrial;
   this.simTestMultiTrial_delay.updateFunctionArgs = [true, false];
 
@@ -247,7 +247,7 @@ this.initialize_diffTest = function() {
   this.largeDPrime_numCorr.max = 10000;
   this.largeDPrime_numCorr.description = "number of correct responses from test"
   this.largeDPrime_numCorr.defaultValue = 0;
-  this.largeDPrime_numCorr.updateFunction = 
+  this.largeDPrime_numCorr.updateFunction =
        diffTest.initPlotPerceptualTestLargeDPrime;
   this.largeDPrime_numCorr.updateFunctionArgs = [true, false];
 
@@ -262,7 +262,7 @@ this.initialize_diffTest = function() {
   this.estDPrime_numCorr.max = 10000;
   this.estDPrime_numCorr.description = "number of correct responses from test"
   this.estDPrime_numCorr.defaultValue = 0;
-  this.estDPrime_numCorr.updateFunction = 
+  this.estDPrime_numCorr.updateFunction =
        diffTest.initPlotPerceptualTestEstDPrime;
   this.estDPrime_numCorr.updateFunctionArgs = [true, false];
 
@@ -278,7 +278,7 @@ this.initialize_diffTest = function() {
   this.estDPrime_CI.max = 100;
   this.estDPrime_CI.description = "confidence interval (percent)"
   this.estDPrime_CI.defaultValue = 95;
-  this.estDPrime_CI.updateFunction = 
+  this.estDPrime_CI.updateFunction =
        diffTest.initPlotPerceptualTestEstDPrime;
   this.estDPrime_CI.updateFunctionArgs = [true, false];
 
@@ -465,7 +465,7 @@ function createBinomialPlot(canvas, sigma_H0, sigma_H1, N) {
   // create the plot
   plot = createPlotObject();
 
-  // set up and create the plot 
+  // set up and create the plot
   plot.xMin = -0.5;
   plot.xMax = N + 0.5;
   plot.yMin = 0.0;
@@ -493,7 +493,7 @@ function createBinomialPlot(canvas, sigma_H0, sigma_H1, N) {
   plot.yLabel = "prob. of X subjects having correct result";
   factor = 1.0;
   yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
-  while (yMajor == 0) { 
+  while (yMajor == 0) {
     factor *= 10.0;
     yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
   }
@@ -628,26 +628,26 @@ function findBestDPrime(correct, N, testType) {
   var pCorrLow = 0.0;
   var pCorrHigh = 0.0;
   // prob. associated with each d' are only accurate to a few places past dec.
-  var initProbTriangle = 
-                     [0.3333333333333333, 
-                      0.41840305544544515, 
-                      0.6052150813222491, 
-                      0.7818370915720877, 
-                      0.8980780975622561, 
-                      0.9591940339741549, 
-                      0.9861037607872926, 
-                      0.9961375383317548, 
-                      0.9993103695420879, 
+  var initProbTriangle =
+                     [0.3333333333333333,
+                      0.41840305544544515,
+                      0.6052150813222491,
+                      0.7818370915720877,
+                      0.8980780975622561,
+                      0.9591940339741549,
+                      0.9861037607872926,
+                      0.9961375383317548,
+                      0.9993103695420879,
                       1.0];
-  var initProb3AFC = [0.3333333333333333, 
+  var initProb3AFC = [0.3333333333333333,
                       0.6337526446868693,
-                      0.8658135355731752, 
-                      0.9688253542331329, 
-                      0.9955117867629218, 
-                      0.9996037546705552, 
-                      0.999978714674274, 
-                      0.999999310458364, 
-                      0.9999999866548419, 
+                      0.8658135355731752,
+                      0.9688253542331329,
+                      0.9955117867629218,
+                      0.9996037546705552,
+                      0.999978714674274,
+                      0.999999310458364,
+                      0.9999999866548419,
                       1.0];
 
   MLPCorr = correct / N;
@@ -706,7 +706,7 @@ function findBestDPrime(correct, N, testType) {
   if (lowDPrime < 0.0) lowDPrime = 0.0;
   // console.log("d'Low = " + lowDPrime + ", d'high = " + highDPrime);
   // interpolate between low and high points
-  bestDPrime = lowDPrime + (MLPCorr - pCorrLow) * 
+  bestDPrime = lowDPrime + (MLPCorr - pCorrLow) *
                (highDPrime - lowDPrime) / (pCorrHigh - pCorrLow);
 
   return bestDPrime;
@@ -716,7 +716,7 @@ function findBestDPrime(correct, N, testType) {
 
 //------------------------------------------------------------------------------
 // plotObjectiveStimuli()
-// plot one sample each of two objective stimuli.  
+// plot one sample each of two objective stimuli.
 // The X axis has been normalized to 'objective units', and so the stimuli are,
 // by our definition of objective units, always 1.0 units apart.
 // The Y axis is a count of the number of stimuli from each, i.e. always 1
@@ -851,7 +851,7 @@ function plotSigma(ctx, plot, name, mu, sigma, yMax) {
   plotTextLeftMiddle(ctx, plot, "\u03C3<sub>"+name+"</sub>", mu, yMax*0.9);
   return;
 }
-  
+
 //------------------------------------------------------------------------------
 
 function plotAlpha(ctx, plot, label, thresholdN_H0, yMax) {
@@ -864,7 +864,7 @@ function plotAlpha(ctx, plot, label, thresholdN_H0, yMax) {
   ctx.lineTo(mapX(plot, thresholdN_H0-0.5), mapY(plot, yMax*0.94));
   ctx.stroke();
   ctx.fillStyle = "darkorange";
-  plotTextMiddleTop(ctx, plot, "\u03B1<sub>"+label+"</sub>", 
+  plotTextMiddleTop(ctx, plot, "\u03B1<sub>"+label+"</sub>",
                     thresholdN_H0-0.5, yMax*0.96);
   ctx.fillStyle = plot.defaultColor;
   ctx.strokeStyle = plot.defaultColor;
@@ -940,7 +940,7 @@ function plotRegion(ctx, plot, range, label, yMax, thresholdN_H1 = -1) {
 
 //------------------------------------------------------------------------------
 // function to hack in the legend for the combination of H0 and H1
- 
+
 function plotLegendH0andH1(ctx, plot, name, xPos, yPos) {
   var fillColor = "";
   var graphicsWidthPx = 0;
@@ -950,7 +950,7 @@ function plotLegendH0andH1(ctx, plot, name, xPos, yPos) {
   var yPx = 0;
   var y1Px = 0;
   var y2Px = 0;
-   
+
   // plot legend for combined H0 and H1
   graphicsWidthPx = plot.fontHeightPx * 2;
   xPx = mapX(plot, xPos) + plot.paddingPx/2;
@@ -969,7 +969,7 @@ function plotLegendH0andH1(ctx, plot, name, xPos, yPos) {
 
 //------------------------------------------------------------------------------
 // function to plot a gray vertical bar at the number of correct responses
- 
+
 function plotCorrectBar(ctx, plot, correct) {
   var fillColor = "";
   var fillPattern = {};
@@ -994,7 +994,7 @@ function plotCorrectBar(ctx, plot, correct) {
 
 //------------------------------------------------------------------------------
 // function to plot a light-gray rectangle outlining the confidence interval
- 
+
 function plotCIBar(ctx, plot, low, high) {
   var fillColor = "";
   var fillPattern = {};
@@ -1021,7 +1021,7 @@ function plotCIBar(ctx, plot, low, high) {
 // plotSimulationResults()
 // plot results from a simulation as shapes on the graph
 
-function plotSimulationResults(ctx, plot, iteration, dataName, 
+function plotSimulationResults(ctx, plot, iteration, dataName,
                                xList, yList, shape, color) {
   var data = [];
   var idx = 0;
@@ -1068,7 +1068,7 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
       document.getElementById('startStop2AFC').innerHTML = "START";
       diffTest.sim2AFC.simIdx = 2*diffTest.sim2AFC_N.value;
     } else {
-      document.getElementById('startStop2AFC').innerHTML = 
+      document.getElementById('startStop2AFC').innerHTML =
                ((diffTest.sim2AFC.simIdx+1)/2).toFixed(0) + ": CONT.";
     }
     if (diffTest.runningPerceptualMeasurementID) {
@@ -1114,17 +1114,17 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
   document.getElementById('sigma').innerHTML = sigma.toFixed(2);
 
   theoreticalCorr = mathLibrary.probCorrect2AFC(d_prime);
-  document.getElementById('theoretical2AFCcorrect').innerHTML = 
+  document.getElementById('theoretical2AFCcorrect').innerHTML =
                (100.0 * theoreticalCorr).toFixed(1)+"%";
 
   probabilityOfDiscrimination = (theoreticalCorr - pGuess) / (1.0 - pGuess);
   if (d_prime <= 0.001) {
     probabilityOfDiscrimination = 0.0;
   }
-  document.getElementById('sim2AFC_pd').innerHTML = 
+  document.getElementById('sim2AFC_pd').innerHTML =
                (100.0 * probabilityOfDiscrimination).toFixed(1)+"%";
 
-  // set up and create the plot 
+  // set up and create the plot
   plot.xMin = -2.5 * sigma;
   plot.xMax =  2.5 * sigma + 1;
   plot.yMin =  0.0;
@@ -1145,7 +1145,7 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
   plot.yLabel = "relative probability of perceptual unit";
   factor = 1.0;
   yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
-  while (yMajor == 0) { 
+  while (yMajor == 0) {
     factor *= 10.0;
     yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
   }
@@ -1162,14 +1162,14 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
 
   // plot function for stimulus A
   mu = 0.0;
-  plotFunction(ctx, plot, "A", mathLibrary.normalDistribution, 
+  plotFunction(ctx, plot, "A", mathLibrary.normalDistribution,
                "blue", 2, mu, sigma);
-  
+
   // plot function for stimulus B
   mu = 1.0;
-  plotFunction(ctx, plot, "B", mathLibrary.normalDistribution, 
+  plotFunction(ctx, plot, "B", mathLibrary.normalDistribution,
                "green", 2, mu, sigma);
-  
+
   // create and position the plot legend
   plot.legend = [["A", "A"],
                  ["B", "B"]];
@@ -1179,7 +1179,7 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
     plot.legendPosition = [plot.xMin * 0.85, yMax * 0.96];
   }
   plot.legendBorderPx = 0;
- 
+
   // must initialize other plots before this one so that random
   // seed is correct
   if (initOnly && cascade) {
@@ -1203,7 +1203,7 @@ this.initPlotPerceptualMeasurement = function(argList = [false, false]) {
 
 //------------------------------------------------------------------------------
 // perceptualMeasurement2AFC_simulation()
-// internal function to compute and plot simulation of perceptual 
+// internal function to compute and plot simulation of perceptual
 // measurement using 2AFC
 //
 // The simulation is either in 'generate' mode (in which two data points
@@ -1227,7 +1227,7 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
     return;
   }
 
-  document.getElementById('startStop2AFC').innerHTML = 
+  document.getElementById('startStop2AFC').innerHTML =
         ((sIdx+1)/2).toFixed(0) + ": PAUSE";
 
   // if 'generate', then generateOrTest is 0;
@@ -1250,7 +1250,7 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
   // plot symbols for A and B on top of legend
   xPx = mapX(plot, plot.legendPosition[0]) + plot.paddingPx/2 -
              plot.paddingPx;
-  yPx = mapY(plot, plot.legendPosition[1]) + plot.paddingPx/2 + 
+  yPx = mapY(plot, plot.legendPosition[1]) + plot.paddingPx/2 +
              plot.fontHeightPx/2 + 4;
   plotSymbol(ctx, plot, "openSquare", xPx, yPx, 12, "blue", 3);
   yPx += plot.fontHeightPx + 2;
@@ -1263,14 +1263,14 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
       xA = mathLibrary.pickSampleFromNormalDistribution(0.0, sigma);
       diffTest.sim2AFC.xA = xA;
       if (delay >= 0) {
-        plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1], 
+        plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1],
                               "openSquare", "blue");
       }
       // pick point in B, store it in diffTest.sim2AFC.xB, and plot it
       xB = mathLibrary.pickSampleFromNormalDistribution(1.0, sigma);
       diffTest.sim2AFC.xB = xB;
       if (delay >= 0) {
-        plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1], 
+        plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1],
                               "openCircle", "green");
       }
     } else {
@@ -1282,16 +1282,16 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
       if (xB > xA) {
         diffTest.sim2AFC.corr += 1;
         if (delay >= 0) {
-          plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1], 
+          plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1],
                                 "filledSquare", "blue");
-          plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1], 
+          plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1],
                                 "filledCircle", "green");
         }
       } else {
         if (delay >= 0) {
-          plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1], 
+          plotSimulationResults(ctx, plot, sIdx, "simA", [xA], [yMax*0.1],
                                 "filledSquare", "red");
-          plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1], 
+          plotSimulationResults(ctx, plot, sIdx, "simB", [xB], [yMax*0.1],
                                 "filledCircle", "red");
         }
       }
@@ -1301,7 +1301,7 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
   // compute and display on HTML the percent correct so far
   percentCorrect = diffTest.sim2AFC.corr / diffTest.sim2AFC.total;
   if (generateOrTest == 1) {
-    document.getElementById('sim2AFCcorr').innerHTML = 
+    document.getElementById('sim2AFCcorr').innerHTML =
                (100.0 * percentCorrect).toFixed(1)+"%";
   }
 
@@ -1309,8 +1309,8 @@ function perceptualMeasurement2AFC_simulation(ctx, plot, yMax, sigma) {
   // alternate between generating points and testing them.
   if (sIdx < 2*sim2AFC_N-1) {
     diffTest.sim2AFC.simIdx += 1;
-    diffTest.runningPerceptualMeasurementID = 
-          setTimeout(perceptualMeasurement2AFC_simulation, delay, ctx, plot, 
+    diffTest.runningPerceptualMeasurementID =
+          setTimeout(perceptualMeasurement2AFC_simulation, delay, ctx, plot,
                          yMax, sigma);
   } else {
     // stop
@@ -1365,7 +1365,7 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
 
   // update the test type in the multi-trial case
   if (document.getElementById('multiTrialTest')) {
-    document.getElementById('multiTrialTest').innerHTML = 
+    document.getElementById('multiTrialTest').innerHTML =
       diffTest.testType.value;
   }
   // update the number of subjects in the multi-trial case
@@ -1381,7 +1381,7 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
       document.getElementById('startStopTestOneTrial').innerHTML = "START";
       diffTest.simTestOneTrial.simIdx = 2*diffTest.N.value;
     } else {
-      document.getElementById('startStopTestOneTrial').innerHTML = 
+      document.getElementById('startStopTestOneTrial').innerHTML =
               ((diffTest.simTestOneTrial.simIdx+1)/2).toFixed(0) + ": CONT.";
     }
     if (diffTest.runningPerceptualTestOneTrialID) {
@@ -1431,18 +1431,18 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
   } else {
     theoreticalCorr = mathLibrary.probCorrect3AFC(d_prime);
   }
-  document.getElementById('theoreticalTestOneTrialcorrect').innerHTML = 
+  document.getElementById('theoreticalTestOneTrialcorrect').innerHTML =
                (100.0 * theoreticalCorr).toFixed(1)+"%";
 
   probabilityOfDiscrimination = (theoreticalCorr - pGuess) / (1.0 - pGuess);
   if (d_prime <= 0.001) {
     probabilityOfDiscrimination = 0.0;
   }
-  // document.getElementById('simTestOneTrial_pd').innerHTML = 
+  // document.getElementById('simTestOneTrial_pd').innerHTML =
                // (100.0 * probabilityOfDiscrimination).toFixed(1)+"%";
 
 
-  // set up and create the plot 
+  // set up and create the plot
   plot.xMin = -2.5 * sigma;
   plot.xMax =  2.5 * sigma + 1;
   plot.yMin =  0.0;
@@ -1463,7 +1463,7 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
   plot.yLabel = "relative probability of perceptual unit";
   factor = 1.0;
   yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
-  while (yMajor == 0) { 
+  while (yMajor == 0) {
     factor *= 10.0;
     yMajor = Number.parseInt(yMax * 2.0 * factor + 0.5) * 0.1 / factor;
   }
@@ -1480,14 +1480,14 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
 
   // plot function for stimulus A
   mu = 0.0;
-  plotFunction(ctx, plot, "A", mathLibrary.normalDistribution, 
+  plotFunction(ctx, plot, "A", mathLibrary.normalDistribution,
                "blue", 2, mu, sigma);
-  
+
   // plot function for stimulus B
   mu = 1.0;
-  plotFunction(ctx, plot, "B", mathLibrary.normalDistribution, 
+  plotFunction(ctx, plot, "B", mathLibrary.normalDistribution,
                "green", 2, mu, sigma);
-  
+
   // create and position the plot legend
   plot.legend = [["A", "A"],
                  ["B", "B"]];
@@ -1501,7 +1501,7 @@ this.initPlotPerceptualTestOneTrial = function(argList = [false, false]) {
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestMultiTrial([initOnly, cascade]);
   }
- 
+
   // if only initializing, then update plot and return; else start simulation
   if (initOnly) {
     // update the plot to include the legend
@@ -1590,7 +1590,7 @@ function scoreTestData(testData) {
     distanceAX = Math.abs(xA - xX);
     distanceBX = Math.abs(xB - xX);
     // console.log("true different = " + testData.trueDifferent);
-    // console.log("AB = " + distanceAB + ", AX = " + distanceAX + 
+    // console.log("AB = " + distanceAB + ", AX = " + distanceAX +
                 // ", BX = " + distanceBX);
     minDist = distanceAB;
     mostDifferent = "X";
@@ -1617,7 +1617,7 @@ function scoreTestData(testData) {
 
 //------------------------------------------------------------------------------
 // perceptualTestOneTrial_simulation()
-// internal function to compute and plot simulation of perceptual 
+// internal function to compute and plot simulation of perceptual
 // measurement using user-selected test type
 //
 // The simulation is either in 'generate' mode (in which two data points
@@ -1659,7 +1659,7 @@ function perceptualTestOneTrial_simulation(ctx, plot, yMax, sigma, d_prime) {
     return;
   }
 
-  document.getElementById('startStopTestOneTrial').innerHTML = 
+  document.getElementById('startStopTestOneTrial').innerHTML =
         ((sIdx+1)/2).toFixed(0) + ": PAUSE";
 
   // if 'generate', then generateOrTest is 0;
@@ -1682,7 +1682,7 @@ function perceptualTestOneTrial_simulation(ctx, plot, yMax, sigma, d_prime) {
   // plot symbols for A and B on top of legend
   xPx = mapX(plot, plot.legendPosition[0]) + plot.paddingPx/2 -
              plot.paddingPx;
-  yPx = mapY(plot, plot.legendPosition[1]) + plot.paddingPx/2 + 
+  yPx = mapY(plot, plot.legendPosition[1]) + plot.paddingPx/2 +
              plot.fontHeightPx/2 + 4;
   plotSymbol(ctx, plot, "openSquare", xPx, yPx, 12, "blue", 3);
   yPx += plot.fontHeightPx + 2;
@@ -1752,7 +1752,7 @@ function perceptualTestOneTrial_simulation(ctx, plot, yMax, sigma, d_prime) {
   // compute and display on HTML the percent correct so far
   percentCorrect = diffTest.simTestOneTrial.corr/diffTest.simTestOneTrial.total;
   if (generateOrTest == 1) {
-    document.getElementById('simTestOneTrialCorr').innerHTML = 
+    document.getElementById('simTestOneTrialCorr').innerHTML =
                (100.0 * percentCorrect).toFixed(1)+"%";
   }
 
@@ -1760,8 +1760,8 @@ function perceptualTestOneTrial_simulation(ctx, plot, yMax, sigma, d_prime) {
   // alternate between generating points and testing them.
   if (sIdx < 2*N-1) {
     diffTest.simTestOneTrial.simIdx += 1;
-    diffTest.runningPerceptualTestOneTrialID = 
-            setTimeout(perceptualTestOneTrial_simulation, delay, ctx, plot, 
+    diffTest.runningPerceptualTestOneTrialID =
+            setTimeout(perceptualTestOneTrial_simulation, delay, ctx, plot,
                          yMax, sigma, d_prime);
   } else {
     // stop
@@ -1815,11 +1815,11 @@ this.initPlotPerceptualTestMultiTrial = function(argList = [false, false]) {
 
   // console.log("in MULTI TRIAL : " + initOnly + " and " + cascade);
   // update the number of subjects (from one trial)
-  document.getElementById('multiTrialD_prime').innerHTML = 
+  document.getElementById('multiTrialD_prime').innerHTML =
     diffTest.d_prime.value;
-  document.getElementById('multiTrialTest').innerHTML = 
+  document.getElementById('multiTrialTest').innerHTML =
     diffTest.testType.value;
-  document.getElementById('multiTrialN').innerHTML = 
+  document.getElementById('multiTrialN').innerHTML =
     diffTest.N.value;
 
   // change the status of the simulation start/stop button
@@ -1866,7 +1866,7 @@ this.initPlotPerceptualTestMultiTrial = function(argList = [false, false]) {
   N = diffTest.N.value;
   testType = diffTest.testType.value;
 
-  // compute parameters for binomial distribution 
+  // compute parameters for binomial distribution
   if (testType == "triangle") {
     theory_pCorr = mathLibrary.probCorrectTriangle(d_prime);
   } else {
@@ -1892,7 +1892,7 @@ this.initPlotPerceptualTestMultiTrial = function(argList = [false, false]) {
   plot = plotObj.plot;
   yMax = plotObj.yMax;
 
-  // create and plot model (binomial) data 
+  // create and plot model (binomial) data
   binomialObj = createBinomialData(N, theory_pCorr, -1, 0);
   theory_binomial = binomialObj.binomial;
   barLineWidth = 1;
@@ -1908,14 +1908,14 @@ this.initPlotPerceptualTestMultiTrial = function(argList = [false, false]) {
                   ["simulation", "simulation"] ];
   plot.legendPosition = [plot.xMin * 1.00, yMax * 1.03];
   plot.legendBorderPx = 0;
- 
+
   diffTest.simTestMultiTrial.N = N;
   diffTest.simTestMultiTrial.theory_pCorr = theory_pCorr;
 
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestH0([initOnly, cascade]);
   }
- 
+
   // if only initializing, then update plot and return; else start simulation
   if (initOnly) {
     // update the plot to include the legend
@@ -1978,7 +1978,7 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
     return;
   }
 
-  document.getElementById('startStopTestMultiTrial').innerHTML = 
+  document.getElementById('startStopTestMultiTrial').innerHTML =
         (sIdx+1).toFixed(0) + ": PAUSE";
 
   // compute the delay for each phase of the simulation, in milliseconds
@@ -1994,7 +1994,7 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
   if (simTestMultiTrial_T > 0) {
     C = 0;
     for (nIdx = 0; nIdx < N; nIdx++) {
-      testData = generatePerceptualTestData(d_prime, 
+      testData = generatePerceptualTestData(d_prime,
                          diffTest.testType.value);
       success = scoreTestData(testData);
       if (success) C += 1;
@@ -2002,13 +2002,13 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
 
     cIdx = C;
     diffTest.simTestMultiTrial.simResults[cIdx] += 1;
-    // console.log(sIdx + " : " + C + " / " + N + " : " + 
+    // console.log(sIdx + " : " + C + " / " + N + " : " +
          // diffTest.simTestMultiTrial.simResults);
 
     if (delay >= 0) {
       simulationData = [];
       for (cIdx = 0; cIdx <= N; cIdx++) {
-        bar = [cIdx-0.5, cIdx+0.5, 0.0, 
+        bar = [cIdx-0.5, cIdx+0.5, 0.0,
               diffTest.simTestMultiTrial.simResults[cIdx]/simTestMultiTrial_T];
         simulationData.push(bar);
       }
@@ -2016,7 +2016,7 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
       if (N > 50) {
         barLineWidth = 0;
       }
-      plotBarData(ctx, plot, "simulation", simulationData, "none", 
+      plotBarData(ctx, plot, "simulation", simulationData, "none",
                 {spacing:4, angleUp:1, angleDown:1, horizontal:0, vertical:0},
                 "blue", "solid", barLineWidth);
     }
@@ -2037,8 +2037,8 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
   // if we're not done yet, call this function again after specified delay.
   if (sIdx < simTestMultiTrial_T-1) {
     diffTest.simTestMultiTrial.simIdx += 1;
-    diffTest.runningPerceptualTestMultiTrialID = 
-            setTimeout(perceptualTestMultiTrial_simulation, delay, ctx, plot, 
+    diffTest.runningPerceptualTestMultiTrialID =
+            setTimeout(perceptualTestMultiTrial_simulation, delay, ctx, plot,
                          yMax, theory_sigma, d_prime);
   } else {
     // stop
@@ -2058,7 +2058,7 @@ function perceptualTestMultiTrial_simulation(ctx, plot, yMax, theory_sigma,
 
 //------------------------------------------------------------------------------
 // initPlotPerceptualTestH0()
-// initialize the plot of perceptual test with hypothesis H0 
+// initialize the plot of perceptual test with hypothesis H0
 
 this.initPlotPerceptualTestH0 = function(argList = [false, false]) {
   var alpha = 0.0;
@@ -2105,7 +2105,7 @@ this.initPlotPerceptualTestH0 = function(argList = [false, false]) {
       document.getElementById('startStopTestH0').innerHTML = "START";
       diffTest.simTestH0.simIdx = diffTest.simTestH0_T.value;
     } else {
-      document.getElementById('startStopTestH0').innerHTML = 
+      document.getElementById('startStopTestH0').innerHTML =
               (diffTest.simTestH0.simIdx+1).toFixed(0) + ": CONT.";
     }
     if (diffTest.runningPerceptualTestH0ID) {
@@ -2229,9 +2229,9 @@ this.initPlotPerceptualTestH0 = function(argList = [false, false]) {
   if (N > 50) {
     barLineWidth = 0;
   }
-  plotBarData(ctx, plot, "H0_inconclusive", H0_binomial_inconclusive, 
+  plotBarData(ctx, plot, "H0_inconclusive", H0_binomial_inconclusive,
               "rgb(220,0,0,0.80)", {}, "black", "solid", barLineWidth);
-  plotBarData(ctx, plot, "H0_reject", H0_binomial_reject, 
+  plotBarData(ctx, plot, "H0_reject", H0_binomial_reject,
               "rgb(128,14,37,1.0)", {}, "black", "solid", barLineWidth);
 
   // create and position the plot legend
@@ -2245,7 +2245,7 @@ this.initPlotPerceptualTestH0 = function(argList = [false, false]) {
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestH0H1([initOnly, cascade]);
   }
- 
+
   // if only initializing, then update plot and return; else start simulation
   if (initOnly) {
     // update the plot to include the legend
@@ -2288,7 +2288,7 @@ function perceptualTestH0_simulation(ctx, plot, yMax, sigma_H0) {
   if (diffTest.simTestH0.running == false) {
     return;
   }
-  document.getElementById('startStopTestH0').innerHTML = 
+  document.getElementById('startStopTestH0').innerHTML =
         (sIdx+1).toFixed(0) + ": PAUSE";
 
   // set variables
@@ -2316,7 +2316,7 @@ function perceptualTestH0_simulation(ctx, plot, yMax, sigma_H0) {
     if (delay >= 0) {
       simulationData = [];
       for (cIdx = 0; cIdx <= N; cIdx++) {
-        bar = [cIdx-0.5, cIdx+0.5, 0.0, 
+        bar = [cIdx-0.5, cIdx+0.5, 0.0,
               diffTest.simTestH0.simResults[cIdx]/simTestH0_T];
         simulationData.push(bar);
       }
@@ -2324,7 +2324,7 @@ function perceptualTestH0_simulation(ctx, plot, yMax, sigma_H0) {
       if (N > 40) {
         barLineWidth = 0;
       }
-      plotBarData(ctx, plot, "simulation", simulationData, "none", 
+      plotBarData(ctx, plot, "simulation", simulationData, "none",
                 {spacing:4, angleUp:1, angleDown:0, horizontal:0, vertical:0},
                 "blue", "solid", barLineWidth);
     }
@@ -2343,17 +2343,17 @@ function perceptualTestH0_simulation(ctx, plot, yMax, sigma_H0) {
   // compute and display on HTML the results so far
   document.getElementById('simTestH0_nCorr_H0').innerHTML = avg.toFixed(1);
   document.getElementById('simTestH0_pCorr_H0').innerHTML = (avg/N).toFixed(3);
-  document.getElementById('simTestH0_sigma_H0').innerHTML = 
+  document.getElementById('simTestH0_sigma_H0').innerHTML =
                           (sim_sigma/N).toFixed(2);
-  document.getElementById('simTestH0_reject_H0').innerHTML = 
+  document.getElementById('simTestH0_reject_H0').innerHTML =
                           (100.0*diffTest.simTestH0.reject /
                            diffTest.simTestH0.numTrials).toFixed(2);
 
   // if we're not done yet, call this function again after specified delay.
   if (sIdx < simTestH0_T-1) {
     diffTest.simTestH0.simIdx += 1;
-    diffTest.runningPerceptualTestH0ID = 
-            setTimeout(perceptualTestH0_simulation, delay, ctx, plot, 
+    diffTest.runningPerceptualTestH0ID =
+            setTimeout(perceptualTestH0_simulation, delay, ctx, plot,
                          yMax, sigma_H0);
   } else {
     // stop
@@ -2421,7 +2421,7 @@ this.initPlotPerceptualTestH0H1 = function(argList = [false, false]) {
       document.getElementById('startStopTestH0H1').innerHTML = "START";
       diffTest.simTestH0H1.simIdx = diffTest.simTestH0H1_T.value;
     } else {
-      document.getElementById('startStopTestH0H1').innerHTML = 
+      document.getElementById('startStopTestH0H1').innerHTML =
               (diffTest.simTestH0H1.simIdx+1).toFixed(0) + ": CONT.";
     }
     if (diffTest.runningPerceptualTestH0H1ID) {
@@ -2493,12 +2493,12 @@ this.initPlotPerceptualTestH0H1 = function(argList = [false, false]) {
 
   // set the HTML for H0 and H1 information
   document.getElementById('H0H1_pCorr_H0').innerHTML = pCorr_H0.toFixed(3);
-  document.getElementById('H0H1_threshN_H0').innerHTML = 
+  document.getElementById('H0H1_threshN_H0').innerHTML =
                           diffTest.thresholdN_H0.toFixed(0);
-  document.getElementById('H0H1_pRej_H0').innerHTML = 
+  document.getElementById('H0H1_pRej_H0').innerHTML =
                           diffTest.pRej_H0.toFixed(3);
 
-  document.getElementById('H0H1_nCorr_H1').innerHTML = 
+  document.getElementById('H0H1_nCorr_H1').innerHTML =
                           (N * pCorr_H1).toFixed(1);
   document.getElementById('H0H1_pCorr_H1').innerHTML = pCorr_H1.toFixed(3);
   document.getElementById('H0H1_sigma_H1').innerHTML = sigma_H1.toFixed(2);
@@ -2527,7 +2527,7 @@ this.initPlotPerceptualTestH0H1 = function(argList = [false, false]) {
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestLR([initOnly, cascade]);
   }
- 
+
   // if only initializing, then update plot and return; else start simulation
   if (initOnly) {
     // update the plot to include the legend
@@ -2573,7 +2573,7 @@ function perceptualTestH0H1_simulation(ctx, plot, yMax, sigma_H0, sigma_H1,
     return;
   }
 
-  document.getElementById('startStopTestH0H1').innerHTML = 
+  document.getElementById('startStopTestH0H1').innerHTML =
         (sIdx+1).toFixed(0) + ": PAUSE";
 
   // set variables
@@ -2599,17 +2599,17 @@ function perceptualTestH0H1_simulation(ctx, plot, yMax, sigma_H0, sigma_H1,
       diffTest.simTestH0H1.inconclusive += 1;
     }
     diffTest.simTestH0H1.simResults[C] += 1;
-    // console.log(sIdx + " : " + C + " / " + N + " : " + 
+    // console.log(sIdx + " : " + C + " / " + N + " : " +
          // diffTest.simTestH0H1.simResults);
 
     if (delay >= 0) {
       simulationData = [];
       for (cIdx = 0; cIdx <= N; cIdx++) {
-        bar = [cIdx-0.5, cIdx+0.5, 0.0, 
+        bar = [cIdx-0.5, cIdx+0.5, 0.0,
               diffTest.simTestH0H1.simResults[cIdx]/simTestH0H1_T];
         simulationData.push(bar);
       }
-      plotBarData(ctx, plot, "simulation", simulationData, "none", 
+      plotBarData(ctx, plot, "simulation", simulationData, "none",
                 {spacing:4, angleUp:1, angleDown:1, horizontal:0, vertical:0},
                 "black", "solid", barLineWidth);
     }
@@ -2630,22 +2630,22 @@ function perceptualTestH0H1_simulation(ctx, plot, yMax, sigma_H0, sigma_H1,
 
   // compute and display on HTML the percent correct so far
   document.getElementById('simTestH0H1_nCorr_H1').innerHTML = avg.toFixed(1);
-  document.getElementById('simTestH0H1_pCorr_H1').innerHTML = 
+  document.getElementById('simTestH0H1_pCorr_H1').innerHTML =
                           (avg/N).toFixed(3);
-  document.getElementById('simTestH0H1_sigma_H1').innerHTML = 
+  document.getElementById('simTestH0H1_sigma_H1').innerHTML =
                           sim_sigma.toFixed(2);
   if (simTestH0H1_T == 0) {
     document.getElementById('simTestH0H1_inconclusive_H1').innerHTML = "N/A";
   } else {
-    document.getElementById('simTestH0H1_inconclusive_H1').innerHTML = 
+    document.getElementById('simTestH0H1_inconclusive_H1').innerHTML =
         (100.0 * diffTest.simTestH0H1.inconclusive / sIdx).toFixed(1);
   }
 
   // if we're not done yet, call this function again after specified delay.
   if (sIdx < simTestH0H1_T-1) {
     diffTest.simTestH0H1.simIdx += 1;
-    diffTest.runningPerceptualTestH0H1ID = 
-            setTimeout(perceptualTestH0H1_simulation, delay, ctx, plot, 
+    diffTest.runningPerceptualTestH0H1ID =
+            setTimeout(perceptualTestH0H1_simulation, delay, ctx, plot,
                          yMax, sigma_H0, sigma_H1, d_prime);
   } else {
     // stop
@@ -2727,7 +2727,7 @@ this.initPlotPerceptualTestLR = function(argList = [false, false]) {
   document.getElementById('LR_N').innerHTML = N;
   document.getElementById('LR_alpha').innerHTML = alpha;
   document.getElementById('LR_beta').innerHTML = diffTest.beta.toFixed(2);
-  document.getElementById('LR_power').innerHTML = 
+  document.getElementById('LR_power').innerHTML =
                           (1.0 - diffTest.beta).toFixed(2);
 
   // get the canvas and context (ctx)
@@ -2750,10 +2750,10 @@ this.initPlotPerceptualTestLR = function(argList = [false, false]) {
 
   // set the HTML for H0
   document.getElementById('LR_pCorr_H0').innerHTML = pCorr_H0.toFixed(3);
-  document.getElementById('LR_threshN_H0').innerHTML = 
+  document.getElementById('LR_threshN_H0').innerHTML =
                           diffTest.thresholdN_H0.toFixed(0);
   document.getElementById('LR_pRej_H0').innerHTML = diffTest.pRej_H0.toFixed(3);
-  document.getElementById('LR_pValue_H0').innerHTML = 
+  document.getElementById('LR_pValue_H0').innerHTML =
                           pValue_H0.toFixed(3);
 
   // create H1 data
@@ -2786,7 +2786,8 @@ this.initPlotPerceptualTestLR = function(argList = [false, false]) {
   }
 
   // set the HTML for likelihoods
-  // console.log("LR: " + LR + " from L_H0 = " + L_H0 + " and L_H1 = " + L_H1);
+  // console.log("LR: " + LR.toFixed(4) + " from L_H0 = " + L_H0.toFixed(4) +
+              // " and L_H1 = " + L_H1.toFixed(4));
   document.getElementById('LR_L_H0').innerHTML = L_H0.toFixed(3);
   document.getElementById('LR_L_H1').innerHTML = L_H1.toFixed(3);
   document.getElementById('LR_LR').innerHTML = "200+";
@@ -2823,9 +2824,9 @@ this.initPlotPerceptualTestLR = function(argList = [false, false]) {
     brief_d_prime = d_prime.toFixed(1);
   }
   plotRegion(ctx, plot, [-0.5, regionLEE_max+0.5], "R<sub>L(EE)</sub>", yMax);
-  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5], 
+  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5],
                          "R<sub>L(d'=0)</sub>", yMax);
-  plotRegion(ctx, plot, [regionBoundary-0.5, plot.xMax], 
+  plotRegion(ctx, plot, [regionBoundary-0.5, plot.xMax],
                          "R<sub>L(d'="+brief_d_prime+")</sub>", yMax);
 
   // plot bar indicating number of correct results
@@ -2834,7 +2835,7 @@ this.initPlotPerceptualTestLR = function(argList = [false, false]) {
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestLargeDPrime([initOnly, cascade]);
   }
- 
+
   return;
 }
 
@@ -2905,13 +2906,13 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
 
   // set the HTML for input parameters
   document.getElementById('largeDPrime_D_prime').innerHTML = d_prime;
-  document.getElementById('largeDPrime_Test').innerHTML = 
+  document.getElementById('largeDPrime_Test').innerHTML =
                           diffTest.testType.value;
   document.getElementById('largeDPrime_N').innerHTML = N;
   document.getElementById('largeDPrime_alpha').innerHTML = alpha;
-  document.getElementById('largeDPrime_beta').innerHTML = 
+  document.getElementById('largeDPrime_beta').innerHTML =
                            diffTest.beta.toFixed(2);
-  document.getElementById('largeDPrime_power').innerHTML = 
+  document.getElementById('largeDPrime_power').innerHTML =
                            (1.0-diffTest.beta).toFixed(2);
 
 
@@ -2934,13 +2935,13 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
   pValue_H0 = pLObj.pValue;
 
   // set the HTML for H0 information
-  document.getElementById('largeDPrime_pCorr_H0').innerHTML = 
+  document.getElementById('largeDPrime_pCorr_H0').innerHTML =
                           pCorr_H0.toFixed(3);
-  document.getElementById('largeDPrime_threshN_H0').innerHTML = 
+  document.getElementById('largeDPrime_threshN_H0').innerHTML =
                           diffTest.thresholdN_H0.toFixed(0);
-  document.getElementById('largeDPrime_pRej_H0').innerHTML = 
+  document.getElementById('largeDPrime_pRej_H0').innerHTML =
                           diffTest.pRej_H0.toFixed(3);
-  document.getElementById('largeDPrime_pValue_H0').innerHTML = 
+  document.getElementById('largeDPrime_pValue_H0').innerHTML =
                           pValue_H0.toFixed(3);
 
   // create data for H1
@@ -2962,7 +2963,7 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
     sumProb += prob;
     // console.log("n = " + nIdx + ", p(n) = " + prob + ", sum p = " + sumProb);
     if (sumProb.toFixed(8) > alpha.toFixed(8)) {
-      // we went too far; go back one 
+      // we went too far; go back one
       // (limit to N places past the decimal to avoid rounding errors)
       thresholdN_H1 = nIdx + 1;
       sumProb -= prob;
@@ -2982,11 +2983,11 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
   diffTest.pRej_H1 = sumProb;
 
   // update HTML for H1
-  document.getElementById('largeDPrime_pCorr_H1').innerHTML = 
+  document.getElementById('largeDPrime_pCorr_H1').innerHTML =
                           diffTest.pCorr_H1.toFixed(3);
   document.getElementById('largeDPrime_H1_thr').innerHTML = thresholdN_H1;
   document.getElementById('largeDPrime_H1_pRej').innerHTML= sumProb.toFixed(3);
-  document.getElementById('largeDPrime_pValue_H1').innerHTML = 
+  document.getElementById('largeDPrime_pValue_H1').innerHTML =
                           pValue_H1.toFixed(3);
 
   // compute likelihood ratio
@@ -3040,12 +3041,12 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
     brief_d_prime = d_prime.toFixed(1);
   }
   plotRegion(ctx, plot, [-0.5, regionLEE_max+0.5], "R<sub>L(EE)</sub>", yMax);
-  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5], 
+  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5],
                          "R<sub>L(d'=0)</sub>", yMax);
-  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5], 
-                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax, 
+  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5],
+                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax,
                          thresholdN_H1);
-  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax], 
+  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax],
                          "R<sub>L(d'>"+brief_d_prime+")</sub>", yMax);
 
   // plot bar indicating number of correct results
@@ -3054,7 +3055,7 @@ this.initPlotPerceptualTestLargeDPrime = function(argList = [false, false]) {
   if (initOnly && cascade) {
     diffTest.initPlotPerceptualTestEstDPrime([initOnly, cascade]);
   }
- 
+
   return;
 }
 
@@ -3130,13 +3131,13 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
 
   // set the HTML for input parameters
   document.getElementById('estDPrime_D_prime').innerHTML = d_prime;
-  document.getElementById('estDPrime_Test').innerHTML = 
+  document.getElementById('estDPrime_Test').innerHTML =
                           diffTest.testType.value;
   document.getElementById('estDPrime_N').innerHTML = N;
   document.getElementById('estDPrime_alpha').innerHTML = alpha;
-  document.getElementById('estDPrime_beta').innerHTML = 
+  document.getElementById('estDPrime_beta').innerHTML =
                            diffTest.beta.toFixed(2);
-  document.getElementById('estDPrime_power').innerHTML = 
+  document.getElementById('estDPrime_power').innerHTML =
                            (1.0-diffTest.beta).toFixed(2);
 
   // get the canvas and context (ctx)
@@ -3158,11 +3159,11 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
   pValue_H0 = pLObj.pValue;
 
   // set the HTML for H0 information
-  document.getElementById('estDPrime_threshN_H0').innerHTML = 
+  document.getElementById('estDPrime_threshN_H0').innerHTML =
                           diffTest.thresholdN_H0.toFixed(0);
-  document.getElementById('estDPrime_pRej_H0').innerHTML = 
+  document.getElementById('estDPrime_pRej_H0').innerHTML =
                           diffTest.pRej_H0.toFixed(3);
-  document.getElementById('estDPrime_pValue_H0').innerHTML = 
+  document.getElementById('estDPrime_pValue_H0').innerHTML =
                           pValue_H0.toFixed(3);
 
   // create data for H1
@@ -3184,7 +3185,7 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
     sumProb += prob;
     // console.log("n = " + nIdx + ", p(n) = " + prob + ", sum p = " + sumProb);
     if (sumProb.toFixed(8) > alpha.toFixed(8)) {
-      // we went too far; go back one 
+      // we went too far; go back one
       // (limit to N places past the decimal to avoid rounding errors)
       thresholdN_H1 = nIdx + 1;
       sumProb -= prob;
@@ -3206,7 +3207,7 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
   // update HTML for H1
   document.getElementById('estDPrime_H1_thr').innerHTML = thresholdN_H1;
   document.getElementById('estDPrime_H1_pRej').innerHTML= sumProb.toFixed(3);
-  document.getElementById('estDPrime_pValue_H1').innerHTML = 
+  document.getElementById('estDPrime_pValue_H1').innerHTML =
                           pValue_H1.toFixed(3);
 
   // compute likelihood ratio
@@ -3260,12 +3261,12 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
     brief_d_prime = d_prime.toFixed(1);
   }
   plotRegion(ctx, plot, [-0.5, regionLEE_max+0.5], "R<sub>L(EE)</sub>", yMax);
-  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5], 
+  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5],
                          "R<sub>L(d'=0)</sub>", yMax);
-  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5], 
-                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax, 
+  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5],
+                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax,
                          thresholdN_H1);
-  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax], 
+  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax],
                          "R<sub>L(d'>"+brief_d_prime+")</sub>", yMax);
 
   // plot bar indicating number of correct results
@@ -3277,7 +3278,7 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
 
   // get confidence interval for number of correct responses
   CI = diffTest.estDPrime_CI.value / 100.0;
-  CIinfo = mathLibrary.bootstrapCI_binomial(correct, N, CI, 
+  CIinfo = mathLibrary.bootstrapCI_binomial(correct, N, CI,
                                    diffTest.randSeed.value);
   plotCIBar(ctx, plot, CIinfo[0], CIinfo[1]);
 
@@ -3289,11 +3290,11 @@ this.initPlotPerceptualTestEstDPrime = function(argList = [false, false]) {
 
   document.getElementById('estDPrime_MLDPrime').innerHTML =
                           bestDPrime.toFixed(2);
-  document.getElementById('estDPrime_nCorrLow').innerHTML = 
+  document.getElementById('estDPrime_nCorrLow').innerHTML =
                           CIinfo[0].toFixed(0);
   document.getElementById('estDPrime_dPrimeLow').innerHTML =
                           bestDPrimeLow.toFixed(2);
-  document.getElementById('estDPrime_nCorrHigh').innerHTML = 
+  document.getElementById('estDPrime_nCorrHigh').innerHTML =
                           CIinfo[1].toFixed(0);
   document.getElementById('estDPrime_dPrimeHigh').innerHTML =
                           bestDPrimeHigh.toFixed(2);
@@ -3470,11 +3471,11 @@ this.initPlotPerceptualTestFinal = function() {
   yMax = plotObj.yMax;
 
   // set the HTML for H0 information
-  document.getElementById('final_threshN_H0').innerHTML = 
+  document.getElementById('final_threshN_H0').innerHTML =
                           thresholdN_H0.toFixed(0);
-  document.getElementById('final_pRej_H0').innerHTML = 
+  document.getElementById('final_pRej_H0').innerHTML =
                           pRej_H0.toFixed(3);
-  document.getElementById('final_pValue_H0').innerHTML = 
+  document.getElementById('final_pValue_H0').innerHTML =
                           pValue_H0.toFixed(3);
 
 
@@ -3485,7 +3486,7 @@ this.initPlotPerceptualTestFinal = function() {
     sumProb += prob;
     // console.log("n = " + nIdx + ", p(n) = " + prob + ", sum p = " + sumProb);
     if (sumProb.toFixed(8) > alpha.toFixed(8)) {
-      // we went too far; go back one 
+      // we went too far; go back one
       // (limit to N places past the decimal to avoid rounding errors)
       thresholdN_H1 = nIdx + 1;
       sumProb -= prob;
@@ -3505,7 +3506,7 @@ this.initPlotPerceptualTestFinal = function() {
   // update HTML for H1
   document.getElementById('final_H1_thr').innerHTML = thresholdN_H1;
   document.getElementById('final_H1_pRej').innerHTML= sumProb.toFixed(3);
-  document.getElementById('final_pValue_H1').innerHTML = 
+  document.getElementById('final_pValue_H1').innerHTML =
                           pValue_H1.toFixed(3);
 
   // compute likelihood ratio
@@ -3529,6 +3530,8 @@ this.initPlotPerceptualTestFinal = function() {
     document.getElementById('final_LR').innerHTML = LR.toFixed(2);
   }
   document.getElementById('final_whichH').innerHTML = whichH;
+  console.log("LR: " + LR.toFixed(4) + " from L_H0 = " + L_H0.toFixed(4) +
+              " and L_H1 = " + L_H1.toFixed(4));
 
   // plot binomial distributions
   barLineWidth = 1;
@@ -3559,12 +3562,12 @@ this.initPlotPerceptualTestFinal = function() {
     brief_d_prime = d_prime.toFixed(1);
   }
   plotRegion(ctx, plot, [-0.5, regionLEE_max+0.5], "R<sub>L(EE)</sub>", yMax);
-  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5], 
+  plotRegion(ctx, plot, [regionLEE_max+0.5, regionBoundary-0.5],
                          "R<sub>L(d'=0)</sub>", yMax);
-  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5], 
-                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax, 
+  plotRegion(ctx, plot, [regionBoundary-0.5, thresholdN_H1-0.5],
+                         "R<sub>L(d'="+brief_d_prime+")</sub>", yMax,
                          thresholdN_H1);
-  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax], 
+  plotRegion(ctx, plot, [thresholdN_H1-0.5, plot.xMax],
                          "R<sub>L(d'>"+brief_d_prime+")</sub>", yMax);
 
   // plot bar indicating number of correct results
@@ -3575,7 +3578,7 @@ this.initPlotPerceptualTestFinal = function() {
   console.log("estimated pCorr = " + correct/N + " with d' " + bestDPrime);
 
   // get confidence interval for number of correct responses
-  CIinfo = mathLibrary.bootstrapCI_binomial(correct, N, CI, 
+  CIinfo = mathLibrary.bootstrapCI_binomial(correct, N, CI,
                                    diffTest.randSeed.value);
   plotCIBar(ctx, plot, CIinfo[0], CIinfo[1]);
 
@@ -3587,11 +3590,11 @@ this.initPlotPerceptualTestFinal = function() {
 
   document.getElementById('final_MLDPrime').innerHTML =
                           bestDPrime.toFixed(2);
-  document.getElementById('final_nCorrLow').innerHTML = 
+  document.getElementById('final_nCorrLow').innerHTML =
                           CIinfo[0].toFixed(0);
   document.getElementById('final_dPrimeLow').innerHTML =
                           bestDPrimeLow.toFixed(2);
-  document.getElementById('final_nCorrHigh').innerHTML = 
+  document.getElementById('final_nCorrHigh').innerHTML =
                           CIinfo[1].toFixed(0);
   document.getElementById('final_dPrimeHigh').innerHTML =
                           bestDPrimeHigh.toFixed(2);

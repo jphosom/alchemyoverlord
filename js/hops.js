@@ -1898,6 +1898,7 @@ var hops = {
     "Teamaker": {
         "AA":    1.20,
         "BA":    9.30,
+        "loss": 62.32,
         "sources": [ "The Hops List",
                      "Great Lake Hops" ],
         },

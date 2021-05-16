@@ -2,7 +2,7 @@
 //
 // This file contains data for the experiments used to tune parameters of the SMPH model of IBUs.
 // All data, except the 'Tinseth' and 'Peacock' experiments, were collected
-// by John-Paul Hosom from June 9, 2015 to April 24, 2020.
+// by John-Paul Hosom from June 9, 2015 to March 16, 2021.
 // Note: Util. Exp. #2 didn't use any hops, to estimate the contribution of malt polyphenols to IBUs.
 // Note: If kettleDiameter and kettleOpening not specified, small samples were taken and cooled, and
 //       so post-boil temperature decrease that is determined by kettle size/opening is not relevant.
@@ -24,6 +24,7 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "oAA as Function of Temperature" ];
 // var evaluateTrainingExperiments = [ "Lauter Exp. #1", "Lauter Exp. #2" ];
 // var evaluateTrainingExperiments = [ "FV Exp. #1" ];
+// var evaluateTrainingExperiments = [ "Teamaker #2" ];
 
 // units *must* be all metric
 
@@ -128,8 +129,8 @@ var trainingData = {
         "time_list":             [ 60,      40,      20,      10 ],
         // pre-boil volume:      [ 7.987,   8.063,   8.139,   8.233 ],
         // pre-boil SG:          [ 1.042,   1.0425,  1.042,   1.042 ],     // from hydrometer
-        "volume_list":           [ 5.394,   5.678,   5.300,   5.205 ],     // from recorded cooled post-boil volume
-        // "volume_list":        [ 5.686,   5.908,   5.604,   5.489 ],     // from pre-boil volume * change in SG
+        // "volume_list":        [ 5.394,   5.678,   5.300,   5.205 ],     // from recorded cooled post-boil volume
+        "volume_list":           [ 5.686,   5.908,   5.604,   5.489 ],     // from pre-boil volume * change in SG
         // "OG_list":            [ 1.059,   1.058,   1.061,   1.063 ],     // from hydrometer
         "OG_list":               [ 1.0593,  1.0589,  1.0628,  1.0637 ],    // from Analysis Laboratory
 
@@ -1678,6 +1679,43 @@ var trainingData = {
 
     },
 
+    "Teamaker #2": {
+        "conditions":            [  "A",     "B" ],
+        "IBU_list":              [  22.1,    5.1 ],
+        "time_list":             [  20.0,   20.0 ],
+        "postBoil_time_list":    [  0.0,     0.0 ],
+        "postBoil_temp_list":    [ 100.0,  100.0 ],
+        "volume_list":           [ 11.96,  11.96 ],
+        "OG_list":               [ 1.040,  1.040 ],
+        "fresh_list":            [ 0.33,   1.00  ],
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        "add1":        [  0.58, 10.92, "cones",   1.00,   38.2,  56.70,  20 ],
+
+        "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
+        "evaporationRate":       0.265, // from model.tcl, 0.07 G/hr covered
+        "whirlpoolTime":         0,
+        "immersionDecayFactor":  2.5,
+        "pH":                    5.78,  // average of 5.751 and 5.818
+        "preOrPostBoilpH":       "postBoilpH",
+        "krausen":               "mix krausen back in; no loss",   // swirling of containers during fermentation
+        "beerAge_days":          11,
+
+        // search parameters:
+        "skipSearch": true,
+        "search": [
+            {
+                "param":    "AA1",
+                "default":  0.41,
+                "method":   "value",
+                "low":      0.20,
+                "high":     0.80,
+                "inc":      0.10,
+            }
+        ]
+
+    },
+
     "oAA as Function of Temperature": {
         "conditions":            [  "A10",   "A20",   "A30",   "A40",
                                     "B10",   "B20",   "B30",   "B40",
@@ -1840,7 +1878,7 @@ var trainingData = {
     },
 
     "FV Exp. #1": {
-        "conditions":            [ "A10",   "A20",   "A30",   "A40", 
+        "conditions":            [ "A10",   "A20",   "A30",   "A40",
                                    "B10",   "B20",   "B30",   "B40",
                                    "C10",   "C20",   "C30",   "C40" ],
         "IBU_list":              [ 18.2,    24.9,    32.7,    39.4,    // 8-oz fermentation

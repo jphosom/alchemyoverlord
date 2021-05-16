@@ -1,11 +1,11 @@
 // -----------------------------------------------------------------------------
 // ibu_SMPH.js : JavaScript for AlchemyOverlord web page, SMPH sub-page
 // Written by John-Paul Hosom
-// Copyright © 2018, 2019, 2020 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018 - 2021 by John-Paul Hosom, all rights reserved.
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
-// Version 1.0.1 : November 22, 2018 -- November 22, 2020
+// Version 1.0.1 : November 22, 2018 -- May 9, 2021
 //         This code was initially based on the mIBU javascript code in this
 //         project.  The code was then modified to implement the SMPH method as
 //         described in the blog post "A Summary of Factors Affecting IBUs".
@@ -75,8 +75,8 @@ this.initialize_SMPH = function() {
   this.verbose            = 5;
   this.integrationTime    = 0.01;  // minutes
 
-  this.AA_limit_minLimit  = 190.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_maxLimit  = 560.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 550.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
 
@@ -87,25 +87,23 @@ this.initialize_SMPH = function() {
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
   this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
 
-  this.IAA_LF_boil        = 0.50;   // SEARCH
+  this.IAA_LF_boil        = 0.52;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
 
-  this.oAA_storageFactor  = 0.41;   // estimate 0.22 from Maye data, then SEARCH
-  this.oAA_boilFactor     = 0.12;   // SEARCH
+  this.oAA_storageFactor  = 0.32;   // estimate 0.22 from Maye data, then SEARCH
+  this.oAA_boilFactor     = 0.11;   // SEARCH
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same loss factor as IAA
   this.scale_oAA          = 0.9155; // from Maye, Figure 7
 
-  this.oBA_storageFactor  = 0.00;   // mostly irrelevant, such low impact
-  this.oBA_boilFactor     = 0.10;   // from Stevens p. 500 max 10%
-  this.oBA_LF_boil        = 0.0153; // boilFactor*LF_boil*ferment=0.0013: Teamkr
+  this.oBA_boilFactor     = 0.07125;
   this.scale_oBA          = 0.85;   // from Hough p. 491: oBA 85% of absorbtion
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
   this.LF_hopPP           = 0.20;   // 20% are soluble, from the literature
   this.ferment_hopPP      = 0.70;   // from blog post on malt PP, assume same
   // Parkin scaling factor is 0.022 from [PP] to BU, but BU is 5/7*concentration
-  // so 0.022*69.68/51.2 is scaling factor from [PP] to [IAA]-equivalent = 0.030
-  this.scale_hopPP        = 0.030;  // from Parkin, p. 28, scaled
+  // so 0.022*69.68/50.0 is scaling factor from [PP] to [IAA]-equivalent = 0.03066
+  this.scale_hopPP        = 0.03066;  // from Parkin, p. 28, scaled
 
   SMPH.computeIBU_SMPH();
 
@@ -234,10 +232,12 @@ this.computeIBU_SMPH = function() {
 
   // compute malt polyphenol contribution to IBUs
   maltPP_beer = compute_maltPP_beer(ibu);
-  IBU += (51.2/69.68) * maltPP_beer;
+  // even though 51.2 is more accurate, 50.0 is used to actually measure IBUs
+  // IBU += (51.2/69.68) * maltPP_beer;
+  IBU += (50.0/69.68) * maltPP_beer;
   if (SMPH.verbose > 3) {
     console.log("malt IBU  in finished beer = " +
-                (maltPP_beer * 51.2/69.68).toFixed(4));
+                (maltPP_beer * 50.0/69.68).toFixed(4));
   }
 
   // print info to console
@@ -253,8 +253,8 @@ this.computeIBU_SMPH = function() {
               ", oBA = " + (oBA_beer*SMPH.scale_oBA).toFixed(3) +
               ", hopPP = " + (hopPP_beer*SMPH.scale_hopPP).toFixed(3) +
               ", maltPP = " + maltPP_beer.toFixed(3))
-    console.log("IBU = " + IBU.toFixed(3) + " = " + (IBU*69.68/51.2).toFixed(3)+
-                " * 51.2/69.68");
+    console.log("IBU = " + IBU.toFixed(3) + " = " + (IBU*69.68/50.0).toFixed(3)+
+                " * 50.0/69.68");
   }
 
   // set output variables in ibu structure
@@ -270,7 +270,7 @@ this.computeIBU_SMPH = function() {
   ibu.AA = totalAA0;
   ibu.IAA = IAA_beer;
   ibu.U = U * ibu.scalingFactor.value;
-  ibu.IAApercent = ((51.2 / 69.68) * IAA_beer) / IBU;
+  ibu.IAApercent = ((50.0 / 69.68) * IAA_beer) / IBU;
   ibu.oAA = oAA_beer * SMPH.scale_oAA;
   ibu.oBA = oBA_beer * SMPH.scale_oBA;
   ibu.hopPP = hopPP_beer * SMPH.scale_hopPP;
@@ -322,7 +322,9 @@ function compute_hop_IBU_and_U(ibu, hopIdx) {
   var oAA_beer = ibu.add[hopIdx].oAA_beer;
   var oBA_beer = ibu.add[hopIdx].oBA_beer;
 
-  hop_IBU = (51.2/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
+  // even though 51.2 is more accurate, 50.0 is used to actually measure IBUs
+  // hop_IBU = (51.2/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
+  hop_IBU = (50.0/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
                                        (oBA_beer * SMPH.scale_oBA) +
                                        (hopPP_beer * SMPH.scale_hopPP));
   ibu.add[hopIdx].IBU = hop_IBU;
@@ -421,7 +423,7 @@ function compute_concent_wort(ibu) {
   }
   integTimePrecision = common.getPrecision("" + integrationTime);
   if (SMPH.verbose > 4) {
-    console.log("integration time = " + integrationTime + 
+    console.log("integration time = " + integrationTime +
                 " with precision " + integTimePrecision);
   }
 
@@ -903,7 +905,9 @@ function compute_concent_wort(ibu) {
     // if wort loss after boil, adjust final volume and final mg of IAA,
     // oAA, oBA, PP, keeping overall concentrations the same
     finalVolume = postBoilVolume - ibu.wortLossVolume.value;
+    if (finalVolume < 0.0) finalVolume = 0.0;
     IAA_dis_mg *= 1.0 - (ibu.wortLossVolume.value / postBoilVolume);
+    if (IAA_dis_mg < 0.0) IAA_dis_mg = 0.0;
     if (SMPH.verbose > 1) {
       console.log("FINAL VOL = " + postBoilVolume.toFixed(4) + " minus loss " +
                   ibu.wortLossVolume.value.toFixed(4));
@@ -1443,7 +1447,6 @@ function compute_LF_oAA(ibu, hopIdx) {
            compute_LF_finings(ibu) *
            compute_LF_filtering(ibu) *
            compute_LF_age(ibu);
-  if (LF_oAA > 1.0) LF_oAA = 1.0;
   if (SMPH.verbose > 5) {
     console.log("    LF oAA " + LF_oAA.toFixed(4));
     console.log("       from " + oAA_LF_boil + ", " +
@@ -1484,70 +1487,22 @@ function compute_oAA_beer(ibu, hopIdx) {
 // compute the amount of dissolved oBA, in mg, for a specific hop addition
 
 function compute_oBA_dis_mg(ibu, hopIdx, currVolume) {
-  var BAloss_percent = 0.0;
-  var k = 0.0;
   var oBA_addition = 0.0;
-  var oBA_fresh = 0.0;
-  var oBA_percent_boilFactor = 0.0;
-  var oBA_percent_init = 0.0;
   var oBA_percent = 0.0;
-  var ratio = 0.0;
 
-  // the oBA_percent_init is for cones; the value for pellets is probably
-  // higher (because more surface area), but this (hopefully) rarely comes
-  // into play because oBA_boil for pellets is much larger.  But even this
-  // doesn't matter, because the oxidized beta acids are almost all transformed
-  // into hulpinic acid. So, just use the cones value even if we have pellets.
-
-  // 'k' is from Garetz
-  ratio = 1.0 - (ibu.add[hopIdx].percentLoss.value / 100.0);
-  k = Math.log(1.0 / ratio) / (365.0 / 2.0);
-  if (SMPH.verbose > 5) {
-    console.log("        %loss = " +
-              ibu.add[hopIdx].percentLoss.value.toFixed(2) +
-              " and so k = " + k.toFixed(6));
-  }
-
-  // oBA_fresh is modeled the same way as oAA_fresh
-  oBA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
-
-  BAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
-  oBA_percent_init = (BAloss_percent * SMPH.oBA_storageFactor) + oBA_fresh;
-  if (SMPH.verbose > 4) {
-    console.log("      [oAA] storage factors: fresh=" + oBA_fresh.toFixed(5) +
-              " + (loss=" + BAloss_percent.toFixed(5) +
-              " * storage=" + SMPH.oBA_storageFactor.toFixed(4) +
-              "): %init=" + oBA_percent_init.toFixed(5));
-  }
-
-  oBA_percent_boilFactor = ibu.add[hopIdx].freshnessFactor.value *
-                           SMPH.oBA_boilFactor;
-
-  // the following lines might be true, but no data to evaluate either way,
-  // and almost no impact on results:
-  // if (ibu.add[hopIdx].hopForm.value == "pellets") {
-    // oBA_percent_boilFactor *= ibu.add[hopIdx].pelletFactor;
-  // }
-
-  // oBA_addition is oBA added to wort, in mg
-
-  // assume that boiling has no effect on BA that have oxidized prior to
-  // boil (same as AA)
-  oBA_percent = oBA_percent_boilFactor;
-  if (oBA_percent_init > oBA_percent_boilFactor) {
-    oBA_percent = oBA_percent_init;
-  }
-  oBA_addition = oBA_percent * (ibu.add[hopIdx].BA.value / 100.0) *
+  oBA_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
+  oBA_addition = oBA_percent * SMPH.oBA_boilFactor *
+                  (ibu.add[hopIdx].BA.value / 100.0) *
                   ibu.add[hopIdx].weight.value * 1000.0;
 
-  // note: solubility limit of oBA is large enough so that all are dissolved
+  // note: solubility limit of oBA is large enough that all is dissolved
   ibu.add[hopIdx].oBA_dis_mg = oBA_addition;
-  if (SMPH.verbose > 3) {
+  if (SMPH.verbose > 4) {
     console.log("    hop addition " + hopIdx + ": [oBA] = " +
                 (ibu.add[hopIdx].oBA_dis_mg/currVolume).toFixed(4) +
-                " ppm from (" + oBA_percent_init.toFixed(4) + " + " +
-                oBA_percent_boilFactor.toFixed(4) +
-                ") * " + (ibu.add[hopIdx].BA.value/100.0).toFixed(4) + " * " +
+                " ppm from (" + oBA_percent.toFixed(4) + " * " +
+                SMPH.oBA_boilFactor +
+                " * " + (ibu.add[hopIdx].BA.value/100.0).toFixed(4) + " * " +
                 ibu.add[hopIdx].weight.value.toFixed(3) + " * 1000.0 / " +
                 currVolume.toFixed(4));
   }
@@ -1558,28 +1513,30 @@ function compute_oBA_dis_mg(ibu, hopIdx, currVolume) {
 // -----------------------------------------------------------------------------
 // compute loss factor (LF) for oxidized beta acids (oBA), for a specific
 // hop addition, using:
-// . oBA loss factor during the boil (lots of loss through conversion
-//   to hulupinic acid),
-// . overall loss factor from OG (big assumption),
 // . overall loss factor for fermentation,
 // . nonIAA loss factor for krausen,
 // . overall loss factor for finings,
 // . overall loss factor for filtering,
 // . overall loss factor for age
-// Assume that pH has little effect on oBA.
+// Assume that pH and OG have little effect on oBA.
 
 function compute_LF_oBA(ibu, hopIdx) {
   var LF_oBA = 0.0;
 
-  LF_oBA = SMPH.oBA_LF_boil *
-           compute_LF_OG_SMPH(ibu, hopIdx) *
-           compute_LF_ferment(ibu) *
+  LF_oBA = compute_LF_ferment(ibu) *
            compute_LF_nonIAA_krausen(ibu) *
            compute_LF_finings(ibu) *
            compute_LF_filtering(ibu) *
            compute_LF_age(ibu);
+  if (SMPH.verbose > 5) {
+    console.log("oBA LOSS FACTOR = " + LF_oBA +
+              " from ferment=" + compute_LF_ferment(ibu) + ", krausen=" +
+              compute_LF_nonIAA_krausen(ibu) + ", finings=" +
+              compute_LF_finings(ibu) + ", filtering=" +
+              compute_LF_filtering(ibu) + ", age=" +
+              compute_LF_age(ibu));
+    }
 
-  if (LF_oBA > 1.0) LF_oBA = 1.0;
   return(LF_oBA);
 }
 
@@ -1705,7 +1662,7 @@ function compute_maltPP_beer(ibu) {
   // the convertion from IBU to PP is not correct, but in the end we
   // want IBUs not PP and so it doesn't matter; we just need to undo
   // the Peacock conversion that we'll do later.
-  PP_malt = IBU_malt * 69.68 / 51.2;
+  PP_malt = IBU_malt * 69.68 / 50.0;
 
   // decrease the IBU by the amount of finings added and any filtration
   PP_malt = PP_malt * compute_LF_finings(ibu) * compute_LF_filtering(ibu);

@@ -8,8 +8,6 @@ TODO:
 
  + test lauter experiment #2 : 12 samples, 3 PP, 3 protein
 
-
-
 +1. new blog post on malt PP
     (code: modelPP.tcl, modelIBUs.tcl = hypothetical models)
     (code: estimateIBUs.tcl estimatePP.tcl = analyze data)
@@ -141,22 +139,25 @@ TODO:
 
 +26. scan in copies of all experiments
 
- 27. modify SMPH HTML to show IBU contribution from oAA, oBA, PP
++27. write blog posts on taste experiments
+
++28. add results of taste experiment to earlier blog posts
+
++29. oBA experiment #2... modify SMPH model and update blog
+
+
+ 30. dry-hopping model.
+
+ 31. modify SMPH HTML to show IBU contribution from oAA, oBA, PP
         AA utilization: 
         IBU from IAA: 
         IBU from oAA: 
         IBU from PP: 
         IBU per addition: 
 
- 28. write blog posts on taste experiments
+ 32. make copies of all blog posts, get copied HTML to display correctly
 
- 29. add results of taste experiment to earlier blog posts
-
- 30. make copies of all blog posts, get copied HTML to display correctly
-
- 31. put blog posts on github.
-
- 32. oBA experiment #2
+ 32. put blog posts on github.
 
  ==========================================================================
 
@@ -165,17 +166,12 @@ TODO:
  . test all calculators on chrome.
 
  . add miscellaneous calculators
-    - evaporation rate from change in SG
-    - compute yeast pitching rate
     - predict HSI <-> freshness factor <-> age, temp, storage factor, variety
-
-    - map Plato <-> SG
-    - correct SG based on temperature
-    - correct pH based on temperature
-    - correct volume based on temperature
-
-    - predict beer color from grains
-    - keg weight <-> volume for corny keg
+    - correct SG based on temperature (also show 'Plato)
+      correct pH based on temperature
+      correct volume based on temperature
+    - evaporation rate from change in SG, volume, etc
+    - compute yeast pitching rate
 
  . create larger system
         - create local parameters template (volume of trub left behind, etc)
