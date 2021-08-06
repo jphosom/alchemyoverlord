@@ -24,7 +24,7 @@ var testData = {
         "whirlpoolTime":         0,
         "beerAge_days":          10,
 
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  6.0,   3.5, "cones", 0.90,   38.2,    42.52,      60 ],  // willamette
         "add2":        [  6.0,   3.5, "cones", 0.90,   38.2,    28.35,      10 ],  // willamette
 
@@ -66,7 +66,7 @@ var testData = {
         "whirlpoolTime":         0,
         "beerAge_days":          15,
 
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  3.9,   3.5, "cones", 0.90,   38.2,    85.05,      60 ],  // willamette
         "add2":        [  3.9,   3.5, "cones", 0.90,   38.2,    28.35,      10 ],  // willamette
 
@@ -108,9 +108,10 @@ var testData = {
         "whirlpoolTime":         0,
         "beerAge_days":          15,
 
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
-        "add1":        [  4.7,   3.5, "cones", 0.95,   38.2,    63.79,      60 ],  // EKG
-        "add2":        [  4.7,   3.5, "cones", 0.95,   38.2,    28.35,      10 ],  // EKG
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
+        "add1":        [  4.7,   3.5, "pellets", 0.95,   38.2,    63.79,      60 ],  // EKG
+        "add2":        [  4.7,   3.5, "pellets", 0.95,   38.2,    28.35,      10 ],  // EKG
+        "add3":        [  4.7,   3.5, "pellets", 0.95,   38.2,    21.26,      4,     2.0,    "dryHop" ],  // EKG
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
@@ -150,9 +151,10 @@ var testData = {
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
 
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  2.7,  5.0, "pellets", 1.00,   40.0,     56.70,     60 ],  // tettnang
         "add2":        [  3.8,  4.0, "pellets", 1.00,   45.0,     56.70,     10 ],  // hallertau
+        "add3":        [  3.8,  4.0, "pellets", 1.00,   45.0,     28.35,     4,     2.0,   "dryHop" ],  // hallertau
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
@@ -186,7 +188,7 @@ var testData = {
     },
 
 
-    "IPA, Jan. 2021": {
+    "English IPA, Jan. 2021": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 38.8 ],
 
@@ -199,10 +201,11 @@ var testData = {
         "preOrPostBoilpH":       "postBoilpH",
         "whirlpoolTime":         0,
 
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  5.0,  2.4, "pellets", 1.00,   34.0,     85.05,     60 ],  // EKG
         "add2":        [  3.0,  2.5, "pellets", 1.00,   25.0,     56.70,     45 ],  // fuggle
         "add3":        [  5.0,  2.4, "pellets", 1.00,   35.0,     28.35,     10 ],  // EKG
+        "add4":        [  5.0,  2.4, "pellets", 1.00,   35.0,     56.70,     4,    2.0,  "dryHop" ],  // EKG
 
         "kettleDiameter":        37.148,
         "kettleOpening":         37.148,
@@ -211,7 +214,7 @@ var testData = {
         "forcedDecayType":       "forcedDecayImmersion",
         "wortClarity":           1.00,
         "finingsType":           "gelatin",
-        "finingsAmount":         5.0,
+        "finingsAmount":         15.0,
         "beerAge_days":          18,
 
         "skipSearch":   true,
@@ -241,8 +244,8 @@ var testData = {
         "IBU_list":              [ 20.2,  21.4,  21.2,  18.7  ],
         "weight1_list":          [ 10.30,  7.77,  5.14,  2.71 ],
         "weight2_list":          [ 21.70, 21.70, 21.70, 21.70 ],
-        "boilTime1_list":        [ 40,    40,    40,    40 ],
-        "boilTime2_list":        [ 1,      5,    10,    15 ],
+        "steepTime1_list":       [ 40,    40,    40,    40 ],
+        "steepTime2_list":       [ 1,      5,    10,    15 ],
         "boilTime":              45,            // time to first addition, plus duration of longest hop steep time
         "wortVolume":            12.0,          // average post-boil volume from four experiments (see volume.tcl)
         "preOrPostBoilVol":      "postBoilVol", // since first 5 minutes have lid off, faster evaporation
@@ -255,7 +258,7 @@ var testData = {
         "beerAge_days":          7,
 
         // 2019 Amarillo hops, analyzed AA 9.56%.  Stored for ~10 months at -15'F with SF 0.75 -> FF 0.98
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
         "add2":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
 
@@ -283,8 +286,8 @@ var testData = {
         "IBU_list":              [ 23.6,  24.5,  23.0,  22.8  ],
         "weight1_list":          [ 10.75,  8.20,  5.25,  0.0  ],
         "weight2_list":          [ 24.10, 24.10, 24.10, 24.10 ],
-        "boilTime1_list":        [ 40,    40,    40,    40 ],
-        "boilTime2_list":        [ 1,      5,    10,    20 ],
+        "steepTime1_list":       [ 40,    40,    40,    40 ],
+        "steepTime2_list":       [ 1,      5,    10,    20 ],
         "boilTime":              45,            // time to first addition, plus duration of longest hop steep time
         "wortVolume":            11.4125,       // average post-boil volume from four experiments (see volume.tcl)
         "preOrPostBoilVol":      "postBoilVol", // since first 5 minutes have lid off, faster evaporation
@@ -297,7 +300,7 @@ var testData = {
         "beerAge_days":          8,
 
         // 2019 Amarillo hops, analyzed AA 9.56%.  Stored for ~10 months at -15'F with SF 0.75 -> FF 0.98
-        //                AA%   BA%   form    freshF  %loss  weight(g),  boil time
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
         "add1":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
         "add2":        [  9.56, 5.0, "cones", 0.98,   14.0,     0.0,      0 ],
 
@@ -318,5 +321,7 @@ var testData = {
              },
        ],
     },
+
+
 };
 

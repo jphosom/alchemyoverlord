@@ -121,11 +121,10 @@ this.initialize_mIBU = function() {
     ibu[keys[idx]].updateFunction = mIBU.computeIBU_mIBU;
   }
   ibu.numAdditions.additionalFunctionArgs = mIBU.computeIBU_mIBU;
-  ibu.hopTableSize = 4; // compact table: cones/pellets, AA%, weight, boilTime
+  ibu.hopTableSize = 4; // cones/pellets, AA%, weight, steepTime
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
-  common.set(ibu.units, 0);
   common.set(ibu.boilTime, 0);
   common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
@@ -147,6 +146,7 @@ this.initialize_mIBU = function() {
   common.set(ibu.flocculation, 0);
   common.set(ibu.filtering, 0);
   common.set(ibu.beerAge_days, 0);
+  common.set(ibu.units, 0);
 
   mIBU.computeIBU_mIBU();
 
@@ -308,7 +308,7 @@ this.computeIBU_mIBU = function() {
     console.log("  addition " + Number(hopIdx+1) + ": AA=" +
                 ibu.add[hopIdx].AA.value +
                 ", weight=" + ibu.add[hopIdx].weight.value +
-                ", time=" + ibu.add[hopIdx].boilTime.value);
+                ", time=" + ibu.add[hopIdx].steepTime.value);
     ibu.add[hopIdx].AAinit = 0.0;
     ibu.add[hopIdx].AAdis = 0.0;
     ibu.add[hopIdx].AAcurr = 0.0;
@@ -372,7 +372,11 @@ this.computeIBU_mIBU = function() {
   for (t = boilTime; finished == 0; t = t - integrationTime) {
     // check to see if add hops at this time point.
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-      additionTime = ibu.add[hopIdx].boilTime.value;
+      if (ibu.add[hopIdx].kettleOrDryHop &&
+          ibu.add[hopIdx].kettleOrDryHop.value != "kettle") {
+        continue;
+      }
+      additionTime = ibu.add[hopIdx].steepTime.value;
       // make sure that addition time doesn't have higher precision than integ.
       if (common.getPrecision("" + additionTime) > 2) {
         additionTime = Number(additionTime.toFixed(2));

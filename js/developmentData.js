@@ -46,6 +46,8 @@ var developmentData = {
         "evaporationRate":       4.01,    // estimated from pre-boil SG, post-boil SG, and total boil time
         "immersionDecayFactor":  0.1198,  // estimated from post-boil volume (which is estimated from evaporation rate)
         "forcedDecayType":       "forcedDecayImmersion",
+        "finingsType":           "gelatin",
+        "finingsAmount":         2.5,
 
         "skipSearch":   true,
         "search": [
@@ -144,6 +146,8 @@ var developmentData = {
         "evaporationRate":       3.98,
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
+        "finingsType":           "gelatin",
+        "finingsAmount":         5.0,
 
         "skipSearch":   true,
         "search": [
@@ -461,6 +465,8 @@ var developmentData = {
         "add3":        [  7.1,  6.5,  "cones", 0.99,    4.0,   56.70,        0 ],  // amarillo, unknown year
         "add4":        [ 12.9,  3.75, "cones", 0.95,   25.0,   56.70,        0 ],  // citra, unknown year
         "add5":        [ 13.7,  4.0,  "cones", 0.94,   25.0,   56.70,        0 ],  // simcoe 2016 crop; BA=package
+        "add6":        [  8.1,  7.6,  "cones", 0.95,   50.0,   28.35,        7, 1.0, "dryHop" ],  // cascade, measured AA and BA
+        "add7":        [ 12.5,  3.5,  "cones", 0.94,   15.0,   28.35,        7, 1.0, "dryHop" ],  // mosaic, default AA, BA, and %loss
 
         "kettleDiameter":        37.148,
         "kettleOpening":         28.0,  // target final measured temp of 93'C after 10 minutes
@@ -534,6 +540,8 @@ var developmentData = {
         "add3":        [ 9.0,   6.5,  "cones", 1.00,    4.00,    85.05,      0 ], // amarillo 2016 crop; BA=guess
         "add4":        [ 12.3,  3.75, "cones", 0.98,   25.00,    85.05,      0 ], // citra 2016 crop; BA=guess
         "add5":        [ 13.7,  4.0,  "cones", 0.98,   25.00,    85.05,      0 ], // simco 2016 crop; BA=package
+        "add6":        [  7.9,  5.0,  "cones", 0.98,   50.0,   28.35,        7, 1.0, "dryHop" ],  // cascade
+        "add7":        [ 12.5,  3.5,  "cones", 0.94,   15.0,   28.35,        7, 1.0, "dryHop" ],  // mosaic, default AA, BA, and %loss
 
         "kettleDiameter":        37.148,
         "kettleOpening":         28.0,  // target final measured temp of 93'C after 10 minutes
@@ -606,12 +614,16 @@ var developmentData = {
         "add3":        [ 9.0,   6.5,  "cones", 0.99,   14.00,    85.05,      0 ], // amarillo 2016 crop
         "add4":        [ 12.3,  3.75, "cones", 0.97,   25.00,    85.05,      0 ], // citra 2016 crop; BA=guess
         "add5":        [ 13.7,  4.0,  "cones", 0.97,   25.00,    85.05,      0 ], // simcoe 2016 crop; BA=package
+        "add6":        [ 8.4,   5.0,  "cones", 0.92,   50.00,    28.35,      7, 1.0, "dryHop" ],  // cascade
+        "add7":        [ 12.5,  3.5,  "cones", 0.94,   15.00,    28.35,      7, 1.0, "dryHop" ],  // mosaic, default AA, BA, and %loss
 
         "kettleDiameter":        37.148,
         "kettleOpening":         28.0,  // target final measured temp of 93'C after 10 minutes
         "evaporationRate":       4.02,
         "immersionDecayFactor":  0.0947,
         "forcedDecayType":       "forcedDecayImmersion",
+        "finingsType":           "gelatin",
+        "finingsAmount":         2.5,
 
         "skipSearch":   true,
         "search": [
@@ -677,6 +689,8 @@ var developmentData = {
         "add3":        [  9.0,  6.5,  "cones", 0.99,    4.0,     85.05,      0 ],  // amarillo 2016 crop
         "add4":        [ 12.3,  3.75, "cones", 0.93,   25.0,     85.05,      0 ],  // citra 2016 crop; BA=guess
         "add5":        [ 13.7,  4.0,  "cones", 0.93,   25.0,     85.05,      0 ],  // simcoe 2016 crop; BA=package
+        "add6":        [  6.2,  5.0,  "cones", 0.92,   50.00,    28.35,      4, 1.0, "dryHop" ],  // cascade
+        "add7":        [ 12.5,  3.5,  "cones", 0.94,   15.00,    28.35,      4, 1.0, "dryHop" ],  // mosaic, default AA, BA, and %loss
 
         "kettleDiameter":        37.148,
         "kettleOpening":         28.0,  // target final measured temp of 93'C after 10 minutes
@@ -685,6 +699,8 @@ var developmentData = {
         "forcedDecayType":       "forcedDecayImmersion",
         // JPH: krausen mixed in or default has a *huge* impact on results
         "krausen":               "mix krausen back in; no loss",   // guess; no record
+        "finingsType":           "gelatin",
+        "finingsAmount":         5.0,
 
         "skipSearch":   true,
         "search": [

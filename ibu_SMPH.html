@@ -175,6 +175,10 @@ Version 1.0.1 : Nov. 22, 2018 to May 16, 2021
     <input type="radio" value="preBoilpH" id="preBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off">pre-boil or
     <input type="radio" value="postBoilpH" id="postBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off" checked>post-boil
   </span>
+  <br>
+  <span id="useDryHopModel">
+  <input type="checkbox" id="ibu.useDryHopModelCheckbox" onchange="common.set(ibu.useDryHopModelCheckbox,1)"> Model IBUs of dry-hop additions (this model provides only a rough approximation)
+  </span>
   </p>
 
 
@@ -215,6 +219,10 @@ Version 1.0.1 : Nov. 22, 2018 to May 16, 2021
   <table style="margin-left:3em">
   <tbody>
   <tr>
+    <td>Volume in Fermentor (<span id="fermentorVolumeUnits">G</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.fermentorVolume" onchange="common.set(ibu.fermentorVolume, 1)"></td>
+  </tr>
+  <tr>
     <td>Wort Clarity into Fermentor:</td>
     <td><select style="width:17em;" id="ibu.wortClarity" onchange="common.set(ibu.wortClarity, 1)">
     <option value="very clear">very clear</option>
@@ -224,6 +232,7 @@ Version 1.0.1 : Nov. 22, 2018 to May 16, 2021
     <option value="somewhat cloudy">somewhat cloudy</option>
     <option value="cloudy">cloudy</option>
     <option value="very cloudy">very cloudy</option>
+    <option value="extremely cloudy">extremely cloudy</option>
     </select>
     </td>
   </tr>

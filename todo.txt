@@ -146,31 +146,47 @@ TODO:
 +29. oBA experiment #2... modify SMPH model and update blog
 
 
- 30. dry-hopping model.
-
- 31. modify SMPH HTML to show IBU contribution from oAA, oBA, PP
++30. modify SMPH HTML to show IBU contribution from oAA, oBA, PP
         AA utilization: 
         IBU from IAA: 
         IBU from oAA: 
         IBU from PP: 
         IBU per addition: 
 
- 32. make copies of all blog posts, get copied HTML to display correctly
++31. dry-hopping model
 
- 32. put blog posts on github.
+ 32. add Shellhammer units to output
+
+ 33. re-run parameter estimation one more time, clean up code again.
+     test all calculators on chome.  scan paper copies of experiments
+
+ 34. publish SMPH model and estimation scripts
+
+ 35. update A Summary of Factors with:
+       - IBU is highly correlated with bitterness (in intro)
+       - add some stuff about dry hopping
+     update Techniques for Maximizing:
+       - order in terms of amount of hops, then freshness, etc.
+
+ 36. blog posts:
+     - Three Misconceptions About the IBU
+         - "IBUs are meaningless"
+         - "IBU = IAA"
+         - ???
+     - SMPH model
+
+ 37. make copies of all blog posts, get copied HTML to display correctly
+
+ 38. put blog posts on github.
 
  ==========================================================================
 
-
-
- . test all calculators on chrome.
-
  . add miscellaneous calculators
     - predict HSI <-> freshness factor <-> age, temp, storage factor, variety
+    - evaporation rate from change in SG, volume, etc
     - correct SG based on temperature (also show 'Plato)
       correct pH based on temperature
       correct volume based on temperature
-    - evaporation rate from change in SG, volume, etc
     - compute yeast pitching rate
 
  . create larger system

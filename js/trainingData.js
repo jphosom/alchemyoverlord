@@ -25,6 +25,11 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "Lauter Exp. #1", "Lauter Exp. #2" ];
 // var evaluateTrainingExperiments = [ "FV Exp. #1" ];
 // var evaluateTrainingExperiments = [ "Teamaker #2" ];
+// var evaluateTrainingExperiments = [ "DryHop1_PreDH", "DryHop1_DH13314" ];
+// var evaluateTrainingExperiments = [ "DryHop1_PreDH", "DryHop1_DH13314",
+                                    // "DryHop2_noIAA_PreDH", "DryHop2_noIAA_DH8000",
+                                    // "DryHop2_lowIAA_PreDH", "DryHop2_lowIAA_DH8000",
+                                    // "DryHop2_highIAA_PreDH", "DryHop2_highIAA_DH2000", "DryHop2_highIAA_DH8000" ];
 
 // units *must* be all metric
 
@@ -38,7 +43,7 @@ var trainingData = {
         "OG_list":               [ 1.055,  1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055 ],
 
         //              weight of hops targets semi-arbitrary 100 ppm
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.65,  5.00, "cones",   1.00,   38.2,  325.55, 90 ],
 
         // assume 2-barrel pilot-brewery volume
@@ -90,7 +95,7 @@ var trainingData = {
         "fresh_list":            [ 0.83,        0.73,       0.54,       0.07 ],
 
         // Willamette hops; weight is set to minimize error
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  3.90,  2.89, "cones",   0.83,   37.43, 560.0,  90 ],
 
         // assume 2-barrel pilot-brewery volume
@@ -135,7 +140,7 @@ var trainingData = {
         "OG_list":               [ 1.0593,  1.0589,  1.0628,  1.0637 ],    // from Analysis Laboratory
 
         // Cascade hops, package rating 8.0%, freshness factor 0.72 from HSI (Analysis Lab.)
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.00,  6.6,  "cones",   0.72,   50.0,  17.01,  60 ],
 
         "timeToFirstAddition":   0,
@@ -188,7 +193,7 @@ var trainingData = {
         // "OG_list":            [ 1.0650,  1.0650,  1.0645,  1.0640,  1.0655 ],  // from hydrometer
 
         // Cascade hops, package rating 8.4%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.40,  3.5,  "cones",   0.68,   50.0,  45.36,  10 ],
 
         "timeToFirstAddition":   0,
@@ -245,7 +250,7 @@ var trainingData = {
         // "OG_list":            [ 1.0659,  1.0632,  1.0625,  1.0630,  1.0630 ],   // from hydrometer
 
         // Cascade hops, package rating 7.9%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  7.90,  6.32, "cones",   0.79,   50.0,  45.36,  10 ],
 
         "timeToFirstAddition":   0,
@@ -300,7 +305,7 @@ var trainingData = {
         // "OG_list":            [ 1.0747,  1.0690,  1.0670,  1.0690,  1.0650 ], // hydrometer
 
         // Cascade hops, analyzed close to harvest at AA=6.64%, BA=5.38%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  6.64,  5.38, "cones",   0.95,   50.0,  22.68,  60 ],
 
         "timeToFirstAddition":   0,
@@ -351,7 +356,7 @@ var trainingData = {
 
         // cascade package rating AA 8.1%  BA 7.6%
         // default freshness factor 0.95 is rough guess based on measured AA / package AA
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.10,  7.60, "cones",   0.95,   50.0,  21.26,  40 ],
 
         "timeToFirstAddition":   10,     // wait 10 minutes after start of boil
@@ -399,7 +404,7 @@ var trainingData = {
 
         // cascade package rating AA=8.10%, BA=7.60%.  Measured AA=7.7%, BA=6.8%, HSI 0.231
         // default freshness factor 0.95 is guess based on measured AA / package AA
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.10,  7.60, "cones",   0.95,   50.0,  0.0,    12 ],
 
         "timeToFirstAddition":   7,     // wait 7 minutes after start of boil
@@ -448,7 +453,7 @@ var trainingData = {
 
         // cascade package rating AA=8.10%, BA=7.60%.  Measured AA=7.7%, BA=6.8%, HSI 0.231
         // default freshness factor 0.95 is rough guess based on measured AA / package AA
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  8.10,  7.60, "cones",   0.95,   50.0,  0.0,    26.9 ],
 
         "timeToFirstAddition":   7,     // wait 7 minutes after start of boil
@@ -506,7 +511,7 @@ var trainingData = {
 
         // citra (both additions) package rating AA 13.3%  BA 3.9%
         // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.30,  3.90, "cones",   0.74,   25.0,  32.60,  100 ],
         "add2":        [ 13.30,  3.90, "cones",   0.74,   25.0,  32.60,  45 ],
 
@@ -578,7 +583,7 @@ var trainingData = {
 
         // citra package rating AA 13.3%  BA 3.9%
         // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.30,  3.90, "cones",   0.74,   25.0,  82.865, 103 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -631,7 +636,7 @@ var trainingData = {
 
         // citra package rating AA 13.3%  BA 3.9%
         // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.30,  3.90, "cones",   0.74,   25.0,  177.18, 80 ],
 
         "timeToFirstAddition":   10,     // wait 10 minutes after start of boil
@@ -685,7 +690,7 @@ var trainingData = {
         // citra package rating AA 13.3%  BA 3.9%
         // default freshness factor 0.74 is rough guess based on estimated age, storage conditions
         // an AA rating of 12.0% yields IAA scaling factor more in line with other experiments
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.30,  3.90, "cones",   0.74,   25.0,  120.48, 100 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -734,7 +739,7 @@ var trainingData = {
                                    1.0396,  1.0399,  1.0401,  1.0404 ],
 
         // citra bought soon after harvest and stored in freezer; package rating AA=14.30%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.30,  3.6,  "cones",   0.95,   25.0,  37.81,  90 ],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -783,7 +788,7 @@ var trainingData = {
                                    1.0396,  1.0399,  1.0401,  1.0404 ],
 
         // citra
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [ 14.0,   3.8,  "pellets", 1.00,   25.0,  37.81,  90,       1.9],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -827,7 +832,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394, 1.0404 ],
 
         // willamette package rating AA 5.0%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  5.00,  3.10, "cones",   1.00,   37.43, 105.57, 60 ],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -871,7 +876,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394, 1.0404 ],
 
         // willamette package rating AA 4.8%; measured from Brew Laboratory 5.1%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  4.95,  4.00, "pellets", 1.00,   37.43, 105.57, 60,       1.50 ],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -915,7 +920,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
         // willamette package rating AA 5.0%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  5.00,  3.10, "cones",   1.00,   37.43, 105.57, 80 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -959,7 +964,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
         // willamette package rating AA 4.8%; measured from Brew Laboratory 5.1%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  4.95,  4.00, "pellets", 1.00,   37.43, 105.57, 80,       1.50 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -1003,7 +1008,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
         // comet package rating AA 9.9%; analysis = AA=10.80%, BA=3.92%, HSI=0.25
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [ 10.35,  3.92, "cones",   1.0,    37.43, 53.312, 80 ],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -1047,7 +1052,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396,  1.0399,  1.0401 ],
 
         // comet rating AA 9.92% is average of package rating and AAR labs result
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  9.92,  3.7,  "pellets", 1.0,    37.43, 53.312, 80,       3.15 ],
 
         "timeToFirstAddition":   4,      // wait 4 minutes after start of boil
@@ -1091,7 +1096,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396 ],
 
         // comet package rating AA 9.9%, measured 9.70% therefore loss factor 0.98, beta acids = 3.17/0.98
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  9.90,  3.23, "cones",   0.98,   37.43, 54.96,  60 ],
 
         "timeToFirstAddition":   6,      // wait 6 minutes after start of boil
@@ -1135,7 +1140,7 @@ var trainingData = {
         "OG_list":               [ 1.0384,  1.0387,  1.0389,  1.0392,  1.0394,  1.0396 ],
 
         // comet package rating AA 9.5%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  9.5,   3.7,  "pellets", 1.0,    37.43, 60.86,  60,       2.21 ],
 
         "timeToFirstAddition":   6,      // wait 6 minutes after start of boil
@@ -1186,7 +1191,7 @@ var trainingData = {
 
         // comet package rating AA 9.9%, measured 8.32% before exp, therefore
         //  loss factor 0.84, beta acids = 3.92 from initial analysis
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  9.9,   3.92, "cones",   0.84,   37.43, 0.0,    40 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -1245,7 +1250,7 @@ var trainingData = {
         // comet package rating AA 9.9%, measured 9.55% just before exp, therefore
         //  loss factor 0.96, beta acids = 3.92 from cones (guess).
         // pelletFactor of 2.7 is average of CvP #4 (3.15) and CvP #5 (2.21)
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime, pelletFactor
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pelletFactor
         "add1":        [  9.9,   3.92, "pellets", 0.96,   37.43, 0.0,    40,       2.7 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -1299,7 +1304,7 @@ var trainingData = {
         "OG_list":               [ 1.0388,  1.0388,  1.0380,  1.0396,  1.0380,  1.0396,  1.0380,  1.0388,  1.0396,  1.0396 ],
 
         // citra bought soon after harvest and stored in freezer
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.30,  3.5,  "cones",   0.95,   25.0,  0.0,    20 ],
 
         "timeToFirstAddition":   0,      // wait 0 minutes after start of boil
@@ -1352,7 +1357,7 @@ var trainingData = {
 
         // add1: citra hops AA 14.3%
         // add2: willamette hops AA 5.0%
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.30,  3.5,  "cones",   0.95,   25.0,  0.0,    30 ],
         "add2":        [  5.00,  3.1,  "cones",   0.95,   37.43, 0.0,    30 ],
 
@@ -1404,7 +1409,7 @@ var trainingData = {
                                    5.39,      5.38,      5.36,      5.35,      5.27,      5.25,      5.24,      5.22 ],
 
         // citra bought soon after harvest and stored in freezer
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.30,  3.5,  "cones",   0.965,  25.0,  18.285, 40 ],
 
         "timeToFirstAddition":   10,     // wait 10 minutes after start of boil
@@ -1450,7 +1455,7 @@ var trainingData = {
                                    1.03825, 1.0388,  1.0394,  1.0400,  1.03825, 1.0388,  1.0394,  1.0400 ],
 
         // citra bought soon after harvest and stored in freezer
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.3,   3.5,  "cones",   0.948,  25.0,  19.675, 40 ],
 
         "timeToFirstAddition":   10,     // wait 10 minutes after start of boil
@@ -1497,7 +1502,7 @@ var trainingData = {
 
         // comet package rating AA 10.0%; analysis = AA=10.80%, BA=3.92%, HSI=0.25
         //     analysis close to time of experiment: AA= 9.70%, BA=3.71%, HSI=0.35
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 10.00,  3.92, "cones",   0.90,   37.43, 20.91,  40 ],
 
         "timeToFirstAddition":   5,     // wait 10 minutes after start of boil
@@ -1547,7 +1552,7 @@ var trainingData = {
                                    1.0461,  1.0463,  1.0464,  1.0465,  1.0301,  1.0301,  1.0302,  1.0303],
 
         // cascade analysis: AA 7.05%, BA 5.66%, store 11 months @ -5.5'F SF 0.5 -> decay 0.908
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  7.05,  5.66, "cones",   0.908,  50.0,  33.485, 40 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1596,7 +1601,7 @@ var trainingData = {
                                    1.0463,  1.0467,  1.0470,  1.0473,  1.0305,  1.0307,  1.0308,  1.0310],
 
         // cascade analysis: AA 7.05%, BA 5.66%, store 11 months @ -5.5'F SF 0.5 -> decay 0.908
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  7.05,  5.66, "cones",   0.908,  50.0,  33.485, 40 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1648,7 +1653,7 @@ var trainingData = {
         "OG_list":               [ 1.0566,  1.0568,  1.0570,  1.0575,  1.0580,
                                    1.0568,  1.0570,  1.0575 ],
 
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  0.41,  11.93, "cones",  1.00,   38.2,  57.00,  60 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1689,8 +1694,8 @@ var trainingData = {
         "OG_list":               [ 1.040,  1.040 ],
         "fresh_list":            [ 0.33,   1.00  ],
 
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
-        "add1":        [  0.58, 10.92, "cones",   1.00,   38.2,  56.70,  20 ],
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [  0.58, 10.92, "cones",   1.00,   62.32,  56.70,  20 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
         "evaporationRate":       0.265, // from model.tcl, 0.07 G/hr covered
@@ -1741,7 +1746,7 @@ var trainingData = {
 
         //                Amarillo hops, 2019 harvest, stored in freezer for 4 months,
         //                         package 8.8%, AAR 9.56%; BA and loss from hops.js
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  9.56,  6.50, "cones",   0.963,  14.0,  24.60,  0 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1790,7 +1795,7 @@ var trainingData = {
 
         // comet: same as CvP #4C
         // storage for 270 days at -9'F yields freshF between 0.90 and 0.95, depending on SF
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 10.35,  3.92, "cones",   0.93,   37.43, 20.43,  40 ],
 
         "timeToFirstAddition":   5,      // wait 5 minutes after start of boil
@@ -1842,7 +1847,7 @@ var trainingData = {
                                    1.020,  1.020,  1.020,  1.020 ],
 
         // cascade 2018 analysis: AA 6.4%, store 555 days @ -9'F SF 0.5 -> decay 0.85
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  6.40,  5.75, "cones",   0.85,   50.0,  37.57,  40 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1897,7 +1902,7 @@ var trainingData = {
         // cascade 2017 analysis: AA 7.7% is average of 6.89% and 8.5%; wide range
         //                        BA 5.75% is average of 5.64% and 6.2%
         //                        freshness: store 2.5 years in freezer -> 0.80
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  7.70,  5.9,  "cones",   0.80,   50.0,  42.25,  40 ],
 
         "timeToFirstAddition":   5,     // wait 5 minutes after start of boil
@@ -1933,6 +1938,290 @@ var trainingData = {
         ]
     },
 
+    "DryHop1_PreDH": {
+        "conditions":            [ "DH1: 0ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 49.68 ],
+
+        "boilTime":              50,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            8.36,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.067,
+        "pH":                    5.25,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          15,    // 8 days ferment, 4 days is duration of dry hop, ~3 days shipping & analysis
+        "wortClarity":           0.70,  // very cloudy = BIAB method, using all collected wort
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [ 13.5,   4.0,  "cones",   0.88,   25.00, 28.35,  45 ], // citra
+        "add2":        [ 10.3,   3.5,  "cones",   0.93,   15.00, 42.52,  10 ], // mosaic
+        "add3":        [ 12.6,   4.5,  "cones",   0.88,   25.00, 42.52,   6 ], // simcoe
+        "add4":        [  9.3,   6.5,  "cones",   0.93,   14.00, 42.52,   2 ], // amarillo
+
+        "evaporationRate":       1.524,
+        "immersionDecayFactor":  2.5,     // single-coil wort chiller with only 2 G wort... not a big impact
+        "forcedDecayType":       "forcedDecayImmersion",
+        "krausen":               "minor krausen deposits on FV", // educated guess
+
+        "skipSearch": false,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  13.5,
+                 "method":   "relative",
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  10.3,
+                 "method":   "relative",
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
+             },
+       ],
+    },
+
+    "DryHop1_DH13314": {
+        "conditions":            [ "DH1: 13314ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 64.625 ],
+
+        "boilTime":              50,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            8.36,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.067,
+        "pH":                    5.25,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          15,    // 8 days ferment, 4 days is duration of dry hop, ~3 days shipping & analysis
+        "wortClarity":           0.70,  // very cloudy = BIAB method, using all collected wort
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [ 13.5,   4.0,  "cones",   0.88,   25.00, 28.35,  45 ], // citra
+        "add2":        [ 10.3,   3.5,  "cones",   0.93,   15.00, 42.52,  10 ], // mosaic
+        "add3":        [ 12.6,   4.5,  "cones",   0.88,   25.00, 42.52,   6 ], // simcoe
+        "add4":        [  9.3,   6.5,  "cones",   0.93,   14.00, 42.52,   2 ], // amarillo
+        "add5":        [  8.5,   6.5,  "pellets", 0.80,   14.00, 264.59,   4,  1.0, "dryHop" ], // amarillo; guess at fresh
+
+        "evaporationRate":       1.524,
+        "immersionDecayFactor":  2.5,     // single-coil wort chiller with only 2 G wort... not a big impact
+        "forcedDecayType":       "forcedDecayImmersion",
+        "krausen":               "minor krausen deposits on FV", // educated guess
+
+        "skipSearch": false,
+        "search": [
+             {
+                 "param":    "AA1",
+                 "default":  13.5,
+                 "method":   "relative",
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
+             },
+             {
+                 "param":    "AA2",
+                 "default":  10.3,
+                 "method":   "relative",
+                 "low":      0.90,
+                 "high":     1.10,
+                 "inc":      0.05,
+             },
+       ],
+    },
+
+    "DryHop2_noIAA_PreDH": {
+        "conditions":            [ "DH2: noIAA 0ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 1.8 ],
+
+        "kettleDiameter":        25.4,
+        "kettleOpening":         25.4,
+        "boilTime":              10,
+        "wortVolume":            3.62,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.034,
+        "pH":                    5.30,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          8,
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [  0.0,   0.0, "cones",    1.00,    0.00,  0.0,   0 ],
+
+        "evaporationRate":       0.0,
+        "fermentorVolume":       2.15768,
+        "icebathDecayFactor":    0.3248,     // default
+        "forcedDecayType":       "forcedDecayIcebath",
+        "krausen":               "medium krausen deposits on FV (default)",  // educated guess
+    },
+
+    "DryHop2_noIAA_DH8000": {
+        "conditions":            [ "DH2: noIAA 8000ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 26.7 ],
+
+        "kettleDiameter":        25.4,
+        "kettleOpening":         25.4,
+        "boilTime":              10,
+        "wortVolume":            3.62,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.034,
+        "pH":                    5.30,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          8,
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pellet, dryHop
+        "add1":        [ 14.9,   3.16, "cones",    0.75,   25.0, 17.262,   0,          1.0,   "dryHop" ],
+
+        "evaporationRate":       0.0,
+        "fermentorVolume":       2.15768,
+        "icebathDecayFactor":    0.3248,     // default
+        "forcedDecayType":       "forcedDecayIcebath",
+        "krausen":               "medium krausen deposits on FV (default)",  // educated guess
+    },
+
+    "DryHop2_lowIAA_PreDH": {
+        "conditions":            [ "DH2: lowIAA 0ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 22.3 ],
+
+        "kettleDiameter":        30.074,  // 5G aluminum kettle
+        "kettleOpening":         30.074,
+        "boilTime":              50,
+        "wortVolume":            11.35,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.0344,
+        "pH":                    5.297,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "wortClarity":           1.5,  // reseted wort 25 min, then decanted only top layer to get as clear as possible
+        "krausen":               "mix krausen back in; no loss",  // daily swirling to reduce krausen, almost none on FV
+        "beerAge_days":          45,
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [  9.56,  6.25, "cones",    0.96,   14.00,  5.0,   45 ],  // 2019 Amarillo hops
+        "add2":        [  9.56,  6.25, "cones",    0.96,   14.00, 23.0,   10 ],
+
+        "evaporationRate":       1.23,  // estimate off 5+10 min (4.0), on 35 min (0.05)
+        "fermentorVolume":       2.15768,
+        "immersionDecayFactor":    0.25,  // average from previous experiments with this kettle
+        "forcedDecayType":       "forcedDecayImmersion",
+    },
+
+    "DryHop2_lowIAA_DH8000": {
+        "conditions":            [ "DH2: lowIAA 8000ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 44.6 ],
+
+        "kettleDiameter":        30.074,  // 5G aluminum kettle
+        "kettleOpening":         30.074,
+        "boilTime":              50,
+        "wortVolume":            11.35,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.0344,
+        "pH":                    5.297,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "wortClarity":           1.5,  // reseted wort 25 min, then decanted only top layer to get as clear as possible
+        "krausen":               "mix krausen back in; no loss",  // daily swirling to reduce krausen, almost none on FV
+        "beerAge_days":          45,
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [  9.56,  6.25, "cones",    0.96,   14.00,  5.0,   45 ],  // 2019 Amarillo hops
+        "add2":        [  9.56,  6.25, "cones",    0.96,   14.00, 23.0,   10 ],
+        "add3":        [ 14.9,   3.95, "pellets",  0.75,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra
+
+        "evaporationRate":       1.23,  // estimate off 5+10 min (4.0), on 35 min (0.05)
+        "fermentorVolume":       2.15768,
+        "immersionDecayFactor":    0.25,  // average from previous experiments with this kettle
+        "forcedDecayType":       "forcedDecayImmersion",
+    },
+
+    "DryHop2_highIAA_PreDH": {
+        "conditions":            [ "DH2: highIAA 0ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 63.7 ],
+
+        "kettleDiameter":        25.4,
+        "kettleOpening":         25.4,
+        "boilTime":              50,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            3.626422,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.065,
+        "pH":                    5.30,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          14,
+        "flocculation":          "high",
+        "wortClarity":           "extremely cloudy",
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [ 13.5,   3.95, "cones",   0.85,   25.00, 42.5244,  45 ], // citra
+        "add2":        [  8.5,   6.50, "pellets", 0.90,   14.00, 14.1748,  10 ], // amarillo
+
+        "evaporationRate":       0.757082,
+        "fermentorVolume":       2.15768,
+        "icebathDecayFactor":    0.3248,     // default
+        "forcedDecayType":       "forcedDecayIcebath",
+        "krausen":               "medium krausen deposits on FV (default)",  // educated guess
+    },
+
+    "DryHop2_highIAA_DH2000": {
+        "conditions":            [ "DH2: highIAA 2000ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 69.3 ],
+
+        "kettleDiameter":        25.4,
+        "kettleOpening":         25.4,
+        "boilTime":              50,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            3.626422,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.065,
+        "pH":                    5.30,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          14,
+        "flocculation":          "high",
+        "wortClarity":           "extremely cloudy",
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [ 13.5,   3.95, "cones",   0.85,   25.00, 42.5244,  45 ], // citra
+        "add2":        [  8.5,   6.50, "pellets", 0.90,   14.00, 14.1748,  10 ], // amarillo
+        "add3":        [ 14.9,   3.95, "pellets", 0.75,   25.00,  4.3153,   4,  1.0, "dryHop" ], // citra
+
+        "evaporationRate":       0.757082,
+        "fermentorVolume":       2.15768,
+        "icebathDecayFactor":    0.3248,     // default
+        "forcedDecayType":       "forcedDecayIcebath",
+        "krausen":               "medium krausen deposits on FV (default)",  // educated guess
+    },
+
+    "DryHop2_highIAA_DH8000": {
+        "conditions":            [ "DH2: highIAA 8000ppm" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 74.2 ],
+
+        "kettleDiameter":        25.4,
+        "kettleOpening":         25.4,
+        "boilTime":              50,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            3.626422,
+        "preOrPostBoilVol":      "preBoilVol",
+        "OG":                    1.065,
+        "pH":                    5.30,
+        "preOrPostBoilpH":       "postBoilpH",
+        "whirlpoolTime":         0,
+        "beerAge_days":          14,
+        "flocculation":          "high",
+        "wortClarity":           "extremely cloudy",
+
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
+        "add1":        [ 13.5,   3.95, "cones",   0.85,   25.00, 42.5244,  45 ], // citra
+        "add2":        [  8.5,   6.50, "pellets", 0.90,   14.00, 14.1748,  10 ], // amarillo
+        "add3":        [ 14.9,   3.95, "pellets", 0.75,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra
+
+        "evaporationRate":       0.757082,
+        "fermentorVolume":       2.15768,
+        "icebathDecayFactor":    0.3248,     // default
+        "forcedDecayType":       "forcedDecayIcebath",
+        "krausen":               "medium krausen deposits on FV (default)",  // educated guess
+    },
+
     "IPA, Jun. 2018": {
         "conditions":            [ "IPA" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 63.7 ],
@@ -1947,7 +2236,7 @@ var trainingData = {
         "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
         "beerAge_days":          26,
 
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 12.3,   3.75, "cones",   0.86,   25.00, 28.35,  60 ], // citra 2016; BA=guess
         "add2":        [  9.0,   6.5,  "cones",   0.98,    4.00, 28.35,  45 ], // amarillo 2016
         "add3":        [ 13.0,   4.5,  "cones",   0.94,   25.00, 28.35,  30 ], // simcoe 2017?
@@ -1956,11 +2245,12 @@ var trainingData = {
         "add6":        [  9.0,   6.5,  "cones",   0.98,    4.00, 21.26,   0 ], // amarillo 2016
         "add7":        [ 11.0,   3.6,  "cones",   0.94,   25.00, 21.26,   0 ], // mosaic 2017?
         "add8":        [ 13.0,   4.5,  "cones",   0.94,   25.00, 21.26,   0 ], // simcoe 2017?
+        "add9":        [ 12.5,   3.5,  "pellets", 0.94,   15.0,  28.35,   3, 1.0, "dryHop" ],  // cryo mosaic, default AA, BA
 
         "kettleDiameter":        37.148,
         "kettleOpening":         28.0,  // target final expected temp of 93'C after 10 minutes
         "evaporationRate":       4.10,
-        "immersionDecayFactor":  0.1015,
+        "immersionDecayFactor":  0.4283,  // was set to 0.1015... why so low??  JPH CHECK
         "forcedDecayType":       "forcedDecayImmersion",
         "krausen":               "mix krausen back in; no loss",   // swirling of containers during fermentation
 
@@ -1999,7 +2289,7 @@ var trainingData = {
         "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
         "beerAge_days":          24,
 
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 14.3,   4.0,  "cones",   0.837,  25.00, 28.35,  60 ], // citra
         "add2":        [  9.3,   6.5,  "cones",   0.959,  14.00, 28.35,  45 ], // amarillo
         "add3":        [ 12.6,   4.5,  "cones",   0.923,  25.00, 28.35,  30 ], // simcoe
@@ -2015,6 +2305,8 @@ var trainingData = {
         "immersionDecayFactor":  0.4283,  // hydra wort chiller, measured Oct 27 2018
         "forcedDecayType":       "forcedDecayImmersion",
         "krausen":               "medium krausen deposits on FV (default)",
+        "finingsType":           "gelatin",
+        "finingsAmount":         15.0,
 
         "skipSearch": false,
         "search": [
@@ -2051,7 +2343,7 @@ var trainingData = {
         "tempExpParamB":         0.0053,      // from Jul 2019, cover *ON*
         "beerAge_days":          21,
 
-        //                AA%    BA%   form       freshF  %loss  wt(g)   boilTime
+        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.5,   4.0,  "cones",   0.837,  25.00, 42.52,  60 ], // citra
         "add2":        [  9.56,  6.5,  "cones",   0.900,  14.00, 49.61,  45 ], // amarillo
         "add3":        [ 12.6,   4.5,  "cones",   0.923,  25.00, 49.61,  30 ], // simcoe
@@ -2060,6 +2352,8 @@ var trainingData = {
         "add6":        [ 13.5,   4.0,  "cones",   0.837,  25.00, 21.26,   0 ], // citra
         "add7":        [ 10.3,   3.5,  "cones",   0.956,  15.00, 21.26,   0 ], // mosaic
         "add8":        [  7.0,   5.66, "cones",   0.825,  50.00, 28.35,   0 ], // cascade
+        "add9":        [ 12.6,   4.5,  "cones",   0.923,  25.00, 28.35,   2, 1.0, "dryHop" ],  // simcoe
+        "add10":       [ 12.5,   3.5,  "cones",   0.95,   15.00, 28.35,   2, 1.0, "dryHop" ],  // mosaic, default AA, BA
 
         "kettleDiameter":        37.148,
         "kettleOpening":         0.0,        // should be overwritten by tempExpParamB

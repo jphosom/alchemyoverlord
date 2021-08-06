@@ -239,6 +239,9 @@ this.set = function(variable, haveUserInput) {
     // get and set the precision
     if ("precision" in variable) {
       variable.precision = common.getPrecision(inputString);
+      if (variable.precision < variable.minPrecision) {
+        variable.precision = variable.minPrecision;
+      }
     }
     // convert to metric, so that 'value' is always in metric
     if (("convertToMetric" in variable) &&
@@ -626,6 +629,8 @@ this.loadFromFile = function(files) {
     console.log("LOADING FROM FILE:");
     for (keyValue of keyValueList) {
       key = keyValue.split("=")[0].trim();
+      // replace any 'boilTimeTable' with 'steepTimeTable' (backward compatible)
+      key = key.replace(/boilTimeTable/, "steepTimeTable");
       if (key.length > 0) {
         formattedValue = keyValue.split("=")[1].trim();
         // get whatever is between " and "; and put it in 'value'

@@ -58,12 +58,12 @@ this.initialize_Tinseth = function() {
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
-  common.set(ibu.units, 0);
   common.set(ibu.boilTime, 0);
   common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
   common.set(ibu.scalingFactor, 0);
   common.set(ibu.numAdditions, 0);
+  common.set(ibu.units, 0);
 
   this.verbose = 1;
 
@@ -119,7 +119,7 @@ this.computeIBU_Tinseth = function() {
       console.log("  addition " + hopIdx+1 + ": AA=" +
                 ibu.add[hopIdx].AA.value +
                 ", weight=" + ibu.add[hopIdx].weight.value +
-                ", time=" + ibu.add[hopIdx].boilTime.value);
+                ", time=" + ibu.add[hopIdx].steepTime.value);
     }
     ibu.add[hopIdx].AAinit = 0.0;
     ibu.add[hopIdx].AAcurr = 0.0;
@@ -149,9 +149,13 @@ this.computeIBU_Tinseth = function() {
 
   totalIBU = 0.0;
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    if (ibu.add[hopIdx].kettleOrDryHop &&
+        ibu.add[hopIdx].kettleOrDryHop.value != "kettle") {
+      continue;
+    }
     AA = ibu.add[hopIdx].AA.value / 100.0;
     weight = ibu.add[hopIdx].weight.value;
-    steepTime = ibu.add[hopIdx].boilTime.value;
+    steepTime = ibu.add[hopIdx].steepTime.value;
     // Tinseth formula doesn't allow for post-flameout utilization
     if (steepTime < 0) {
       steepTime = 0.0;

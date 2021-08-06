@@ -153,6 +153,7 @@ body {
 /* define table of hops additions */
 
 #hopsAdditionsTable {
+  border-spacing: 1em 0;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -205,7 +206,7 @@ div[id^="letter"] {
 /* define table of outputs */
 
 .outputTableCellName {
-  width:15ex;
+  width:23ex;
 }
 .outputTableCellValue {
   width:11.5ex;

@@ -43,11 +43,11 @@ this.initialize_SMPH = function() {
     ibu[keys[idx]].updateFunction = SMPH.computeIBU_SMPH;
   }
   ibu.numAdditions.additionalFunctionArgs = SMPH.computeIBU_SMPH;
-  ibu.hopTableSize = 8;   // number of inputs to specify each addition of hops
+  ibu.hopTableSize = 9;   // number of inputs to specify each addition of hops
+  ibu.detailedOutput = true;
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
-  common.set(ibu.units, 0);
   common.set(ibu.boilTime, 0);
   common.set(ibu.preOrPostBoilVol, 0);
   common.set(ibu.OG, 0);
@@ -62,6 +62,7 @@ this.initialize_SMPH = function() {
   common.set(ibu.defaultHopForm, 0);
   common.set(ibu.applySolubilityLimitCheckbox, 0);
   common.set(ibu.pHCheckbox, 0);
+  common.set(ibu.useDryHopModelCheckbox, 0);
   common.set(ibu.pH, 0);
   common.set(ibu.preOrPostBoilpH, 0);
   common.set(ibu.numAdditions, 0);
@@ -70,6 +71,7 @@ this.initialize_SMPH = function() {
   common.set(ibu.filtering, 0);
   common.set(ibu.finingsType, 0);
   common.set(ibu.beerAge_days, 0);
+  common.set(ibu.units, 0);
 
   // set parameters of the SMPH model here:
   this.verbose            = 5;
@@ -79,6 +81,9 @@ this.initialize_SMPH = function() {
   this.AA_limit_maxLimit  = 550.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
+  this.AA_dryHop_lossFactor   = 0.01; // estimated from Lafontaine p. 56
+  this.AA_dryHop_saturation   = 4.0; // ppm, see Lafontaine p. 55
+  this.scale_AA           = 0.885; // from Maye, MBAA TQ v.53, n.3, 2016, p. 135
 
   this.hop_nonExtract     = 1.0;   // some say higher, some say lower than 1.0
   this.hop_baggingFactor  = 1.00;  // from "Four Experiments on AA Util."
@@ -95,11 +100,12 @@ this.initialize_SMPH = function() {
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same loss factor as IAA
   this.scale_oAA          = 0.9155; // from Maye, Figure 7
 
-  this.oBA_boilFactor     = 0.07125;
+  this.oBA_boilFactor     = 0.07125; // about 7% of oxidized beta acids post boil
   this.scale_oBA          = 0.85;   // from Hough p. 491: oBA 85% of absorbtion
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
-  this.LF_hopPP           = 0.20;   // 20% are soluble, from the literature
+  this.LF_hopPP_kettle    = 0.20;   // 20% are soluble, from the literature
+  this.LF_hopPP_dryHop    = 0.07;   // 7% are soluble, from experiment
   this.ferment_hopPP      = 0.70;   // from blog post on malt PP, assume same
   // Parkin scaling factor is 0.022 from [PP] to BU, but BU is 5/7*concentration
   // so 0.022*69.68/50.0 is scaling factor from [PP] to [IAA]-equivalent = 0.03066
@@ -116,13 +122,21 @@ this.initialize_SMPH = function() {
 
 this.computeIBU_SMPH = function() {
   var AA_added_mg = 0.0;
+  var AA_beer = 0.0;
+  var dryHop = false;
+  var addAAoutput = 0.0;
+  var addIAAoutput = 0.0;
   var addIBUoutput = 0.0;
+  var addoAAoutput = 0.0;
+  var addoBAoutput = 0.0;
+  var addPPoutput = 0.0;
   var addUtilOutput = 0.0;
   var FCT = 0.0;
   var hopIdx = 0;
   var hopPP_beer = 0.0;
   var IAA_beer = 0.0;
   var IAA_beer_mg = 0.0;
+  var IAA_LF_dryHop = 0.0;
   var IBU = 0.0;
   var idxP1 = 0;
   var maltPP_beer = 0.0;
@@ -164,6 +178,8 @@ this.computeIBU_SMPH = function() {
     ibu.add[hopIdx].AA_dis_mg = 0.0;     // units: mg
     ibu.add[hopIdx].AA_xfer_mg = 0.0;    // units: mg
     ibu.add[hopIdx].AA_added_mg = 0.0;   // units: mg
+    ibu.add[hopIdx].AA_beer = 0.0;       // units: ppm
+
     ibu.add[hopIdx].IAA_dis_mg = 0.0;    // units: mg
     ibu.add[hopIdx].IAA_xfer_mg = 0.0;   // units: mg
     ibu.add[hopIdx].IAA_wort = 0.0;      // units: ppm
@@ -191,7 +207,8 @@ this.computeIBU_SMPH = function() {
       console.log("  addition " + Number(hopIdx+1) + ": AA=" +
                 ibu.add[hopIdx].AA.value +
                 ", weight=" + ibu.add[hopIdx].weight.value +
-                ", time=" + ibu.add[hopIdx].boilTime.value);
+                ", usage=" + ibu.add[hopIdx].kettleOrDryHop.value +
+                ", time=" + ibu.add[hopIdx].steepTime.value);
     }
   }
 
@@ -204,10 +221,20 @@ this.computeIBU_SMPH = function() {
   // FCT is amount of time required for forced cooling.
   FCT = compute_concent_wort(ibu);
 
+  // compute loss factor for IAA when dry hopping
+  IAA_LF_dryHop = 1.0;
+  if (ibu.useDryHopModelCheckbox.value) {
+    IAA_LF_dryHop = compute_IAA_LF_dryHop(ibu);
+    if (SMPH.verbose > 0) {
+      console.log("IAA loss factor from dry hopping: " +IAA_LF_dryHop.toFixed(4));
+    }
+  }
+
   // compute concentrations of various compounds in the finished beer
   // for each hop addition, and compute IBUs and utilization for
   // each addition and in total.
   IAA_beer = 0.0;
+  AA_beer = 0.0;
   oAA_beer = 0.0;
   oBA_beer = 0.0;
   hopPP_beer = 0.0;
@@ -219,7 +246,8 @@ this.computeIBU_SMPH = function() {
     if (SMPH.verbose > 2) {
       console.log("For hop addition " + Number(hopIdx+1) + ":");
     }
-    IAA_beer += compute_IAA_beer(ibu, hopIdx);
+    IAA_beer += compute_IAA_beer(ibu, hopIdx, IAA_LF_dryHop);
+    AA_beer += compute_AA_beer(ibu, hopIdx);
     oAA_beer += compute_oAA_beer(ibu, hopIdx);
     oBA_beer += compute_oBA_beer(ibu, hopIdx);
     hopPP_beer += compute_hopPP_beer(ibu, hopIdx);
@@ -244,11 +272,13 @@ this.computeIBU_SMPH = function() {
   if (SMPH.verbose > 2) {
     console.log(">>>> FINAL:");
     console.log("UNSCALED IAA = " + IAA_beer.toFixed(3) +
+              ", AA = " + AA_beer.toFixed(3) +
               ", oAA = " + oAA_beer.toFixed(3) +
               ", oBA = " + oBA_beer.toFixed(3) +
               ", hopPP = " + hopPP_beer.toFixed(3) +
               ", maltPP = " + maltPP_beer.toFixed(3))
     console.log("  SCALED IAA = " + IAA_beer.toFixed(3) +
+              ", AA = " + (AA_beer*SMPH.scale_AA).toFixed(3) +
               ", oAA = " + (oAA_beer*SMPH.scale_oAA).toFixed(3) +
               ", oBA = " + (oBA_beer*SMPH.scale_oBA).toFixed(3) +
               ", hopPP = " + (hopPP_beer*SMPH.scale_hopPP).toFixed(3) +
@@ -267,10 +297,11 @@ this.computeIBU_SMPH = function() {
   } else {
     U = 0.0;
   }
-  ibu.AA = totalAA0;
+  ibu.AA0 = totalAA0;
   ibu.IAA = IAA_beer;
   ibu.U = U * ibu.scalingFactor.value;
   ibu.IAApercent = ((50.0 / 69.68) * IAA_beer) / IBU;
+  ibu.AA = AA_beer * SMPH.scale_AA;
   ibu.oAA = oAA_beer * SMPH.scale_oAA;
   ibu.oBA = oBA_beer * SMPH.scale_oBA;
   ibu.hopPP = hopPP_beer * SMPH.scale_hopPP;
@@ -288,13 +319,46 @@ this.computeIBU_SMPH = function() {
   // set output values in HTML
   // if no IBU outputs exist (no table yet), then just return
   if (document.getElementById("addIBUvalue1")) {
+    dryHop = false;
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
       idxP1 = hopIdx + 1;
       addIBUoutput = ibu.add[hopIdx].IBU.toFixed(2);
-      document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
+      if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop") {
+        dryHop = true;
+        document.getElementById('addIBUvalue'+idxP1).innerHTML =
+               addIBUoutput + "<sup>*</sup>";
+      } else {
+        document.getElementById('addIBUvalue'+idxP1).innerHTML = addIBUoutput;
+      }
 
       addUtilOutput = (ibu.add[hopIdx].U * 100.0).toFixed(2);
       document.getElementById('addUtilValue'+idxP1).innerHTML = addUtilOutput;
+
+      if (ibu.detailedOutput) {
+        addIAAoutput = (ibu.add[hopIdx].IAA_beer).toFixed(2);
+        document.getElementById('addIAAValue'+idxP1).innerHTML = addIAAoutput;
+
+        addAAoutput = (ibu.add[hopIdx].AA_beer * SMPH.scale_AA).toFixed(2);
+        document.getElementById('addAAValue'+idxP1).innerHTML = addAAoutput;
+
+        addoAAoutput = (ibu.add[hopIdx].oAA_beer * SMPH.scale_oAA).toFixed(2);
+        document.getElementById('addoAAValue'+idxP1).innerHTML = addoAAoutput;
+
+        addoBAoutput = (ibu.add[hopIdx].oBA_beer * SMPH.scale_oBA).toFixed(2);
+        document.getElementById('addoBAValue'+idxP1).innerHTML = addoBAoutput;
+
+        addPPoutput = (ibu.add[hopIdx].hopPP_beer* SMPH.scale_hopPP).toFixed(2);
+        document.getElementById('addPPValue'+idxP1).innerHTML = addPPoutput;
+      }
+    }
+    if (dryHop && ibu.useDryHopModelCheckbox.value) {
+      document.getElementById('outputFootnote').innerHTML =
+           "<td> (<sup>*</sup>IBUs from dry hopping are rough approximations. Also, IAA concentration may be reduced when dry hopping.) </td>";
+    } else if (dryHop && !ibu.useDryHopModelCheckbox.value) {
+      document.getElementById('outputFootnote').innerHTML =
+           "<td> (<sup>*</sup>Modeling of IBUs from dry hopping has been turned off.) </td>";
+    } else {
+      document.getElementById('outputFootnote').innerHTML = "<td></td>";
     }
   }
 
@@ -316,6 +380,7 @@ this.computeIBU_SMPH = function() {
 // compute IBUs and utilization for a specific hop addition
 
 function compute_hop_IBU_and_U(ibu, hopIdx) {
+  var AA_beer = ibu.add[hopIdx].AA_beer;
   var hop_IBU = 0.0;
   var hopPP_beer = ibu.add[hopIdx].hopPP_beer;
   var IAA_beer = ibu.add[hopIdx].IAA_beer;
@@ -324,7 +389,8 @@ function compute_hop_IBU_and_U(ibu, hopIdx) {
 
   // even though 51.2 is more accurate, 50.0 is used to actually measure IBUs
   // hop_IBU = (51.2/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
-  hop_IBU = (50.0/69.68) * (IAA_beer + (oAA_beer * SMPH.scale_oAA) +
+  hop_IBU = (50.0/69.68) * (IAA_beer + (AA_beer * SMPH.scale_AA) +
+                                       (oAA_beer * SMPH.scale_oAA) +
                                        (oBA_beer * SMPH.scale_oBA) +
                                        (hopPP_beer * SMPH.scale_hopPP));
   ibu.add[hopIdx].IBU = hop_IBU;
@@ -490,10 +556,11 @@ function compute_concent_wort(ibu) {
       ibu.add[hopIdx].oBA_wort = 0.0;
       ibu.add[hopIdx].hopPP_wort = 0.0;
     }
-    ibu.AA = 0.0;
+    ibu.AA0 = 0.0;
     ibu.IAA = 0.0;
     ibu.U = 0.0;
     ibu.IAApercent = 0.0;
+    ibu.AA = 0.0;
     ibu.oAA = 0.0;
     ibu.oBA = 0.0;
     ibu.hopPP = 0.0;
@@ -696,7 +763,10 @@ function compute_concent_wort(ibu) {
     // Check to see if add any hops should be added at this time point.
     // Apply AA saturation limit, if needed.
     for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
-      additionTime = ibu.add[hopIdx].boilTime.value;
+      if (ibu.add[hopIdx].kettleOrDryHop.value != "kettle") {
+        continue;
+      }
+      additionTime = ibu.add[hopIdx].steepTime.value;
       // make sure that addition time doesn't have higher precision than integ.
       if (common.getPrecision("" + additionTime) > integTimePrecision) {
         additionTime = Number(additionTime.toFixed(integTimePrecision));
@@ -1079,12 +1149,11 @@ function compute_LF_filtering(ibu) {
 function compute_LF_finings(ibu) {
   var finingsMlPerLiter = 0.0;
   var LF_finings = 0.0;
-  var postBoilVolume = 0.0;
+  var volume = ibu.fermentorVolume.value;
 
   LF_finings = 1.0;
   if (!isNaN(ibu.finingsAmount.value)) {
-    postBoilVolume = ibu.getPostBoilVolume();
-    finingsMlPerLiter = ibu.finingsAmount.value / postBoilVolume;
+    finingsMlPerLiter = ibu.finingsAmount.value / volume;
     if (ibu.finingsType.value == "gelatin") {
       // exponential decay factor from 'gelatin' subdirectory, data.txt
       LF_finings = Math.exp(-0.09713 * finingsMlPerLiter);
@@ -1094,7 +1163,7 @@ function compute_LF_finings(ibu) {
     console.log("LF finings : " + LF_finings.toFixed(4) + " from " +
                 ibu.finingsAmount.value.toFixed(3) + " ml of " +
                 ibu.finingsType.value + " in " +
-                postBoilVolume.toFixed(2) + " l post-boil");
+                volume.toFixed(2) + " l fermentor");
   }
   return LF_finings;
 }
@@ -1234,22 +1303,83 @@ function compute_LF_IAA(ibu, hopIdx) {
 }
 
 //------------------------------------------------------------------------------
+// compute overall loss factor for IAA caused by dry hopping
+
+function compute_IAA_LF_dryHop(ibu) {
+  var b = 0.0;
+  var bLow = 0.0;
+  var bHigh = 0.0;
+  var dryHops_concent = 0.0;
+  var hopIdx = 0;
+  var IAA_beer = 0.0;
+  var IAAhigh = 0.0;
+  var IAA_LF_dryHop = 0.0;
+  var IAAlow = 0.0;
+  var offset = 0.0;
+  var slope = 0.0;
+  var volume = ibu.fermentorVolume.value;
+
+  dryHops_concent = 0.0;
+  IAA_beer = 0.0;
+  for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
+    if (ibu.add[hopIdx].kettleOrDryHop.value == "kettle") {
+      IAA_beer += ibu.add[hopIdx].IAA_wort * compute_LF_IAA(ibu, hopIdx);
+    }
+    if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop") {
+      dryHops_concent += ibu.add[hopIdx].weight.value * 1000.0 / volume;
+    }
+  }
+  if (SMPH.verbose > 3) {
+    console.log("IAA in beer before dry hop: " + IAA_beer.toFixed(4) + " ppm");
+    console.log("total [dry hops]: " + dryHops_concent.toFixed(4) + " ppm");
+  }
+
+  // if no dry hopping, then no IAA loss
+  if (dryHops_concent == 0.0) {
+    return 1.0;
+  }
+
+  if (false) {
+    bHigh   = 0.00012;
+    bLow    = 0.0;
+    IAAhigh = 50.0;
+    IAAlow  = 16.0;
+    slope = (bHigh - bLow) / (IAAhigh - IAAlow);
+    offset = bHigh - (slope * IAAhigh);
+    } else {
+    slope  =  0.0000035294117647058825;
+    offset = -0.000056470588235294126;
+    }
+  b = slope * IAA_beer + offset;
+  if (b < 0.0) {
+    b = 0.0;
+  }
+
+  IAA_LF_dryHop = 0.50 * Math.exp(-1.0 * b * dryHops_concent) + 0.50;
+
+  return IAA_LF_dryHop;
+}
+
+//------------------------------------------------------------------------------
 // Compute IAA levels in the finished beer, given IAA concentration in the wort
 // and the cumulative IAA loss factor.
 
-function compute_IAA_beer(ibu, hopIdx) {
+function compute_IAA_beer(ibu, hopIdx, IAA_LF_dryHop) {
   var IAA_beer = 0.0;
 
-  ibu.add[hopIdx].IAA_beer    = ibu.add[hopIdx].IAA_wort *
-                                 compute_LF_IAA(ibu, hopIdx);
-  ibu.add[hopIdx].IAA_beer_mg = ibu.add[hopIdx].IAA_wort_mg *
-                                 compute_LF_IAA(ibu, hopIdx);
-  IAA_beer = ibu.add[hopIdx].IAA_beer;
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "kettle") {
+    ibu.add[hopIdx].IAA_beer    = ibu.add[hopIdx].IAA_wort * IAA_LF_dryHop *
+                                   compute_LF_IAA(ibu, hopIdx);
+    ibu.add[hopIdx].IAA_beer_mg = ibu.add[hopIdx].IAA_wort_mg * IAA_LF_dryHop *
+                                   compute_LF_IAA(ibu, hopIdx);
+    IAA_beer = ibu.add[hopIdx].IAA_beer;
 
-  if (SMPH.verbose > 2) {
-    console.log("    [IAA]_wort = " + ibu.add[hopIdx].IAA_wort.toFixed(2) +
-              ", [IAA]_beer = " + ibu.add[hopIdx].IAA_beer.toFixed(4));
+    if (SMPH.verbose > 2) {
+      console.log("    [IAA]_wort = " + ibu.add[hopIdx].IAA_wort.toFixed(2) +
+                ", [IAA]_beer = " + ibu.add[hopIdx].IAA_beer.toFixed(4));
+    }
   }
+
   return IAA_beer;
 }
 
@@ -1324,6 +1454,52 @@ function compute_LF_nonIAA_krausen(ibu) {
 }
 
 // -----------------------------------------------------------------------------
+// compute loss factor for nonIAA components when dry hopping
+
+function compute_LF_dryHop(ibu) {
+  var LF_dryHop = compute_LF_finings(ibu) * compute_LF_filtering(ibu);
+  return LF_dryHop;
+}
+
+
+// -----------------------------------------------------------------------------
+// ------------ AA -------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// compute concentration of alpha acids (AA) in finished beer,
+// for a specific hop addition, given AA concentration and AA loss factors.
+
+function compute_AA_beer(ibu, hopIdx) {
+  var AA_concent = 0.0;
+  var hops_concent = 0.0;
+  var volume = ibu.fermentorVolume.value;
+
+  // alpha acids added during the boil don't survive into finished beer
+  // e.g. Lewis and Young, p. 259
+  ibu.add[hopIdx].AA_beer = 0.0;
+
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop" &&
+      ibu.useDryHopModelCheckbox.value) {
+    hops_concent = ibu.add[hopIdx].weight.value * 1000.0 / volume;
+    AA_concent = hops_concent * (ibu.add[hopIdx].AA.value/100.0) *
+                 SMPH.AA_dryHop_lossFactor;
+    // model saturation of AA; 4 ppm (Lafontaine p. 55 citing other studies)
+    if (AA_concent > SMPH.AA_dryHop_saturation) {
+      AA_concent = SMPH.AA_dryHop_saturation;
+    }
+    AA_concent *= compute_LF_dryHop(ibu);
+    ibu.add[hopIdx].AA_dis_mg = AA_concent * volume;
+    ibu.add[hopIdx].AA_wort = 0.0;
+    ibu.add[hopIdx].AA_beer = AA_concent;
+    if (SMPH.verbose > 3) {
+      console.log("    [AA]_beer = " + (ibu.add[hopIdx].AA_beer).toFixed(4));
+    }
+  }
+
+  return(AA_concent);
+}
+
+// -----------------------------------------------------------------------------
 // ----------- oAA -------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
@@ -1357,7 +1533,7 @@ function compute_oAA_dis_mg(ibu, hopIdx, currVolume) {
   // oAA_fresh modeled as 3.5 days decay at 20'C, which is then multiplied
   // by AA rating.  For Maye paper, average AA of Zeus is 15.75% and SF = 50%,
   // so 1-(1/exp(0.003798*1*1*3.5) * 0.1575 = 0.002 = 0.2% of weight of hops.
-  // where 0.003798 is k for SF 50%.
+  // where 0.003798 is k for SF 0.50.
   oAA_fresh = 1.0 - (1.0 / Math.exp(k * 1.0 * 1.0 * 3.5));
 
   AAloss_percent = 1.0 - ibu.add[hopIdx].freshnessFactor.value;
@@ -1466,17 +1642,53 @@ function compute_LF_oAA(ibu, hopIdx) {
 // for a specific hop addition, given oAA concentration and oAA loss factors.
 
 function compute_oAA_beer(ibu, hopIdx) {
+  var hops_concent = 0.0;
   var oAA_beer = 0.0;
+  var oAA_concent = 0.0;
+  var oAA_percent_of_AA = 0.0;
+  var oAA_saturationFactor = 0.0;
+  var volume = ibu.fermentorVolume.value;
 
-  ibu.add[hopIdx].oAA_beer = ibu.add[hopIdx].oAA_wort *
-                             compute_LF_oAA(ibu, hopIdx);
-  oAA_beer = ibu.add[hopIdx].oAA_beer;
+  ibu.add[hopIdx].oAA_beer = 0.0;
+  oAA_beer = 0.0;
 
-  if (SMPH.verbose > 3) {
-    console.log("    [oAA]_beer = " + oAA_beer.toFixed(4) +
-              " ppm from [oAA]_wort " + ibu.add[hopIdx].oAA_wort.toFixed(4) +
-              " ppm and LF " + compute_LF_oAA(ibu,hopIdx).toFixed(4));
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "kettle") {
+    ibu.add[hopIdx].oAA_beer = ibu.add[hopIdx].oAA_wort *
+                               compute_LF_oAA(ibu, hopIdx);
+    oAA_beer = ibu.add[hopIdx].oAA_beer;
+
+    if (SMPH.verbose > 3) {
+      console.log("    [oAA]_beer = " + oAA_beer.toFixed(4) +
+                " ppm from [oAA]_wort " + ibu.add[hopIdx].oAA_wort.toFixed(4) +
+                " ppm and LF " + compute_LF_oAA(ibu,hopIdx).toFixed(4));
+    }
   }
+
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop" &&
+      ibu.useDryHopModelCheckbox.value) {
+    hops_concent = ibu.add[hopIdx].weight.value * 1000.0 / volume;
+    // if freshness is 1.0, oAA is 2% of AA; if freshness is 0.75, oAA is 3.4%
+    oAA_percent_of_AA = (-0.056*ibu.add[hopIdx].freshnessFactor.value) + 0.076;
+    oAA_concent = hops_concent * (ibu.add[hopIdx].AA.value/100.0) *
+                  oAA_percent_of_AA;
+    // model saturation of oAA; data from Maye p. 25 & Lafontaine pp 55,56
+    oAA_saturationFactor = 1.0;
+    if (hops_concent > 2200.0) {
+      oAA_saturationFactor = 1.1181 * Math.exp(-0.0000506 * hops_concent);
+    }
+    oAA_concent *= oAA_saturationFactor;
+    oAA_concent *= compute_LF_dryHop(ibu);
+    ibu.add[hopIdx].oAA_dis_mg = oAA_concent * volume;
+    ibu.add[hopIdx].oAA_wort = 0.0;
+    ibu.add[hopIdx].oAA_beer = oAA_concent;
+    if (SMPH.verbose > 3) {
+      console.log("    [hops] = " + hops_concent.toFixed(4) + " ppm");
+      console.log("    oAA: "+(oAA_percent_of_AA*100.0).toFixed(4) + "% of AA");
+      console.log("    fermentor VOLUME = " + volume);
+      console.log("    [oAA]_beer = " + (ibu.add[hopIdx].oAA_beer).toFixed(4));
+    }
+  }
+
   return(oAA_beer);
 }
 
@@ -1497,7 +1709,7 @@ function compute_oBA_dis_mg(ibu, hopIdx, currVolume) {
 
   // note: solubility limit of oBA is large enough that all is dissolved
   ibu.add[hopIdx].oBA_dis_mg = oBA_addition;
-  if (SMPH.verbose > 4) {
+  if (SMPH.verbose > 3) {
     console.log("    hop addition " + hopIdx + ": [oBA] = " +
                 (ibu.add[hopIdx].oBA_dis_mg/currVolume).toFixed(4) +
                 " ppm from (" + oBA_percent.toFixed(4) + " * " +
@@ -1546,16 +1758,36 @@ function compute_LF_oBA(ibu, hopIdx) {
 
 function compute_oBA_beer(ibu, hopIdx) {
   var oBA_beer = 0.0;
+  var volume = ibu.fermentorVolume.value;
 
-  ibu.add[hopIdx].oBA_beer = ibu.add[hopIdx].oBA_wort *
-                             compute_LF_oBA(ibu, hopIdx);
-  oBA_beer = ibu.add[hopIdx].oBA_beer;
+  ibu.add[hopIdx].oBA_beer = 0.0;
+  oBA_beer = 0.0;
 
-  if (SMPH.verbose > 3) {
-    console.log("    [oBA]_beer = " + oBA_beer.toFixed(4) +
-              " ppm from [oBA]_wort " + ibu.add[hopIdx].oBA_wort.toFixed(4) +
-              " ppm and LF " + compute_LF_oBA(ibu,hopIdx).toFixed(4));
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "kettle") {
+    ibu.add[hopIdx].oBA_beer = ibu.add[hopIdx].oBA_wort *
+                               compute_LF_oBA(ibu, hopIdx);
+    oBA_beer = ibu.add[hopIdx].oBA_beer;
+
+    if (SMPH.verbose > 3) {
+      console.log("    [oBA]_beer = " + oBA_beer.toFixed(4) +
+                " ppm from [oBA]_wort " + ibu.add[hopIdx].oBA_wort.toFixed(4) +
+                " ppm and LF " + compute_LF_oBA(ibu,hopIdx).toFixed(4));
+    }
   }
+
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop" &&
+      ibu.useDryHopModelCheckbox.value) {
+    compute_oBA_dis_mg(ibu, hopIdx, volume);
+    oBA_beer *= compute_LF_dryHop(ibu);
+    oBA_beer = ibu.add[hopIdx].oBA_dis_mg / volume;
+    ibu.add[hopIdx].oBA_beer = oBA_beer;
+    if (SMPH.verbose > 3) {
+      console.log("    [oBA]_beer = " + oBA_beer.toFixed(4) +
+                " ppm from [oBA]_wort " + ibu.add[hopIdx].oBA_wort.toFixed(4) +
+                " ppm and LF " + compute_LF_oBA(ibu,hopIdx).toFixed(4));
+    }
+  }
+
   return(oBA_beer);
 }
 
@@ -1581,7 +1813,7 @@ function compute_hopPP_dis_mg(ibu, hopIdx, currVolume) {
 }
 
 // -----------------------------------------------------------------------------
-// compute loss factor for hop polyphenols using
+// compute loss factor for hop polyphenols added to the kettle, using
 // . overall loss factor (or solubility) of hop polyphenols
 // . overall loss factor for fermentation,
 // . non-IAA loss factor for krausen,
@@ -1589,11 +1821,11 @@ function compute_hopPP_dis_mg(ibu, hopIdx, currVolume) {
 // . overall loss factor for filtering,
 // Assume hop [PP] doesn't change much with age, pH, or OG.
 
-function compute_LF_hopPP(ibu) {
+function compute_LF_hopPP_kettle(ibu) {
   var LF_hopPP = 0.0;
 
   // Assume krausen, finings, filtering affect hop PP the same as other nonIAA.
-  LF_hopPP = SMPH.LF_hopPP *
+  LF_hopPP = SMPH.LF_hopPP_kettle *
              SMPH.ferment_hopPP *
              compute_LF_nonIAA_krausen(ibu) *
              compute_LF_finings(ibu) *
@@ -1604,22 +1836,69 @@ function compute_LF_hopPP(ibu) {
 
 
 // -----------------------------------------------------------------------------
+// compute loss factor for hop polyphenols when dry hopping, using
+// . overall loss factor (or solubility) of hop polyphenols
+// . overall loss factor for finings,
+// . overall loss factor for filtering,
+// Assume hop [PP] doesn't change much with age, pH, or OG, ferment, krausen.
+
+function compute_LF_hopPP_dryHop(ibu) {
+  var LF_hopPP = 0.0;
+
+  // combine the loss factor for polyphenols with general dry-hop loss factor
+  LF_hopPP = SMPH.LF_hopPP_dryHop * compute_LF_dryHop(ibu);
+
+  return(LF_hopPP);
+}
+
+
+// -----------------------------------------------------------------------------
 // compute concentration of hop polyphenols in finished beer for a
 // specific hop addition
 
 function compute_hopPP_beer(ibu, hopIdx) {
+  var hops_concent = 0.0;
   var PP_beer = 0.0;
+  var saturationFactor = 0.0;
+  var volume = ibu.fermentorVolume.value;
 
-  ibu.add[hopIdx].hopPP_beer = ibu.add[hopIdx].hopPP_wort *
-                               compute_LF_hopPP(ibu);
+  ibu.add[hopIdx].beer = 0.0;
+  PP_beer = 0.0;
+
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "kettle") {
+    ibu.add[hopIdx].hopPP_beer = ibu.add[hopIdx].hopPP_wort *
+                                 compute_LF_hopPP_kettle(ibu);
+    if (SMPH.verbose > 3) {
+      console.log("    [hopPP]_beer = " + ibu.add[hopIdx].hopPP_beer.toFixed(4)+
+                  " ppm from [hopPP]_wort " +
+                  ibu.add[hopIdx].hopPP_wort.toFixed(4) +
+                  " ppm and LF " + compute_LF_hopPP_kettle(ibu).toFixed(4));
+    }
+  }
+  if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop" &&
+      ibu.useDryHopModelCheckbox.value) {
+    hops_concent = ibu.add[hopIdx].weight.value * 1000.0 / volume;
+    ibu.add[hopIdx].hopPP_dis_mg =
+          SMPH.hopPPrating * ibu.add[hopIdx].weight.value * 1000.0;
+    // apply polynomial saturation model from data in Hauser, p. 113
+    saturationFactor = (-7.47e-10 * hops_concent * hops_concent) +
+                       (0.00000542 * hops_concent) + 0.99733;
+    if (saturationFactor > 1.0) {
+      saturationFactor = 1.0;
+    }
+    ibu.add[hopIdx].hopPP_dis_mg *= saturationFactor;
+    ibu.add[hopIdx].hopPP_wort = 0.0;
+    ibu.add[hopIdx].hopPP_beer = ibu.add[hopIdx].hopPP_dis_mg *
+                                 compute_LF_hopPP_dryHop(ibu) / volume;
+    if (SMPH.verbose > 3) {
+      console.log("    [hopPP]_beer = " + ibu.add[hopIdx].hopPP_beer.toFixed(4)+
+                  " ppm, saturation = " + saturationFactor.toFixed(4) +
+                  ", and LF " + compute_LF_hopPP_dryHop(ibu).toFixed(4));
+    }
+  }
+
   PP_beer = ibu.add[hopIdx].hopPP_beer;
 
-  if (SMPH.verbose > 3) {
-    console.log("    [hopPP]_beer = " + PP_beer.toFixed(4) +
-                " ppm from [hopPP]_wort " +
-                ibu.add[hopIdx].hopPP_wort.toFixed(4) +
-                " ppm and LF " + compute_LF_hopPP(ibu).toFixed(4));
-  }
   return PP_beer;
 }
 

@@ -1900,7 +1900,8 @@ var hops = {
         "BA":    9.30,
         "loss": 62.32,
         "sources": [ "The Hops List",
-                     "Great Lake Hops" ],
+                     "Great Lake Hops",
+                     "personal experiments"],
         },
     "Tettnanger (Germany)": {
         "AA":    4.05,

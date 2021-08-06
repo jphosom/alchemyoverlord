@@ -106,8 +106,8 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   var addIdx = 0;
   var addStr = "";
   var aIdx = 0;
-  var boilTime_list = [];
-  var boilTime2_list = [];
+  var steepTime_list = [];
+  var steepTime2_list = [];
   var cIdx = 0;
   var conditionsList = [];
   var corrIBU = 0.0;
@@ -147,7 +147,7 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   // 'conditions' and 'IBU_list'; other lists are optional.
   // The code is currently set up for at most 2 hop additions, specified
   // in weight_list[] and weight2_list[], and optionally in
-  // boilTime_list[] and boilTime2_list[].
+  // steepTime_list[] and steepTime2_list[].
   conditionsList = expData["conditions"];
   IBU_list = expData["IBU_list"];
   if (expData["IAA_list"]) {
@@ -186,14 +186,14 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
   if (expData["weight2_list"]) {
     weight2_list = expData["weight2_list"];
   }
-  if (expData["boilTime_list"]) {
-    boilTime_list = expData["boilTime_list"];
+  if (expData["steepTime_list"]) {
+    steepTime_list = expData["steepTime_list"];
   }
-  if (expData["boilTime1_list"]) {
-    boilTime_list = expData["boilTime1_list"];
+  if (expData["steepTime1_list"]) {
+    steepTime_list = expData["steepTime1_list"];
   }
-  if (expData["boilTime2_list"]) {
-    boilTime2_list = expData["boilTime2_list"];
+  if (expData["steepTime2_list"]) {
+    steepTime2_list = expData["steepTime2_list"];
   }
 
   // evaluate each condition, getting total error and table of all results
@@ -236,16 +236,16 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
       ibu.add[1].weight.value = weight2_list[cIdx];
     }
 
-    // assume that boilTime in boilTime_list applies to all additions
-    if (boilTime_list.length > 0 && boilTime2_list.length == 0) {
+    // assume that steepTime in steepTime_list applies to all additions
+    if (steepTime_list.length > 0 && steepTime2_list.length == 0) {
       for (aIdx = 0; aIdx < ibu.numAdditions.value; aIdx++) {
-        ibu.add[aIdx].boilTime.value = boilTime_list[cIdx];
+        ibu.add[aIdx].steepTime.value = steepTime_list[cIdx];
       }
     }
-    // otherwise, there should be boilTime1_list and boilTime2_list...
-    else if (boilTime2_list.length > 0) {
-      ibu.add[0].boilTime.value = boilTime_list[cIdx];
-      ibu.add[1].boilTime.value = boilTime2_list[cIdx];
+    // otherwise, there should be steepTime1_list and steepTime2_list...
+    else if (steepTime2_list.length > 0) {
+      ibu.add[0].steepTime.value = steepTime_list[cIdx];
+      ibu.add[1].steepTime.value = steepTime2_list[cIdx];
     }
 
     if (postBoil_time_list.length > 0) {
@@ -274,9 +274,9 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
                            time_list[cIdx];
         // if realHopBoilTime < 0, then the hops are never added in this cond.
         if (realHopBoilTime > 0) {
-          ibu.add[addIdx].boilTime.value = realHopBoilTime;
+          ibu.add[addIdx].steepTime.value = realHopBoilTime;
         } else {
-          ibu.add[addIdx].boilTime.value = 0;
+          ibu.add[addIdx].steepTime.value = 0;
         }
         // if we have more than one hop addition, but the weights for the
         // second hop addition are not specified in weight2_list[], then
@@ -290,7 +290,7 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
           }
         }
         // console.log("  addition " + addIdx + " has boil time " +
-        //             ibu.add[addIdx].boilTime.value.toFixed(2) +
+        //             ibu.add[addIdx].steepTime.value.toFixed(2) +
         //             " based on full boil time " + expData[addStr][6] +
         //             " and weight "+ibu.add[addIdx].weight.value.toFixed(2));
       }
@@ -299,9 +299,9 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
       // time value specified in the array of hop values, index 6.
       for (addIdx = 0; addIdx < numAdd; addIdx++) {
         addStr = "add"+(addIdx+1);
-        if ((addIdx == 0 && boilTime_list.length == 0) ||
-            (addIdx == 1 && boilTime2_list.length == 0) || addIdx > 1) {
-          ibu.add[addIdx].boilTime.value = expData[addStr][6];
+        if ((addIdx == 0 && steepTime_list.length == 0) ||
+            (addIdx == 1 && steepTime2_list.length == 0) || addIdx > 1) {
+          ibu.add[addIdx].steepTime.value = expData[addStr][6];
         }
       }
     }
@@ -387,7 +387,7 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     htmlResults += "<td>"+conditionsList[cIdx]+"</td> "
     htmlResults += "<td>"+corrIBU.toFixed(2)+"</td> "
     htmlResults += "<td>"+ibu.IBU.toFixed(2)+"</td> "
-    htmlResults += "<td>"+ibu.AA.toFixed(2)+"</td> "
+    htmlResults += "<td>"+ibu.AA0.toFixed(2)+"</td> "
     htmlResults += "<td>"+ibu.IAA.toFixed(2)+"</td> "
     htmlResults += "<td>"+ibu.U.toFixed(2)+"</td> "
     htmlResults += "<td>"+ibu.IAApercent.toFixed(2)+"</td> "
@@ -635,8 +635,11 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
           ibu.add[addIdx].weight = new Object;
           ibu.add[addIdx].weight.id = "weight"+addNum;
 
-          ibu.add[addIdx].boilTime = new Object;
-          ibu.add[addIdx].boilTime.id = "boilTimeTable"+addNum;
+          ibu.add[addIdx].kettleOrDryHop = new Object;
+          ibu.add[addIdx].kettleOrDryHop.id = "kettleOrDryHopTable"+addNum;
+
+          ibu.add[addIdx].steepTime = new Object;
+          ibu.add[addIdx].steepTime.id = "steepTimeTable"+addNum;
         }
         ibu.add[addIdx].AA.value = expValues[kIdx][0];
         ibu.add[addIdx].BA.value = expValues[kIdx][1];
@@ -649,7 +652,12 @@ this.evaluateAllExperiments = function(expIdxList, parameters,
         ibu.add[addIdx].freshnessFactor.value = expValues[kIdx][3];
         ibu.add[addIdx].percentLoss.value = expValues[kIdx][4];
         ibu.add[addIdx].weight.value = expValues[kIdx][5];
-        ibu.add[addIdx].boilTime.value = 0.0;  // fix later
+        ibu.add[addIdx].steepTime.value = 0.0;  // fix later
+        if (expValues[kIdx].length > 8) {
+          ibu.add[addIdx].kettleOrDryHop.value = expValues[kIdx][8];
+        } else {
+          ibu.add[addIdx].kettleOrDryHop.value = "kettle";
+        }
       } else if (expKeys[kIdx] == "timeToFirstAddition") {
         timeToFirstAddition = expValues[kIdx];
       } else if (expKeys[kIdx] == "preBoilSG") {
