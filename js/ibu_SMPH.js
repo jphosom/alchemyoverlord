@@ -81,11 +81,11 @@ this.initialize_SMPH = function() {
   this.AA_limit_maxLimit  = 550.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
-  this.AA_dryHop_lossFactor   = 0.01; // estimated from Lafontaine p. 56
-  this.AA_dryHop_saturation   = 4.0; // ppm, see Lafontaine p. 55
+  this.AA_dryHop_lossFactor   = 0.01;  // estimated from Lafontaine p. 56
+  this.AA_dryHop_saturation   = 4.0;   // ppm, see Lafontaine p. 55
   this.scale_AA           = 0.885; // from Maye, MBAA TQ v.53, n.3, 2016, p. 135
 
-  this.hop_nonExtract     = 1.0;   // some say higher, some say lower than 1.0
+  this.hop_nonExtract     = 1.0;
   this.hop_baggingFactor  = 1.00;  // from "Four Experiments on AA Util."
 
   this.icebathBaseTemp    = 314.00;       // 314.00'K = 40.85'C = 105.53'F
@@ -100,7 +100,7 @@ this.initialize_SMPH = function() {
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same loss factor as IAA
   this.scale_oAA          = 0.9155; // from Maye, Figure 7
 
-  this.oBA_boilFactor     = 0.07125; // about 7% of oxidized beta acids post boil
+  this.oBA_boilFactor     = 0.07125; // ~7% of oxidized beta acids post boil
   this.scale_oBA          = 0.85;   // from Hough p. 491: oBA 85% of absorbtion
 
   this.hopPPrating        = 0.04;   // approx 4% of hop is PP, from literature
@@ -108,7 +108,7 @@ this.initialize_SMPH = function() {
   this.LF_hopPP_dryHop    = 0.07;   // 7% are soluble, from experiment
   this.ferment_hopPP      = 0.70;   // from blog post on malt PP, assume same
   // Parkin scaling factor is 0.022 from [PP] to BU, but BU is 5/7*concentration
-  // so 0.022*69.68/50.0 is scaling factor from [PP] to [IAA]-equivalent = 0.03066
+  // so 0.022*69.68/50.0 is scaling factor from [PP] to [IAA]-equivalent=0.03066
   this.scale_hopPP        = 0.03066;  // from Parkin, p. 28, scaled
 
   SMPH.computeIBU_SMPH();
@@ -123,7 +123,6 @@ this.initialize_SMPH = function() {
 this.computeIBU_SMPH = function() {
   var AA_added_mg = 0.0;
   var AA_beer = 0.0;
-  var dryHop = false;
   var addAAoutput = 0.0;
   var addIAAoutput = 0.0;
   var addIBUoutput = 0.0;
@@ -131,6 +130,8 @@ this.computeIBU_SMPH = function() {
   var addoBAoutput = 0.0;
   var addPPoutput = 0.0;
   var addUtilOutput = 0.0;
+  var BI = 0.0;
+  var dryHop = false;
   var FCT = 0.0;
   var hopIdx = 0;
   var hopPP_beer = 0.0;
@@ -226,7 +227,8 @@ this.computeIBU_SMPH = function() {
   if (ibu.useDryHopModelCheckbox.value) {
     IAA_LF_dryHop = compute_IAA_LF_dryHop(ibu);
     if (SMPH.verbose > 0) {
-      console.log("IAA loss factor from dry hopping: " +IAA_LF_dryHop.toFixed(4));
+      console.log("IAA loss factor from dry hopping: " +
+                  IAA_LF_dryHop.toFixed(4));
     }
   }
 
@@ -351,10 +353,12 @@ this.computeIBU_SMPH = function() {
         document.getElementById('addPPValue'+idxP1).innerHTML = addPPoutput;
       }
     }
-    if (dryHop && ibu.useDryHopModelCheckbox.value) {
+    if (dryHop && ibu.useDryHopModelCheckbox.value &&
+        document.getElementById('outputFootnote')) {
       document.getElementById('outputFootnote').innerHTML =
            "<td> (<sup>*</sup>IBUs from dry hopping are rough approximations. Also, IAA concentration may be reduced when dry hopping.) </td>";
-    } else if (dryHop && !ibu.useDryHopModelCheckbox.value) {
+    } else if (dryHop && !ibu.useDryHopModelCheckbox.value &&
+        document.getElementById('outputFootnote')) {
       document.getElementById('outputFootnote').innerHTML =
            "<td> (<sup>*</sup>Modeling of IBUs from dry hopping has been turned off.) </td>";
     } else {
@@ -365,6 +369,11 @@ this.computeIBU_SMPH = function() {
   if (document.getElementById("totalIBUvalue")) {
     totalIBUoutput = ibu.IBU.toFixed(2);
     document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
+  }
+  if (document.getElementById("BIvalue")) {
+    BI = (-0.0009 * totalIBUoutput * totalIBUoutput) +
+         (0.246 * totalIBUoutput) - 0.264;
+    document.getElementById('BIvalue').innerHTML = BI.toFixed(2);
   }
 
   if (SMPH.verbose > 0) {

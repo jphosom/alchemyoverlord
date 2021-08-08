@@ -155,7 +155,7 @@ TODO:
 
 +31. dry-hopping model
 
- 32. add Shellhammer units to output
++32. add Shellhammer units to output
 
  33. re-run parameter estimation one more time, clean up code again.
      test all calculators on chome.  scan paper copies of experiments

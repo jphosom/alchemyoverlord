@@ -2262,6 +2262,11 @@ function hopAdditionsSet(updateFunction) {
         table += "<td>Addition "+idx+" </td> "
       }
     }
+    if (numAdd < 7) {
+      for (idx = numAdd; idx < 7; idx++) {
+        table += "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>"
+      }
+    }
     table += "</tr> "
 
     table += "<tr> "
@@ -2325,10 +2330,26 @@ function hopAdditionsSet(updateFunction) {
     table += "<td class='outputTableTotalName'>Total IBUs:</td>"
     table += "<td class='outputTableTotalValue' id='totalIBUvalue'>0.00</td>"
     table += "</tr> ";
-    table += "</table> ";
+
+    if (ibu.detailedOutput) {
+      table += "<tr> ";
+      table += "<td class='outputTableTotalName'>Bitterness Intensity:</td>"
+      table += "<td class='outputTableTotalValue' id='BIvalue'>0.00</td>"
+      table += "<td colspan=100 class='outputTableTotalName'><small>(perceived bitterness, scale 0 to 20<sup>&dagger;</sup>)</small></td>"
+      table += "</tr> ";
+      table += "<tr><td>&nbsp;</td></tr>";
+      table += "<tr> ";
+      table += "</table>";
+      table += "<table style='margin-left:3em'> ";
+      table += "<td>"
+      table += "<sup>&dagger;</sup><small>C.D. Hahn, S.R. Lafontaine, C.B. Pereira, and T.H. Shellhammer, \"Evaluation of Nonvolatile Chemistry Affecting the Sensory Bitterness Intensity of Highly Hopped Beers\", <em>J. Agric. Food Chem.</em>, 2018, 66 (13), pp. 3505-3513</small>";
+      table += "</td> ";
+      table += "</tr>";
+      }
+    table += "</table>";
     table += "<table style='margin-left:3em' id='outputFootnote'> "
-    table += "<td> </td>"
-    table += "</table> ";
+    table += "<td> </td>";
+    table += "</table>";
     document.getElementById('outputTableDiv').innerHTML = table;
   }
 
