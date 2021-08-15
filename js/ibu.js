@@ -661,9 +661,9 @@ ibu._construct = function() {
   // hopDecayMethod
   this.hopDecayMethod.id = "ibu.hopDecayMethod";
   this.hopDecayMethod.inputType = "radioButton";
-  this.hopDecayMethod.value = "decaySpecify";
+  this.hopDecayMethod.value = "decayFactor";
   this.hopDecayMethod.userSet = 0;
-  this.hopDecayMethod.defaultValue = "decaySpecify";
+  this.hopDecayMethod.defaultValue = "decayFactor";
   this.hopDecayMethod.additionalFunction = hopAdditionsSet;
   this.hopDecayMethod.additionalFunctionArgs = "";
 
