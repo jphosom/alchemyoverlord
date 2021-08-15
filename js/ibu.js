@@ -35,6 +35,7 @@
 //                                add fermentorVolume, dry-hop options,
 //                                and more possible output values,
 //                                lower the defaults freshness factors
+// Version 1.2.11: Aug 10, 2021 : add storage conditions to each hop addition
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -100,6 +101,7 @@ var ibu = ibu || {};
 //    . pH = the wort pH, if applying pH correction
 //    . preOrPostBoilpH = if the pH is pre- or post-boil
 //    . useDryHopModelCheckbox = whether or not to use dry-hop model of IBUs
+//    . hopDecayMethod = specify storage conditions or use freshness factor
 //    . add = array of hop additions, containing:
 //        . variety = hop variety, if known
 //        . hopForm = form of the hops (cones, pellets, or default)
@@ -107,6 +109,9 @@ var ibu = ibu || {};
 //        . BA = beta acid, in percent (scale 0 to 100)
 //        . percentLoss = percent loss of AA when stored 6 mos at room temp
 //        . freshnessFactor = how fresh are the hops? e.g. using Garetz formula
+//        . hopPackaging = how the hops have been stored since harvest
+//        . storageTemp = at what temperature hops have been stored
+//        . storageDuration = how long the hops have been stored
 //        . pelletFactor = increase in oAA boil factor when using pellets
 //        . weight = weight of hops added
 //        . kettleOrDryHop = are hops added to the kettle or for dry hopping?
@@ -175,6 +180,7 @@ ibu._construct = function() {
   this.pH                   = new Object();
   this.preOrPostBoilpH      = new Object();
   this.useDryHopModelCheckbox = new Object();
+  this.hopDecayMethod       = new Object();
 
   this.add = [];        // array of hops additions
   this.letterList = []; // array of hop variety first letters
@@ -652,6 +658,15 @@ ibu._construct = function() {
   this.useDryHopModelCheckbox.userSet = 0;
   this.useDryHopModelCheckbox.defaultValue = true;
 
+  // hopDecayMethod
+  this.hopDecayMethod.id = "ibu.hopDecayMethod";
+  this.hopDecayMethod.inputType = "radioButton";
+  this.hopDecayMethod.value = "decaySpecify";
+  this.hopDecayMethod.userSet = 0;
+  this.hopDecayMethod.defaultValue = "decaySpecify";
+  this.hopDecayMethod.additionalFunction = hopAdditionsSet;
+  this.hopDecayMethod.additionalFunctionArgs = "";
+
   // fermentorVolume
   this.fermentorVolume.id = "ibu.fermentorVolume";
   this.fermentorVolume.inputType = "float";
@@ -1028,7 +1043,6 @@ function checkHoldTemp(forcedDecayType) {
   var checked = ibu.holdTempCheckbox.value;
   var idx = 0;
 
-  console.log("CHECKING HOLD TEMP " + ibu.holdTemp.value + ", " + ibu.boilTemp.value);
   if (ibu.holdTemp.value > ibu.boilTemp.value) {
     window.alert("maximum temperature of hop stand is boiling.");
     ibu.holdTemp.value = ibu.boilTemp.value;
@@ -1396,6 +1410,13 @@ function checkHopFormDefaults() {
       ibu.add[arrayIdx].hopForm.defaultValue = ibu.defaultHopForm.value;
       common.set(ibu.add[arrayIdx].hopForm,0);
     }
+    // check packaging
+    userSet = ibu.add[arrayIdx].hopPackaging.userSet;
+    if (!userSet) {
+      ibu.add[arrayIdx].hopPackaging.defaultValue =
+          get_hopPackaging_default(arrayIdx);
+      common.set(ibu.add[arrayIdx].hopPackaging,0);
+    }
     // check freshness factor
     userSet = ibu.add[arrayIdx].freshnessFactor.userSet;
     if (!userSet) {
@@ -1424,7 +1445,7 @@ function checkHopFormDefaults2(arrayIdx) {
   var value = "";
   var variable = ibu.add[arrayIdx].hopForm;
 
-  value = ibu.add[arrayIdx].hopForm.value;
+  value = variable.value;
   if (value == "(default)") {
     variable.defaultValue = ibu.defaultHopForm.value;
     variable.value = ibu.defaultHopForm.value;
@@ -1437,6 +1458,11 @@ function checkHopFormDefaults2(arrayIdx) {
         document.getElementById(variable.id).style.color = "black";
       }
     }
+  }
+  if (!ibu.add[arrayIdx].hopPackaging.userSet) {
+    ibu.add[arrayIdx].hopPackaging.defaultValue =
+        get_hopPackaging_default(arrayIdx);
+    common.set(ibu.add[arrayIdx].hopPackaging,0);
   }
   if (!ibu.add[arrayIdx].freshnessFactor.userSet) {
     ibu.add[arrayIdx].freshnessFactor.defaultValue =
@@ -1510,27 +1536,168 @@ function get_percentLoss_default(arrayIdx) {
 }
 
 //------------------------------------------------------------------------------
+// get default storage duration
+
+function get_storageDuration_default(arrayIdx) {
+  var defaultValue = 9.0;  // random guess... somewhere between fresh and 18mo?
+  return defaultValue;
+}
+
+//------------------------------------------------------------------------------
+// get default storage conditions
+
+function get_hopPackaging_default(arrayIdx) {
+  var defaultValue = "";
+  var tableID = "";
+
+  if (ibu.add[arrayIdx].hopForm.value == "cones") {
+    defaultValue = "vacuum seal";
+  } else {
+    defaultValue = "pro. nitrogen";
+  }
+
+  return defaultValue;
+}
+
+//------------------------------------------------------------------------------
 // get default freshness factor
+// This is a direct implementation of the Garetz method.
 // It is assumed that cones are stored fairly well, but not in
-//    nitrogen-flushed packaging.
-// It is assumed that pellets may be stored in nitrogen-flushed packaging
-//    and so have a higher likelihood of being fresh.
+//    professional nitrogen-flushed packaging.
+// It is assumed that pellets may be stored in professional nitrogen-flushed
+//    packaging and so have a higher likelihood of being fresh.
 
 function get_freshnessFactor_default(arrayIdx) {
+  var addIdx = arrayIdx + 1;
+  var days = 0.0;
   var defaultValue = 0.90;
+  var freshnessFactor = 0.0;
   var form = "";
+  var HSI = 0.0;
+  var k = 0.0;
+  var loss = ibu.add[arrayIdx].percentLoss.value;
+  var lossFactor = 0.0;
+  var precision = 0;
+  var SF = 0.0;
+  var hopPackaging = ibu.add[arrayIdx].hopPackaging.value;
+  var storageDuration_months = ibu.add[arrayIdx].storageDuration.value;
+  var storageTemp = ibu.add[arrayIdx].storageTemp.value;
+  var storageTempC = 0.0;
+  var TF = 0.0;
   var value = 0.0;
 
-  form = ibu.add[arrayIdx].hopForm.value;
-  value = defaultValue;
-  if (form == "cones") {
-    value = 0.85;
-  }
-  if (form == "pellets") {
-    value = 0.95;
+  // if we have all the information needed for a decent estimate, use it.
+  if (loss && hopPackaging && storageDuration_months && storageTemp) {
+    lossFactor = loss / 100.0;
+    if (lossFactor >= 1.0) lossFactor = 0.99; // prevent divide by zero, ln(neg)
+    k = Math.log(1.0/(1.0-lossFactor)) / 182.5;
+
+    if (hopPackaging == "pro. nitrogen") {
+      SF = 0.05;
+    }
+    else if (hopPackaging == "inert flush") {
+      SF = 0.5;
+    }
+    else if (hopPackaging == "vacuum seal") {
+      SF = 0.5;
+    }
+    else if (hopPackaging == "wrapped") {
+      SF = 0.75;
+    }
+    else if (hopPackaging == "loose") {
+      SF = 1.0;
+    }
+
+    days = storageDuration_months * 30.5;
+
+    if (storageTemp == "room temp") {
+      storageTempC = 20.0;
+    }
+    else if (storageTemp == "refrigerator") {
+      storageTempC = 3.0;
+    }
+    else if (storageTemp == "freezer") {
+      storageTempC = -20.0;
+    }
+    TF = 0.39685026299204984 * Math.exp(0.04620981203732968*storageTempC);
+
+    freshnessFactor = 1.0 / Math.exp(k * TF * SF * days);
+    HSI = Math.pow(10.0, (1.0 - freshnessFactor)/1.10) * 0.25;
+    console.log("freshness: lossFactor=" + lossFactor.toFixed(2) +
+                ", k=" + k.toFixed(5) +
+                ", conditions='" + hopPackaging +
+                "'=" + SF.toFixed(3) +
+                ", duration=" + days.toFixed(1) + " days" +
+                ", temp=" + storageTempC + "'C with factor=" + TF.toFixed(4));
+    console.log("freshness: freshnessFactor = " + freshnessFactor.toFixed(3) +
+                ", HSI = ", HSI.toFixed(4));
+    value = freshnessFactor;
+  // otherwise, pick a default value based on if it's cones or pellets
+  } else {
+    form = ibu.add[arrayIdx].hopForm.value;
+    value = defaultValue;
+    if (form == "cones") {
+      value = 0.85;
+    }
+    if (form == "pellets") {
+      value = 0.95;
+    }
   }
 
   return value;
+}
+
+//------------------------------------------------------------------------------
+// set freshness factor from the specified storage conditions
+
+function set_freshnessFactor(arrayIdx) {
+  var freshnessFactor = 0.0;
+
+  freshnessFactor = get_freshnessFactor_default(arrayIdx);
+  ibu.add[arrayIdx].freshnessFactor.defaultValue = freshnessFactor;
+  common.set(ibu.add[arrayIdx].freshnessFactor, 0);
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// set storage conditions and freshness factor
+
+function set_storageAndFreshnessFactor(arrayIdx) {
+  var addIdx = Number(arrayIdx+1);
+  var tableID = "ibu.add"+addIdx+".hopPackaging";
+  var variable = ibu.add[arrayIdx].hopPackaging;
+
+  // if user selected '(default)', change values based on form of hops
+  if (variable.value == "(default)") {
+    variable.userSet = 0;
+    if (ibu.add[arrayIdx].hopForm.value == "cones") {
+      variable.value = "vacuum seal";
+      variable.defaultValue = "vacuum seal";
+    } else {
+      variable.value = "pro. nitrogen";
+      variable.defaultValue = "pro. nitrogen";
+    }
+  }
+
+  // change the value in the table and the color
+  if (document.getElementById(tableID)) {
+    if (document.getElementById(tableID).value == "(default)") {
+      if (ibu.add[arrayIdx].hopForm.value == "cones") {
+        document.getElementById(tableID).value = "vacuum seal";
+        document.getElementById(tableID).style.color = ibu.defaultColor;
+      } else {
+        document.getElementById(tableID).value = "pro. nitrogen";
+        document.getElementById(tableID).style.color = ibu.defaultColor;
+      }
+    } else {
+    document.getElementById(tableID).style.color = "black";
+    }
+  }
+
+  set_freshnessFactor(arrayIdx);
+
+  return;
 }
 
 //------------------------------------------------------------------------------
@@ -1881,18 +2048,22 @@ function hopAdditionsSet(updateFunction) {
   var constructInputTable = false;
   var constructOutputTable = false;
   var currentVariety = "";
+  var hopDecayMethod = "decayFactor";
   var idx = 1;
   var numAdd = ibu.numAdditions.value;
   var steepUnitsID = "";
   var table = "";
   var tableID = "";
-  var units = 0;
+  var units = "";
   var varietyDefault = "(unspecified)";
   var varietyMenu = "";
   var weightDefault = 0.0;
   var weightUnits = 0;
 
   console.log(" ------ SETTING HOPS ADDITIONS ------ ");
+  if (ibu.hopDecayMethod) {
+    hopDecayMethod = ibu.hopDecayMethod.value;
+  }
   if (ibu.hopTableSize == null) {
     ibu.hopTableSize = 3;
   }
@@ -2023,7 +2194,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].AA.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 10) {
+  if (constructInputTable && ibu.hopTableSize >= 13) {
     table += "</tr> "
     table += "<tr> "
     table += "<td> Beta Acid (%):</td> "
@@ -2031,7 +2202,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".BA";
-    if (constructInputTable && ibu.hopTableSize >= 10) {
+    if (constructInputTable && ibu.hopTableSize >= 13) {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].BA,1)'> </td> "
     }
     ibu.add[arrayIdx].BA = new Object;
@@ -2041,7 +2212,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].BA.precision = 1;
     ibu.add[arrayIdx].BA.minPrecision = 1;
     ibu.add[arrayIdx].BA.display = "";
-    ibu.add[arrayIdx].BA.min = 1.0;
+    ibu.add[arrayIdx].BA.min = 0.0;
     ibu.add[arrayIdx].BA.max = 100.0;
     ibu.add[arrayIdx].BA.description = "hops beta acid rating";
     ibu.add[arrayIdx].BA.defaultFunction = get_BA_default;
@@ -2051,7 +2222,8 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].BA.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 9) {
+  if (constructInputTable && ibu.hopTableSize >= 8 &&
+      hopDecayMethod == "decaySpecify") {
     table += "</tr> ";
     table += "<tr> ";
     table += "<td> % Loss (6mos,RT): </td> "
@@ -2059,7 +2231,8 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".percentLoss";
-    if (constructInputTable && ibu.hopTableSize >= 9) {
+    if (constructInputTable && ibu.hopTableSize >= 8 &&
+        hopDecayMethod == "decaySpecify") {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].percentLoss,1)'> </td> "
     }
     ibu.add[arrayIdx].percentLoss = new Object;
@@ -2075,11 +2248,100 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].percentLoss.defaultFunction = get_percentLoss_default;
     ibu.add[arrayIdx].percentLoss.defaultArgs = arrayIdx;
     ibu.add[arrayIdx].percentLoss.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].percentLoss.additionalFunction = set_freshnessFactor;
+    ibu.add[arrayIdx].percentLoss.additionalFunctionArgs = arrayIdx;
     ibu.add[arrayIdx].percentLoss.updateFunction = updateFunction;
     ibu.add[arrayIdx].percentLoss.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 8) {
+  if (constructInputTable && ibu.hopTableSize >= 9 &&
+      hopDecayMethod == "decaySpecify") {
+    table += "</tr> ";
+    table += "<tr> ";
+    table += "<td> Packaging: </td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".hopPackaging";
+    if (constructInputTable && ibu.hopTableSize >= 9 &&
+        hopDecayMethod == "decaySpecify") {
+      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopPackaging,1)'> <option value='pro. nitrogen'>pro. nitrogen</option> <option value='inert flush'>inert flush</option> <option value='vacuum seal'>vacuum seal</option> <option value='wrapped'>wrapped</option> <option value='loose'>loose</option> <option value='(default)'>(default)</option></td> "
+    }
+    ibu.add[arrayIdx].hopPackaging = new Object;
+    ibu.add[arrayIdx].hopPackaging.id = tableID;
+    ibu.add[arrayIdx].hopPackaging.inputType = "select";
+    ibu.add[arrayIdx].hopPackaging.userSet = 0;
+    ibu.add[arrayIdx].hopPackaging.description = "storage conditions";
+    ibu.add[arrayIdx].hopPackaging.defaultFunction =
+                      get_hopPackaging_default;
+    ibu.add[arrayIdx].hopPackaging.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].hopPackaging.additionalFunction =
+                      set_storageAndFreshnessFactor;
+    ibu.add[arrayIdx].hopPackaging.additionalFunctionArgs = arrayIdx;
+    ibu.add[arrayIdx].hopPackaging.updateFunction = updateFunction;
+    ibu.add[arrayIdx].hopPackaging.parent = "ibu";
+  }
+
+  if (constructInputTable && ibu.hopTableSize >= 10 &&
+      hopDecayMethod == "decaySpecify") {
+    table += "</tr> ";
+    table += "<tr> ";
+    table += "<td> Storage Duration: </td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".storageDuration";
+    if (constructInputTable && ibu.hopTableSize >= 10 &&
+        hopDecayMethod == "decaySpecify") {
+      table += "<td> <input type='text' size='1.8' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].storageDuration,1)'> <small>months</small></td> "
+    }
+    ibu.add[arrayIdx].storageDuration = new Object;
+    ibu.add[arrayIdx].storageDuration.id = tableID;
+    ibu.add[arrayIdx].storageDuration.inputType = "float";
+    ibu.add[arrayIdx].storageDuration.userSet = 0;
+    ibu.add[arrayIdx].storageDuration.precision = 1;
+    ibu.add[arrayIdx].storageDuration.minPrecision = 0;
+    ibu.add[arrayIdx].storageDuration.display = "";
+    ibu.add[arrayIdx].storageDuration.min = 0.0;
+    ibu.add[arrayIdx].storageDuration.max = 60.0;
+    ibu.add[arrayIdx].storageDuration.description = "storage duration (months)";
+    ibu.add[arrayIdx].storageDuration.defaultFunction = get_storageDuration_default;
+    ibu.add[arrayIdx].storageDuration.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].storageDuration.defaultColor = ibu.defaultColor;
+    ibu.add[arrayIdx].storageDuration.additionalFunction = set_freshnessFactor;
+    ibu.add[arrayIdx].storageDuration.additionalFunctionArgs = arrayIdx;
+    ibu.add[arrayIdx].storageDuration.updateFunction = updateFunction;
+    ibu.add[arrayIdx].storageDuration.parent = "ibu";
+  }
+
+  if (constructInputTable && ibu.hopTableSize >= 11 &&
+      hopDecayMethod == "decaySpecify") {
+    table += "</tr> ";
+    table += "<tr> ";
+    table += "<td> Storage Temperature: </td> "
+  }
+  for (idx = 1; idx <= numAdd; idx++) {
+    arrayIdx = Number(idx-1);
+    tableID = "ibu.add"+idx+".storageTemp";
+    if (constructInputTable && ibu.hopTableSize >= 10 &&
+        hopDecayMethod == "decaySpecify") {
+      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].storageTemp,1)'> <option value='room temp'>room temp</option> <option value='refrigerator'>refrigerator</option> <option value='freezer'>freezer</option></td> "
+    }
+    ibu.add[arrayIdx].storageTemp = new Object;
+    ibu.add[arrayIdx].storageTemp.id = tableID;
+    ibu.add[arrayIdx].storageTemp.inputType = "select";
+    ibu.add[arrayIdx].storageTemp.userSet = 0;
+    ibu.add[arrayIdx].storageTemp.description = "storage temperature";
+    ibu.add[arrayIdx].storageTemp.defaultValue = "room temp";
+    ibu.add[arrayIdx].storageTemp.additionalFunction = set_freshnessFactor;
+    ibu.add[arrayIdx].storageTemp.additionalFunctionArgs = arrayIdx;
+    ibu.add[arrayIdx].storageTemp.updateFunction = updateFunction;
+    ibu.add[arrayIdx].storageTemp.parent = "ibu";
+  }
+
+  if (constructInputTable &&
+      (ibu.hopTableSize >= 8 && hopDecayMethod == "decayFactor") ||
+      (ibu.hopTableSize >= 12 && hopDecayMethod == "decaySpecify")) {
     table += "</tr> ";
     table += "<tr> ";
     table += "<td> Freshness Factor: </td> "
@@ -2087,7 +2349,9 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".freshnessFactor";
-    if (constructInputTable && ibu.hopTableSize >= 8) {
+    if (constructInputTable &&
+        (ibu.hopTableSize >= 8 && hopDecayMethod == "decayFactor") ||
+        (ibu.hopTableSize >= 12 && hopDecayMethod == "decaySpecify")) {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].freshnessFactor,1)'> </td> "
     }
     ibu.add[arrayIdx].freshnessFactor = new Object;
@@ -2197,7 +2461,7 @@ function hopAdditionsSet(updateFunction) {
     tableID = "ibu.add"+idx+".steepTimeTable";
     steepUnitsID = "ibu.add"+idx+".steepUnits";
     if (constructInputTable) {
-      table += "<td> <input type='text' size='4' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].steepTime,1)'> <span id='"+steepUnitsID+"'>min</span> </td> "
+      table += "<td> <input type='text' size='4' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].steepTime,1)'> <small><span id='"+steepUnitsID+"'>min</span></small> </td> "
     }
     arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].steepTime = new Object;
@@ -2233,8 +2497,11 @@ function hopAdditionsSet(updateFunction) {
     common.set(ibu.add[arrayIdx].hopForm,0);
     common.set(ibu.add[arrayIdx].AA,0);
     common.set(ibu.add[arrayIdx].BA,0);
-    common.set(ibu.add[arrayIdx].percentLoss,0);
     common.set(ibu.add[arrayIdx].freshnessFactor,0);
+    common.set(ibu.add[arrayIdx].percentLoss,0);
+    common.set(ibu.add[arrayIdx].hopPackaging,0);
+    common.set(ibu.add[arrayIdx].storageDuration,0);
+    common.set(ibu.add[arrayIdx].storageTemp,0);
     common.set(ibu.add[arrayIdx].pelletFactor,0);
     common.set(ibu.add[arrayIdx].weight,0);
     common.set(ibu.add[arrayIdx].kettleOrDryHop,0);
@@ -2262,6 +2529,7 @@ function hopAdditionsSet(updateFunction) {
         table += "<td>Addition "+idx+" </td> "
       }
     }
+    // add spaces so that 'perceived bitterness' doesn't wrap around
     if (numAdd < 7) {
       for (idx = numAdd; idx < 7; idx++) {
         table += "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>"
@@ -2285,28 +2553,28 @@ function hopAdditionsSet(updateFunction) {
       table += "</tr> "
 
       table += "<tr> "
-      table += "<td class='outputTableCellName'><em>&alpha;</em> acids (IAA<sub>eq</sub>):</td> "
+      table += "<td class='outputTableCellName'><em>&alpha;</em> acids <small>(IAA<sub>eq</sub>)</small>:</td> "
       for (idx = 1; idx <= numAdd; idx++) {
         table += "<td class='outputTableCellValue' id='addAAValue"+idx+"'>0.00</td> "
       }
       table += "</tr> "
 
       table += "<tr> "
-      table += "<td class='outputTableCellName'>oxidized <em>&alpha;</em> acids (IAA<sub>eq</sub>):</td> "
+      table += "<td class='outputTableCellName'>oxidized <em>&alpha;</em> acids <small>(IAA<sub>eq</sub>)</small>:</td> "
       for (idx = 1; idx <= numAdd; idx++) {
         table += "<td class='outputTableCellValue' id='addoAAValue"+idx+"'>0.00</td> "
       }
       table += "</tr> "
 
       table += "<tr> "
-      table += "<td class='outputTableCellName'>oxidized <em>&beta;</em> acids (IAA<sub>eq</sub>):</td> "
+      table += "<td class='outputTableCellName'>oxidized <em>&beta;</em> acids <small>(IAA<sub>eq</sub>)</small>:</td> "
       for (idx = 1; idx <= numAdd; idx++) {
         table += "<td class='outputTableCellValue' id='addoBAValue"+idx+"'>0.00</td> "
       }
       table += "</tr> "
 
       table += "<tr> "
-      table += "<td class='outputTableCellName'>polyphenols (IAA<sub>eq</sub>):</td> "
+      table += "<td class='outputTableCellName'>polyphenols <small>(IAA<sub>eq</sub>)</small>:</td> "
       for (idx = 1; idx <= numAdd; idx++) {
         table += "<td class='outputTableCellValue' id='addPPValue"+idx+"'>0.00</td> "
       }
@@ -2333,18 +2601,20 @@ function hopAdditionsSet(updateFunction) {
 
     if (ibu.detailedOutput) {
       table += "<tr> ";
-      table += "<td class='outputTableTotalName'>Bitterness Intensity:</td>"
+      table += "<td class='outputTableTotalName'><a href='https://www.researchgate.net/publication/323690039_A_Comprehensive_Evaluation_of_the_Nonvolatile_Chemistry_Affecting_the_Sensory_Bitterness_Intensity_of_Highly_Hopped_Beers'>Bitterness Intensity</a>:</td>"
       table += "<td class='outputTableTotalValue' id='BIvalue'>0.00</td>"
-      table += "<td colspan=100 class='outputTableTotalName'><small>(perceived bitterness, scale 0 to 20<sup>&dagger;</sup>)</small></td>"
+      table += "<td colspan=100 class='outputTableTotalName'><small>(perceived bitterness, scale 0 to 20";
+      // table += "<sup>&dagger;</sup>";
+      table += ")</small></td>";
       table += "</tr> ";
       table += "<tr><td>&nbsp;</td></tr>";
       table += "<tr> ";
-      table += "</table>";
-      table += "<table style='margin-left:3em'> ";
-      table += "<td>"
-      table += "<sup>&dagger;</sup><small>C.D. Hahn, S.R. Lafontaine, C.B. Pereira, and T.H. Shellhammer, \"Evaluation of Nonvolatile Chemistry Affecting the Sensory Bitterness Intensity of Highly Hopped Beers\", <em>J. Agric. Food Chem.</em>, 2018, 66 (13), pp. 3505-3513</small>";
-      table += "</td> ";
-      table += "</tr>";
+      // table += "</table>";
+      // table += "<table style='margin-left:3em'> ";
+      // table += "<td>"
+      // table += "<sup>&dagger;</sup><small>C.D. Hahn, S.R. Lafontaine, C.B. Pereira, and T.H. Shellhammer, \"Evaluation of Nonvolatile Chemistry Affecting the Sensory Bitterness Intensity of Highly Hopped Beers\", <em>J. Agric. Food Chem.</em>, 2018, 66 (13), pp. 3505-3513</small>";
+      // table += "</td> ";
+      // table += "</tr>";
       }
     table += "</table>";
     table += "<table style='margin-left:3em' id='outputFootnote'> "

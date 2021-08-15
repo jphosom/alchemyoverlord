@@ -157,32 +157,40 @@ TODO:
 
 +32. add Shellhammer units to output
 
- 33. re-run parameter estimation one more time, clean up code again.
++33. re-run parameter estimation one more time, clean up code again.
      test all calculators on chome.  scan paper copies of experiments
 
- 34. publish SMPH model and estimation scripts
++34. predict HSI <-> freshness factor <-> age, temp, storage factor, variety
 
- 35. update A Summary of Factors with:
+ 35. publish SMPH model and estimation scripts
+
+ 36. update A Summary of Factors with:
        - IBU is highly correlated with bitterness (in intro)
        - add some stuff about dry hopping
      update Techniques for Maximizing:
        - order in terms of amount of hops, then freshness, etc.
 
- 36. blog posts:
+ 37. blog posts:
      - Three Misconceptions About the IBU
          - "IBUs are meaningless"
          - "IBU = IAA"
-         - ???
+         - "can know IBUs by using (any) IBU calculator"
+           (best approximation by very detailed analysis of
+            volumes at multiple points in the process, hop storage
+            index, AA analysis, specification of all factors; even
+            with that, lots of unknowns and variability)
+            If can get IBU analyzed, that is best.  If can't,
+            then understand that calculator result is only approximation
+            and accuracy depends on model assumptions and input measurements
      - SMPH model
 
- 37. make copies of all blog posts, get copied HTML to display correctly
+ 38. make copies of all blog posts, get copied HTML to display correctly
 
- 38. put blog posts on github.
+ 39. put blog posts on github.
 
  ==========================================================================
 
  . add miscellaneous calculators
-    - predict HSI <-> freshness factor <-> age, temp, storage factor, variety
     - evaporation rate from change in SG, volume, etc
     - correct SG based on temperature (also show 'Plato)
       correct pH based on temperature

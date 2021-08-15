@@ -215,9 +215,9 @@ this.set = function(variable, haveUserInput) {
       (haveUserInput && !check.valid && !check.useDefaultValue))) {
     saved = common.getSavedValue(variable);
     variable.value = saved.value;
-    if ("precision" in variable) {
-      variable.precision = saved.precision;
-    }
+    // if ("precision" in variable) {
+      // variable.precision = saved.precision;
+    // }
     variable.userSet = 1;
     console.log("setting value to saved value: " + variable.value);
   } else if (!haveUserInput ||
@@ -347,7 +347,9 @@ this.updateHTML = function(variable) {
   if (!isNaN(outputNumber)) outputNumber = parseFloat(outputNumber);
 
   // convert output to imperial units, if necessary
-  if (("convertToImperial" in variable) && ibu.units.value == "imperial") {
+  if ("convertToImperial" in variable &&
+      window[variable.parent]["units"] &&
+      window[variable.parent]["units"].value == "imperial") {
     outputNumber = variable.convertToImperial(outputNumber);
   }
 

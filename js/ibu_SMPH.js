@@ -43,7 +43,8 @@ this.initialize_SMPH = function() {
     ibu[keys[idx]].updateFunction = SMPH.computeIBU_SMPH;
   }
   ibu.numAdditions.additionalFunctionArgs = SMPH.computeIBU_SMPH;
-  ibu.hopTableSize = 9;   // number of inputs to specify each addition of hops
+  ibu.hopDecayMethod.additionalFunctionArgs = SMPH.computeIBU_SMPH;
+  ibu.hopTableSize = 12;   // number of inputs to specify each addition of hops
   ibu.detailedOutput = true;
 
   // don't need to set() any variables that change with unit conversion;
@@ -59,6 +60,7 @@ this.initialize_SMPH = function() {
   common.set(ibu.forcedDecayType, 0);
   common.set(ibu.holdTempCheckbox, 0);  // must do this after forcedDecayType
   common.set(ibu.scalingFactor, 0);
+  common.set(ibu.hopDecayMethod, 0);
   common.set(ibu.defaultHopForm, 0);
   common.set(ibu.applySolubilityLimitCheckbox, 0);
   common.set(ibu.pHCheckbox, 0);
@@ -373,6 +375,8 @@ this.computeIBU_SMPH = function() {
   if (document.getElementById("BIvalue")) {
     BI = (-0.0009 * totalIBUoutput * totalIBUoutput) +
          (0.246 * totalIBUoutput) - 0.264;
+    if (BI < 0.0) BI = 0.0;
+    if (BI > 136.667) BI = 16.546;  // this equation peaks at 136.667
     document.getElementById('BIvalue').innerHTML = BI.toFixed(2);
   }
 

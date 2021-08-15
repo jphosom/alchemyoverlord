@@ -206,7 +206,7 @@ div[id^="letter"] {
 /* define table of outputs */
 
 .outputTableCellName {
-  width:23ex;
+  width:25ex;
 }
 .outputTableCellValue {
   width:11.5ex;

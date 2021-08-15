@@ -15,7 +15,7 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
 
  <a name="top_SMPH"></a>
 <div id="content">
-  <h2>IBU Calculator Using SMPH</h2>
+  <h2>IBU Calculator Using the SMPH Method</h2>
   <p>This page provides a calculator for predicting IBUs using the SMPH
   method. The techniques used in this method are described in the blog post
   <a href="https://alchemyoverlord.wordpress.com/2017/01/03/a-summary-of-factors-affecting-ibus/">
@@ -96,7 +96,7 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   </tr>
   <tr>
     <td>Kettle Opening Diameter (<span id="kettleOpeningUnits">inches</span>):</td>
-    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.kettleOpening" onchange="common.set(ibu.kettleOpening, 1)"> (usually same as kettle diameter)</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.kettleOpening" onchange="common.set(ibu.kettleOpening, 1)"> (often same as kettle diameter)</td>
   </tr>
   </tbody>
   </table>
@@ -179,6 +179,10 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   <span id="useDryHopModel">
   <input type="checkbox" id="ibu.useDryHopModelCheckbox" onchange="common.set(ibu.useDryHopModelCheckbox,1)"> Model IBUs of dry-hop additions (this model provides only a rough approximation)
   </span>
+  <br>
+  Specify hop alpha-acid decay during storage using:
+  <input type="radio" id="decaySpecify" value="decaySpecify" name="ibu.hopDecayMethod" onclick="common.set(ibu.hopDecayMethod,1)" autocomplete="off">storage conditions
+  <input type="radio" id="decayFactor" value="decayFactor" name="ibu.hopDecayMethod" onclick="common.set(ibu.hopDecayMethod,1)" autocomplete="off" checked>freshness factor
   </p>
 
 
