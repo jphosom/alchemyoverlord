@@ -1,0 +1,202 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+hops_freshness.html : HTML for AlchemyOverlord web page, hops freshness sub-page
+Written by John-Paul Hosom
+Copyright © 2021 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : August 8, 2021
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+  </head>
+  <body>
+
+  <a name="top_freshness"></a>
+  <div id="content">
+  <h2>Hop Freshness Calculator</h2>
+  <p>This page provides a calculator for estimating a hop freshness factor.
+  The formula for alpha-acid decay and hop freshness comes from
+  <a href="https://www.morebeer.com/articles/storing_hops_properly">Mark Garetz</a>.
+  The mapping between the <a href="https://www.canr.msu.edu/news/understanding-the-importance-of-the-hop-storage-index">Hop Storage Index (HSI)</a>
+  and freshness comes from <a href="https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-37-0184">Gail Nickerson and Sam Likens (1979)</a>.
+  </p>
+  <p>
+  Default values are shown in <font color="#94476b">grayish-red</font>.
+  These defaults are based on other inputs, such as the hop variety, and
+  may change when other inputs change.
+  If you don't know the value of a parameter, the default is probably fine.
+  You can change the value of a default parameter by simply entering a new
+  value, at which point the font color will change to black.
+  To get back to a default value, enter 'd'.
+  </p>
+  <p>
+  For packaging, I have taken Garetz's terms and corresponding storage-factor
+  values. I have added a "professionally nitrogen flushed" category because I
+  have found that such packaging produces far less hop deterioration than
+  the (<a href="https://en.wikipedia.org/wiki/Do_it_yourself">DIY</a>)
+  inert-gas and vacuum-sealing values specified by Garetz in the 1990's.
+  <p>I would like to stress the importance of knowing the packaging and
+  storage conditions of your hops!  Just because hops at the store come
+  in a vacuum-sealed foil pouch doesn't mean that they have been
+  professionally flushed with nitrogen.  Just because they are in a
+  refrigerator at the time of purchase doesn't mean that they have always
+  been kept at refrigeration temperatures. In some cases I have bought
+  hops under the impression that they were flushed with nitrogen, only
+  to find that the alpha acids had degraded far below the value written on
+  the package.  I currently prefer to buy hops direct soon
+  after harvest in one-pound bags and store them in my freezer.
+  </p>
+  <p>
+  While beta acids do not usually survive into finished beer, oxidized
+  beta acids produced during storage can be present when using both kettle
+  hops and dry hops.  I've found a distinctly
+  <a href="https://www.ricola.com">herbal</a> quality in beer made with hops
+  high in oxidized beta acids, and so I try to limit their presence in my beer.
+  </p>
+  <p>
+  The best way to really know the freshness factor is to have a sample of
+  the hops analyzed for the HSI and then use the Nickerson formula.
+  The freshness factor value and the default estimate of the HSI on this page
+  are approximations only, and the real values will probably be at least
+  somewhate different.
+  </p>
+
+  <h3>Inputs:</h3>
+  <p style="margin-left:3em">Input Units:
+  <input type="radio" value="metric" id="metric" name="hopFresh.units" onclick="common.set(hopFresh.units,1)" autocomplete="off">metric or
+  <input type="radio" value="imperial" id="imperial" name="hopFresh.units" onclick="common.set(hopFresh.units,1)" autocomplete="off" checked>imperial (e.g. Fahrenheit)
+  </p>
+
+  <p>
+  <b>Hops:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Hop Variety:</td>
+    <td><div id="hopVariety"><div></td>
+  </tr>
+  <tr>
+    <td>Alpha Acids at Harvest (%): </td>
+    <td><input type="text" value="" autocomplete="off" STYLE="text-align:left" id="hopFresh.AA" onchange="common.set(hopFresh.AA,1)"></td>
+  </tr>
+  <tr>
+    <td>Beta Acids at Harvest (%): </td>
+    <td><input type="text" value="" autocomplete="off" STYLE="text-align:left" id="hopFresh.BA" onchange="common.set(hopFresh.BA,1)"></td>
+  </tr>
+  <tr>
+    <td>Loss After Six Months at Room Temp. (%):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="hopFresh.percentLoss" onchange="common.set(hopFresh.percentLoss, 1)"></td>
+  </tr>
+  <tr>
+    <td>Decay Rate Constant (<em>k</em>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="hopFresh.k" onchange="common.set(hopFresh.k, 1)"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  <b>Storage Conditions:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Packaging:</td>
+    <td><select style='width:16em;' id='hopFresh.hopPackaging' onclick='common.set(hopFresh.hopPackaging,1)'> <option value='professionally nitrogen flushed'>professionally nitrogen flushed</option> <option value='inert-gas flush'>inert-gas flush</option> <option value='vacuum sealed'>vacuum sealed</option> <option value='wrapped'>wrapped</option> <option value='loose'>loose</option></td>
+  </tr>
+  <tr>
+    <td>Storage Temperature (<span id="storageTemperatureUnits">X</span>): </td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="hopFresh.storageTemp" onchange="common.set(hopFresh.storageTemp, 1)"></td>
+  </tr>
+  <tr>
+    <td>Storage Duration (months):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="hopFresh.storageDuration" onchange="common.set(hopFresh.storageDuration, 1)"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  <b>Hop Storage Index:</b>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>HSI:</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="hopFresh.HSI" onchange="common.set(hopFresh.HSI,1)"></td>
+  </tr>
+  </tbody>
+  </table>
+
+  <br>
+
+  <h3>Outputs:</h3>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+   <td>Freshness Factor:</td><td><span id="hopFresh.freshnessFactor">0.0</span></td>
+  </tr>
+  <tr>
+   <td>Percent Lost:</td><td><span id="hopFresh.percentLost">0.0</span>%</td>
+  </tr>
+  <tr>
+  <td></td>
+  </tr>
+  <tr>
+   <td>Current Alpha Acids:</td><td><span id="hopFresh.currentAA">0.0</span>%</td>
+  </tr>
+  <tr>
+   <td>Oxidized Alpha Acids:</td><td><span id="hopFresh.oAA">0.0</span>%</td>
+  </tr>
+  <td></td>
+  <tr>
+  </tr>
+  <tr>
+   <td>Current Beta Acids:</td><td><span id="hopFresh.currentBA">0.0</span>%</td>
+  </tr>
+  <tr>
+   <td>Oxidized Beta Acids:</td><td><span id="hopFresh.oBA">0.0</span>%</td>
+  </tr>
+  </tbody>
+  </table>
+
+  </div>
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hopFresh.js" charset="utf-8"></script>
+
+  <script>
+  hopFresh.initialize_hopFresh();
+  </script>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2021-Aug-08)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_freshness">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord github home page</a>
+  <br>
+  <a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+  <p>
+  <p>
+  <center>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  <p>
+  <small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>
