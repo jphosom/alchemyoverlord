@@ -4,12 +4,13 @@
 ibu_SMPH.html : HTML for AlchemyOverlord web page, SMPH sub-page
 Written by John-Paul Hosom
 Copyright © 2018,2019,2020,2021 by John-Paul Hosom, all rights reserved.
-Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
+Version 1.0.1 : Nov. 22, 2018 to Aug. 28, 2021
 ------------------------------------------------------------------------- --!>
 
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
   </head>
   <body>
 
@@ -26,39 +27,30 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   Tom Shellhammer, and Mark Malowicki, as well as my own experiments.  This
   calculator takes into account utilization from any hop stand or whirlpool,
   as well as the time it takes to cool the wort using an immersion chiller,
-  counterflow chiller, or ice bath.
-  This calculator has an optional alpha-acid solubility limit, based on
-  experiments described in
+  counterflow chiller, or ice bath.  Other optional adjustments include
   <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
-  Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
-  The (optional) correction of IBU values based on wort pH is based on the
-  experiment described in
+  an alpha-acid solubility limit</a>, 
   <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
-  The Effect of pH on Utilization and IBUs</a>.
-  The (optional) correction of IBU values based on wort clarity is described in
+  adjustment of IBUs based on wort pH</a>,
+  adjustment of IBUs based on 
   <a href="https://alchemyoverlord.wordpress.com/2020/10/21/how-lautering-and-wort-clarity-affect-ibus/">
-  How Lautering and Wort Clarity Affect IBUs</a>.
-  The (optional) correction of IBU values based on krausen loss is based on the
-  experiment described in
+  wort clarity</a> and 
   <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
-  The Impact of Krausen Loss on IBUs</a>.
-  The correction of IBU values when using pellets is based on the experiments described in
+  krausen loss</a>, 
   <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
-  Hop Cones vs. Pellets: IBU Differences</a>.
+  adjustment based on the use of hop pellets instead of whole cones</a>, and
+  IBUs from dry-hopping.
   </p>
 
   <p>
-  For the temperature decay functions, default values are shown in
-  <font color="#94476b">grayish-red</font>.
+  Default values are shown in <font color="#94476b">grayish-red</font>.
   The defaults should yield reasonable results for most homebrewing scenarios.
-  The defaults are based on the wort volume, kettle diameter, and kettle
+  The temperature-decay defaults are based on the wort volume, kettle diameter, and kettle
   opening diameter.  For most homebrewers, the kettle diameter and the
   opening diameter are the same (with an uncovered kettle).
   The "exponential decay" function is probably somewhat more accurate than
   the "linear" function, but the linear function is easier to conceptualize
-  (e.g. a decrease of 1.74&deg;F per minute).  If your measured decrease in
-  wort temperature is not modeled well by these defaults, feel free to
-  change them.
+  (e.g. a decrease of 1.74&deg;F per minute).
   </p>
   <p>
   To get back to a default value, enter 'd'.  To save settings to a text file
@@ -125,8 +117,7 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   </tr>
   <tr>
     <td>Wort/Trub Left in Kettle (<span id="wortLossUnits">G</span>):</td>
-    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortLossVolume" onchange="common.set(ibu.wortLossVolume, 1)">
-    (only needed for partial boils)</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.wortLossVolume" onchange="common.set(ibu.wortLossVolume, 1)"></td>
   </tr>
   <tr>
     <td>(Partial Boil) Added Water (<span id="topoffUnits">G</span>):</td>
@@ -180,7 +171,7 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   <input type="checkbox" id="ibu.useDryHopModelCheckbox" onchange="common.set(ibu.useDryHopModelCheckbox,1)"> Model IBUs of dry-hop additions (this model provides only a rough approximation)
   </span>
   <br>
-  Specify hop alpha-acid decay during storage using:
+  Specify hop alpha-acid decay using:
   <input type="radio" id="decaySpecify" value="decaySpecify" name="ibu.hopDecayMethod" onclick="common.set(ibu.hopDecayMethod,1)" autocomplete="off">storage conditions
   <input type="radio" id="decayFactor" value="decayFactor" name="ibu.hopDecayMethod" onclick="common.set(ibu.hopDecayMethod,1)" autocomplete="off" checked>freshness factor
   </p>
@@ -287,6 +278,10 @@ Version 1.0.1 : Nov. 22, 2018 to Aug. 8, 2021
   <h3>Outputs:</h3>
   <div id="outputTableDiv">
   </div>
+  <table style="margin-left:3em">
+  <tr><td><span id="forcedCoolingTime"></span></td></tr>
+  <tr><td></td></tr>
+  </table>
 </div>
 
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
@@ -320,7 +315,7 @@ SMPH.initialize_SMPH();
 <small>
 <a name="versions"></a>
 <h4>Versions:</h4>
-<b>1.0.1</b>: (2018-Nov-22 to 2021-Aug-08)  Initial version.<br>
+<b>1.0.1</b>: (2018-Nov-22 to 2021-Aug-28)  Initial version.<br>
 </small>
 
 <p>

@@ -801,6 +801,7 @@ this.computeIBU_mIBU = function() {
   }
 
   totalIBUoutput = IBU.toFixed(2);
+  ibu.IBU = IBU; // needed if evaluating with ibu_SMPH_search.js
   if (document.getElementById("totalIBUvalue")) {
     document.getElementById('totalIBUvalue').innerHTML = totalIBUoutput;
   }

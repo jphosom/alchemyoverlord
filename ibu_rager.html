@@ -1,15 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
 
 <!-- -------------------------------------------------------------------------
-ibu_tinseth.html : HTML for AlchemyOverlord web page, Tinseth IBU sub-page
+ibu_rager.html : HTML for AlchemyOverlord web page, Rager IBU sub-page
 Written by John-Paul Hosom
-Copyright © 2018 by John-Paul Hosom, all rights reserved.
-Version 1.0.0 : January 30, 2017
-Version 1.0.1 : May 6, 2018
-Version 1.2.0 : July 15, 2018
-Version 1.2.2 : September 3, 2018
-Version 1.2.3 : December 29, 2018
-Version 1.2.4 : February 21, 2020
+Copyright © 2021 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : Aug. 21, 2021
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -19,13 +14,12 @@ Version 1.2.4 : February 21, 2020
   </head>
   <body>
 
-  <a name="top_Tinseth"></a>
+  <a name="top_Rager"></a>
 <div id="content">
-  <h2>Tinseth IBU Calculator</h2>
-  <p>This page provides a calculator for predicting IBUs using the Tinseth formula.
-  This formula is provided on Glenn Tinseth's
-  <a href="http://realbeer.com/hops/research.html" target="_parent">web site</a>.
-  He has a similar JavaScript IBU calculator.
+  <h2>Rager IBU Calculator</h2>
+  <p>This page provides a calculator for predicting IBUs using the Jackie Rager formula from an article in <em>Zymurgy</em> (vol. 13, no. 4, pp. 54-54, 1990).
+  This formula is provided at
+  <a href="http://realbeer.com/hops/FAQ.html" target="_parent">Norm Pyle's Hops FAQ</a>.
   </p>
 
   <h3>Inputs:</h3>
@@ -97,10 +91,10 @@ Version 1.2.4 : February 21, 2020
 <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
 <script type="text/javascript" src="js/ibu.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/ibu_tinseth.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/ibu_rager.js" charset="utf-8"></script>
 
 <script>
-Tinseth.initialize_Tinseth();
+Rager.initialize_Rager();
 </script>
 
 <br>
@@ -110,7 +104,7 @@ Tinseth.initialize_Tinseth();
   <tbody>
   <tr>
   <td>Save to File:</td>
-  <td><button type="button" onclick="common.saveToFile('IBU_Tinseth.txt')">Browse... </button></td>
+  <td><button type="button" onclick="common.saveToFile('IBU_Rager.txt')">Browse... </button></td>
   </tr>
   <tr>
   <td>Load from File:</td>
@@ -121,12 +115,10 @@ Tinseth.initialize_Tinseth();
 
 <br>
 <hr>
-Note that the Tinseth utilization function models alpha acid isomerization
-as a pseudo first-order reaction, with no utilization at a steep time
-of zero minutes and the rate of utilization greatest at lower steep times.
-This generally conforms to the utilization function later determined by
-<a href="https://ir.library.oregonstate.edu/downloads/bz60d000z">
-Mark Malowicki (adviser Tom Shellhammer)</a>.
+Note that the Rager utilization function is greater than zero even at
+a steep time of zero.  Jackie Rager may have observed the contribution
+to the IBU from oxidized alpha acids produced when hops are added to the 
+kettle, and included this in his utilization function:
 <br>
 <p>
 <img src="img/utilization.png" alt="utilization" style="width:600;height:360px;">
@@ -138,20 +130,13 @@ Mark Malowicki (adviser Tom Shellhammer)</a>.
 <small>
 <a name="versions"></a>
 <h4>Versions:</h4>
-<b>1.0.0</b>: (2017-Jan-06)  Initial version.<br>
-<b>1.0.1</b>: (2018-May-06)  Added functionality for partial boils, global scaling,
-and evaporation rate.</br>
-<b>1.2.0</b>: (2018-Jul-15) Complete re-write under the hood.  Add boil time. Minor fixes.
-New functionality: automatically save and load parameter settings.<br>
-<b>1.2.2</b>: (2018-Sep-03) Minor updates.<br>
-<b>1.2.3</b>: (2018-Dec-29) Minor updates.<br>
-<b>1.2.4</b>: (2020-Feb-21) Add ability to save and load files.<br>
+<b>1.0.0</b>: (2021-Aug-21)  Initial version.<br>
 </small>
 
 <p>
 <center>
 Navigate to:<br>
-<a href="#top_Tinseth">top of page</a>
+<a href="#top_Rager">top of page</a>
 <br>
 <a href="index.html" target="_top">AlchemyOverlord github home page</a>
 <br>
@@ -162,7 +147,7 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2018-2021 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
 the accuracy or suitability of the results.  Predicting IBUs is a bit
 of a "black art", because there are so many variables and there is so much

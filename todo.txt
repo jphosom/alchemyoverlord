@@ -1,7 +1,7 @@
 TODO:
 
  + test adding IAA to finished beer, using beer #76 3 quarts D and E
-   analyze this "as is" and with 2 IAA additions. 
+   analyze this "as is" and with 2 IAA additions.
    make sure to measure drops using IAA not water. 6 samples total
 
  + impact of gelatin fining on IPA : 2 samples
@@ -49,7 +49,7 @@ TODO:
 
 +9. new blog post on oAA as function of temp
     (code: analyze.tcl = analyze data)
-    Note PP levels are all same at beginning. 
+    Note PP levels are all same at beginning.
     Note PP levels increase during the boil, as expected? (see notes below)
 
 +10. re-analyze first CvP experiments using oAA not just nonIAA.
@@ -89,9 +89,9 @@ TODO:
 +15. update "why do pellets have higher IBUs" to include PP results
      from CVP #6.  Explain pelletFactor of 2.0 in "IBU differences" post.
 
-+16. lauter experiment #2 : analyze 
++16. lauter experiment #2 : analyze
 
-+17. finings: 
++17. finings:
      analyze IPA and Kolsch analyzed before and after gelatin finings
      exp(-0.004349*x) where x is gelatin in ml (5 ml/tsp)
 
@@ -116,12 +116,12 @@ TODO:
 
 +23. cones vs pellets:
     + wrap up and publish all CvP posts
- 
+
 +24. double-check javascript
     + check mIBU code, make sure API looks good everywhere
     + make sure all ABC match up with recent scripts, e.g.
       solExp_pH5.2/solExp5_2_model.tcl
-    + clean up code (tabs, indentation, etc) 
+    + clean up code (tabs, indentation, etc)
           ibu_SMPH_search.js
           data.js
     + re-run parameter estimation
@@ -147,11 +147,11 @@ TODO:
 
 
 +30. modify SMPH HTML to show IBU contribution from oAA, oBA, PP
-        AA utilization: 
-        IBU from IAA: 
-        IBU from oAA: 
-        IBU from PP: 
-        IBU per addition: 
+        AA utilization:
+        IBU from IAA:
+        IBU from oAA:
+        IBU from PP:
+        IBU per addition:
 
 +31. dry-hopping model
 
@@ -161,20 +161,34 @@ TODO:
      test all calculators on chome.  scan paper copies of experiments
 
 +34. predict HSI <-> freshness factor <-> age, temp, storage factor, variety
+     evaporation rate from change in SG, volume, etc
+     correct SG based on temperature (also show 'Plato)
+     correct pH based on temperature
+     correct volume based on temperature
 
- 35. publish SMPH model and estimation scripts
++35. add Rager and Garetz pages
 
- 36. update A Summary of Factors with:
++36. publish SMPH model and parameter-estimation scripts
+
+ 37. update A Summary of Factors with:
        - IBU is highly correlated with bitterness (in intro)
        - add some stuff about dry hopping
      update Techniques for Maximizing:
        - order in terms of amount of hops, then freshness, etc.
 
- 37. blog posts:
+ 38. blog posts:
      - Three Misconceptions About the IBU
          - "IBUs are meaningless"
+             - talking about measured IBUs, not formulas
+             - correlated with perceived bitterness
+             - reproducible, not random, low variance in controlled conditions
          - "IBU = IAA"
-         - "can know IBUs by using (any) IBU calculator"
+             - confusion based on history
+             - shellhammer contribution of oAA
+             - my contribution of oAA
+             - other ABCs
+             - utilization curve back to time 0
+         - An IBU calculator will give you a good estimate of real IBUs
            (best approximation by very detailed analysis of
             volumes at multiple points in the process, hop storage
             index, AA analysis, specification of all factors; even
@@ -182,20 +196,26 @@ TODO:
             If can get IBU analyzed, that is best.  If can't,
             then understand that calculator result is only approximation
             and accuracy depends on model assumptions and input measurements
+          - Example: Alice and Bob brew two batches following the same
+            recipe.  But due to different techniques, the arrive at
+            very different IBUs.  So it's not just a question of choosing
+            the right model, but of accounting for all of the factors
+            that affect IBUs
      - SMPH model
 
- 38. make copies of all blog posts, get copied HTML to display correctly
+ 39. review all blog posts, make copies of all blog posts,
+     get copied HTML to display correctly
 
- 39. put blog posts on github.
+ 40. put blog posts on github.
 
  ==========================================================================
 
  . add miscellaneous calculators
-    - evaporation rate from change in SG, volume, etc
-    - correct SG based on temperature (also show 'Plato)
-      correct pH based on temperature
-      correct volume based on temperature
-    - compute yeast pitching rate
+    + hop freshness calculator
+    + evaporation rate from change in SG, volume, etc
+    + correct SG based on temperature (also show 'Plato)
+    + correct pH based on temperature
+    + correct volume based on temperature
 
  . create larger system
         - create local parameters template (volume of trub left behind, etc)
@@ -205,13 +225,71 @@ TODO:
 --------------------------------------------------------------------------------
 
 NOTES on larger system:
+BrewPlan
+BrewStep
 
-grain : ** type (include extract)
+Recipe: xxxx   (save / load)
+Style: xxx
+Brew Date: xxxx
+Checklist Template: xxxx (save / load)
+(Create Checklist)
+
+time labels:
+    prep, milling, pre-mash, mash-begin, mash-plusN, mash-stepN, mash-end,
+    batchsparge1-begin, batchsparge1-end, batchsparge1-vorlauf
+    batchsparge2-begin, batchsparge2-end, batchsparge1-vorlauf
+    wort-combined, pre-boil, boil-begin, boil-reachboil, boil-startTimer,
+    boil-plusN, boil-endMinusN, boil-end,
+    whirlpool-begin, whirlpool-end, forcedcooling-begin,
+    forcedcooling-end, tranfertoFV, starterBegin, starterEnd, pitchyeast,
+    ferment-start, ferment-plusN, ferment-end,
+    conditioning-start, conditioning-plusN,
+    conditioning-endMinusN, conditioning-end,
+    coldcrash-begin, coldcrash-end, filtering,
+    kegging, bottling
+
+meta labels:
+    batch-sparge (yes/no)
+    whirlpool (yes/no)
+    keg/bottle
+    step-mash
+
+measurement labels:
+    batch1-SG, pH, volume, water-volume, mash-volume
+    batch2-SG, pH, volume, water-volume, mash-volume
+    SG
+    pH
+    mash-volume
+    volume
+    sugars
+    temperature
+    color
+    yeast-pitchxx
+    ABV, calories
+
+actions (?? needed ??):
+    mill
+    addgrains
+    addwater
+    addhops
+    removehops
+    cover-kettle
+    remove-cover
+    vorlauf
+
+extracts:
+        ** xxxx
+
+grain : ** type
         ** color
         ** %extract or PPG
         ** weight
+        ** millgap
         absorbing factor
         volume contributing factor
+
+adjuncts:
+        ** ???
 
 water : ** number of infusions
         ** amount of water

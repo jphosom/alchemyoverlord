@@ -1,7 +1,7 @@
 // ==========================================================================================================================
 //
 // This file contains data for the experiments used to tune parameters of the SMPH model of IBUs.
-// All data, except the 'Tinseth' and 'Peacock' experiments, were collected
+// All data except for the 'Peacock' experiment were collected
 // by John-Paul Hosom from June 9, 2015 to March 16, 2021.
 // Note: Util. Exp. #2 didn't use any hops, to estimate the contribution of malt polyphenols to IBUs.
 // Note: If kettleDiameter and kettleOpening not specified, small samples were taken and cooled, and
@@ -10,9 +10,7 @@
 //
 
 var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
-// var evaluateTrainingExperiments = [ "Tinseth" ];
 // var evaluateTrainingExperiments = [ "Peacock" ];
-// var evaluateTrainingExperiments = [ "mIBU Exp. #2a", "mIBU Exp. #2b" ];
 // var evaluateTrainingExperiments = [ "mIBU Exp. #1", "mIBU Exp. #2a", "mIBU Exp. #2b", "mIBU Exp. #3" ];
 // var evaluateTrainingExperiments = [ "Util. Exp. #1", "Util. Exp. #3", "Util. Exp. #4" ];
 // var evaluateTrainingExperiments = [ "Sol. Exp. #1", "Sol. Exp. #2", "Sol. Exp. #3", "Sol. Exp. #4" ];
@@ -24,67 +22,10 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "oAA as Function of Temperature" ];
 // var evaluateTrainingExperiments = [ "Lauter Exp. #1", "Lauter Exp. #2" ];
 // var evaluateTrainingExperiments = [ "FV Exp. #1" ];
-// var evaluateTrainingExperiments = [ "Teamaker #2" ];
-// var evaluateTrainingExperiments = [ "DryHop1_PreDH", "DryHop1_DH13314" ];
-// var evaluateTrainingExperiments = [ "DryHop1_PreDH", "DryHop1_DH13314",
-                                    // "DryHop2_noIAA_PreDH", "DryHop2_noIAA_DH8000",
-                                    // "DryHop2_lowIAA_PreDH", "DryHop2_lowIAA_DH8000",
-                                    // "DryHop2_highIAA_PreDH", "DryHop2_highIAA_DH2000", "DryHop2_highIAA_DH8000" ];
 
 // units *must* be all metric
 
 var trainingData = {
-    "Tinseth": {
-        "conditions":            [ "t=10","t=20","t=30","t=40","t=50","t=60","t=70","t=80","t=90" ],
-        // time_list is the list of times after the *first* addition of hops at which
-        // samples are taken.  Pre-boil volume is 281.6 l = 74.4 G = batch size 62G * 1.2.
-        "time_list":             [ 10,     20,    30,    40,    50,    60,    70,    80,    90 ],
-        "volume_list":           [ 281.6,  281.6, 281.6, 281.6, 281.6, 281.6, 281.6, 281.6, 281.6 ],
-        "OG_list":               [ 1.055,  1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055, 1.055 ],
-
-        //              weight of hops targets semi-arbitrary 100 ppm
-        //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
-        "add1":        [  8.65,  5.00, "cones",   1.00,   38.2,  325.55, 90 ],
-
-        // assume 2-barrel pilot-brewery volume
-        // www.beersmith.com/forum/index.php?topic=8073.0
-        //    batch size 16 bbl has boil volume 19.00 bbl and evap rate 5.3%=1bbl/hr
-        // https://brewmagic.com/products/brew-magic-2-barrel-unitank/
-        //    working volume 61.8G total volume 83.2G
-        //    batchSize = 62G ... boilVolume = batchSize*1.2, evapRate = boilVolume * 0.05
-        "timeToFirstAddition":   0,
-        "kettleDiameter":        70,            // brew-magic 2bbl unitank inner diam. SABCO
-        "kettleOpening":         35,            // brew-magic 2bbl unitank top manway SABCO
-        "evaporationRate":       14.081725,     // 234.7*1.2*0.05
-        "preOrPostBoilVol":      "preBoilVol",  // will account for evaporation rate
-        "immersionDecayFactor":  0.22,          // target forced cooling time of ~3 minutes, like UtilExp2
-        "forcedDecayType":       "forcedDecayImmersion", // each sample uses immersion chiller rate
-        "krausen":               "medium krausen deposits on FV (default)",
-        "pH":                    5.75,          // Tinseth did not adjust wort pH
-        "beerAge_days":          5,             // guess
-
-        "skipSearch": false,
-        "search": [
-            {
-                "param":    "weight1",
-                "default":  325.55,
-                "method":   "relative",
-                "low":      1.00,
-                "high":     1.00,
-                "inc":      0.10,
-            },
-
-            {
-                "param":    "freshnessFactor1",
-                "default":  1.00,
-                "method":   "value",
-                "low":      1.00,
-                "high":     1.00,
-                "inc":      0.05,
-            }
-        ]
-    },
-
     "Peacock": {
         "conditions":            [ "-20&deg;F", "25&deg;F", "40&deg;F", "70&deg;F" ],
         "IBU_list":              [ 13.5,        12.0,       13.5,       11.0 ],

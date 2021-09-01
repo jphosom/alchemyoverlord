@@ -370,6 +370,7 @@ ibu._construct = function() {
   this.wortLossVolume.defaultValue = 0.9463525;
   this.wortLossVolume.additionalFunction = checkWortLossVolumeAndColor;
   this.wortLossVolume.additionalFunctionArgs = "";
+  this.wortLossVolume.greyColor = "#b1b1cd";
 
   // topoffVolume
   this.topoffVolume.id = "ibu.topoffVolume";
@@ -385,7 +386,7 @@ ibu._construct = function() {
   this.topoffVolume.max = 500.0;
   this.topoffVolume.description = "added water";
   this.topoffVolume.defaultValue = 0.0;
-  this.topoffVolume.additionalFunction = checkWortLossColor;
+  this.topoffVolume.additionalFunction = checkWortLossVolumeAndColor;
   this.topoffVolume.additionalFunctionArgs = "";
 
   // temperature decay linear : param A
@@ -591,11 +592,11 @@ ibu._construct = function() {
   // defaultHopForm
   this.defaultHopForm.id = "ibu.defaultHopForm";
   this.defaultHopForm.inputType = "select";
-  this.defaultHopForm.value = "cones";
+  this.defaultHopForm.value = "pellets";
   this.defaultHopForm.userSet = 0;
-  this.defaultHopForm.display = "cones";
+  this.defaultHopForm.display = "pellets";
   this.defaultHopForm.description = "default form of hop additions";
-  this.defaultHopForm.defaultValue = "cones";
+  this.defaultHopForm.defaultValue = "pellets";
   this.defaultHopForm.additionalFunction = checkHopFormDefaults;
 
   // numAdditions
@@ -952,9 +953,14 @@ function checkWortLossVolumeAndColor() {
     common.updateHTML(lossVariable);
     common.setSavedValue(lossVariable, 0);
   }
-  if (fermentorVariable.value > postBoilVol) {
-    window.alert("Fermentor volume can't be greater than post-boil volume. " +
-                 "Setting fermentor volume to default value.");
+  if (!fermentorVariable.userSet) {
+    fermentorVariable.value = get_fermentorVolume_default();
+    fermentorVariable.userSet = 0;
+    common.updateHTML(fermentorVariable);
+    common.unsetSavedValue(fermentorVariable, 0);
+  } else if (fermentorVariable.value > Number(postBoilVol) + addedWater) {
+    window.alert("Fermentor volume can't be greater than post-boil volume " +
+               "plus added water. Setting fermentor volume to default value.");
     fermentorVariable.value = get_fermentorVolume_default();
     fermentorVariable.userSet = 0;
     common.updateHTML(fermentorVariable);
@@ -965,27 +971,11 @@ function checkWortLossVolumeAndColor() {
     if (addedWater > 0) {
       document.getElementById(lossVariable.id).style.color = "black";
     } else {
-      document.getElementById(lossVariable.id).style.color = "#b1b1cd";
+      document.getElementById(lossVariable.id).style.color =
+              ibu.wortLossVolume.greyColor;
     }
   }
 
-  return true;
-}
-
-//------------------------------------------------------------------------------
-// check if the font color for the wortLossVolume field should be black or gray
-
-function checkWortLossColor() {
-  var addedWater = ibu.topoffVolume.value;
-  var variable = ibu.wortLossVolume;
-
-  if (document.getElementById(variable.id)) {
-    if (addedWater > 0) {
-      document.getElementById(variable.id).style.color = "black";
-    } else {
-      document.getElementById(variable.id).style.color = "#b1b1cd";
-    }
-  }
   return true;
 }
 
@@ -995,16 +985,23 @@ function checkWortLossColor() {
 function checkBoilTime() {
   var doneAlert = false;
   var idx = 0;
+  var kettleHops = true;
 
   for (idx = 0; idx < ibu.add.length; idx++) {
-    if (ibu.add[idx].kettleOrDryHop.value == "kettle" &&
+    kettleHops = true;
+    if (ibu.add[idx].kettleOrDryHop) {
+      if (ibu.add[idx].kettleOrDryHop.value != "kettle") {
+        kettleHops = false;
+      }
+    }
+    if (kettleHops &&
         ibu.add[idx].steepTime.value > ibu.boilTime.value && !doneAlert) {
       window.alert("Hop steep time must be less than or equal to " +
                    "wort boil time.  Setting hop steep time to " +
                    "wort boil time as needed.");
       doneAlert = true;
     }
-    if (ibu.add[idx].kettleOrDryHop.value == "kettle" &&
+    if (kettleHops &&
       ibu.add[idx].steepTime.value > ibu.boilTime.value) {
       ibu.add[idx].steepTime.value = ibu.boilTime.value;
       ibu.add[idx].steepTime.userSet = 1;
@@ -1148,13 +1145,14 @@ function checkpH() {
 // check if fermentor volume is valid or not
 
 function checkFermentorVolume() {
+  var addedWater = ibu.topoffVolume.value;
   var postBoilVol = 0.0;
   var variable = ibu.fermentorVolume;
 
   postBoilVol = get_postBoilVolume();
-  if (variable.value > postBoilVol) {
-    window.alert("Fermentor volume can't be greater than post-boil volume. " +
-                 "Setting fermentor volume to default value.");
+  if (variable.value > postBoilVol + addedWater) {
+    window.alert("Fermentor volume can't be greater than post-boil volume " +
+               "plus added water. Setting fermentor volume to default value.");
     variable.value = get_fermentorVolume_default();
     variable.userSet = 0;
     common.updateHTML(variable);
@@ -1397,7 +1395,7 @@ this.getPostBoilVolume = function() {
 function checkHopFormDefaults() {
   var arrayIdx = 0;
   var idx = 0;
-  var numAdd = ibu.numAdditions.value;
+  var numAdd = ibu.add.length;
   var userSet = 0;
 
   // console.log("CHECKING HOP FORM DEFAULTS FOR EACH ADDITION");
@@ -1714,7 +1712,11 @@ function get_pelletFactor_default(arrayIdx) {
     value = 1.00;
   }
   if (form == "pellets") {
-    value = 2.00;
+    if (ibu.defaultPelletFactor) {
+      value = ibu.defaultPelletFactor;
+    } else {
+      value = 2.00;
+    }
   }
 
   return value;
@@ -2061,6 +2063,17 @@ function hopAdditionsSet(updateFunction) {
   var weightUnits = 0;
 
   console.log(" ------ SETTING HOPS ADDITIONS ------ ");
+
+  // if calling function was unable to specify the update function,
+  // get it from a different variable.  Assume scalingFactor already set.
+  if (updateFunction == "") {
+    if (ibu.scalingFactor) {
+      updateFunction = ibu.scalingFactor.updateFunction;
+      } else {
+      window.alert("Internal error: can't determine update function");
+      }
+    }
+
   if (ibu.hopDecayMethod) {
     hopDecayMethod = ibu.hopDecayMethod.value;
   }
@@ -2222,7 +2235,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].BA.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 8 &&
+  if (constructInputTable && ibu.hopTableSize >= 7 &&
       hopDecayMethod == "decaySpecify") {
     table += "</tr> ";
     table += "<tr> ";
@@ -2231,7 +2244,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".percentLoss";
-    if (constructInputTable && ibu.hopTableSize >= 8 &&
+    if (constructInputTable && ibu.hopTableSize >= 7 &&
         hopDecayMethod == "decaySpecify") {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].percentLoss,1)'> </td> "
     }
@@ -2254,7 +2267,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].percentLoss.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 9 &&
+  if (constructInputTable && ibu.hopTableSize >= 8 &&
       hopDecayMethod == "decaySpecify") {
     table += "</tr> ";
     table += "<tr> ";
@@ -2263,7 +2276,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".hopPackaging";
-    if (constructInputTable && ibu.hopTableSize >= 9 &&
+    if (constructInputTable && ibu.hopTableSize >= 8 &&
         hopDecayMethod == "decaySpecify") {
       table += "<td> <select style='width:8.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopPackaging,1)'> <option value='pro. nitrogen'>pro. nitrogen</option> <option value='inert flush'>inert flush</option> <option value='vacuum seal'>vacuum seal</option> <option value='wrapped'>wrapped</option> <option value='loose'>loose</option> <option value='(default)'>(default)</option></td> "
     }
@@ -2282,7 +2295,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].hopPackaging.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 10 &&
+  if (constructInputTable && ibu.hopTableSize >= 9 &&
       hopDecayMethod == "decaySpecify") {
     table += "</tr> ";
     table += "<tr> ";
@@ -2291,7 +2304,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".storageDuration";
-    if (constructInputTable && ibu.hopTableSize >= 10 &&
+    if (constructInputTable && ibu.hopTableSize >= 9 &&
         hopDecayMethod == "decaySpecify") {
       table += "<td> <input type='text' size='1.8' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].storageDuration,1)'> <small>months</small></td> "
     }
@@ -2314,7 +2327,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].storageDuration.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 11 &&
+  if (constructInputTable && ibu.hopTableSize >= 10 &&
       hopDecayMethod == "decaySpecify") {
     table += "</tr> ";
     table += "<tr> ";
@@ -2340,18 +2353,18 @@ function hopAdditionsSet(updateFunction) {
   }
 
   if (constructInputTable &&
-      (ibu.hopTableSize >= 8 && hopDecayMethod == "decayFactor") ||
-      (ibu.hopTableSize >= 12 && hopDecayMethod == "decaySpecify")) {
+      (ibu.hopTableSize >= 7 && hopDecayMethod == "decayFactor") ||
+      (ibu.hopTableSize >= 11 && hopDecayMethod == "decaySpecify")) {
     table += "</tr> ";
     table += "<tr> ";
-    table += "<td> Freshness Factor: </td> "
+    table += "<td> <a href='hop_freshness.html'>Freshness Factor</a>: </td> "
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".freshnessFactor";
     if (constructInputTable &&
-        (ibu.hopTableSize >= 8 && hopDecayMethod == "decayFactor") ||
-        (ibu.hopTableSize >= 12 && hopDecayMethod == "decaySpecify")) {
+        (ibu.hopTableSize >= 7 && hopDecayMethod == "decayFactor") ||
+        (ibu.hopTableSize >= 11 && hopDecayMethod == "decaySpecify")) {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].freshnessFactor,1)'> </td> "
     }
     ibu.add[arrayIdx].freshnessFactor = new Object;
@@ -2371,7 +2384,7 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].freshnessFactor.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 7) {
+  if (constructInputTable && ibu.hopTableSize >= 5) {
     table += "</tr> ";
     table += "<tr> ";
     table += "<td> Pellet Factor: </td> "
@@ -2379,7 +2392,7 @@ function hopAdditionsSet(updateFunction) {
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".pelletFactor";
-    if (constructInputTable && ibu.hopTableSize >= 7) {
+    if (constructInputTable && ibu.hopTableSize >= 5) {
       table += "<td> <input type='text' size='6' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].pelletFactor,1)'> </td> "
     }
     ibu.add[arrayIdx].pelletFactor = new Object;
@@ -2427,15 +2440,15 @@ function hopAdditionsSet(updateFunction) {
     ibu.add[arrayIdx].weight.parent = "ibu";
   }
 
-  if (constructInputTable && ibu.hopTableSize >= 5) {
+  if (constructInputTable && ibu.hopTableSize >= 12) {
     table += "</tr> ";
     table += "<tr> ";
     table += "<td> Kettle / Dry Hop: </td> "
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
-    tableID = "ibu.add"+idx+".dryhopTable";
-    if (constructInputTable && ibu.hopTableSize >= 5) {
+    tableID = "ibu.add"+idx+".kettleOrDryHop";
+    if (constructInputTable && ibu.hopTableSize >= 12) {
       table += "<td> <select style='width:7.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].kettleOrDryHop,1)'> <option value='kettle'>kettle</option> <option value='dryHop'>dry hop</option></td> "
     }
     arrayIdx = Number(idx-1);
@@ -2601,7 +2614,7 @@ function hopAdditionsSet(updateFunction) {
 
     if (ibu.detailedOutput) {
       table += "<tr> ";
-      table += "<td class='outputTableTotalName'><a href='https://www.researchgate.net/publication/323690039_A_Comprehensive_Evaluation_of_the_Nonvolatile_Chemistry_Affecting_the_Sensory_Bitterness_Intensity_of_Highly_Hopped_Beers'>Bitterness Intensity</a>:</td>"
+      table += "<td class='outputTableTotalName'><a href='https://www.researchgate.net/publication/323690039_A_Comprehensive_Evaluation_of_the_Nonvolatile_Chemistry_Affecting_the_Sensory_Bitterness_Intensity_of_Highly_Hopped_Beers' target='_parent'>Bitterness Intensity</a>:</td>"
       table += "<td class='outputTableTotalValue' id='BIvalue'>0.00</td>"
       table += "<td colspan=100 class='outputTableTotalName'><small>(perceived bitterness, scale 0 to 20";
       // table += "<sup>&dagger;</sup>";
@@ -2746,14 +2759,43 @@ function get_tempLinParamA_default() {
 }
 
 //------------------------------------------------------------------------------
-// get default for fermentor volume.  Currently assume no loss to trub or hops
+// get default for fermentor volume.
 
 function get_fermentorVolume_default() {
-  var value = 0.0;
+  var absorbVol = 0.0;
+  var addedWater = ibu.topoffVolume.value;
+  var arrayIdx = 0;
+  var kettleHops = true;
+  var numAdd = ibu.add.length;
   var postBoilVol = 0.0;
+  var totalWeight = 0.0;
+  var value = 0.0;
 
   postBoilVol = get_postBoilVolume();
-  value = postBoilVol;
+
+  totalWeight = 0.0;
+  for (arrayIdx = 0; arrayIdx < numAdd; arrayIdx++) {
+    kettleHops = true;
+    if (ibu.add[arrayIdx].kettleOrDryHop) {
+      if (ibu.add[arrayIdx].kettleOrDryHop.value != "kettle") {
+        kettleHops = false;
+      }
+    }
+    if (!kettleHops) {
+      continue;
+    }
+    totalWeight += ibu.add[arrayIdx].weight.value;
+  }
+  absorbVol = totalWeight * 0.0084;  // hops absorb 0.0084 liters per gram
+  // console.log(totalWeight.toFixed(3) + " g of hops absorbs " +
+              // absorbVol.toFixed(2) + " liters of wort");
+
+  // wort going into fermentor is the post-boil volume, plus any top-off water,
+  // minus wort absorbed by hops, minus volume of trub left behind
+  value = postBoilVol + addedWater - absorbVol - ibu.wortLossVolume.value;
+  if (value < 0.0) {
+    value = 0.0;
+  }
 
   return value;
 }

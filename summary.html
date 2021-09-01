@@ -4,31 +4,57 @@
 index.html : HTML for AlchemyOverlord web page, summary sub-page
 Written by John-Paul Hosom
 Version 1.0.0 : January 30, 2017
-Version 1.0.1 : May 6, 2018 : add mIBU info
+Version 1.0.1 : May  6, 2018 : add mIBU info
+Version 1.0.2 : Aug 28, 2021 : add information about other calculators
 ------------------------------------------------------------------------- --!>
 
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
   </head>
   <body>
 
   <div id="content">
     <h3>Summary</h3>
     <p>
-    The link(s) on the left provide calculators for various beer-related 
-    computations.  At this point, there's (a) an IBU calculator using the 
-    Tinseth formula, (b) a calculator for the mIBU method described on my blog,
-    (c) a page for estimating the hop freshness factor and HSI,
-    and (d) a tutorial on perceptual difference testing using interactive
-    worksheets.  Hopefully in the future there will be more.
+    The link(s) on the left provide calculators for various beer-related
+    computations.  The list includes:
+    <ul>
+    <li> an IBU calculator using the Tinseth formula
+    <li> an IBU calculator using the Rager formula
+    <li> an IBU calculator using the Garetz formula
+    <li> an IBU calculator for the mIBU method described on my blog
+    <li> an IBU calculator for the SMPH method described on my blog
+    <li> a page for estimating the hop freshness factor (or alpha-acid
+         decay over time) and hop storage index (HSI)
+    <li> a calculator for the relationship between specific gravity,
+         volume, and time
+    <li> a calculator for correcting specific gravity, pH, and volume
+         based on temperature (and a gravity &harr; &deg;Plato converter)
+    <li> a tutorial on perceptual difference testing using interactive
+        worksheets
+    <li> a web page for searching for optimal parameter values for the
+         SMPH model, and for evaluating the SMPH model on development or
+         test data
+    </ul>
     </p>
     <p>
-    The source code (HTML, CSS, and JavaScript) for these calculators is 
-    available by clicking on the "source code" link above.
+    The source code (HTML, CSS, and JavaScript) for these calculators can
+    be seen by clicking on the "source code" link above.  Of note,
+    the file <code>js/trainingData.js</code> provides the specific conditions
+    used in brewing the 339 beers with measured IBU values (and assumed
+    conditions for four beers reported by Val Peacock in "The International
+    Bitterness Unit, Its Creation, and What it Measures" in <em>Hop Flavor
+    and Aroma</em>) that were used to find parameter values for the SMPH model.
+    The file <code>js/developmentData.js</code> provides the specific
+    conditions used in brewing the 13 beers with measured IBU values used
+    as cross-validation data to develop the SMPH model.
+    The file <code>js/testData.js</code> provides specifics on the 14 beers
+    used in testing the IBU models.
     </p>
     <p>
-    The "blog" link above will take you to my blog, which is all about 
+    The "blog" link above will take you to my blog, which is all about
     experimenting with the process of making beer.
     </p>
   </div>

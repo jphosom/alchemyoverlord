@@ -100,6 +100,7 @@ body {
     padding-top: 2ex;
     padding-left: 0;
     padding-right: 0;
+    border-right:1px solid lightgrey;
     width: 14ex;
     height: 100%;
     background-color: #eff2f8;
@@ -110,7 +111,8 @@ body {
 
 #verticalMenuItem {
     display: block;
-    padding: 1ex 2ex;
+    padding: 1.25ex 2ex;
+    border-bottom:1px solid lightgrey;
 }
 
 #verticalMenuItem a {

@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
  <!-- ------------------------------------------------------------------------
 ================================================================================
-perceptualDiffTest.html : HTML for AlchemyOverlord web page, 
+perceptualDiffTest.html : HTML for AlchemyOverlord web page,
                           explanation of perceptual (sensory) difference tests
 Written by John-Paul Hosom
 Copyright © 2021 by John-Paul Hosom, all rights reserved.
@@ -12,6 +12,7 @@ Version 1.0.0 : Mar. 16, 2021
 ================================================================================
 ---------------------------------------------------------------------------- -->
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
     <title>Worksheets for Perceptual Difference Tests</title>
   </head>
   <body>
@@ -29,17 +30,17 @@ Version 1.0.0 : Mar. 16, 2021
     <center>Version 1.0.0</center>
     <p> Show: <input value="showText" id="showText"
         name="diffTest.showOrHideText" style="text-align:left"
-        autocomplete="off" onclick="common.set(diffTest.showOrHideText, 1)" 
+        autocomplete="off" onclick="common.set(diffTest.showOrHideText, 1)"
         type="radio">text and worksheets, <input value="hideText"
         id="hideText" name="diffTest.showOrHideText"
         style="text-align:left" autocomplete="off"
         onclick="common.set(diffTest.showOrHideText, 1)" type="radio">
       worksheets only, or <input value="onlyFinal" id="onlyFinal"
         name="diffTest.showOrHideText" style="text-align:left"
-        autocomplete="off" onclick="common.set(diffTest.showOrHideText, 1)" 
+        autocomplete="off" onclick="common.set(diffTest.showOrHideText, 1)"
         type="radio"> final worksheet only <br>
       random number seed: <input style="width:3em;" autocomplete="off"
-        id="diffTest.randSeed" onchange="common.set(diffTest.randSeed, 1)" 
+        id="diffTest.randSeed" onchange="common.set(diffTest.randSeed, 1)"
         type="text"> </p>
 
     <div class="NONFINAL">
@@ -63,27 +64,27 @@ Version 1.0.0 : Mar. 16, 2021
           will be graphically generated and evaluated within this delay
           period. If you use a negative simulation delay, the per-sample
           graphics will be omitted, and the simulation will show only
-          the summary results. The simulations depend on 
-          <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">pseudo-random numbers</a>; if you want to see the effect of changing the
-          starting point for these pseudo-random numbers, change the
-          value of "random number seed" (above) to any value you like
-          between 0 and 10000.</p>
+          the summary results. The simulations depend on
+          <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator" target="_parent">pseudo-random numbers</a>;
+          if you want to see the effect of changing the starting point
+          for these pseudo-random numbers, change the value of "random
+          number seed" (above) to any value you like between 0 and 10000.</p>
 
         <p> Disclaimer: I am not a statistician. While I am very
           familiar with a number of concepts and methods from
           statistics, having taught a small subset of statistical
           concepts for 10 years at the graduate level, the area of
           statistical significance testing sometimes seems like a game
-          of <a href="https://en.wikipedia.org/wiki/List_of_games_in_Star_Trek#Fizzbin">Fizzbin</a>:
+          of <a href="https://en.wikipedia.org/wiki/List_of_games_in_Star_Trek#Fizzbin" target="_parent">Fizzbin</a>:
           just when you think you understand the rules, there's another
-          exception or special case to consider. There has also been a 
-          <a href="https://link.springer.com/article/10.1007/s00259-019-04467-5#ref-CR19">
+          exception or special case to consider. There has also been a
+          <a href="https://link.springer.com/article/10.1007/s00259-019-04467-5#ref-CR19" target="_parent">
           vocal debate in many research communities</a> about the best
           methods for significance testing and evaluating results. This
           tutorial certainly won't settle any of that debate, and I'm
-          not at all interested in debating points on which 
-          <a href="https://en.wikipedia.org/wiki/Wikipedia:Reasonableness">
-          reasonable people may disagree</a>. This page is simply my attempt 
+          not at all interested in debating points on which
+          <a href="https://en.wikipedia.org/wiki/Wikipedia:Reasonableness" target="_parent">
+          reasonable people may disagree</a>. This page is simply my attempt
           to explain what I have learned about evaluating perceptual
           difference tests in a (hopefully) logical and intuitive
           manner.</p>
@@ -176,7 +177,7 @@ Version 1.0.0 : Mar. 16, 2021
 
         <h2 id="Section3">3. Internal Perceptual Measurement</h2>
         <p> Now we'll switch from the objective (physical) stimuli to our
-          perception of these stimuli. What units or metrics should we use 
+          perception of these stimuli. What units or metrics should we use
           to measure this perception (such as sweetness)?
           There will be some mapping from the physical stimulus (e.g.
           concentration of sugar) to the neural response to this stimulus.
@@ -184,44 +185,44 @@ Version 1.0.0 : Mar. 16, 2021
           rather insensitive to others. (In the case of bitterness, there
           is a very wide range of sensitivity levels between people, with
           some people being very sensitive (so-called "<a
-          href="https://en.wikipedia.org/wiki/Supertaster">super tasters</a>")
+          href="https://en.wikipedia.org/wiki/Supertaster" target="_parent">super tasters</a>")
           and others not so sensitive.) Since we're using a generic term
           "objective units" to describe the physical stimuli, we can use a
           similarly generic term, "perceptual units," to describe the
           sensory reaction to the stimuli. It doesn't matter if these
           perceptual units are in neural impulses per second or some other
           scale, as long as there is a direct (but possibly <a
-          href="https://en.wikipedia.org/wiki/Nonlinear_system">nonlinear</a>)
+          href="https://en.wikipedia.org/wiki/Nonlinear_system" target="_parent">nonlinear</a>)
           mapping between objective units and perceptual units.
-          For simplicity, we'll say that this direct mapping translates 
-          objective units into perceptual units on the same scale, and 
+          For simplicity, we'll say that this direct mapping translates
+          objective units into perceptual units on the same scale, and
           so <b>A</b> and <b>B</b> are still one unit apart.</p>
 
         <p> When a person is given a sample (or stimulus) for
           evaluation, there are a number of factors that affect their
           perception of the sample. This change in their perception may
-          be caused by general random variation in neural responses, 
-          <a href="https://en.wikipedia.org/wiki/Recall_(memory)">memory</a>
-          and 
-          <a href="https://en.wikipedia.org/wiki/Neural_adaptation">adaptation</a>
-          effects, an unintended 
-          <a href="https://en.wikipedia.org/wiki/Priming_(psychology)">priming effect</a>, 
-          or (for 
-          <a href="https://dictionary.apa.org/between-subjects-design">between-subjects studies</a>) 
+          be caused by general random variation in neural responses,
+          <a href="https://en.wikipedia.org/wiki/Recall_(memory)" target="_parent">memory</a>
+          and
+          <a href="https://en.wikipedia.org/wiki/Neural_adaptation" target="_parent">adaptation</a>
+          effects, an unintended
+          <a href="https://en.wikipedia.org/wiki/Priming_(psychology)" target="_parent">priming effect</a>,
+          or (for
+          <a href="https://dictionary.apa.org/between-subjects-design" target="_parent">between-subjects studies</a>)
           differences in people's sensitivity. Because of
           these factors, when we give subjects multiple samples of <b>A</b>,
           the perceived sweetness won't always be exactly at 0.0
           perceptual units; sometimes it will be higher, and sometimes
           lower. On average, though, <b>A</b> will have 0.0 perceptual
           units and <b>B</b> will have 1.0 perceptual units, and we say
-          that the <a href="https://en.wikipedia.org/wiki/Mean">mean</a> 
+          that the <a href="https://en.wikipedia.org/wiki/Mean" target="_parent">mean</a>
           of <b>A</b> is 0.0 and the mean of <b>B</b> is 1.0. </p>
 
         <p> This is a good place to introduce probabilities, since
           probabilities allow us to talk about uncertain information
-          such as perceived sweetness. There are 
-          <a href="https://en.wikipedia.org/wiki/Probability">
-          different ways to define probability</a>, but the definition I'd 
+          such as perceived sweetness. There are
+          <a href="https://en.wikipedia.org/wiki/Probability" target="_parent">
+          different ways to define probability</a>, but the definition I'd
           like to use is very practical: a probability is the relative
           frequency with which we <em>expect</em> an event to occur.
           Probabilities can be determined in one of two ways: by
@@ -239,33 +240,32 @@ Version 1.0.0 : Mar. 16, 2021
           have a probability of 1/12 (or 0.0833) of getting the correct
           answer. (A more complicated formula might account for the
           different number of days in each month.) Either way, we can
-          refer to the probability of some event <em>x</em> as 
-          <em>p</em>(<em>x</em>).  In this example, <em>p</em>(heads) 
+          refer to the probability of some event <em>x</em> as
+          <em>p</em>(<em>x</em>).  In this example, <em>p</em>(heads)
           is either 0.48 or 0.50, depending on which method we use. </p>
 
-        <p> For the type of model we'll talk about in this tutorial (namely a 
-          <a href="https://en.wikipedia.org/wiki/Thurstonian_model">Thurstonian model</a>), 
-          we'll also assume that the perceived sweetness varies according to a 
-          <a href="https://en.wikipedia.org/wiki/Normal_distribution">normal distribution</a> 
-          (also called a 
-          <a href="https://www.mathsisfun.com/data/standard-normal-distribution.html">bell curve</a>), 
-          and so the probability of getting a certain level of perceived 
-          sweetness can be described using the 
-          <a href="https://www.mathsisfun.com/data/standard-deviation.html">standard deviation</a>
-          of the perceived values, called sigma (represented with the Greek 
-          letter <em>&sigma;</em> or the letter <em>s</em>).  The standard 
-          deviation is a 
-          <a href="https://en.wikipedia.org/wiki/Standard_deviation">measure of the amount of variation in a set of values</a>. 
+        <p> For the type of model we'll talk about in this tutorial (namely a
+          <a href="https://en.wikipedia.org/wiki/Thurstonian_model" target="_parent">Thurstonian model</a>),
+          we'll also assume that the perceived sweetness varies according to a
+          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_parent">normal distribution</a>
+          (also called a
+          <a href="https://www.mathsisfun.com/data/standard-normal-distribution.html">bell curve</a>),
+          and so the probability of getting a certain level of perceived
+          sweetness can be described using the
+          <a href="https://www.mathsisfun.com/data/standard-deviation.html" target="_parent">standard deviation</a>
+          of the perceived values, called sigma (represented with the Greek
+          letter <em>&sigma;</em> or the letter <em>s</em>).  The standard
+          deviation is a
+          <a href="https://en.wikipedia.org/wiki/Standard_deviation" target="_parent">measure of the amount of variation in a set of values</a>.
           For simplicity, we'll also assume that the standard deviations for
           the perception of <b>A</b> and <b>B</b> are the same. (A
           normal distribution is commonly found in nature. If an event
           in nature (or perception) is the result of many independent
-          processes, the 
-          <a href="https://en.wikipedia.org/wiki/Normal_distribution">central 
-            limit theorem says that the resulting event will have a
+          processes, the
+          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_parent">central limit theorem says that the resulting event will have a
             normal distribution</a>. In the case of bitterness, it would
-          be better to model the perception as (at least) 
-          <a href="https://en.wikipedia.org/wiki/Multimodal_distribution">bimodal</a>,
+          be better to model the perception as (at least)
+          <a href="https://en.wikipedia.org/wiki/Multimodal_distribution" target="_parent">bimodal</a>,
           or the summation of two (or more) normal distributions,
           reflecting both the variance within an individual and the
           different perceptual-unit means for "super-tasters" and less
@@ -278,29 +278,29 @@ Version 1.0.0 : Mar. 16, 2021
           perceived sweetness when a subject is given sample <b>A</b>,
           and the relative probability of perceived sweetness given
           sample <b>B</b>. In mathematical notation, these probability
-          functions are called <em>p</em>(<em>s</em> | <b>A</b>) and 
-          <em>p</em>(<em>s</em> | <b>B</b>), where 
+          functions are called <em>p</em>(<em>s</em> | <b>A</b>) and
+          <em>p</em>(<em>s</em> | <b>B</b>), where
           <em>p</em>(<em>x</em> | <em>Y</em>) is
           the probability of some value <em>x</em> "given" some
           condition(s) <em>Y</em> and <em>s</em> is the perceived
           stimulus level. (The "|" or "given" notation in probabilities
           can be thought of as first constraining the world of
-          possibilities so that <em>Y</em> is considered to be true.  
-          This <a href="https://en.wikipedia.org/wiki/Conditional_probability">conditional probability </a> 
-          function tells us the probability of observing <em>x</em> 
-          "under the condition" that <em>Y</em> is true.  For example, 
-          <em>p</em>(sunshine | summer) is a large value in most places 
-          in the world, whether it is currently summer or not.) The relative 
-          probability of sweetness is described using the normal distribution 
-          with mean value <em>&mu;</em> (using the Greek letter "mu") 
-          and standard deviation <em>&sigma;</em>.  Therefore, we can say 
-          <em>p</em>(<em>s</em> | <b>A</b>) = 
-          <em>N</em>(<em>&mu;</em><sub><b>A</b></sub>, <em>&sigma;</em><sub><b>A</b></sub><sup>2</sup>) and 
+          possibilities so that <em>Y</em> is considered to be true.
+          This <a href="https://en.wikipedia.org/wiki/Conditional_probability" target="_parent">conditional probability </a>
+          function tells us the probability of observing <em>x</em>
+          "under the condition" that <em>Y</em> is true.  For example,
+          <em>p</em>(sunshine | summer) is a large value in most places
+          in the world, whether it is currently summer or not.) The relative
+          probability of sweetness is described using the normal distribution
+          with mean value <em>&mu;</em> (using the Greek letter "mu")
+          and standard deviation <em>&sigma;</em>.  Therefore, we can say
+          <em>p</em>(<em>s</em> | <b>A</b>) =
+          <em>N</em>(<em>&mu;</em><sub><b>A</b></sub>, <em>&sigma;</em><sub><b>A</b></sub><sup>2</sup>) and
           <em>p</em>(<em>s</em> | <b>B</b>) = <em>N</em>(<em>&mu;</em><sub><b>B</b></sub>, <em>&sigma;</em><sub><b>B</b></sub><sup>2</sup>)
           where <em>N</em>() is the normal distribution described by a
           mean <em>&mu;</em> and standard deviation <em>&sigma;</em>. We've
-          already defined <em>&mu;<sub><b>A</b></sub></em> as 0.0 and 
-          <em>&mu;<sub><b>B</b></sub></em> as 1.0, and 
+          already defined <em>&mu;<sub><b>A</b></sub></em> as 0.0 and
+          <em>&mu;<sub><b>B</b></sub></em> as 1.0, and
           <em>&sigma;<sub><b>A</b></sub></em> has been defined as
           equal to <em>&sigma;<sub><b>B</b></sub></em>, so the only thing we
           need to decide on is the value of <em>&sigma;</em>. (I use the term
@@ -312,42 +312,39 @@ Version 1.0.0 : Mar. 16, 2021
           higher-level responses to stimuli, and humans aren't very good
           at providing magnitude estimates of their perceptions. We're
           much better at communicating relative perceptions. This model
-          is therefore called a 
-          <a href="https://en.wikipedia.org/wiki/Latent_variable">latent</a>
+          is therefore called a
+          <a href="https://en.wikipedia.org/wiki/Latent_variable" target="_parent">latent</a>
           (or "hidden") model, because it can't be observed directly. </p>
 
         <p> An important concept in this model is that of <em>d'</em>
-          (d prime), or the 
-          <a href="https://en.wikipedia.org/wiki/Sensitivity_index">sensitivity index</a>. 
-          Intuitively, <em>d'</em> is a measurement of how perceptually 
-          different two stimuli are. If two stimuli are perceptually 
-          indistinguishable, the <em>d'</em> value is 0. If two stimuli are 
-          easily distinguished, the value of <em>d'</em> may be 4 or larger. 
-          Mathematically, <em>d'</em> is defined as the difference between 
-          the mean perceptual units of the two stimuli divided by the standard 
-          deviation of the perception of these stimuli. We have conveniently 
-          defined the difference between the means as always 1.0, and so in 
-          our case <em>d'</em> is 1.0/&sigma;. 
-          (<a href="https://en.wikipedia.org/wiki/Effect_size#Cohen's_d">Cohen's
-
-           <em>d</em></a> effect size is the same as <em>d'</em>, in
+          (d prime), or the
+          <a href="https://en.wikipedia.org/wiki/Sensitivity_index" target="_parent">sensitivity index</a>.
+          Intuitively, <em>d'</em> is a measurement of how perceptually
+          different two stimuli are. If two stimuli are perceptually
+          indistinguishable, the <em>d'</em> value is 0. If two stimuli are
+          easily distinguished, the value of <em>d'</em> may be 4 or larger.
+          Mathematically, <em>d'</em> is defined as the difference between
+          the mean perceptual units of the two stimuli divided by the standard
+          deviation of the perception of these stimuli. We have conveniently
+          defined the difference between the means as always 1.0, and so in
+          our case <em>d'</em> is 1.0/&sigma;.
+          (<a href="https://en.wikipedia.org/wiki/Effect_size#Cohen's_d" target="_parent">Cohen's <em>d</em></a> effect size is the same as <em>d'</em>, in
           case you're familiar with effect size.) </p>
 
-        <p> This leads to the concept of a 
-          "<a href="https://en.wikipedia.org/wiki/Just-noticeable_difference">just noticeable difference</a>", 
-          or JND. The JND is the threshold at which a stimulus or change is 
-          detected half the time. This forms an <a 
-href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-Sensory-Testing-Hout/110c8065c7a7848548f8041a4b763e848306027d">often-used
-            threshold</a> for determining whether two stimuli are the
-          same or different. In a 
-          <a href="https://en.wikipedia.org/wiki/Two-alternative_forced_choice">two-alternative forced-choice</a> 
-          (2-AFC) task, if the two stimuli are identical then performance 
-          will be 50% (reflecting random guessing). The JND is at 75% correct 
-          in a 2-AFC task, halfway in between random guessing (50%) and 
-          perfect identification (100%). A 75% correct response rate on a 
-          2-AFC task corresponds with a <em>d'</em> value of 0.954, using 
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf">a formula for this mapping</a>. 
-          It is common to round <em>d'</em> up to 1.0, corresponding to 76% 
+        <p> This leads to the concept of a
+          "<a href="https://en.wikipedia.org/wiki/Just-noticeable_difference" target="_parent">just noticeable difference</a>",
+          or JND. The JND is the threshold at which a stimulus or change is
+          detected half the time. This forms an <a
+href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-Sensory-Testing-Hout/110c8065c7a7848548f8041a4b763e848306027d" target="_parent">often-used threshold</a> for determining whether two stimuli are the
+          same or different. In a
+          <a href="https://en.wikipedia.org/wiki/Two-alternative_forced_choice" target="_parent">two-alternative forced-choice</a>
+          (2-AFC) task, if the two stimuli are identical then performance
+          will be 50% (reflecting random guessing). The JND is at 75% correct
+          in a 2-AFC task, halfway in between random guessing (50%) and
+          perfect identification (100%). A 75% correct response rate on a
+          2-AFC task corresponds with a <em>d'</em> value of 0.954, using
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">a formula for this mapping</a>.
+          It is common to round <em>d'</em> up to 1.0, corresponding to 76%
           correct on the 2-AFC task. </p>
 
         <p> By defining "perceptual difference" as a "just noticeable
@@ -363,10 +360,10 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           would at least imply that the two stimuli are probably not
           perceptually identical.</p>
 
-        <p> <a href="#Worksheet1">Worksheet 1</a> (below) plots the relative 
-          probability of the perception of a stimulus (such as sweetness) 
-          when a person is given samples of <b>A</b>, and the relative 
-          probability of the perception of that stimulus given samples of 
+        <p> <a href="#Worksheet1">Worksheet 1</a> (below) plots the relative
+          probability of the perception of a stimulus (such as sweetness)
+          when a person is given samples of <b>A</b>, and the relative
+          probability of the perception of that stimulus given samples of
           <b>B</b>.  This relative probability is taken from the normal
           distribution with standard deviation computed from the
           specified <em>d'</em>.
@@ -384,25 +381,25 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           as being (practically) the same. </p>
 
         <p> In the entry next to "<em>d'</em> =" on the left of
-          <a href="#Worksheet1">Worksheet 1</a>, you can enter different 
-          values of <em>d'</em> and see <b>(a)</b> how much overlap there 
-          is between the perception of the two stimuli, <b>(b)</b> what 
-          the standard deviation (<em>&sigma;</em>) is, <b>(c)</b> the 
-          probability of discrimination, <em>p<sub>d</sub></em>, (also 
-          called the 
-          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0950329313000554">proportion of distinguishers</a>) 
+          <a href="#Worksheet1">Worksheet 1</a>, you can enter different
+          values of <em>d'</em> and see <b>(a)</b> how much overlap there
+          is between the perception of the two stimuli, <b>(b)</b> what
+          the standard deviation (<em>&sigma;</em>) is, <b>(c)</b> the
+          probability of discrimination, <em>p<sub>d</sub></em>, (also
+          called the
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0950329313000554" target="_parent">proportion of distinguishers</a>)
           with a value of 0% for perceptually-identical stimuli and 100% for
           easily-distinguished stimuli, and <b>(d)</b> what the
           probability of correctly identifying <b>A</b> from <b>B</b>
-          would be in a 2-AFC test, called <em>p<sub>2AFC</sub></em>. 
-          (<em>p<sub>d</sub></em> is defined as 
+          would be in a 2-AFC test, called <em>p<sub>2AFC</sub></em>.
+          (<em>p<sub>d</sub></em> is defined as
           (<em>p<sub>2AFC</sub></em> &minus; <em>p<sub>g</sub></em>)/(1
           &minus; <em>p<sub>g</sub></em>), where <em>p<sub>g</sub></em> is
           the percent correct from guessing, or 0.50 in this case.) </p>
 
-        <p> In <a href="#Worksheet1">Worksheet 1</a> there is also an option 
-          to simulate a 2-AFC test. You can specify the number of tests in 
-          this simulation and the simulation delay. The delay specifies how 
+        <p> In <a href="#Worksheet1">Worksheet 1</a> there is also an option
+          to simulate a 2-AFC test. You can specify the number of tests in
+          this simulation and the simulation delay. The delay specifies how
           long the result of one test is displayed on the worksheet. When you
           start the simulation, the specified number of tests will
           begin. In each test, two points will be chosen, one from
@@ -430,10 +427,10 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
         <p> The probability of correctly identifying <b>A</b> from <b>B</b>,
           <em>p<sub>2AFC</sub></em>, will also be called the "model
           correct" or "theoretical correct" value. For the 2-AFC task,
-          the formula can be found in a 
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf">paper by R. H. B. Christensen, Equation 6</a>. 
-          As the number of simulation tests increases (e.g. from 10 to 100 
-          to 1000), the percent correct from the simulation becomes closer 
+          the formula can be found in a
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">paper by R. H. B. Christensen, Equation 6</a>.
+          As the number of simulation tests increases (e.g. from 10 to 100
+          to 1000), the percent correct from the simulation becomes closer
           to the model-correct value. </p>
       </div>
 
@@ -494,21 +491,21 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           questions about samples of the stimuli. The test is designed in
           such a way that we hope to (a) estimate <em>d'</em> and/or (b)
           determine if the stimuli are (probably) perceptually different.
-          The number of test subjects in one trial (or test) is called 
+          The number of test subjects in one trial (or test) is called
           <em>N</em>.</p>
 
         <p> This tutorial describes the case where each test sample is
-          presented to a different test subject, which is called a 
-          "<a href="https://dictionary.apa.org/between-subjects-design">between-subjects</a>"
+          presented to a different test subject, which is called a
+          "<a href="https://dictionary.apa.org/between-subjects-design" target="_parent">between-subjects</a>"
           design. It is also possible to present each test sample to the
-          same subject, which is called a 
-          "<a href="https://dictionary.apa.org/within-subjects-design">within-subjects</a>"
+          same subject, which is called a
+          "<a href="https://dictionary.apa.org/within-subjects-design" target="_parent">within-subjects</a>"
           design. A within-subjects design can have lower perceptual
-          variation (<em>&sigma;</em> in <a href="#Section3">Section 3</a>) 
-          and therefore a larger value of <em>d'</em>, but the results will 
-          only be valid for that one person. In the case of a test of 
-          bitterness, for example, one-third of the population might be 
-          "super tasters" and have a very large <em>d'</em>, one-third might 
+          variation (<em>&sigma;</em> in <a href="#Section3">Section 3</a>)
+          and therefore a larger value of <em>d'</em>, but the results will
+          only be valid for that one person. In the case of a test of
+          bitterness, for example, one-third of the population might be
+          "super tasters" and have a very large <em>d'</em>, one-third might
           be "average tasters" and have a <em>d'</em> right around 1.0,
           and one-third might be "non-tasters" and have a <em>d'</em>
           close to zero. A test of this combined population might then
@@ -520,24 +517,23 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           test</b> and the <b>three-alternative forced-choice (3-AFC)
           test</b>. The triangle test is commonly used when you have
           an unknown difference between the stimuli, as described in
-          <a href="#Section2">Section 2</a>. The 3-AFC test is commonly used 
-          when you have a known difference and the test subjects can rate 
-          the stimuli along that known dimension (e.g. sweetness). There are 
+          <a href="#Section2">Section 2</a>. The 3-AFC test is commonly used
+          when you have a known difference and the test subjects can rate
+          the stimuli along that known dimension (e.g. sweetness). There are
           a number of other types of perceptual tests not discussed here,
-          including 
-          <a href="https://en.wikipedia.org/wiki/Discrimination_testing">duo-trio, paired comparison, ABX, two-out-of-five, and same-different</a>.
+          including
+          <a href="https://en.wikipedia.org/wiki/Discrimination_testing" target="_parent">duo-trio, paired comparison, ABX, two-out-of-five, and same-different</a>.
         </p>
 
-        <p> <a href="#Worksheet2">Worksheet 2</a> (below) shows the same 
-          probabilities of perceptual units from the two stimuli <b>A</b> 
-          and <b>B</b> (as in <a href="#Worksheet1">Worksheet 1</a>), but it 
-          allows the selection of either a triangle test or a 3-AFC perceptual 
+        <p> <a href="#Worksheet2">Worksheet 2</a> (below) shows the same
+          probabilities of perceptual units from the two stimuli <b>A</b>
+          and <b>B</b> (as in <a href="#Worksheet1">Worksheet 1</a>), but it
+          allows the selection of either a triangle test or a 3-AFC perceptual
           test. </p>
 
         <p> In a 3-AFC test, each subject is given two samples of <b>A</b>
-          and one sample of <b>B</b>, and is 
-          <a href="http://www.columbia.edu/~ld208/jmp12.pdf">asked to
-          pick the one with the largest value of an attribute</a>
+          and one sample of <b>B</b>, and is
+          <a href="http://www.columbia.edu/~ld208/jmp12.pdf" target="_parent">asked to pick the one with the largest value of an attribute</a>
           (e.g. the highest level of sweetness). Because <b>B</b> is
           known to have the largest value of this attribute, the subject
           is effectively asked to pick stimulus <b>B</b> from the three
@@ -569,29 +565,28 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           you don't want one cookie to have sugar crystals on top and
           the other to be plain.) </p>
 
-        <p> <a href="#Worksheet2">Worksheet 2</a> shows, on the right-hand 
-          side, the percent correct that would be obtained from the specified 
+        <p> <a href="#Worksheet2">Worksheet 2</a> shows, on the right-hand
+          side, the percent correct that would be obtained from the specified
           test given the <em>d'</em> from <a href="#Worksheet1">Worksheet 1</a>
-          and a large enough (or infinite) number of subjects. Again, this 
-          is called the "model correct" value. The formulas for the 
-          model-correct value from the 3-AFC and triangle test can be found 
-          in the 
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf">paper by Christensen in Equations 5 and 7, respectively</a>. 
+          and a large enough (or infinite) number of subjects. Again, this
+          is called the "model correct" value. The formulas for the
+          model-correct value from the 3-AFC and triangle test can be found
+          in the
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">paper by Christensen in Equations 5 and 7, respectively</a>.
           It can be seen that for any non-zero value of <em>d'</em> the
           3-AFC test has a larger model-correct value than the triangle
           test, until both tests reach 100% accuracy. This is because of
           the perceptual overlap between <b>A</b> and <b>B</b>; the
           one sample that is different is more likely to be an extreme
           value than it is to be the sample with the largest distance to
-          the other two. (H. S. Lee and M. O'Mahony have a 
-          <a href="https://www.researchgate.net/publication/285865885_Sensory_difference_testing_Thurstonian_models">more detailed and better explanation 
-          of the differences between these tests</a>.)</p>
+          the other two. (H. S. Lee and M. O'Mahony have a
+          <a href="https://www.researchgate.net/publication/285865885_Sensory_difference_testing_Thurstonian_models" target="_parent">more detailed and better explanation of the differences between these tests</a>.)</p>
 
-        <p> In <a href="#Worksheet2">Worksheet 2</a>, just below the test 
-          type, you can enter the number of subjects for a simulation, as 
-          well as the simulation delay. As with 
-          <a href="#Worksheet1">Worksheet 1</a>, when you start the 
-          simulation one test is performed for each subject. The three test 
+        <p> In <a href="#Worksheet2">Worksheet 2</a>, just below the test
+          type, you can enter the number of subjects for a simulation, as
+          well as the simulation delay. As with
+          <a href="#Worksheet1">Worksheet 1</a>, when you start the
+          simulation one test is performed for each subject. The three test
           samples are selected from the two stimuli according to the specified
           probability distributions. For each subject's test, the three
           samples are plotted with a blue square for <b>A</b> and a
@@ -603,14 +598,14 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           red. A tally is kept of what percent of the time a response is
           correct or incorrect. The result of this simulated perceptual
           test is reported as the "simulation correct" number at the
-          bottom right of <a href="#Worksheet2">Worksheet 2</a>. As the 
-          number of subjects increases, the simulation-correct value 
+          bottom right of <a href="#Worksheet2">Worksheet 2</a>. As the
+          number of subjects increases, the simulation-correct value
           approaches that of the model-correct value. </p>
 
         <p> This may be stating the obvious, but note that as the number
           of subjects increases, the variation of the perceptual stimuli
-          in <a href="#Worksheet2">Worksheet 2</a> doesn't change. The 
-          perceptual variation is the same, and <em>d'</em> is the same, 
+          in <a href="#Worksheet2">Worksheet 2</a> doesn't change. The
+          perceptual variation is the same, and <em>d'</em> is the same,
           regardless of the number of subjects in the test. </p>
       </div>
 
@@ -700,26 +695,26 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           average of all <em>p<sub>trial</sub></em> values from
           the <i>T</i> trials <em>p<sub>avg</sub></em>. </p>
 
-        <p> If we divide the model-correct value from 
-          <a href="#Worksheet2">Worksheet 2</a> (above) by 100, we convert 
+        <p> If we divide the model-correct value from
+          <a href="#Worksheet2">Worksheet 2</a> (above) by 100, we convert
           that from a percent to the probability of getting a correct
-          response. We'll call this probability from the model <em>p</em>. 
-          It can be seen in <a href="#Worksheet2">Worksheet 2</a> that as 
-          the number of subjects <em>N</em> increases, the simulation results 
-          become closer to the model-correct value. Regardless of the number 
-          of subjects per trial, if we have a large enough number of trials, 
-          we expect that the average proportion of correct responses 
-          (<em>p<sub>avg</sub></em>) will approach the probability of a 
-          correct response <em>p</em>.  In other words, we can reach the 
-          model's probability estimate <em>p</em> by either running a single 
-          experiment with a very large number of subjects, or a large number 
-          of trials with a smaller number of subjects each. (The trials are 
-          independent of each other, so we can think of one large trial 
-          <em>T<sub>L</sub></em> with <em>N<sub>L</sub></em> subjects as 
-          equivalent to two smaller trials, <em>T<sub>1</sub></em> 
-          (with <em>N<sub>1</sub></em> subjects) and <em>T<sub>2</sub></em> 
-          (with <em>N<sub>2</sub></em> subjects), where 
-          <em>N<sub>L</sub></em> = <em>N<sub>1</sub></em> + 
+          response. We'll call this probability from the model <em>p</em>.
+          It can be seen in <a href="#Worksheet2">Worksheet 2</a> that as
+          the number of subjects <em>N</em> increases, the simulation results
+          become closer to the model-correct value. Regardless of the number
+          of subjects per trial, if we have a large enough number of trials,
+          we expect that the average proportion of correct responses
+          (<em>p<sub>avg</sub></em>) will approach the probability of a
+          correct response <em>p</em>.  In other words, we can reach the
+          model's probability estimate <em>p</em> by either running a single
+          experiment with a very large number of subjects, or a large number
+          of trials with a smaller number of subjects each. (The trials are
+          independent of each other, so we can think of one large trial
+          <em>T<sub>L</sub></em> with <em>N<sub>L</sub></em> subjects as
+          equivalent to two smaller trials, <em>T<sub>1</sub></em>
+          (with <em>N<sub>1</sub></em> subjects) and <em>T<sub>2</sub></em>
+          (with <em>N<sub>2</sub></em> subjects), where
+          <em>N<sub>L</sub></em> = <em>N<sub>1</sub></em> +
           <em>N<sub>2</sub></em>.) The value of <em>p<sub>avg</sub></em>
           over a very large number of trials should be close to <em>p</em>,
           no matter what the value of <em>N</em> is. </p>
@@ -730,18 +725,18 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           the closer each value of <em>p<sub>trial</sub></em> will be
           to <em>p</em>, and so the less variation there will be in
           these values. The fewer subjects per trial, the more that
-          perceptual variation (<a href="#Section3">Section 3</a>) will 
-          affect the results, and the larger the variation in results will 
-          be. This difference in the variation in results with the number 
-          of subjects in a trial is an important concept in the following 
-          worksheets: the larger the value of <em>N</em> in our experiment, 
-          the more confidence we can have in the result. To put it another 
+          perceptual variation (<a href="#Section3">Section 3</a>) will
+          affect the results, and the larger the variation in results will
+          be. This difference in the variation in results with the number
+          of subjects in a trial is an important concept in the following
+          worksheets: the larger the value of <em>N</em> in our experiment,
+          the more confidence we can have in the result. To put it another
           way, as <em>N</em> increases, there is a lower probability of a
           different trial having a different result. </p>
 
         <p> A trial that has a probability of <em>p</em> correct
-          responses from <em>N</em> subjects can be described using a 
-          <a href="https://en.wikipedia.org/wiki/Binomial_distribution">binomial distribution</a>. 
+          responses from <em>N</em> subjects can be described using a
+          <a href="https://en.wikipedia.org/wiki/Binomial_distribution" target="_parent">binomial distribution</a>.
           A binomial distribution is a function,
           Binomial(<em>x</em>; <em>N</em>, <em>p</em>), which returns
           the probability of seeing exactly <em>x</em> correct values
@@ -753,11 +748,11 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           to get the correct result with probability 0.24 when <em>p</em>
           equals 0.634 (i.e. Binomial(6; 10, 0.634) = 0.24), then out of
           100 trials we expect that on average there will be 24 trials
-          with exactly 6 out of 10 correct responses. The 
-          "<a href="https://en.wikipedia.org/wiki/Expected_value">expected</a>"
+          with exactly 6 out of 10 correct responses. The
+          "<a href="https://en.wikipedia.org/wiki/Expected_value" target="_parent">expected</a>"
           or most likely value from a binomial distribution is with <em>x</em>
-          equal to <em>N</em> &times; <em>p</em>. (Although the values of <em>x</em>
-          used by the binomial function are integers, this expected
+          equal to <em>N</em> &times; <em>p</em>. (Although the values of
+          <em>x</em> used by the binomial function are integers, this expected
           value doesn't have to be an integer, just as the average
           population of a household can be 2.5 people instead of an
           integer 2 or 3.) </p>
@@ -772,15 +767,15 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           probabilities from a binomial distribution also increases with
           the number of subjects, but not as quickly as the variance. If
           one looks not at the <em>number</em> of correct values from a
-          trial (<em>x</em>) but at the <em>proportion</em> or 
-          <em>probability</em> of correct results (i.e. the number of correct 
-          values divided by the total number of subjects, 
-          <em>p<sub>bin</sub></em> = <em>x</em> / <em>N</em>), then the 
+          trial (<em>x</em>) but at the <em>proportion</em> or
+          <em>probability</em> of correct results (i.e. the number of correct
+          values divided by the total number of subjects,
+          <em>p<sub>bin</sub></em> = <em>x</em> / <em>N</em>), then the
           most likely value is simply <em>p</em> (instead of <em>N</em> &times;
-          <em>p</em>). The standard deviation of <em>p<sub>bin</sub></em> 
-          can be written as <em>&sigma;<sub>p</sub></em> = (<em>N</em> &times; 
-          <em>p</em> &times; (1 &minus; <em>p</em>))<sup>1/2</sup> / 
-          <em>N</em>, which is equivalent to 
+          <em>p</em>). The standard deviation of <em>p<sub>bin</sub></em>
+          can be written as <em>&sigma;<sub>p</sub></em> = (<em>N</em> &times;
+          <em>p</em> &times; (1 &minus; <em>p</em>))<sup>1/2</sup> /
+          <em>N</em>, which is equivalent to
           (<em>p</em> &times; (1 &minus; <em>p</em>))<sup>1/2</sup> /
           <em>N</em><sup>1/2</sup>. Therefore, as <em>N</em> increases,
           the standard deviation of the probability of a correct
@@ -793,11 +788,11 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           expectation in a precise way. </p>
 
         <p> We can plot a binomial distribution and the simulation of
-          many trials using bar graphs. (See 
+          many trials using bar graphs. (See
           <a href="#Worksheet3">Worksheet 3</a>, below, with <em>N</em>
-          from <a href="#Worksheet2">Worksheet 2</a> and <em>p</em> based 
-          on the "model correct" value from 
-          <a href="#Worksheet2">Worksheet 2</a>.) The X axis is the number 
+          from <a href="#Worksheet2">Worksheet 2</a> and <em>p</em> based
+          on the "model correct" value from
+          <a href="#Worksheet2">Worksheet 2</a>.) The X axis is the number
           of subjects in one trial with a correct result (<em>x</em> for the
           binomial distribution or <em>C</em> for the simulation). Also
           on the X axis we can show the probability of a correct result
@@ -813,8 +808,8 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> We can simulate many trials and see how the values of <em>C</em>
           cluster around a central value (<em>p<sub>avg</sub></em>). The
-          result of each trial is plotted in 
-          <a href="#Worksheet3">Worksheet 3</a> in blue with cross-hatched 
+          result of each trial is plotted in
+          <a href="#Worksheet3">Worksheet 3</a> in blue with cross-hatched
           lines. As the number of trials increases, <em>p<sub>avg</sub></em>
           approaches <em>p</em> from the binomial distribution. Because
           the binomial distribution provides a good description of this
@@ -823,25 +818,25 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           should have a distribution close to that of the probabilities
           from a binomial distribution. </p>
 
-        <p> The "binomial" numbers on the right side of 
-          <a href="#Worksheet3">Worksheet 3</a> show some values predicted 
+        <p> The "binomial" numbers on the right side of
+          <a href="#Worksheet3">Worksheet 3</a> show some values predicted
           by a binomial distribution with parameters <em>N</em> and <em>p</em>.
-          The first value ("expect") is the number of subjects we expect 
-          to provide a correct response, on average. This value is 
-          <em>N</em> &times; <em>p</em>.  The second value ("<em>p</em>") 
-          is the probability of a correct response, which is the percent 
-          correct predicted by the model in 
-          <a href="#Worksheet2">Worksheet 2</a> divided by 100. The third 
-          value ("<em>&sigma;<sub>p</sub></em>") is the standard deviation 
+          The first value ("expect") is the number of subjects we expect
+          to provide a correct response, on average. This value is
+          <em>N</em> &times; <em>p</em>.  The second value ("<em>p</em>")
+          is the probability of a correct response, which is the percent
+          correct predicted by the model in
+          <a href="#Worksheet2">Worksheet 2</a> divided by 100. The third
+          value ("<em>&sigma;<sub>p</sub></em>") is the standard deviation
           of values of <em>p<sub>bin</sub></em>. </p>
 
-        <p> The "simulation" numbers on the right side of 
-          <a href="#Worksheet3">Worksheet 3</a> show the values obtained 
-          from the simulation of <em>T</em> trials. The first value 
-          ("avg. corr.") is the number of subjects who get a correct result, 
-          on average. The second value ("<em>p<sub>avg</sub></em>") is the 
-          average proportion of correct responses (i.e. the average number 
-          of subjects with a correct response divided by the number of 
+        <p> The "simulation" numbers on the right side of
+          <a href="#Worksheet3">Worksheet 3</a> show the values obtained
+          from the simulation of <em>T</em> trials. The first value
+          ("avg. corr.") is the number of subjects who get a correct result,
+          on average. The second value ("<em>p<sub>avg</sub></em>") is the
+          average proportion of correct responses (i.e. the average number
+          of subjects with a correct response divided by the number of
           subjects per trial). The third value ("<em>s</em>") is the standard
           deviation of the values of <em>p<sub>trial</sub></em>. As the
           number of trials increases, the values from this simulation
@@ -906,49 +901,48 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
       <div class="TEXT">
         <h2 id="Section6">6. Significance Testing: H0</h2>
-        <p> Referring back to <a href="#Section2">Section 2</a> for a moment, 
-          recall that our goal is to determine whether the two stimuli are 
+        <p> Referring back to <a href="#Section2">Section 2</a> for a moment,
+          recall that our goal is to determine whether the two stimuli are
           perceptually different or not. The easiest way to show that they are
           different, mathematically, is to show that they are not the
           same. Why is it easier? Because a hypothesis that the stimuli
           are perceptually the same (which we hope to disprove) requires
           no knowledge about all the ways in which they might be
-          different. We'll call this hypothesis H0, or the 
-          <a href="https://en.wikipedia.org/wiki/Exclusion_of_the_null_hypothesis">null hypothesis</a>. 
-          For H0, we only need to know the number of subjects in order to 
-          create a binomial distribution; the probability of a correct 
-          response is the same as random guessing, or 0.333. We don't need 
-          to figure out (or estimate) <em>d'</em>; under this hypothesis, 
+          different. We'll call this hypothesis H0, or the
+          <a href="https://en.wikipedia.org/wiki/Exclusion_of_the_null_hypothesis" target="_parent">null hypothesis</a>.
+          For H0, we only need to know the number of subjects in order to
+          create a binomial distribution; the probability of a correct
+          response is the same as random guessing, or 0.333. We don't need
+          to figure out (or estimate) <em>d'</em>; under this hypothesis,
           <em>d'</em> is zero.</p>
 
         <p> A hypothesis like H0 is tested in terms of probabilities. We
-          perform one trial of an experiment and measure some result, 
-          <em>C</em>.  We can then find the probability of observing this 
-          result using the binomial distribution under the assumption that 
-          this hypothesis is true, i.e. 
+          perform one trial of an experiment and measure some result,
+          <em>C</em>.  We can then find the probability of observing this
+          result using the binomial distribution under the assumption that
+          this hypothesis is true, i.e.
           Binomial(<em>C</em>; <em>N</em>, <em>p</em>).
           For H0, this becomes Binomial(<em>C</em>; <em>N</em>, 0.333).
-          (We can express this probability in mathematical notation as 
-          <em>p</em>(<em>X</em>=<em>C</em> | H0), or the probability of 
-          a result <em>X</em> being equal to the observed value <em>C</em>, 
-          given H0). We want to know the probability of observing 
-          <em>at least</em> this result, in other words a value of 
-          <em>C</em> or larger (i.e. 
-          <em>p</em>(<em>X</em>&ge;<em>C</em> | H0)), and so we compute 
-          probabilities from the binomial distribution for all values from 
-          <em>C</em> to <em>N</em> and sum them up. This is called the 
-          "<a href="https://en.wikipedia.org/wiki/P-value"><em>p</em> value</a>"
-          of the experiment. If this <em>p</em> value, or the probability 
-          of getting a result of at least <em>C</em> when H0 is true, is 
-          less than some threshold, then we conclude that this result is 
-          sufficiently improbable given the assumption that H0 is true, 
-          and therefore we reject H0. If we reject H0 (in which <em>d'</em> 
-          equals 0), then we accept the hypothesis that <em>d'</em> is 
-          not zero, and we therefore conclude that there is a perceptual 
-          difference. A test that rejects H0 is said to have demonstrated 
-          significance. This type of hypothesis testing is referred to as 
-          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/">null
-          hypothesis significance testing</a>", or NHST.</p>
+          (We can express this probability in mathematical notation as
+          <em>p</em>(<em>X</em>=<em>C</em> | H0), or the probability of
+          a result <em>X</em> being equal to the observed value <em>C</em>,
+          given H0). We want to know the probability of observing
+          <em>at least</em> this result, in other words a value of
+          <em>C</em> or larger (i.e.
+          <em>p</em>(<em>X</em>&ge;<em>C</em> | H0)), and so we compute
+          probabilities from the binomial distribution for all values from
+          <em>C</em> to <em>N</em> and sum them up. This is called the
+          "<a href="https://en.wikipedia.org/wiki/P-value" target="_parent"><em>p</em> value</a>"
+          of the experiment. If this <em>p</em> value, or the probability
+          of getting a result of at least <em>C</em> when H0 is true, is
+          less than some threshold, then we conclude that this result is
+          sufficiently improbable given the assumption that H0 is true,
+          and therefore we reject H0. If we reject H0 (in which <em>d'</em>
+          equals 0), then we accept the hypothesis that <em>d'</em> is
+          not zero, and we therefore conclude that there is a perceptual
+          difference. A test that rejects H0 is said to have demonstrated
+          significance. This type of hypothesis testing is referred to as
+          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_parent">null hypothesis significance testing</a>", or NHST.</p>
 
         <p> One complication with NHST is that if we don't reject H0, then
           we can't say anything at all about the two stimuli. Not
@@ -962,24 +956,23 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           are the same, or that <em>d'</em> equals zero) is kind of a
           classic, tried-and-true null hypothesis that is very commonly
           used. However, we don't <em>need</em> to define H0 as the
-          case in which the stimuli are the same. In 
-          <a href="#Section9">Section 9</a> we will consider a different 
-          definition of H0. For now, though, we'll stick with the classics. 
+          case in which the stimuli are the same. In
+          <a href="#Section9">Section 9</a> we will consider a different
+          definition of H0. For now, though, we'll stick with the classics.
 
-        <p> The threshold for rejecting H0 is called <em>alpha</em>, 
-          <a href="https://en.wikipedia.org/wiki/Statistical_significance">the
-            probability of rejecting the null hypothesis given that it
+        <p> The threshold for rejecting H0 is called <em>alpha</em>,
+          <a href="https://en.wikipedia.org/wiki/Statistical_significance" target="_parent">the probability of rejecting the null hypothesis given that it
             was assumed to be true</a>. I'll use the subscript H0 to be
-          clear that this is the threshold for rejecting H0, i.e. 
-          <em>alpha<sub>H0</sub></em>.  A commonly used value for 
-          <em>alpha<sub>H0</sub></em> is 0.05, meaning that H0 will be 
-          (incorrectly) rejected 5% of the time when H0 is true. (The value 
-          of 0.05 is common but other values can be used, depending on the 
-          purpose of the test.) Note that (by definition) when 
+          clear that this is the threshold for rejecting H0, i.e.
+          <em>alpha<sub>H0</sub></em>.  A commonly used value for
+          <em>alpha<sub>H0</sub></em> is 0.05, meaning that H0 will be
+          (incorrectly) rejected 5% of the time when H0 is true. (The value
+          of 0.05 is common but other values can be used, depending on the
+          purpose of the test.) Note that (by definition) when
           <em>alpha<sub>H0</sub></em> is 0.05, in 1 out of every 20 experiments
-          in which H0 <em>is</em> true, we will incorrectly conclude that 
+          in which H0 <em>is</em> true, we will incorrectly conclude that
           there is a perceptual difference between the stimuli. </p>
-          
+
         <p> By the way, I try to avoid phrases such as "the effect is
           significant" because the result of a significance test depends
           on the combination of the hypothesis, the data, and how the
@@ -1000,8 +993,8 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           of the two stimuli needs to be evaluated within the context of
           the test. </p>
 
-        <p> <a href="#Worksheet4">Worksheet 4</a> (below) shows the binomial 
-          distribution for H0 with <em>d'</em>=0. No matter how many subjects 
+        <p> <a href="#Worksheet4">Worksheet 4</a> (below) shows the binomial
+          distribution for H0 with <em>d'</em>=0. No matter how many subjects
           there are, the probability of <em>X</em> subjects having a correct
           result is maximum when <em>X</em> is one-third of <em>N</em>,
           or when the probability of any one subject having a correct
@@ -1023,14 +1016,14 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           red. If the number of subjects with a correct result is
           greater than or equal to this threshold, the probability is
           shown in dark red. The sum of all of the dark-red
-          probabilities is, by definition, less than or equal to 
-          <em>alpha<sub>H0</sub></em>.  If you get a result anywhere in the 
-          dark-red region, H0 can be rejected. The light-red probabilities 
-          are therefore labeled "H0 inconclusive", and the dark-red 
-          probabilities are labeled "H0 reject". An orange vertical dashed 
-          line shows the boundary between inconclusive H0 and rejecting H0. 
-          Just above this line the symbol <em>&alpha;<sub>H0</sub></em> 
-          indicates that this is the <em>alpha<sub>H0</sub></em> threshold 
+          probabilities is, by definition, less than or equal to
+          <em>alpha<sub>H0</sub></em>.  If you get a result anywhere in the
+          dark-red region, H0 can be rejected. The light-red probabilities
+          are therefore labeled "H0 inconclusive", and the dark-red
+          probabilities are labeled "H0 reject". An orange vertical dashed
+          line shows the boundary between inconclusive H0 and rejecting H0.
+          Just above this line the symbol <em>&alpha;<sub>H0</sub></em>
+          indicates that this is the <em>alpha<sub>H0</sub></em> threshold
           for rejection. </p>
 
         <p> Note that the region in dark red is only for the higher
@@ -1050,12 +1043,12 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           of the probability distribution mean? If our two stimuli <b>A</b>
           and <b>B</b> are assumed to be equal and we conduct a
           triangle or 3-AFC test with 60 subjects, we expect 20 subjects
-          to guess the correct result, on average. With 
-          <em>alpha<sub>H0</sub></em> at 0.05, if 27 subjects get the 
-          correct result, we conclude that probably the stimuli aren't 
-          really equal after all, and we reject H0. On the flip side, let's 
-          say that only 13 subjects get the correct result, which should 
-          happen about 2% of the time if our model is a good description of 
+          to guess the correct result, on average. With
+          <em>alpha<sub>H0</sub></em> at 0.05, if 27 subjects get the
+          correct result, we conclude that probably the stimuli aren't
+          really equal after all, and we reject H0. On the flip side, let's
+          say that only 13 subjects get the correct result, which should
+          happen about 2% of the time if our model is a good description of
           our experiment. If I got such a result, I would suspect that there
           might be something wrong in the experimental setup, and I
           would spend time verifying that there were no mistakes in how
@@ -1065,20 +1058,20 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           spend a very long time seeing if anything had gone wrong in
           the way the experiment was conducted. If I found an error, I
           would fix it and re-run the experiment; if I found no error, I
-          would accept the result and not reject H0. In this case, the purpose 
+          would accept the result and not reject H0. In this case, the purpose
           of analyzing a result at the lower end of the distribution is not
           to reject H0, but to verify that the test was properly
           conducted. I would like to call this region at the low end of
           the binomial probability distribution the "region of likely
           experimental error", and notate it as <em>R<sub>L(EE)</sub></em>.
-          This region is shown on the top left of 
-          <a href="#Worksheet4">Worksheet 4</a> with a horizontal orange 
+          This region is shown on the top left of
+          <a href="#Worksheet4">Worksheet 4</a> with a horizontal orange
           line and arrows pointing to the beginning and end of this region.</p>
 
-        <p> On the right-hand side of <a href="#Worksheet4">Worksheet 4</a>, 
-          under "<b>H0:</b>", there are five values. The first ("expect") is 
-          the expected number of subjects who will get a correct result (on 
-          average), the second (<em>p<sub>H0</sub></em>) is the probability 
+        <p> On the right-hand side of <a href="#Worksheet4">Worksheet 4</a>,
+          under "<b>H0:</b>", there are five values. The first ("expect") is
+          the expected number of subjects who will get a correct result (on
+          average), the second (<em>p<sub>H0</sub></em>) is the probability
           of any one subject getting a correct result (which is always 0.333),
           and the third value (<em>&sigma;<sub>H0</sub></em>) is the standard
           deviation of this binomial probability distribution. The next
@@ -1088,32 +1081,32 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           is greater than or equal to <em>thresh<sub>H0</sub></em>,
           then H0 is rejected. The final number ("<em>p<sub>RejH0</sub></em>")
           is the probability of rejecting H0 using this threshold. In
-          theory (or with a large enough number of subjects), 
-          <em>p<sub>RejH0</sub></em> is equal to <em>alpha<sub>H0</sub></em>, 
-          but with a small number of subjects, this number may be noticeably 
-          less than <em>alpha<sub>H0</sub></em>.  If the threshold were 
-          lowered by a single subject, though, this probability would become 
+          theory (or with a large enough number of subjects),
+          <em>p<sub>RejH0</sub></em> is equal to <em>alpha<sub>H0</sub></em>,
+          but with a small number of subjects, this number may be noticeably
+          less than <em>alpha<sub>H0</sub></em>.  If the threshold were
+          lowered by a single subject, though, this probability would become
           greater than <em>alpha<sub>H0</sub></em>.</p>
 
         <p> When you start the simulation with the specified number of
-          trials, each trial will be conducted (as in 
-          <a href="#Worksheet2">Worksheet 2</a>) with the specified number 
-          of subjects and <em>d'</em> equal to zero. The result of each 
+          trials, each trial will be conducted (as in
+          <a href="#Worksheet2">Worksheet 2</a>) with the specified number
+          of subjects and <em>d'</em> equal to zero. The result of each
           trial is plotted in <a href="#Worksheet4">Worksheet 4</a> in
-          blue with striped lines. On the right-hand side of 
-          <a href="#Worksheet4">Worksheet 4</a>, under 
+          blue with striped lines. On the right-hand side of
+          <a href="#Worksheet4">Worksheet 4</a>, under
           "<b>H0 simulation:</b>", there are four numbers. The
           first ("avg. corr.") is the average number of correct
-          responses in this simulation, the second 
-          ("<em>p<sub>avgH0</sub></em>") is the average proportion of 
-          correct responses (i.e. the average number of correct responses 
-          divided by <em>N</em>) given H0, and the third number 
-          ("<em>s<sub>H0</sub></em>") is the standard deviation of the 
-          results from these simulated trials. The fourth number, on 
-          the bottom, ("reject") shows how often the null hypothesis was 
-          rejected even when it was true.  With a large enough number of 
-          trials, "avg. corr." should be close to "expect", 
-          <em>p<sub>avgH0</sub></em> should be close to 
+          responses in this simulation, the second
+          ("<em>p<sub>avgH0</sub></em>") is the average proportion of
+          correct responses (i.e. the average number of correct responses
+          divided by <em>N</em>) given H0, and the third number
+          ("<em>s<sub>H0</sub></em>") is the standard deviation of the
+          results from these simulated trials. The fourth number, on
+          the bottom, ("reject") shows how often the null hypothesis was
+          rejected even when it was true.  With a large enough number of
+          trials, "avg. corr." should be close to "expect",
+          <em>p<sub>avgH0</sub></em> should be close to
           <em>p<sub>H0</sub></em>, <em>s<sub>H0</sub></em> should
           be close to <em>&sigma;<sub>H0</sub></em>, and "reject", when
           divided by 100, should be close to <em>p<sub>RejH0</sub></em>.
@@ -1195,51 +1188,46 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           the two stimuli are perceptually the same. If we consider an
           alternate hypothesis, called H1, we can obtain an estimate of
           how much risk we take by doing the test as planned. We know
-          (from <a href="#Section6">Section 6</a>) that if H0 can not be 
-          rejected based on some result, then we can come to no conclusion 
-          about the hypothesis (we can neither accept nor reject H0). Having 
-          H1 lets us potentially avoid spending a huge effort only to shrug 
-          and say "we don't know". With H1, we can design the test so that 
+          (from <a href="#Section6">Section 6</a>) that if H0 can not be
+          rejected based on some result, then we can come to no conclusion
+          about the hypothesis (we can neither accept nor reject H0). Having
+          H1 lets us potentially avoid spending a huge effort only to shrug
+          and say "we don't know". With H1, we can design the test so that
           it is more likely to demonstrate a significant result.</p>
 
         <p> H1 is a different hypothesis about the value of <em>d'</em>.
-          What should this value be? This is a bit of a 
-          <a href="https://en.wikipedia.org/wiki/Catch-22_(logic)">catch-22</a>.
+          What should this value be? This is a bit of a
+          <a href="https://en.wikipedia.org/wiki/Catch-22_(logic)" target="_parent">catch-22</a>.
           Ideally, it is the best estimate we already have for <em>d'</em>,
-          based on 
-          <a href="https://research.usu.edu//irb/wp-content/uploads/sites/12/2015/08/A_Researchers_Guide_to_Power_Analysis_USU.pdf">pilot data or a 
-          literature search</a>. 
-          This ideal isn't always practical, though.  There are many times 
-          when we have no 
-          <a href="https://en.wikipedia.org/wiki/Pilot_experiment">pilot
-          data</a>. Using values of <em>d'</em> from similar studies
-          found in the literature is one possibility, but the uncertainty 
-          in our estimate will be very large even if we can find several 
-          such studies. And, of course, sometimes we're performing an 
-          entirely new study and there is nowhere to obtain a good 
+          based on
+          <a href="https://research.usu.edu//irb/wp-content/uploads/sites/12/2015/08/A_Researchers_Guide_to_Power_Analysis_USU.pdf" target="_parent">pilot data or a literature search</a>.
+          This ideal isn't always practical, though.  There are many times
+          when we have no
+          <a href="https://en.wikipedia.org/wiki/Pilot_experiment" target="_parent">pilot data</a>. Using values of <em>d'</em> from similar studies
+          found in the literature is one possibility, but the uncertainty
+          in our estimate will be very large even if we can find several
+          such studies. And, of course, sometimes we're performing an
+          entirely new study and there is nowhere to obtain a good
           estimate of <em>d'</em>. </p>
 
         <p> Without pilot data or an estimate from the literature, a
           common option in some fields is to guess that <em>d'</em> is
-          0.5, which is considered a 
-          <a href="https://www.simplypsychology.org/effect-size.html">"medium"
-          effect size</a>. 
-          <a href="https://en.wikipedia.org/wiki/Jacob_Cohen_(statistician)">Jacob Cohen</a> 
-          classified an effect size of 0.5 as medium 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/">because such an effect is "visible to the naked eye of a careful observer"</a>, 
-          but he noted that his suggested categorizations should be flexible 
-          and he 
-          "<a href="https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1536&amp;context=jmasm">warned about ... them becoming de facto standards 
-          for research</a>".  Instead, his 
-          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/">ballpark categories 
-          provide a general guide that should also be informed by context</a>".
-          For perceptual testing, a <em>d'</em> of 0.5 means a probability 
-          of discrimination (<em>p<sub>d</sub></em>, defined in 
-          <a href="#Section3">Section 3</a>) of only 28%, which seems 
-          like a very small perceptual difference between two stimuli. 
+          0.5, which is considered a
+          <a href="https://www.simplypsychology.org/effect-size.html" target="_parent">"medium" effect size</a>.
+          <a href="https://en.wikipedia.org/wiki/Jacob_Cohen_(statistician)" target="_parent">Jacob Cohen</a>
+          classified an effect size of 0.5 as medium
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_parent">because such an effect is "visible to the naked eye of a careful observer"</a>,
+          but he noted that his suggested categorizations should be flexible
+          and he
+          "<a href="https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1536&amp;context=jmasm" target="_parent">warned about ... them becoming de facto standards for research</a>".  Instead, his
+          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_parent">ballpark categories provide a general guide that should also be informed by context</a>".
+          For perceptual testing, a <em>d'</em> of 0.5 means a probability
+          of discrimination (<em>p<sub>d</sub></em>, defined in
+          <a href="#Section3">Section 3</a>) of only 28%, which seems
+          like a very small perceptual difference between two stimuli.
           Instead, I will use a <em>d'</em> of 1.0, or approximately the
           just-noticeable difference (JND) with a probability of
-          discrimination of 50% (<a href="#Section3">Section 3</a>). 
+          discrimination of 50% (<a href="#Section3">Section 3</a>).
           (Of course, if you think that the JND is too strict or too lenient,
           feel free to choose a different value for <em>d'</em>.) </p>
 
@@ -1254,14 +1242,14 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
         <p> Once we have H1, we can estimate not only the probability of
           rejecting H0 when it is true (<em>alpha<sub>H0</sub></em>), we
           can also estimate the probability of an inconclusive result
-          when H1 is true, called 
-          <a href="https://ncu.libguides.com/statsresources/alphabeta"><em>beta</em></a>.
+          when H1 is true, called
+          <a href="https://ncu.libguides.com/statsresources/alphabeta" target="_parent"><em>beta</em></a>.
           I will refer to it as <em>beta<sub>H1</sub></em> to emphasize
           that this probability is conditioned on H1 being true. It is
           common to target a <em>beta<sub>H1</sub></em> value of 0.20,
           meaning that if H1 is true we will have an inconclusive result
-          (on average) 20% of the time. The 
-          <a href="https://en.wikipedia.org/wiki/Power_of_a_test">power</a>
+          (on average) 20% of the time. The
+          <a href="https://en.wikipedia.org/wiki/Power_of_a_test" target="_parent">power</a>
           of a test is defined as 1 &minus; <em>beta<sub>H1</sub></em>, and
           so a test with high power has a low probability of being
           inconclusive. </p>
@@ -1271,14 +1259,14 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           to (but not including) the threshold for <em>alpha<sub>H0</sub></em>.
           Once we have the binomial distribution for H1, beta can be
           computed by iterating over all number of correct responses
-          from 0 up to (but not including) the value of 
-          <em>thresh<sub>H0</sub></em> defined in 
-          <a href="#Section6">Section 6</a> and 
+          from 0 up to (but not including) the value of
+          <em>thresh<sub>H0</sub></em> defined in
+          <a href="#Section6">Section 6</a> and
           <a href="#Worksheet4">Worksheet 4</a>. (Visually, this limit is
-          indicated with the dashed orange line marked 
-          <em>&alpha;<sub>H0</sub></em> in 
-          <a href="#Worksheet5">Worksheet 5</a>.) All of the probabilities 
-          from the binomial distribution in this range are summed up to a 
+          indicated with the dashed orange line marked
+          <em>&alpha;<sub>H0</sub></em> in
+          <a href="#Worksheet5">Worksheet 5</a>.) All of the probabilities
+          from the binomial distribution in this range are summed up to a
           total probability, which is <em>beta<sub>H1</sub></em>. </p>
 
         <p> Once we've decided on the type of test, number of subjects,
@@ -1291,7 +1279,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           more lenient in order to increase the estimated power of the
           test, we run more of a risk of failing to demonstrate a
           significant result when one does exist. Therefore, we usually
-          increase <em>N</em> until we reach the desired value of 
+          increase <em>N</em> until we reach the desired value of
           <em>beta<sub>H1</sub></em>. </p>
 
         <p> Having H1 and knowing <em>beta<sub>H1</sub></em> doesn't
@@ -1301,47 +1289,47 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           useful to have in advance some idea of the likelihood of being
           able to demonstrate significance (if a difference does exist).  </p>
 
-        <p> <a href="#Worksheet5">Worksheet 5</a> shows two binomial 
-          distributions, one for H0 (in light red) and one for H1 (in 
-          light green). The hypothesis H1 in this worksheet is that 
-          <em>d'</em> is the value specified in 
-          <a href="#Worksheet1">Worksheet 1</a> (not necessarily 1.0). 
-          Where the two distributions overlap, the color is a dark (or 
-          olive) green.  This worksheet is largely the same as 
-          <a href="#Worksheet4">Worksheet 4</a>, but with the addition of 
-          H1. The standard deviation shown in this worksheet is for H1 
+        <p> <a href="#Worksheet5">Worksheet 5</a> shows two binomial
+          distributions, one for H0 (in light red) and one for H1 (in
+          light green). The hypothesis H1 in this worksheet is that
+          <em>d'</em> is the value specified in
+          <a href="#Worksheet1">Worksheet 1</a> (not necessarily 1.0).
+          Where the two distributions overlap, the color is a dark (or
+          olive) green.  This worksheet is largely the same as
+          <a href="#Worksheet4">Worksheet 4</a>, but with the addition of
+          H1. The standard deviation shown in this worksheet is for H1
           instead of H0. </p>
 
-        <p> In the top-left corner of this worksheet, the values of 
-          <em>d'</em> (for H1), the type of test, number of subjects, 
-          <em>alpha<sub>H0</sub></em>, <em>beta<sub>H1</sub></em>, and 
-          the power are specified. Below this, you can enter the number 
-          of trials and delay for a simulation. In this case, the 
-          simulation will generate and score data for H1. Each trial is 
+        <p> In the top-left corner of this worksheet, the values of
+          <em>d'</em> (for H1), the type of test, number of subjects,
+          <em>alpha<sub>H0</sub></em>, <em>beta<sub>H1</sub></em>, and
+          the power are specified. Below this, you can enter the number
+          of trials and delay for a simulation. In this case, the
+          simulation will generate and score data for H1. Each trial is
           plotted in black with cross-hatched lines. </p>
 
-        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>, 
-          under "<b>H0:</b>", there are three values. The first 
-          ("<em>p<sub>H0</sub></em>") is the probability of any one 
-          subject getting a correct result (always 0.333), the second 
-          ("<em>thresh<sub>H0</sub></em>") is the threshold for rejecting 
-          H0 (expressed as the number of subjects), and the third 
-          ("<em>p<sub>RejH0</sub></em>") is the probability of rejecting 
+        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>,
+          under "<b>H0:</b>", there are three values. The first
+          ("<em>p<sub>H0</sub></em>") is the probability of any one
+          subject getting a correct result (always 0.333), the second
+          ("<em>thresh<sub>H0</sub></em>") is the threshold for rejecting
+          H0 (expressed as the number of subjects), and the third
+          ("<em>p<sub>RejH0</sub></em>") is the probability of rejecting
           H0 using this threshold. </p>
 
-        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>, 
-          under "<b>H1:</b>", there are four values. The first ("expect") 
-          is the expected number of subjects who will get a correct result 
+        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>,
+          under "<b>H1:</b>", there are four values. The first ("expect")
+          is the expected number of subjects who will get a correct result
           (on average) when H1 is true. The second ("<em>p<sub>H1</sub></em>")
           is the probability of any one subject getting a correct result. The
           third ("<em>&sigma;<sub>H1</sub></em>") is the standard deviation of
-          the probability distribution of H1. The fourth 
-          ("<em>beta<sub>H1</sub></em>") is the computed value of beta, 
-          or the probability of an inconclusive result. (This value of beta 
+          the probability distribution of H1. The fourth
+          ("<em>beta<sub>H1</sub></em>") is the computed value of beta,
+          or the probability of an inconclusive result. (This value of beta
           is the same as on the left-hand side of the worksheet.) </p>
 
-        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>, 
-          under "<b>H1 simluation:</b>", there are four values. The first 
+        <p> On the right-hand side of <a href="#Worksheet5">Worksheet 5</a>,
+          under "<b>H1 simluation:</b>", there are four values. The first
           ("avg.  corr.") is the average number of correct responses in this
           simulation of H1, the second ("<em>p<sub>avgH1</sub></em>") is
           the average proportion of correct responses (i.e. the average
@@ -1448,19 +1436,17 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           not require demonstrating statistical significance. What happens
           when we conduct a test and the results don't demonstrate
           significance? Rather than give up entirely, we can use the <a
-          href="https://en.wikipedia.org/wiki/Likelihood-ratio_test">likelihood
-          ratio</a> to interpret our result. The likelihood ratio tells
+          href="https://en.wikipedia.org/wiki/Likelihood-ratio_test" target="_parent">likelihood ratio</a> to interpret our result. The likelihood ratio tells
           us how likely one hypothesis is over the other, given the
           result. There is no threshold for acceptance, but the higher the
           ratio, the more compelling the result is. </p>
 
-        <p> The <a href="https://en.wikipedia.org/wiki/Likelihood_function">likelihood</a>
+        <p> The <a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_parent">likelihood</a>
           of a hypothesis given a result is defined as the probability
           of the result given the hypothesis. In mathematical notation,
-          <em>L</em>(<em>H</em> | <em>C</em>) = <em>p</em>(<em>C</em> | 
-          <em>H</em>). The likelihood function, <em>L</em>, 
-          "<a href="https://en.wikipedia.org/wiki/Likelihood_function">measures
-          the goodness of fit of a statistical model to a sample of
+          <em>L</em>(<em>H</em> | <em>C</em>) = <em>p</em>(<em>C</em> |
+          <em>H</em>). The likelihood function, <em>L</em>,
+          "<a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_parent">measures the goodness of fit of a statistical model to a sample of
           data</a>". When talking about probabilities, the hypothesis
           is fixed (or given) and we evaluate the possible outcomes.
           With likelihoods, the outcome is fixed (e.g. 13 correct
@@ -1473,13 +1459,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           equally likely. The likelihood ratio of H1 to H0 is the
           likelihood of H1 divided by the likelihood of H0, or <em>L</em>(H1
           | <em>C</em>) / <em>L</em>(H0 | <em>C</em>). (For those of
-          you who are into 
-          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics">Bayesian
-          statistics</a>, the likelihood ratio is the same as the 
-          <a href="https://rss.onlinelibrary.wiley.com/doi/pdf/10.1111/j.1740-9713.2006.00204.x">Bayes factor</a> 
-          when constraining the Bayes factor hypotheses to single outcomes.) 
-          If <em>L</em>(H1 | <em>C</em>) is 0.132 and <em>L</em>(H0 | 
-          <em>C</em>) is 0.025, then we can say that H1 is 5.3 times more 
+          you who are into
+          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_parent">Bayesian statistics</a>,
+          the likelihood ratio is the same as the
+          <a href="https://rss.onlinelibrary.wiley.com/doi/pdf/10.1111/j.1740-9713.2006.00204.x" target="_parent">Bayes factor</a>
+          when constraining the Bayes factor hypotheses to single outcomes.)
+          If <em>L</em>(H1 | <em>C</em>) is 0.132 and <em>L</em>(H0 |
+          <em>C</em>) is 0.025, then we can say that H1 is 5.3 times more
           likely than H0 given the test result <em>C</em>. </p>
 
         <p> We are using <em>d'</em>=0 for H0 and <em>d'</em>=1 for
@@ -1496,13 +1482,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           interesting to consider a range of possible <em>d'</em>
           values for H1, such as <em>d'</em> &ge; 1. However, doing this
           (using the Bayes factor), requires knowing or assuming <a
-            href="https://en.wikipedia.org/wiki/Prior_probability">prior
-            probabilities</a> that we don't really know anything about.
+            href="https://en.wikipedia.org/wiki/Prior_probability" target="_parent">prior probabilities</a>
+          that we don't really know anything about.
           To keep things simple, we can focus on two specific values of
           <em>d'</em>. </p>
 
-        <p> In <a href="#Section6">Section 6</a>, I named the region where 
-          there was a likely experimental error as <em>R<sub>L(EE)</sub></em>. 
+        <p> In <a href="#Section6">Section 6</a>, I named the region where
+          there was a likely experimental error as <em>R<sub>L(EE)</sub></em>.
           H1 specifies that <i>d'</i> equals some value <i>D</i> (usually
           1 in this tutorial).&nbsp; Considering the region where the
           likelihood of H0 is greater than H1, this is equivalent to
@@ -1516,48 +1502,48 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           and for each value of <em>C</em> in this region we can
           determine how much more likely H1 is than H0. </p>
 
-        <p> <a href="#Worksheet6">Worksheet 6</a> shows the same two binomial 
-          distributions from <a href="#Worksheet5">Worksheet 5</a>, one for 
-          H0 (in red) and one for H1 (in light green). In addition to 
-          showing <em>R<sub>L(EE)</sub></em> with a horizontal orange line, 
-          this worksheet shows the region where <em>d'</em> is more likely to 
-          be zero, <em>R<sub>L(d'=0)</sub></em>, and the region where 
-          <em>d'</em> is more likely to be the value specified for H1, 
-          <em>R<sub>L(d'=D)</sub></em>.  Vertical dashed orange lines are 
-          placed at the boundaries of these regions for greater visual 
+        <p> <a href="#Worksheet6">Worksheet 6</a> shows the same two binomial
+          distributions from <a href="#Worksheet5">Worksheet 5</a>, one for
+          H0 (in red) and one for H1 (in light green). In addition to
+          showing <em>R<sub>L(EE)</sub></em> with a horizontal orange line,
+          this worksheet shows the region where <em>d'</em> is more likely to
+          be zero, <em>R<sub>L(d'=0)</sub></em>, and the region where
+          <em>d'</em> is more likely to be the value specified for H1,
+          <em>R<sub>L(d'=D)</sub></em>.  Vertical dashed orange lines are
+          placed at the boundaries of these regions for greater visual
           clarity. </p>
 
-        <p> In the top left corner of this worksheet, the values of 
-          <em>d'</em> (for H1), the type of test, number of subjects, 
-          <em>alpha<sub>H0</sub></em>, <em>beta<sub>H1</sub></em>, and the 
-          power are specified. Below this, you can enter the number of 
-          correct responses in a test, <em>C</em>. (Sorry, there are no 
-          more simulations in this tutorial.) A vertical gray bar is plotted 
+        <p> In the top left corner of this worksheet, the values of
+          <em>d'</em> (for H1), the type of test, number of subjects,
+          <em>alpha<sub>H0</sub></em>, <em>beta<sub>H1</sub></em>, and the
+          power are specified. Below this, you can enter the number of
+          correct responses in a test, <em>C</em>. (Sorry, there are no
+          more simulations in this tutorial.) A vertical gray bar is plotted
           at the specified value of <em>C</em>. </p>
 
-        <p> On the right-hand side of <a href="#Worksheet6">Worksheet 6</a>, 
-          under "<b>H0:</b>", there are the same three values as in 
-          <a href="#Worksheet5">Worksheet 5</a>. In addition, there is 
-          "<em>pval<sub>H0</sub></em>", which shows the <em>p</em> value 
-          for an experiment with this value of <em>C</em>.  If this 
+        <p> On the right-hand side of <a href="#Worksheet6">Worksheet 6</a>,
+          under "<b>H0:</b>", there are the same three values as in
+          <a href="#Worksheet5">Worksheet 5</a>. In addition, there is
+          "<em>pval<sub>H0</sub></em>", which shows the <em>p</em> value
+          for an experiment with this value of <em>C</em>.  If this
           <em>p</em> value is less than or equal to <em>p<sub>RejH0</sub></em>,
           then H0 can be rejected. Under "<b>H1:</b>", there are three
-          of the same values from <a href="#Worksheet5">Worksheet 5</a>. 
-          (The value of <em>&sigma;<sub>H1</sub></em> has been omitted 
+          of the same values from <a href="#Worksheet5">Worksheet 5</a>.
+          (The value of <em>&sigma;<sub>H1</sub></em> has been omitted
           because it is less interesting.) </p>
 
-        <p> Finally, on the right-hand side of 
+        <p> Finally, on the right-hand side of
           <a href="#Worksheet5">Worksheet 5</a>, under "<b>Likelihoods:</b>",
           there are three values. The first ("<em>L</em>(H0)") is the
-          likelihood of H0 given the result <em>C</em>. The second 
-          ("<em>L</em>(H1)") is the likelihood of H1 given the result 
-          <em>C</em>. The third value ("LR:") specifies which hypothesis 
-          is more likely and the likelihood ratio for this hypothesis against 
+          likelihood of H0 given the result <em>C</em>. The second
+          ("<em>L</em>(H1)") is the likelihood of H1 given the result
+          <em>C</em>. The third value ("LR:") specifies which hypothesis
+          is more likely and the likelihood ratio for this hypothesis against
           the other. (Because the more likely hypothesis is specified, this
           likelihood ratio will always be greater than or equal to 1.)
           If this likelihood ratio is greater than 200, the value "200+"
-          is shown for visual clarity, because 
-          <a href="https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1167&amp;context=jps">anything over 150 is generally considered "decisive"</a>. 
+          is shown for visual clarity, because
+          <a href="https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1167&amp;context=jps" target="_parent">anything over 150 is generally considered "decisive"</a>.
           For example, a value such as "H1 = 18.51" says that the <em>d'</em>
           value from H1 is 18.51 times more likely than a <em>d'</em>
           value of 0. A value such as "H0 = 2.24" says that a <em>d'</em>
@@ -1628,11 +1614,11 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
       <br>
 
       <div class="TEXT">
-        <h2 id="Section9">9. Significance Testing: Is <em>d'</em> Greater 
+        <h2 id="Section9">9. Significance Testing: Is <em>d'</em> Greater
         Than One?</h2>
-        <p> The use of the likelihood ratio in 
-          <a href="#Worksheet6">Worksheet 6</a> illustrates one problem with 
-          these ratios at higher correct-response rates. If, for example, 
+        <p> The use of the likelihood ratio in
+          <a href="#Worksheet6">Worksheet 6</a> illustrates one problem with
+          these ratios at higher correct-response rates. If, for example,
           we have 20 subjects in a 3-AFC test when H1 is <em>d'</em>=1.0,
           and there are 19 correct responses, then the likelihood ratio is
           (correctly) very large in favor of H1. But with 19 correct
@@ -1641,7 +1627,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           strongly suggest that neither H0 nor H1 are true. If the true
           value of <em>d'</em> isn't even close to either hypothesis,
           then the likelihood ratio of the two hypotheses is in some sense a
-          "<a href="https://en.wikipedia.org/wiki/Misdirection_(magic)">misdirection</a>,"
+          "<a href="https://en.wikipedia.org/wiki/Misdirection_(magic)" target="_parent">misdirection</a>,"
           forcing us to look over here (at H0 and H1) when the interesting
           information is over there (a much larger <em>d'</em>).
           Fortunately, there is an easy solution to this problem that we
@@ -1657,8 +1643,8 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> The previous paragraph implies that we could have skipped
           Sections 7 and 8 entirely, and simply used <em>d'</em>=1 as
-          our null hypothesis in <a href="#Section6">Section 6</a>. 
-          However, it is often difficult enough to demonstrate significance 
+          our null hypothesis in <a href="#Section6">Section 6</a>.
+          However, it is often difficult enough to demonstrate significance
           for the hypothesis that <em>d'</em> is greater than zero. Presumably
           it will be a rare event when we demonstrate that <em>d'</em>
           is probably greater than 1. By keeping H0 as <em>d'</em>=0,
@@ -1667,18 +1653,18 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           a large or small number of correct responses. </p>
 
         <p> Testing multiple hypotheses at the same time is possible,
-          but it is important to understand the 
-          <a href="https://www.stat.berkeley.edu/~mgoldman/Section0402.pdf">implications</a>.
+          but it is important to understand the
+          <a href="https://www.stat.berkeley.edu/~mgoldman/Section0402.pdf" target="_parent">implications</a>.
           A common pitfall with testing multiple hypotheses is that as
           you add more and more comparisons, it becomes more and more
           likely that at least one hypothesis will demonstrate
-          significance. (This effect has been nicely illustrated by 
-          <a href="https://en.wikipedia.org/wiki/Randall_Munroe">Randall Munroe</a> 
-          at <a href="https://xkcd.com/882/">XKCD</a>.) If the success of 
-          an experiment (or a series of experiments) is dependent on
-          demonstrating significance in only one case, then testing
-          multiple hypotheses often makes it (artificially) easier to
-          succeed. In this case, however, testing both H0 and H1 doesn't
+          significance. (This effect has been nicely illustrated by
+          <a href="https://en.wikipedia.org/wiki/Randall_Munroe" target="_parent">Randall Munroe</a>
+          at <a href="https://xkcd.com/882/" target="_parent">XKCD</a>.)
+          If the success of an experiment (or a series of experiments) is
+          dependent on demonstrating significance in only one case, then
+          testing multiple hypotheses often makes it (artificially) easier
+          to succeed. In this case, however, testing both H0 and H1 doesn't
           change the number of times we demonstrate a significant
           result, relative to testing only H0. If we reject H1 we always
           reject H0, and so rejecting H1 implies rejecting H0. If we
@@ -1699,8 +1685,8 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           this approach to its logical extreme and test all possible
           values of <em>d'</em>, and then select the hypothesis that
           best fits the data? The first reason is that this is
-          confounding a 
-          <a href="https://en.wikipedia.org/wiki/Hypothesis"><em>hypothesis</em></a>
+          confounding a
+          <a href="https://en.wikipedia.org/wiki/Hypothesis" target="_parent"><em>hypothesis</em></a>
           (which, by definition, is made before conducting a test) with
           a <em>result</em>. If we specify our hypothesis based on the
           outcome of a test, then it is a result, not a hypothesis. We
@@ -1716,38 +1702,38 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           some value <em>D</em> (usually 1.0 in this tutorial), then
           there are four non-overlapping regions: (1) the region where
           there is likely experimental error (<em>R<sub>L(EE)</sub></em>)
-          (and if there is no error, then the likelihood ratio favors 
-          <em>d'</em>=0), (2) the region where it's more likely that 
-          <em>d'</em> is 0 than <em>D</em> (<em>R<sub>L(d'=0)</sub></em>), 
-          (3) the region where it's more likely that <em>d'</em> is 
-          <em>D</em> than 0 (<em>R<sub>L(d'=D)</sub></em>), and (4) using 
+          (and if there is no error, then the likelihood ratio favors
+          <em>d'</em>=0), (2) the region where it's more likely that
+          <em>d'</em> is 0 than <em>D</em> (<em>R<sub>L(d'=0)</sub></em>),
+          (3) the region where it's more likely that <em>d'</em> is
+          <em>D</em> than 0 (<em>R<sub>L(d'=D)</sub></em>), and (4) using
           NHST to reject H1, the region where we conclude that <em>d'</em> is
           probably greater than <em>D</em> (<em>R<sub>L(d'&gt;D)</sub></em>).
-          Another region has a boundary within either 
-          <em>R<sub>L(d'=0)</sub></em> or <em>R<sub>L(d'=D)</sub></em>, 
-          namely the region where we conclude that <em>d'</em> is probably 
-          greater than 0 (from <a href="#Section6">Section 6</a>). For the 
-          regions <em>R<sub>L(d'=0)</sub></em> and 
+          Another region has a boundary within either
+          <em>R<sub>L(d'=0)</sub></em> or <em>R<sub>L(d'=D)</sub></em>,
+          namely the region where we conclude that <em>d'</em> is probably
+          greater than 0 (from <a href="#Section6">Section 6</a>). For the
+          regions <em>R<sub>L(d'=0)</sub></em> and
           <em>R<sub>L(d'=D)</sub></em>, the likelihood ratio can give us
           more detail about the relative strength of the two hypotheses.
           Note that if a result is in <em>R<sub>L(d'=D)</sub></em>,
           that doesn't mean that it's more likely that <em>d'</em>=<em>D</em>
           than <em>d'</em>&gt;<em>D</em>; it just means that the
-          evidence isn't strong enough to reject the hypothesis that 
+          evidence isn't strong enough to reject the hypothesis that
           <em>d'</em>=<em>D</em>. </p>
 
-        <p> <a href="#Worksheet7">Worksheet 7</a> is very similar to 
+        <p> <a href="#Worksheet7">Worksheet 7</a> is very similar to
           <a href="#Worksheet6">Worksheet 6</a>, but the region
           where it's more likely that <em>d'</em>=<em>D</em> than 0 has
           been reduced, and there is a new region where it's likely that
           <em>d'</em>&gt;<em>D</em>. The worksheet also displays
           different information about H1. In particular, the "expect"
           and <em>beta<sub>H1</sub></em> values are no longer displayed
-          (for conciseness). The figure now shows (a) 
-          <em>thresh<sub>H1</sub></em>, the threshold for rejecting H1 
-          (expressed as the number of subjects), (b) 
-          <em>p<sub>RejH1</sub></em>, the probability of incorrectly 
-          rejecting H1 using this threshold when H1 is true, and (c) 
+          (for conciseness). The figure now shows (a)
+          <em>thresh<sub>H1</sub></em>, the threshold for rejecting H1
+          (expressed as the number of subjects), (b)
+          <em>p<sub>RejH1</sub></em>, the probability of incorrectly
+          rejecting H1 using this threshold when H1 is true, and (c)
           <em>pval<sub>H1</sub></em>, the <em>p</em> value for
           an experiment with this value of <em>C</em> given H1. If this
           <em>p</em> value is less than or equal to <em>p<sub>RejH1</sub></em>,
@@ -1825,11 +1811,11 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
       <div class="TEXT">
         <h2 id="Section10">10. Estimating <em>d'</em> and Confidence Intervals</h2>
-          <p> We may want to estimate <em>d'</em> from our test result, 
-          <em>C</em>.  Our current experiment might be a pilot study, and 
-          we want to estimate <i>d'</i> in order to use a well-motivated 
-          value of <em>d'</em> when estimating the power of a subsequent 
-          (and possibly larger) experiment (as discussed in 
+          <p> We may want to estimate <em>d'</em> from our test result,
+          <em>C</em>.  Our current experiment might be a pilot study, and
+          we want to estimate <i>d'</i> in order to use a well-motivated
+          value of <em>d'</em> when estimating the power of a subsequent
+          (and possibly larger) experiment (as discussed in
           <a href="#Section7">Section 7</a>). Maybe we've run a trial
           with 200 subjects and we got 160 correct responses, far greater
           than we'd get with a <em>d'</em> of 1.0, and we want some
@@ -1849,22 +1835,22 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           according to our model, a perceptual distance with the true
           value of <em>d'</em>. We don't know if our test result is at
           the peak of this binomial distribution associated with <em>d'</em>,
-          but <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Book%3A_Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.02%3A_The_Binomial_Distribution">the best (maximum-likelihood) estimate we have of <em>p</em> for this test is <em>C</em>/<em>N</em></a> 
-          which we can call <em>p<sub>est</sub></em>. Because this test has 
-          the true value of <em>d'</em>, the best estimate of 
-          <em>p<sub>d'</sub></em> is the same as <em>p<sub>est</sub></em>, 
-          namely <em>C</em>/<em>N</em>.  The larger the value of <em>N</em>, 
-          the better we expect this estimate to be, as discussed in 
+          but <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Book%3A_Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.02%3A_The_Binomial_Distribution" target="_parent">the best (maximum-likelihood) estimate we have of <em>p</em> for this test is <em>C</em>/<em>N</em></a>
+          which we can call <em>p<sub>est</sub></em>. Because this test has
+          the true value of <em>d'</em>, the best estimate of
+          <em>p<sub>d'</sub></em> is the same as <em>p<sub>est</sub></em>,
+          namely <em>C</em>/<em>N</em>.  The larger the value of <em>N</em>,
+          the better we expect this estimate to be, as discussed in
           <a href="#Section5">Section 5</a>. </p>
 
         <p> Given <em>N</em> and the test type, every value of <em>d'</em>
-          yields a unique value of <em>p</em>. Previously we've computed 
-          <em>p</em> from <em>d'</em>, <em>N</em>, and the test type 
-          (Sections 3 and 4, using 
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf">equations from Christensen</a>). 
-          We can determine the value of <em>d'</em> that corresponds with 
-          <em>p<sub>est</sub></em> by computing <em>p</em> for a large 
-          number of values of <em>d'</em> and finding the closest match 
+          yields a unique value of <em>p</em>. Previously we've computed
+          <em>p</em> from <em>d'</em>, <em>N</em>, and the test type
+          (Sections 3 and 4, using
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">equations from Christensen</a>).
+          We can determine the value of <em>d'</em> that corresponds with
+          <em>p<sub>est</sub></em> by computing <em>p</em> for a large
+          number of values of <em>d'</em> and finding the closest match
           of these <em>p</em> values to <em>p<sub>est</sub></em>.
           The value of <em>d'</em> associated with this closest match
           to <em>p<sub>est</sub></em> is the maximum-likelihood
@@ -1890,11 +1876,10 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           The more atypical our result <em>C</em> is, compared with a
           large number of similar (but hypothetical) tests, the worse
           our estimate is. We will never know how good our estimate is,
-          but we can use <a href="https://en.wikipedia.org/wiki/Confidence_interval">confidence intervals</a> 
-          to get some sense of the likely range of <em>d'</em> values. 
-          Before getting to the confidence interval, we should define the 
-          "<a href="https://www.statisticshowto.com/population-mean/">population
-            mean</a>". If we had measurements of <em>C</em> from every
+          but we can use <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_parent">confidence intervals</a>
+          to get some sense of the likely range of <em>d'</em> values.
+          Before getting to the confidence interval, we should define the
+          "<a href="https://www.statisticshowto.com/population-mean/" target="_parent">population mean</a>". If we had measurements of <em>C</em> from every
           human on earth taking multiple tests, each with the true value
           of <em>d'</em>, we could compute the mean value of <em>C</em>
           associated with <em>d'</em> over all humans; this mean is the
@@ -1908,38 +1893,37 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           in our case, the expected number of correct responses, <em>C</em>.
           In particular, if one were to conduct the same experiment
           again with the same number of subjects and otherwise identical
-          circumstances, the 95% confidence interval says that 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/">95%
-            of the time that one does such an experiment, the confidence
-            interval will contain the population mean</a>. 
-          Once we have a lower limit and upper limit for the expected number 
-          of correct responses (based on the confidence interval), we can 
-          compute the lower and upper limit for the proportion of correct 
-          responses (by dividing by the number of subjects), and we can use 
-          the same technique to map from a probability of success to 
-          <em>d'</em>. We can therefore use the low and high estimates of 
-          <em>C</em> to determine the low and high values of <em>d'</em> 
+          circumstances, the 95% confidence interval says that
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_parent">95% of the time that one does such an experiment, the confidence
+            interval will contain the population mean</a>.
+          Once we have a lower limit and upper limit for the expected number
+          of correct responses (based on the confidence interval), we can
+          compute the lower and upper limit for the proportion of correct
+          responses (by dividing by the number of subjects), and we can use
+          the same technique to map from a probability of success to
+          <em>d'</em>. We can therefore use the low and high estimates of
+          <em>C</em> to determine the low and high values of <em>d'</em>
           associated with the confidence interval. </p>
 
         <p> There are many ways to compute a confidence interval. My
-          favorite is the 
-          "<a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/MIT18_05S14_Reading24.pdf">bootstrap confidence interval</a>". 
-          It has the advantages of not making assumptions about the 
-          underlying 
-          <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions">distribution of the data</a>, 
-          it doesn't assume that the interval is symmetric around the 
-          <a href="https://en.wikipedia.org/wiki/Point_estimation">point estimate</a>, 
-          and it's very easy to implement on a computer.  The worksheet 
+          favorite is the
+          "<a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/MIT18_05S14_Reading24.pdf" target="_parent">bootstrap confidence interval</a>".
+          It has the advantages of not making assumptions about the
+          underlying
+          <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions" target="_parent">distribution of the data</a>,
+          it doesn't assume that the interval is symmetric around the
+          <a href="https://en.wikipedia.org/wiki/Point_estimation" target="_parent">point estimate</a>,
+          and it's very easy to implement on a computer.  The worksheet
           below uses bootstrapping to compute the confidence interval. </p>
 
-        <p> <a href="#Worksheet8">Worksheet 8</a>, below, is very similar 
-          to <a href="#Worksheet7">Worksheet 7</a>. In addition to specifying 
-          the number of correct responses, there is a field for specifying 
-          the confidence interval. The default value, 95%, should be suitable 
-          for most cases. On the right-hand side, under 
-          <b><em>d'</em> Estimates:</b>, there are three rows. The first 
-          row shows the 
-          (<a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">maximum-likelihood</a>,
+        <p> <a href="#Worksheet8">Worksheet 8</a>, below, is very similar
+          to <a href="#Worksheet7">Worksheet 7</a>. In addition to specifying
+          the number of correct responses, there is a field for specifying
+          the confidence interval. The default value, 95%, should be suitable
+          for most cases. On the right-hand side, under
+          <b><em>d'</em> Estimates:</b>, there are three rows. The first
+          row shows the
+          (<a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation" target="_parent">maximum-likelihood</a>,
           or ML) estimate of <em>d'</em> based on the number of correct
           responses. The second row shows the lower estimate of expected
           correct responses based on the specified confidence interval,
@@ -2029,13 +2013,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
         <h2 id="Section11">11. Conclusion</h2>
         <p> This tutorial has presented a number of techniques for
           evaluating whether two stimuli are perceptually different or
-          not. If you're a fan of 
-          <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Ronald Fisher</a>, 
-          then go ahead and use only H0 and <i>alpha</i> in your analysis. 
-          (If you're really a fan, then 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/">be flexible with <i>alpha</i></a>.) 
-          If you prefer the 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/">hybrid Fisher and Neyman-Pearson approach</a> 
+          not. If you're a fan of
+          <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_parent">Ronald Fisher</a>,
+          then go ahead and use only H0 and <i>alpha</i> in your analysis.
+          (If you're really a fan, then
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_parent">be flexible with <i>alpha</i></a>.)
+          If you prefer the
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_parent">hybrid Fisher and Neyman-Pearson approach</a>
           described in <a href="#Section7">Section 7</a>,
           then use beta and the power of the test. If it makes you
           uncomfortable to consider rejecting H1, then don't attempt it.
@@ -2071,51 +2055,51 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           probabilities that H0 and H1 are true before conducting the
           experiment. Such probabilities can give us an even better
           picture of our data if we have them. In some fields it may be
-          possible to estimate these probabilities; for example, 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4448847/#RSOS140216C7">there may be only a 10% chance of a clinical trial being successful</a>,
-          and so p(H0) is 0.90 and p(H1) is 0.10. For perceptual testing, 
-          I'm not sure that these probabilities can be estimated very well 
-          in the general case, and so I've left them, and the whole world of 
-          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics">Bayesian estimation</a>, 
+          possible to estimate these probabilities; for example,
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4448847/#RSOS140216C7" target="_parent">there may be only a 10% chance of a clinical trial being successful</a>,
+          and so p(H0) is 0.90 and p(H1) is 0.10. For perceptual testing,
+          I'm not sure that these probabilities can be estimated very well
+          in the general case, and so I've left them, and the whole world of
+          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_parent">Bayesian estimation</a>,
             out of this tutorial. </p>
 
-        <p> It has been commented that 
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6945059/">researchers should publish not just the results that show success, but all results</a>. 
-          When simply testing H0, the story that "we did all this work and 
-          can conclude nothing" is not very interesting to the writer, the 
-          reviewer, or the reader. However, being able to say "we did all 
-          this work and can conclude that H0 is 5 times more likely than H1" 
-          is potentially more interesting and potentially more publishable.  
-          Or, saying that the experiment did not demonstrate significance 
-          with the available number of subjects but that the estimated value 
-          of <em>d'</em> is 1.46 may provide useful information to future 
-          researchers. One advantage of using likelihood ratios and 
-          maximum-likelihood estimates is that all results become, at some 
+        <p> It has been commented that
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6945059/" target="_parent">researchers should publish not just the results that show success, but all results</a>.
+          When simply testing H0, the story that "we did all this work and
+          can conclude nothing" is not very interesting to the writer, the
+          reviewer, or the reader. However, being able to say "we did all
+          this work and can conclude that H0 is 5 times more likely than H1"
+          is potentially more interesting and potentially more publishable.
+          Or, saying that the experiment did not demonstrate significance
+          with the available number of subjects but that the estimated value
+          of <em>d'</em> is 1.46 may provide useful information to future
+          researchers. One advantage of using likelihood ratios and
+          maximum-likelihood estimates is that all results become, at some
           level, interesting and therefore potentially publishable. </p>
 
         <p> At the beginning of this tutorial, we asked a simple question:
           "Is there a perceptual difference between the two stimuli?".
-          Hopefully it is clear now that there is very rarely a definitive 
-          answer to this question. We can only answer it in terms of 
-          probabilities that need to be evaluated within the context of 
-          the testing procedure.  With a small number of subjects, the 
-          amount of uncertainty in the results may be large.  With a very 
+          Hopefully it is clear now that there is very rarely a definitive
+          answer to this question. We can only answer it in terms of
+          probabilities that need to be evaluated within the context of
+          the testing procedure.  With a small number of subjects, the
+          amount of uncertainty in the results may be large.  With a very
           large number of subjects, we have better confidence in our
           estimates and conclusions, but we need to be sure that the
           result is meaningful as well as significant.  For example,
           we may be confident that <em>d'</em> is 0.25, but simply
           rejecting the hypothesis that <em>d'</em> is zero doesn't mean
           that a value of 0.25 is perceptually important.  Finally, all
-          of these analysis methods are only as good as the models they are 
+          of these analysis methods are only as good as the models they are
           built upon, and different assumptions in the models or details
-          of the test procedures can lead to different results.  Therefore, 
-          it's important to understand the test results within the context 
+          of the test procedures can lead to different results.  Therefore,
+          it's important to understand the test results within the context
           of both the testing details and the model assumptions. </p>
 
         <h2 id="Section12">12. Final Worksheet</h2>
-        <p> Sometimes you may want to use this web page just to try different 
-          testing scenarios. <a href="#Worksheet9">Worksheet 9</a> allows you 
-          to specify all of the relevant test parameters (<em>d'</em>, test 
+        <p> Sometimes you may want to use this web page just to try different
+          testing scenarios. <a href="#Worksheet9">Worksheet 9</a> allows you
+          to specify all of the relevant test parameters (<em>d'</em>, test
           type, number of subjects, <em>alpha<sub>H0</sub></em>), the number of
           correct responses, and the desired confidence interval all in
           one worksheet.</p>

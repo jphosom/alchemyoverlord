@@ -133,32 +133,32 @@ var params = {
         "veryfine": [
             {
                 "param":    "IAA_LF_boil",
-                "default":  0.54,
-                "low":      0.50,
-                "high":     0.56,
+                "default":  0.50,
+                "low":      0.48,
+                "high":     0.54,
                 "inc":      0.02,
             },
 
             {
                 "param":    "oAA_boilFactor",
-                "default":  0.10,
-                "low":      0.08,
-                "high":     0.12,
+                "default":  0.12,
+                "low":      0.10,
+                "high":     0.14,
                 "inc":      0.01,
             },
 
             {
                 "param":    "oAA_storageFactor",
-                "default":  0.30,
-                "low":      0.28,
-                "high":     0.34,
+                "default":  0.40,
+                "low":      0.30,
+                "high":     0.50,
                 "inc":      0.02,
             },
 
             {
                 "param":    "AA_limit_minLimit",
-                "default":  180.0,
-                "low":      160.0,
+                "default":  200.0,
+                "low":      180.0,
                 "high":     220.0,
                 "inc":      20.0,
             },
@@ -177,7 +177,7 @@ var params = {
             {
                 "param":    "IAA_LF_boil",
                 "default":  0.52,
-                "low":      0.51,
+                "low":      0.50,
                 "high":     0.53,
                 "inc":      0.01,
             },
@@ -194,7 +194,7 @@ var params = {
                 "param":    "oAA_storageFactor",
                 "default":  0.32,
                 "low":      0.31,
-                "high":     0.33,
+                "high":     0.34,
                 "inc":      0.01,
             },
 
@@ -202,7 +202,7 @@ var params = {
                 "param":    "AA_limit_minLimit",
                 "default":  200.0,
                 "low":      190.0,
-                "high":     210.0,
+                "high":     220.0,
                 "inc":      10.0,
             },
 
@@ -210,7 +210,7 @@ var params = {
                 "param":    "AA_limit_maxLimit",
                 "default":  550.0,
                 "low":      540.0,
-                "high":     560.0,
+                "high":     580.0,
                 "inc":      10.0,
             },
         ],

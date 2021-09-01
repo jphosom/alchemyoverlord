@@ -1,8 +1,8 @@
 // plotLibrary.js : library of functions for plotting 2D data
 //
 // Copyright (C) 2021  John-Paul Hosom
-// 
-//  This file plotLibrary.js is free software: you can redistribute it and/or 
+//
+//  This file plotLibrary.js is free software: you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
@@ -17,7 +17,7 @@
 //
 // Contact information: alchemyoverlord © yahoo · com
 //
-// See the 'testPlotLibrary' function below for an example of how this plotting 
+// See the 'testPlotLibrary' function below for an example of how this plotting
 // library can be used.
 //
 // Version 1.0.1 : January 9, 2021   (JPH)
@@ -50,7 +50,7 @@ function createPlotObject() {
                title: "Figure 1.", paddingPx: 6,
                lowerLeftBoundsWidthPx: 1, upperRightBoundsWidthPx: 0,
                canvasColor: "white", plotAreaColor: "white",
-               legend: [], legendPosition: [0.0, 10.0], legendBorderPx: 0, 
+               legend: [], legendPosition: [0.0, 10.0], legendBorderPx: 0,
                x2function: undefined, x2Precision: 1, x2Label: "",
                data: []};
   return plot;
@@ -1415,7 +1415,7 @@ function constructInnerPlotBackground(ctx, plot, tics, grid, values) {
       ctx.beginPath();
       ctx.rect(mapX(plot, plot.legendPosition[0]),
                mapY(plot, plot.legendPosition[1]),
-               maxWidthPx + 4*plot.paddingPx + graphicsWidthPx, 
+               maxWidthPx + 4*plot.paddingPx + graphicsWidthPx,
                yPx - mapY(plot, plot.legendPosition[1]) + 1.5*plot.paddingPx);
       ctx.stroke();
     }
@@ -1751,9 +1751,9 @@ function internalPlotBarData(ctx, plot, dataIdx) {
   var lineStyleIdx = 0;
   var lineWidthPx = 0;
   var pIdx = 0;
-  var x1Px = 0; 
-  var x2Px = 0; 
-  var y1Px = 0; 
+  var x1Px = 0;
+  var x2Px = 0;
+  var y1Px = 0;
   var y2Px = 0;
 
   if (dataIdx < 0 || plot.data[dataIdx].points.length <= 0) {

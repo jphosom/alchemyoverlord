@@ -8,6 +8,7 @@
 // Version 1.2.2 : Dec 29, 2018 : add support for 'select', float or string
 // Version 1.3.2 : Feb 20, 2020 : add support for saving/loading files
 // Version 1.3.3 : Nov 22, 2020 : add tsp/ml conversion; minor cleanup
+// Version 1.3.4 : Aug 22, 2021 : add meters/feet, Plato conversion; cleanup
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -26,6 +27,8 @@ var common = common || {};
 //   . updateHTML()
 //
 //   UNIT CONVERSION FUNCTIONS:
+//   . convertMetersToFeet()
+//   . convertFeetToMeters()
 //   . convertCmToInches()
 //   . convertInchesToCm()
 //   . convertLitersToGallons()
@@ -38,6 +41,8 @@ var common = common || {};
 //   . convertCelsiusToKelvin()
 //   . convertOuncesToGrams()
 //   . convertGramsToOunces()
+//   . convertSGToPlato()
+//   . convertPlatoToSG()
 //   . convertTspToMl()
 //   . convertMlToTsp()
 //
@@ -119,7 +124,7 @@ validateFloatOrString = function(variable, input) {
   }
 
   check.valid = false;
-  if (!isNaN(input)) {
+  if (!isNaN(input) && input.length != 0) {
     inputValue = Number(input);
     check.valid = true;
     if (inputValue < variable.min || inputValue > variable.max) {
@@ -215,9 +220,9 @@ this.set = function(variable, haveUserInput) {
       (haveUserInput && !check.valid && !check.useDefaultValue))) {
     saved = common.getSavedValue(variable);
     variable.value = saved.value;
-    // if ("precision" in variable) {
-      // variable.precision = saved.precision;
-    // }
+    if ("precision" in variable) {
+      variable.precision = saved.precision;
+    }
     variable.userSet = 1;
     console.log("setting value to saved value: " + variable.value);
   } else if (!haveUserInput ||
@@ -231,6 +236,10 @@ this.set = function(variable, haveUserInput) {
     variable.value = defaultValue;
     variable.userSet = 0;
     if ("precision" in variable) {
+      if (variable.precision < variable.minPrecision) {
+        variable.precision = variable.minPrecision;
+      }
+    } else if ("minPrecision" in variable) {
       variable.precision = variable.minPrecision;
     }
   } else {
@@ -340,14 +349,20 @@ this.set = function(variable, haveUserInput) {
 //------------------------------------------------------------------------------
 
 this.updateHTML = function(variable) {
+  var isNumber = true;
   var outputNumber = 0.0;
 
-  // console.log("UPDATING HTML for " + variable.id);
+  // console.log("UPDATING HTML for " + variable.id +
+               // " with value " + variable.value);
+  isNumber = false;
   outputNumber = variable.value;
-  if (!isNaN(outputNumber)) outputNumber = parseFloat(outputNumber);
+  if (!isNaN(outputNumber) && outputNumber != "") {
+    outputNumber = parseFloat(outputNumber);
+    isNumber = true;
+    }
 
   // convert output to imperial units, if necessary
-  if ("convertToImperial" in variable &&
+  if (isNumber && "convertToImperial" in variable &&
       window[variable.parent]["units"] &&
       window[variable.parent]["units"].value == "imperial") {
     outputNumber = variable.convertToImperial(outputNumber);
@@ -355,14 +370,14 @@ this.updateHTML = function(variable) {
 
   // format the output properly: set precision, variable precision, int,
   // or nothing specific.  Convert to string.
-  if ("precision" in variable && variable.precision >= 0) {
+  if ("precision" in variable && variable.precision >= 0 && isNumber) {
     // console.log("setting precision to " + variable.precision);
     if (!isNaN(outputNumber)) {
       variable.display = outputNumber.toFixed(variable.precision);
     } else {
       variable.display = variable.value;
     }
-  } else if ("precision" in variable && variable.precision < 0) {
+  } else if ("precision" in variable && variable.precision < 0 && isNumber) {
     var precision = variable.precision * -1;
     // console.log("precision initially " + precision);
     while (outputNumber != 0 && outputNumber.toFixed(precision) == 0) {
@@ -403,6 +418,16 @@ this.updateHTML = function(variable) {
 
 //------------------------------------------------------------------------------
 // UNIT CONVERSION
+
+this.convertMetersToFeet = function(input) {
+  var output = input * 3.280839895;
+  return output;
+}
+
+this.convertFeetToMeters = function(input) {
+  var output = input / 3.280839895;
+  return output;
+}
 
 this.convertCmToInches = function(input) {
   var output = input / 2.54;
@@ -461,6 +486,20 @@ this.convertOuncesToGrams = function(input) {
 
 this.convertGramsToOunces = function(input) {
   var output = input / 28.3496;
+  return output;
+}
+
+this.convertSGToPlato = function(input) {
+  // formula from Jean De Clerck's A Textbook of Brewing (1957)
+  // https://beerandbrewing.com/specific-gravity-or-just-a-matter-of-degree/
+  var output = (-205.347*input*input) + (668.72*input) - 463.37;
+  return output;
+}
+
+this.convertPlatoToSG = function(input) {
+  // the inverse of De Clerck's formula
+  var output = (-668.72 + Math.sqrt(447186.438 + (821.388*(-463.37-input)))) /
+               -410.694;
   return output;
 }
 

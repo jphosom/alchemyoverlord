@@ -22,11 +22,13 @@ Version 1.2.12 : Oct 31, 2020
 Version 1.2.13 : Nov  1, 2020
 Version 1.2.14 : Nov  7, 2020
 Version 1.2.15 : Nov 22, 2020
+Version 1.2.16 : Aug 28, 2021
 ------------------------------------------------------------------------- --!>
 
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
   </head>
   <body>
 
@@ -41,41 +43,39 @@ Version 1.2.15 : Nov 22, 2020
   This calculator takes into account utilization from any hop stand or whirlpool,
   as well as the time it takes to cool the wort using an immersion chiller,
   counterflow chiller, or ice bath.
-  The (optional) use of an alpha-acid solubility limit is an additional modification
-  of the Tinseth formula, based on the experiments described in
+  There are a number of additional modifications to the Tinseth formula, all of which
+  are optional:
   <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
-  Hopping-Rate Correction Based on Alpha-Acid Solubility</a>.
-  The (optional) correction of IBU values based on wort pH is still another modification
-  of the Tinseth formula, based on the experiment described in
+  an alpha-acid solubility limit</a>,
   <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
-  The Effect of pH on Utilization and IBUs</a>.
-  The (optional) correction of IBU values based on wort clarity is described in
+  adjustment of IBUs based on wort pH</a>,
+  adjustment of IBUs based on
   <a href="https://alchemyoverlord.wordpress.com/2020/10/21/how-lautering-and-wort-clarity-affect-ibus/">
-  How Lautering and Wort Clarity Affect IBUs</a>.
-  The (optional) correction of IBU values based on krausen loss is yet another modification,
-  based on the experiment described in
+  wort clarity</a> and
   <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
-  The Impact of Krausen Loss on IBUs</a>.
-  The correction of IBU values when using pellets is yet another modification,
-  based on the experiments described in
-  <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
-  Hop Cones vs. Pellets: IBU Differences</a>.
+  krausen loss</a>,
+  and <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
+  adjustment based on the use of hop pellets instead of whole cones</a>.
   This calculator is described in more detail in
   <a href="https://alchemyoverlord.wordpress.com/2018/05/07/an-on-line-calculator-for-the-mibu-technique/">
   An On-Line Calculator for the mIBU Technique</a>.
   </p>
 
   <p>
-  For the temperature decay functions, default values are shown in
-  <font color="#94476b">grayish-red</font>.
+  Default values are shown in <font color="#94476b">grayish-red</font>.
   The defaults should yield reasonable results for most homebrewing scenarios.
-  The defaults are based on the wort volume, kettle diameter, and kettle opening
-  diameter.  For most homebrewers, the kettle diameter and the opening diameter
-  are the same (with an uncovered kettle).  The "exponential decay" function is
-  probably somewhat more accurate than the "linear" function, but the linear function
-  is easier to conceptualize (e.g. a decrease of 1.74&deg;F per minute).  If your
-  measured decrease in wort temperature is not modeled well by these defaults,
-  feel free to change them.  To get back to a default value, enter 'd'.
+  The temperature-decay defaults are based on the wort volume, kettle diameter,
+  and kettle opening diameter.  For most homebrewers, the kettle diameter and
+  the opening diameter are the same (with an uncovered kettle).  The
+  "exponential decay" function is probably somewhat more accurate than the
+  "linear" function, but the linear function is easier to conceptualize
+  (e.g. a decrease of 1.74&deg;F per minute).
+  </p>
+  <p>
+  To get back to a default value, enter 'd'.  To save settings to a text file
+  or load them from a file, use the "Save" and "Load" buttons near the bottom
+  of this page.  To clear all settings, use the "clear" button at the
+  bottom of this page.
   </p>
 
   <h3>Inputs:</h3>
@@ -302,13 +302,14 @@ cooling with immersion chiller.<br>
 <b>1.2.6</b>: (2019-Jun-28) Adjust volume use in computations; impacts hopping rates around 200ppm.<br>
 <b>1.2.7</b>: (2020-Feb-21) Add ability to save and load files.<br>
 <b>1.2.8</b>: (2020-Jun-09) Minor update to the effect of pH on auxiliary bittering compounds.<br>
-<b>1.2.9</b>: (2020-Sep-16) Many thanks to Marko Heyns at <a href="https://grainfather.com/">Grainfather</a> for finding several bugs related to the solubility limit and temperature decay!<br>
+<b>1.2.9</b>: (2020-Sep-16) Many thanks to Marko Heyns at <a href="https://grainfather.com/" target="_parent">Grainfather</a> for finding several bugs related to the solubility limit and temperature decay!<br>
 <b>1.2.10</b>: (2020-Sep-20) Update solubility-limit model and pH-loss model</br>
 <b>1.2.11</b>: (2020-Oct-21) Add adjustment factor for wort clarity<br>
 <b>1.2.12</b>: (2020-Oct-31) Add adjustment factor for pellets<br>
 <b>1.2.13</b>: (2020-Nov-01) Stop when degree of utilization reaches 0.01 instead of 0.001<br>
-<b>1.2.14</b>: (2020-Nov-07) Thanks again to Marko Heyns at <a href="https://grainfather.com/">Grainfather</a> for finding a bug with the use of pellets at high hopping rate!<br>
+<b>1.2.14</b>: (2020-Nov-07) Thanks again to Marko Heyns at <a href="https://grainfather.com/" target="_parent">Grainfather</a> for finding a bug with the use of pellets at high hopping rate!<br>
 <b>1.2.15</b>: (2020-Nov-22) Minor bug fixes, checking, and cleanup.<br>
+<b>1.2.16</b>: (2021-Aug-28) Minor HTML cleanup.<br>
 </small>
 
 <p>
@@ -325,7 +326,7 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2018-2020 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2018-2021 John-Paul Hosom, all rights reserved.
 While I hope that you find this page useful, I make no guarantees about
 the accuracy or suitability of the results.  Predicting IBUs is a bit
 of a "black art", because there are so many variables and there is so much

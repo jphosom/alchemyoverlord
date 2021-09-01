@@ -354,16 +354,25 @@ this.evaluateAllConditionsInExperiment = function(expName, expData,
     }
 
     // compute IBU value using SMPH model (make sure no verbosity)
-    SMPH.verbose = 0;
-    SMPH.integrationTime = 0.1;  // speed up search
-    SMPH.computeIBU_SMPH();
-    // uncomment the following to compute mIBU instead of SMPH:
-    // mIBU.verbose = 0;
-    // mIBU.integrationTime = 0.1;
-    // mIBU.computeIBU_mIBU();
-    // uncomment the following to compute Tinseth formula instead of SMPH:
-    // Tinseth.verbose = 0;
-    // Tinseth.computeIBU_Tinseth();
+    // edit the 1's and 0's to select a different model for evaluation
+    if (1) {
+      SMPH.verbose = 0;
+      SMPH.integrationTime = 0.1;  // speed up search
+      SMPH.computeIBU_SMPH();
+    } else if (0) {
+      mIBU.verbose = 0;
+      mIBU.integrationTime = 0.1;
+      mIBU.computeIBU_mIBU();
+    } else if (0) {
+      Tinseth.verbose = 0;
+      Tinseth.computeIBU_Tinseth();
+    } else if (0) {
+      Rager.verbose = 0;
+      Rager.computeIBU_Rager();
+    } else {
+      Garetz.verbose = 0;
+      Garetz.computeIBU_Garetz();
+    }
 
     // create output values and table of results
     diff = ibu.IBU - corrIBU;
@@ -780,6 +789,8 @@ this.init_SMPH_search = function() {
   document.getElementById('progress').innerHTML = progressText;
 
   Tinseth.initialize_Tinseth();  // need Tinseth for evaluating Tinseth model
+  Rager.initialize_Rager();      // need Rager for evaluating Rager model
+  Garetz.initialize_Garetz();    // need Garetz for evaluating Garetz model
   mIBU.initialize_mIBU();        // if using mIBU instead of SMPH
   SMPH.initialize_SMPH();
 
@@ -884,7 +895,7 @@ this.init_SMPH_search = function() {
       newList = [];
       for (kIdx = 0; kIdx < kvList.length; kIdx++) {
         item = kvList[kIdx];
-        for (v = evalParamList[idx].low; 
+        for (v = evalParamList[idx].low;
              v <= evalParamList[idx].high+(evalParamList[idx].inc/2);
              v += evalParamList[idx].inc) {
           v = Number(v.toFixed(3));

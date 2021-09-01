@@ -1,0 +1,109 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+sg_vol_time.html : HTML for AlchemyOverlord web page, SG/vol/time sub-page
+Written by John-Paul Hosom
+Copyright © 2021 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : August 15, 2021
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <a name="top_sgVolTime"></a>
+  <div id="content">
+  <h2>Specific Gravity, Volume, and Time Calculator</h2>
+  <p>This page provides a calculator for determining specific gravity,
+  volume, boil duration, and/or evaporation rate given other known values.
+  </p>
+  <p>
+  Enter values for parameters that are known.  When possible, the unknown
+  value(s) will be computed from the known values.  You can undo a value by
+  deleting it.  Known values (inputs) are shown in black font.  Computed values
+  (outputs) are shown in a <font color="#94476b">grayish-red</font> font.
+  </p>
+  <p>
+  You can enter volume in either liters or gallons (or any other unit of
+  measurement), and results will be displayed in the same units.
+  </p>
+
+  <h3>Parameters:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>initial SG</sub>:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.initSG" onchange="common.set(sgVolTime.initSG,1)"></td>
+    <td> &rarr; </td>
+    <td>final SG:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.finalSG" onchange="common.set(sgVolTime.finalSG,1)"></td>
+  </tr>
+  <tr>
+    <td>initial volume:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.initVol" onchange="common.set(sgVolTime.initVol,1)"></td>
+    <td> &rarr; </td>
+    <td>final volume:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.finalVol" onchange="common.set(sgVolTime.finalVol,1)"></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td>boil duration: </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.duration" onchange="common.set(sgVolTime.duration,1)"> <small>minutes</small></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td></td>
+   <td></td>
+   <td>evaporation rate: </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="sgVolTime.evapRate" onchange="common.set(sgVolTime.evapRate,1)"> <small>(volume-units per hour)</small></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  </div>
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/sgVolTime.js" charset="utf-8"></script>
+
+  <script>
+  sgVolTime.initialize_sgVolTime();
+  </script>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2021-Aug-15)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_sgVolTime">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord github home page</a>
+  <br>
+  <a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+  <p>
+  <p>
+  <center>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  <p>
+  <small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>

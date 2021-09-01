@@ -5,7 +5,7 @@
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
 //
-// Version 1.0.1 : November 22, 2018 -- May 9, 2021
+// Version 1.0.1 : November 22, 2018 -- August 28, 2021
 //         This code was initially based on the mIBU javascript code in this
 //         project.  The code was then modified to implement the SMPH method as
 //         described in the blog post "A Summary of Factors Affecting IBUs".
@@ -46,6 +46,8 @@ this.initialize_SMPH = function() {
   ibu.hopDecayMethod.additionalFunctionArgs = SMPH.computeIBU_SMPH;
   ibu.hopTableSize = 12;   // number of inputs to specify each addition of hops
   ibu.detailedOutput = true;
+
+  ibu.wortLossVolume.greyColor = "black"; // don't grey-out WLV, always black
 
   // don't need to set() any variables that change with unit conversion;
   // when we call set(units), those dependent variables will also be set.
@@ -92,7 +94,7 @@ this.initialize_SMPH = function() {
 
   this.icebathBaseTemp    = 314.00;       // 314.00'K = 40.85'C = 105.53'F
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
-  this.immersionMinTempC  = 60.0;         // must be > immersionChillerBaseTemp
+  this.immersionMinTempC  = 50.0;         // must be > immersionChillerBaseTemp
 
   this.IAA_LF_boil        = 0.52;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
@@ -358,7 +360,7 @@ this.computeIBU_SMPH = function() {
     if (dryHop && ibu.useDryHopModelCheckbox.value &&
         document.getElementById('outputFootnote')) {
       document.getElementById('outputFootnote').innerHTML =
-           "<td> (<sup>*</sup>IBUs from dry hopping are rough approximations. Also, IAA concentration may be reduced when dry hopping.) </td>";
+           "<td> (<sup>*</sup>IBUs from dry hopping are rough approximations. Also, total IAA concentration may be reduced when dry hopping.) </td>";
     } else if (dryHop && !ibu.useDryHopModelCheckbox.value &&
         document.getElementById('outputFootnote')) {
       document.getElementById('outputFootnote').innerHTML =
@@ -376,8 +378,28 @@ this.computeIBU_SMPH = function() {
     BI = (-0.0009 * totalIBUoutput * totalIBUoutput) +
          (0.246 * totalIBUoutput) - 0.264;
     if (BI < 0.0) BI = 0.0;
-    if (BI > 136.667) BI = 16.546;  // this equation peaks at 136.667
+    if (totalIBUoutput > 136.667) {
+      BI = 16.546;  // this equation peaks at 136.667 IBUs
+    }
     document.getElementById('BIvalue').innerHTML = BI.toFixed(2);
+  }
+
+  if (ibu.forcedDecayType.value != "forcedDecayCounterflow") {
+    if (document.getElementById("forcedCoolingTime")) {
+      if (ibu.units.value == "metric") {
+        document.getElementById("forcedCoolingTime").innerHTML =
+           "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
+           " minutes to reach 60&deg;C"
+      } else {
+        document.getElementById("forcedCoolingTime").innerHTML =
+           "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
+           " minutes to reach 140&deg;F"
+      }
+    }
+  } else {
+    if (document.getElementById("forcedCoolingTime")) {
+      document.getElementById("forcedCoolingTime").innerHTML = ""
+    }
   }
 
   if (SMPH.verbose > 0) {
@@ -454,7 +476,8 @@ function compute_concent_wort(ibu) {
   var dIAA_dis_mg = 0.0;        // the change in dissolved IAA at time t, in mg
   var doneHoldTemp = false;     // are we done with holding temperature?
   var expParamC_Kelvin = 0.0;   // exponential decay parameter C, in Kelvin
-  var FCT = 0.0;                // amount of time spent in forced cooling
+  var FCT = 0.0;                // total amount of time spent in forced cooling
+  var FCT60 = 0.0;              // amount of time to reach 60'C
   var finalVolume = 0.0;        // final volume after wort loss and added water
   var finished = false;         // are we finished with modeling IAA over time?
   var holdTemp = ibu.holdTemp.value;  // the temperature at which to hold wort
@@ -579,6 +602,7 @@ function compute_concent_wort(ibu) {
     ibu.hopPP = 0.0;
     ibu.maltPP = 0.0;
     ibu.FCT = 0.0;
+    ibu.FCT60 = 0.0;
     ibu.IBU = 0.0;
     return 0.0;
   }
@@ -625,6 +649,7 @@ function compute_concent_wort(ibu) {
   IAA_dis_mg= 0.0; // mg of IAA dissolved, not ppm to account for volume changes
   AA_xfer_mg  = 0.0; // mg of AA transferred (and cooled) via counterflow
   IAA_xfer_mg = 0.0; // mg of IAA transferred via counterflow
+  FCT60 = -1.0;    // use negative number to indicate not yet post-whirlpool
 
   if (SMPH.verbose > 1) {
     console.log("\nStarting processing of each time point:");
@@ -642,6 +667,7 @@ function compute_concent_wort(ibu) {
       if (postBoilTime == ibu.whirlpoolTime.value && SMPH.verbose > 1) {
         console.log("---- at " + t + ", starting use of " +
                     coolingMethod + " chiller ---");
+        FCT60 = 0.0;
       }
 
       // if counterflow or not yet done with whirlpool, get temp from cooling fn
@@ -711,6 +737,9 @@ function compute_concent_wort(ibu) {
 
       // stop modeling if temperature is less than minimum for isomerization
       tempC = common.convertKelvinToCelsius(tempK);
+      if (FCT60 >= 0.0 && tempC >= 60.0) {
+        FCT60 += integrationTime;
+      }
       if (tempC < SMPH.immersionMinTempC) {
         finished = true;
       }
@@ -978,7 +1007,7 @@ function compute_concent_wort(ibu) {
     ibu.add[hopIdx].IAA_xfer_mg *= RF_IAA;
   }
 
-  // compute forced cooling time (FCT)
+  // compute total forced cooling time (FCT)
   FCT = (-1.0 * t) - ibu.whirlpoolTime.value;
 
   // adjust amount of dissolved material based on wort/trub loss and
@@ -1033,6 +1062,8 @@ function compute_concent_wort(ibu) {
     }
   }
 
+  // set the cooling time to reach 60'C
+  ibu.FCT60 = FCT60;
 
   // print out summary information to console when done
   if (SMPH.verbose > 2) {
@@ -1163,6 +1194,10 @@ function compute_LF_finings(ibu) {
   var finingsMlPerLiter = 0.0;
   var LF_finings = 0.0;
   var volume = ibu.fermentorVolume.value;
+
+  if (volume <= 0) {
+    return 0.0;
+  }
 
   LF_finings = 1.0;
   if (!isNaN(ibu.finingsAmount.value)) {
@@ -1332,6 +1367,10 @@ function compute_IAA_LF_dryHop(ibu) {
   var slope = 0.0;
   var volume = ibu.fermentorVolume.value;
 
+  if (volume <= 0) {
+    return 0.0;
+  }
+
   dryHops_concent = 0.0;
   IAA_beer = 0.0;
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
@@ -1487,6 +1526,10 @@ function compute_AA_beer(ibu, hopIdx) {
   var hops_concent = 0.0;
   var volume = ibu.fermentorVolume.value;
 
+  if (volume <= 0) {
+    return 0.0;
+  }
+
   // alpha acids added during the boil don't survive into finished beer
   // e.g. Lewis and Young, p. 259
   ibu.add[hopIdx].AA_beer = 0.0;
@@ -1509,7 +1552,7 @@ function compute_AA_beer(ibu, hopIdx) {
     }
   }
 
-  return(AA_concent);
+  return AA_concent;
 }
 
 // -----------------------------------------------------------------------------
@@ -1647,7 +1690,7 @@ function compute_LF_oAA(ibu, hopIdx) {
                                  compute_LF_filtering(ibu) + ", " +
                                  compute_LF_age(ibu));
   }
-  return(LF_oAA);
+  return LF_oAA;
 }
 
 // -----------------------------------------------------------------------------
@@ -1661,6 +1704,10 @@ function compute_oAA_beer(ibu, hopIdx) {
   var oAA_percent_of_AA = 0.0;
   var oAA_saturationFactor = 0.0;
   var volume = ibu.fermentorVolume.value;
+
+  if (volume <= 0) {
+    return 0.0;
+  }
 
   ibu.add[hopIdx].oAA_beer = 0.0;
   oAA_beer = 0.0;
@@ -1702,7 +1749,7 @@ function compute_oAA_beer(ibu, hopIdx) {
     }
   }
 
-  return(oAA_beer);
+  return oAA_beer;
 }
 
 // -----------------------------------------------------------------------------
@@ -1762,7 +1809,7 @@ function compute_LF_oBA(ibu, hopIdx) {
               compute_LF_age(ibu));
     }
 
-  return(LF_oBA);
+  return LF_oBA;
 }
 
 // -----------------------------------------------------------------------------
@@ -1772,6 +1819,10 @@ function compute_LF_oBA(ibu, hopIdx) {
 function compute_oBA_beer(ibu, hopIdx) {
   var oBA_beer = 0.0;
   var volume = ibu.fermentorVolume.value;
+
+  if (volume <= 0) {
+    return 0.0;
+  }
 
   ibu.add[hopIdx].oBA_beer = 0.0;
   oBA_beer = 0.0;
@@ -1801,7 +1852,7 @@ function compute_oBA_beer(ibu, hopIdx) {
     }
   }
 
-  return(oBA_beer);
+  return oBA_beer;
 }
 
 // -----------------------------------------------------------------------------
@@ -1844,7 +1895,7 @@ function compute_LF_hopPP_kettle(ibu) {
              compute_LF_finings(ibu) *
              compute_LF_filtering(ibu);
 
-  return(LF_hopPP);
+  return LF_hopPP;
 }
 
 
@@ -1861,7 +1912,7 @@ function compute_LF_hopPP_dryHop(ibu) {
   // combine the loss factor for polyphenols with general dry-hop loss factor
   LF_hopPP = SMPH.LF_hopPP_dryHop * compute_LF_dryHop(ibu);
 
-  return(LF_hopPP);
+  return LF_hopPP;
 }
 
 
@@ -1874,6 +1925,10 @@ function compute_hopPP_beer(ibu, hopIdx) {
   var PP_beer = 0.0;
   var saturationFactor = 0.0;
   var volume = ibu.fermentorVolume.value;
+
+  if (volume <= 0) {
+    return 0.0;
+  }
 
   ibu.add[hopIdx].beer = 0.0;
   PP_beer = 0.0;

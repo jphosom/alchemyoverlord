@@ -1,0 +1,132 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+temp_correction.html : HTML for AlchemyOverlord web page, 
+                       temperature-correction sub-page
+Written by John-Paul Hosom
+Copyright © 2021 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : August 21, 2021
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <a name="top_tempCorrection"></a>
+  <div id="content">
+  <h2>Temperature Corrections</h2>
+  <p>This page provides a calculator for correcting specific gravity,
+  pH, or volume measurements based on temperature.  There's also a
+  conversion between specific gravity and degrees Plato, thrown in
+  for free as a special bonus.
+  </p>
+
+  <h3>Units:</h3>
+  <p style="margin-left:3em">Input Units:
+  <input type="radio" value="metric" id="metric" name="tempCorrect.units" onclick="common.set(tempCorrect.units,1)" autocomplete="off">metric or
+  <input type="radio" value="imperial" id="imperial" name="tempCorrect.units" onclick="common.set(tempCorrect.units,1)" autocomplete="off" checked>imperial (e.g. Fahrenheit, gallons)
+  </p>
+
+  <h3>Corrections:</h3>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td></td>
+    <td><small>Measured<br>Value</small></td>
+    <td><small>Measured<br>Temperature</small></td>
+    <td></td>
+    <td><small>Calibration<br>Temperature</small></td>
+    <td><small>Corrected<br>Value</small></td>
+  </tr>
+  <tr>
+    <td>SG:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SG1" onchange="common.set(tempCorrect.SG1,1)">&nbsp; at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp1" onchange="common.set(tempCorrect.SGtemp1,1)"><span id="tempCorrectSGtemp1Units">X</span> </td>
+    <td>,&nbsp; when at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp2" onchange="common.set(tempCorrect.SGtemp2,1)"><span id="tempCorrectSGtemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><span id="tempCorrect.SG2"></span>
+  </tr>
+  <tr>
+    <td>pH:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pH1" onchange="common.set(tempCorrect.pH1,1)">&nbsp; at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp1" onchange="common.set(tempCorrect.pHtemp1,1)"><span id="tempCorrectpHtemp1Units">X</span> </td>
+    <td>,&nbsp; when at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp2" onchange="common.set(tempCorrect.pHtemp2,1)"><span id="tempCorrectpHtemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><span id="tempCorrect.pH2"></span>
+  </tr>
+  <tr>
+    <td>volume:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.vol1" onchange="common.set(tempCorrect.vol1,1)"> <span id="tempCorrectvol1Units">U</span>&nbsp; at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp1" onchange="common.set(tempCorrect.voltemp1,1)"><span id="tempCorrectvoltemp1Units">X</span> </td>
+    <td>,&nbsp; when at &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp2" onchange="common.set(tempCorrect.voltemp2,1)"><span id="tempCorrectvoltemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><span id="tempCorrect.vol2"></span> <span id="tempCorrectvol2Units"</span>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+  <br>
+
+  <h3>Conversions:</h3>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>SG:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SG" onchange="common.set(tempCorrect.SG,1)"></td>
+  <td>&nbsp; = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.Plato" onchange="common.set(tempCorrect.Plato,1)"> &deg;Plato</td>
+  </tr>
+  </tbody>
+  </table>
+
+  <br>
+  <p>The specific-gravity correction comes from <a href="https://www.homebrewersassociation.org/attachments/0000/2497/Math_in_Mash_SummerZym95.pdf" target="_parent">an article by M. L. Hall in the Summer 1995 edition of <em>Zymurgy</em></a>.<br>
+  The pH correction comes from my blog post <a href="https://alchemyoverlord.wordpress.com/2018/09/06/some-observations-of-mash-and-wort-ph/">Some Observations of Mash and Wort pH</a>.<br>
+  The volume conversion comes from a 
+  <a href="https://www.nist.gov/" target="_parent">NIST</a> publication by
+  <a href="https://nvlpubs.nist.gov/nistpubs/jres/097/jresv97n3p335_A1b.pdf" target="_parent">F. E. Jones and G. L. Harris (vol. 97, no. 3, 1992)</a>.<br>
+  The conversion between SG and &deg;Plato comes from
+  <a href="https://catalog.hathitrust.org/api/volumes/oclc/316822991.html" target="_parent">Jean De Clerck's <em>A Textbook of Brewing</em> (1957)</a>, published in <a href="https://beerandbrewing.com/specific-gravity-or-just-a-matter-of-degree/" target="_parent"><em>Beer and Brewing</em></a>.
+  </div>
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/tempCorrect.js" charset="utf-8"></script>
+
+  <script>
+  tempCorrect.initialize_tempCorrect();
+  </script>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2021-Aug-21)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_tempCorrection">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord github home page</a>
+  <br>
+  <a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+  <p>
+  <p>
+  <center>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  <p>
+  <small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>

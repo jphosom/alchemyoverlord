@@ -10,17 +10,22 @@ Version 1.0.0 : August 8, 2021
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
   </head>
   <body>
 
   <a name="top_freshness"></a>
   <div id="content">
   <h2>Hop Freshness Calculator</h2>
-  <p>This page provides a calculator for estimating a hop freshness factor.
-  The formula for alpha-acid decay and hop freshness comes from
-  <a href="https://www.morebeer.com/articles/storing_hops_properly">Mark Garetz</a>.
-  The mapping between the <a href="https://www.canr.msu.edu/news/understanding-the-importance-of-the-hop-storage-index">Hop Storage Index (HSI)</a>
-  and freshness comes from <a href="https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-37-0184">Gail Nickerson and Sam Likens (1979)</a>.
+  <p>This page provides a calculator for estimating the hop freshness factor,
+  which is the opposite of alpha-acid decay.
+  The formula for alpha-acid decay comes from
+  <a href="https://www.morebeer.com/articles/storing_hops_properly" target="_parent">Mark Garetz</a>.
+  The mapping between the <a href="https://www.canr.msu.edu/news/understanding-the-importance-of-the-hop-storage-index" target="_parent">Hop Storage Index (HSI)</a>
+  and freshness comes from <a href="https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-37-0184" target="_parent">Gail Nickerson and Sam Likens (1979)</a>.  Note that some
+  sources confuse the HSI with the loss of alpha acids after six months
+  at room temperature; the HSI is a measure of the current freshness of
+  a sample of hops.
   </p>
   <p>
   Default values are shown in <font color="#94476b">grayish-red</font>.
@@ -30,37 +35,6 @@ Version 1.0.0 : August 8, 2021
   You can change the value of a default parameter by simply entering a new
   value, at which point the font color will change to black.
   To get back to a default value, enter 'd'.
-  </p>
-  <p>
-  For packaging, I have taken Garetz's terms and corresponding storage-factor
-  values. I have added a "professionally nitrogen flushed" category because I
-  have found that such packaging produces far less hop deterioration than
-  the (<a href="https://en.wikipedia.org/wiki/Do_it_yourself">DIY</a>)
-  inert-gas and vacuum-sealing values specified by Garetz in the 1990's.
-  <p>I would like to stress the importance of knowing the packaging and
-  storage conditions of your hops!  Just because hops at the store come
-  in a vacuum-sealed foil pouch doesn't mean that they have been
-  professionally flushed with nitrogen.  Just because they are in a
-  refrigerator at the time of purchase doesn't mean that they have always
-  been kept at refrigeration temperatures. In some cases I have bought
-  hops under the impression that they were flushed with nitrogen, only
-  to find that the alpha acids had degraded far below the value written on
-  the package.  I currently prefer to buy hops direct soon
-  after harvest in one-pound bags and store them in my freezer.
-  </p>
-  <p>
-  While beta acids do not usually survive into finished beer, oxidized
-  beta acids produced during storage can be present when using both kettle
-  hops and dry hops.  I've found a distinctly
-  <a href="https://www.ricola.com">herbal</a> quality in beer made with hops
-  high in oxidized beta acids, and so I try to limit their presence in my beer.
-  </p>
-  <p>
-  The best way to really know the freshness factor is to have a sample of
-  the hops analyzed for the HSI and then use the Nickerson formula.
-  The freshness factor value and the default estimate of the HSI on this page
-  are approximations only, and the real values will probably be at least
-  somewhate different.
   </p>
 
   <h3>Inputs:</h3>
@@ -160,6 +134,38 @@ Version 1.0.0 : August 8, 2021
   </tbody>
   </table>
 
+  <br>
+  <p>
+  For packaging, I have taken Garetz's terms and corresponding storage-factor
+  values. I have added a "professionally nitrogen flushed" category because I
+  have found that such packaging produces far less hop deterioration than
+  the (<a href="https://en.wikipedia.org/wiki/Do_it_yourself" target="_parent">DIY</a>)
+  inert-gas and vacuum-sealing values specified by Garetz in the 1990's.
+  <p>I would like to stress the importance of knowing the packaging and
+  storage conditions of your hops!  Just because hops at the store come
+  in a vacuum-sealed foil pouch doesn't mean that they have been
+  professionally flushed with nitrogen.  Just because they are in a
+  refrigerator at the time of purchase doesn't mean that they have always
+  been kept at refrigeration temperatures. In some cases I have bought
+  hops under the impression that they were flushed with nitrogen, only
+  to find that the alpha acids had degraded far below the value written on
+  the package.  I currently prefer to buy hops direct soon
+  after harvest in one-pound bags and store them in my freezer.
+  </p>
+  <p>
+  While beta acids do not usually survive into finished beer, oxidized
+  beta acids produced during storage can be present when using both kettle
+  hops and dry hops.  I've found a distinctly
+  <a href="https://www.ricola.com" target="_parent">herbal</a> quality in beer made with hops
+  high in oxidized beta acids, and so I try to limit their presence in my beer.
+  </p>
+  <p>
+  The best way to really know the freshness factor is to have a sample of
+  the hops analyzed for the HSI and then use the Nickerson formula.
+  The freshness factor value and the default estimate of the HSI on this page
+  are approximations only, and the real values will probably be at least
+  somewhate different.
+  </p>
   </div>
 
   <script type="text/javascript" src="js/common.js" charset="utf-8"></script>

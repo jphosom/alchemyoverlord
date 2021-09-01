@@ -1,4 +1,4 @@
-// math library 
+// math library
 //
 // Copyright (C) 2021  John-Paul Hosom, all rights reserved.
 // Contact information: alchemyoverlord © yahoo · com
@@ -30,12 +30,12 @@ this.normalDistributionMax = function(sigma) {
 
   if (sigma == 0.0) sigma = 0.0001;
   norm = 1.0 / (sigma * sqrtTwoPi);
-  
+
   return norm;
 }
 
 //------------------------------------------------------------------------------
-// compute probability of x using normal distribution with 
+// compute probability of x using normal distribution with
 // mean = param[0] and standard deviation = param[1]
 
 this.normalDistribution = function(x, param) {
@@ -79,7 +79,7 @@ this.phi = function(x) {
 this.probCorrect2AFC = function(d_prime) {
   var z_score = d_prime / sqrt2;
   var y = mathLibrary.phi(z_score);
-  
+
   return y;
 }
 
@@ -235,8 +235,8 @@ this.binomial = function(N, pCorr, corr) {
   var mu = 0.0;
   var sigma = 0.0;
 
-  // if the number of subjects is less than 1000, use the exact binomial 
-  // distribution.  If the number of subjects is larger, then use the 
+  // if the number of subjects is less than 1000, use the exact binomial
+  // distribution.  If the number of subjects is larger, then use the
   // normal distribution as an approximation.
   if (N < 1000) {
     x = this.combination(N, corr);

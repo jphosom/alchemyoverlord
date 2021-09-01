@@ -150,7 +150,7 @@ this.initialize_hopFresh = function() {
   this.storageDuration.minPrecision = 0;
   this.storageDuration.display = "";
   this.storageDuration.min = 0.0;
-  this.storageDuration.max = 60.0;
+  this.storageDuration.max = 120.0;
   this.storageDuration.description = "storage duration (months)";
   this.storageDuration.defaultValue = 6.0;
   this.storageDuration.defaultColor = defaultColor;
@@ -210,7 +210,7 @@ this.initialize_hopFresh = function() {
   varietyMenu = buildHops("hopFresh.varietyMenu", hopFresh.variety.value);
   document.getElementById('hopVariety').innerHTML = varietyMenu;
 
-  this.verbose = 100;
+  this.verbose = 1;
 
   hopFresh.compute_hopFresh();
 
@@ -300,8 +300,8 @@ function get_k_default() {
 // This is a direct (reverse) implementation of the Nickerson method.
 
 function get_HSI_default() {
-  var HSI = 0.0;
   var freshnessFactor = 0.0;
+  var HSI = 0.0;
 
   freshnessFactor = computeFreshnessFactor();
   HSI = Math.pow(10.0, (1.0 - freshnessFactor)/1.10) * 0.25;
@@ -316,12 +316,17 @@ function get_HSI_default() {
 function computeFreshnessFactor() {
   var days = 0.0;
   var freshnessFactor = 0.0;
+  var hopPackaging = hopFresh.hopPackaging.value;
   var k = hopFresh.k.value;
   var SF = 0.0;
-  var hopPackaging = hopFresh.hopPackaging.value;
   var storageDuration_months = hopFresh.storageDuration.value;
   var storageTemp = hopFresh.storageTemp.value;
   var TF = 0.0;
+
+  // if we haven't defined some variable(s) (yet), just return some value
+  if (!k || !hopPackaging || !storageDuration_months || !storageTemp) {
+    return 0.90;
+  }
 
   SF = 2.0;  // if there's a bug, make it obvious with a high value of SF
   if (hopPackaging == "professionally nitrogen flushed") {
@@ -341,6 +346,7 @@ function computeFreshnessFactor() {
   }
   if (SF == 2.0) {
     console.log(" ***** ERROR **** storage factors inconsistently named");
+    console.log("                  " + hopPackaging);
   }
 
   days = storageDuration_months * 30.5;

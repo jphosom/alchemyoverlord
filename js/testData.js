@@ -11,7 +11,7 @@ var evaluateTestExperiments = [ ];  // null list means evaluate on all
 // units *must* be all metric
 
 var testData = {
-    "Tiffany's Stout, June 2020 large fermenter": {
+    "Tiffany's Stout, June 2020 large FV": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 21.8 ],
 
@@ -33,27 +33,9 @@ var testData = {
         "evaporationRate":       4.315,
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-             {
-                 "param":    "AA2",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-       ],
     },
 
-    "Excellent Stout #3, Oct 2019, large fermenter": {
+    "Excellent Stout #3, Oct 2019, large FV": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 28.6 ],
 
@@ -75,27 +57,9 @@ var testData = {
         "evaporationRate":       3.581,
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-             {
-                 "param":    "AA2",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-       ],
     },
 
-    "ESB #2, Dec. 2019, large fermenter": {
+    "ESB #2, Dec. 2019, large FV": {
         "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
         "IBU_list":              [ 26.6 ],
 
@@ -118,24 +82,6 @@ var testData = {
         "evaporationRate":       3.581,
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-             {
-                 "param":    "AA2",
-                 "default":  3.90,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-       ],
     },
 
     "Kolsch, Sep. 2020": {
@@ -162,29 +108,7 @@ var testData = {
         "immersionDecayFactor":  0.4283,
         "forcedDecayType":       "forcedDecayImmersion",
         "wortClarity":           1.10,
-        "finingsType":           "gelatin",
-        "finingsAmount":         10.0,
         "beerAge_days":          15,
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  2.70,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.20,
-             },
-             {
-                 "param":    "AA2",
-                 "default":  3.80,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.20,
-             },
-       ],
     },
 
 
@@ -216,27 +140,45 @@ var testData = {
         "finingsType":           "gelatin",
         "finingsAmount":         15.0,
         "beerAge_days":          18,
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  5.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.20,
-             },
-             {
-                 "param":    "AA2",
-                 "default":  3.00,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-                 "inc":      0.20,
-             },
-       ],
     },
+
+
+    "West-Coast IPA, Jul. 2021": {
+        "conditions":            [ "TEST" ],  // this field is needed to fit in same format as parameter search
+        "IBU_list":              [ 70.0 ],
+
+        "boilTime":              65,          // time to first addition, plus duration of longest hop steep time
+        "wortVolume":            24.23,
+        "preOrPostBoilVol":      "postBoilVol",
+        "OG":                    1.0657,
+
+        "pH":                    5.35,
+        "preOrPostBoilpH":       "preBoilpH",
+        "whirlpoolTime":         2,
+
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
+        "add1":        [ 13.5,  3.95, "cones", 0.88,   25.0,     42.52,     60 ], // citra
+        "add2":        [  9.3,  6.50, "cones", 0.94,   14.0,     56.70,     45 ], // amarillo
+        "add3":        [ 12.6,  4.50, "cones", 0.88,   25.0,     56.70,     30 ], // simcoe
+        "add4":        [  9.3,  6.50, "cones", 0.94,   14.0,     28.35,      0 ], // amarillo
+        "add5":        [ 12.6,  4.50, "cones", 0.88,   25.0,     28.35,      0 ], // simcoe
+        "add6":        [ 13.5,  3.95, "cones", 0.88,   25.0,     28.35,      0 ], // citra
+        "add7":        [ 10.3,  3.50, "cones", 0.93,   15.0,     42.52,      0 ], // mosaic
+
+        "add8":        [ 12.6,  4.50, "cones", 0.88,   25.0,     56.70,      4,  1.0, "dryHop" ], // simcoe
+        "add9":        [ 13.5,  3.95, "cones", 0.88,   25.0,     28.35,      4,  1.0, "dryHop" ], // citra
+        "add10":       [ 10.3,  3.50, "cones", 0.93,   15.0,     56.70,      4,  1.0, "dryHop" ], // mosaic
+
+        "kettleDiameter":        37.148,
+        "kettleOpening":         37.148,
+        "evaporationRate":       4.66,
+        "immersionDecayFactor":  0.4283,
+        "forcedDecayType":       "forcedDecayImmersion",
+        "wortClarity":           1.00,
+        "beerAge_days":          18,
+        "fermentorVolume":       20.82,
+    },
+
 
 
     "Taste Experiment #1": {
@@ -268,17 +210,6 @@ var testData = {
         "evaporationRate":       0.029,   // median from all four experiments
         "immersionDecayFactor":  0.25,    // average decay function exponential, from 0 to 5 min post boil
         "forcedDecayType":       "forcedDecayImmersion",
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  9.56,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-       ],
     },
 
     "Taste Experiment #2": {
@@ -309,17 +240,6 @@ var testData = {
         "evaporationRate":       0.046,   // median from all four experiments
         "immersionDecayFactor":  0.25,    // average decay function exponential, from first experiment
         "forcedDecayType":       "forcedDecayImmersion",
-
-        "skipSearch":   true,
-        "search": [
-             {
-                 "param":    "AA1",
-                 "default":  9.56,
-                 "method":   "relative",
-                 "low":      0.85,
-                 "high":     1.15,
-             },
-       ],
     },
 
 
