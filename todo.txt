@@ -170,11 +170,11 @@ TODO:
 
 +36. publish SMPH model and parameter-estimation scripts
 
- 37. update A Summary of Factors with:
-       - IBU is highly correlated with bitterness (in intro)
-       - add some stuff about dry hopping
++37. update A Summary of Factors with:
+       + IBU is highly correlated with bitterness (in intro)
+       + add some stuff about dry hopping
      update Techniques for Maximizing:
-       - order in terms of amount of hops, then freshness, etc.
+       + order in terms of amount of hops, then freshness, etc.
 
  38. blog posts:
      - Three Misconceptions About the IBU

@@ -208,7 +208,7 @@ var params = {
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  550.0,
+                "default":  560.0,
                 "low":      540.0,
                 "high":     580.0,
                 "inc":      10.0,
@@ -218,9 +218,9 @@ var params = {
         "none": [
             {
                 "param":    "IAA_LF_boil",
-                "default":  0.52,
-                "low":      0.52,
-                "high":     0.52,
+                "default":  0.51,
+                "low":      0.51,
+                "high":     0.51,
                 "inc":      0.01,
             },
 
@@ -234,25 +234,25 @@ var params = {
 
             {
                 "param":    "oAA_storageFactor",
-                "default":  0.32,
-                "low":      0.32,
-                "high":     0.32,
+                "default":  0.33,
+                "low":      0.33,
+                "high":     0.33,
                 "inc":      0.01,
             },
 
             {
                 "param":    "AA_limit_minLimit",
-                "default":  200.0,
-                "low":      200.0,
-                "high":     200.0,
+                "default":  210.0,
+                "low":      210.0,
+                "high":     210.0,
                 "inc":      1.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  550.0,
-                "low":      550.0,
-                "high":     550.0,
+                "default":  570.0,
+                "low":      570.0,
+                "high":     570.0,
                 "inc":      1.0,
             },
 

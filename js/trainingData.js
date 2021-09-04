@@ -22,6 +22,7 @@ var evaluateTrainingExperiments = [ ];  // null list means evaluate on all
 // var evaluateTrainingExperiments = [ "oAA as Function of Temperature" ];
 // var evaluateTrainingExperiments = [ "Lauter Exp. #1", "Lauter Exp. #2" ];
 // var evaluateTrainingExperiments = [ "FV Exp. #1" ];
+// var evaluateTrainingExperiments = [ "DryHop2_lowIAA_DH8000" ];
 
 // units *must* be all metric
 
@@ -1944,7 +1945,7 @@ var trainingData = {
         "add2":        [ 10.3,   3.5,  "cones",   0.93,   15.00, 42.52,  10 ], // mosaic
         "add3":        [ 12.6,   4.5,  "cones",   0.88,   25.00, 42.52,   6 ], // simcoe
         "add4":        [  9.3,   6.5,  "cones",   0.93,   14.00, 42.52,   2 ], // amarillo
-        "add5":        [  8.5,   6.5,  "pellets", 0.80,   14.00, 264.59,   4,  1.0, "dryHop" ], // amarillo; guess at fresh
+        "add5":        [  8.5,   6.5,  "pellets", 0.85,   14.00, 264.59,   4,  1.0, "dryHop" ], // amarillo; guess at fresh
 
         "evaporationRate":       1.524,
         "immersionDecayFactor":  2.5,     // single-coil wort chiller with only 2 G wort... not a big impact
@@ -2013,7 +2014,7 @@ var trainingData = {
         "beerAge_days":          8,
 
         //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime, pellet, dryHop
-        "add1":        [ 14.9,   3.16, "cones",    0.75,   25.0, 17.262,   0,          1.0,   "dryHop" ],
+        "add1":        [ 14.9,   3.16, "cones",    0.90,   25.0, 17.262,   0,          1.0,   "dryHop" ],  // citra, guess at freshness
 
         "evaporationRate":       0.0,
         "fermentorVolume":       2.15768,
@@ -2069,7 +2070,7 @@ var trainingData = {
         //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [  9.56,  6.25, "cones",    0.96,   14.00,  5.0,   45 ],  // 2019 Amarillo hops
         "add2":        [  9.56,  6.25, "cones",    0.96,   14.00, 23.0,   10 ],
-        "add3":        [ 14.9,   3.95, "pellets",  0.75,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra
+        "add3":        [ 14.9,   3.95, "pellets",  0.90,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra, guess at freshness
 
         "evaporationRate":       1.23,  // estimate off 5+10 min (4.0), on 35 min (0.05)
         "fermentorVolume":       2.15768,
@@ -2125,7 +2126,7 @@ var trainingData = {
         //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.5,   3.95, "cones",   0.85,   25.00, 42.5244,  45 ], // citra
         "add2":        [  8.5,   6.50, "pellets", 0.90,   14.00, 14.1748,  10 ], // amarillo
-        "add3":        [ 14.9,   3.95, "pellets", 0.75,   25.00,  4.3153,   4,  1.0, "dryHop" ], // citra
+        "add3":        [ 14.9,   3.95, "pellets", 0.90,   25.00,  4.3153,   4,  1.0, "dryHop" ], // citra, guess at freshness
 
         "evaporationRate":       0.757082,
         "fermentorVolume":       2.15768,
@@ -2154,7 +2155,7 @@ var trainingData = {
         //                AA%    BA%   form       freshF  %loss  wt(g)   steepTime
         "add1":        [ 13.5,   3.95, "cones",   0.85,   25.00, 42.5244,  45 ], // citra
         "add2":        [  8.5,   6.50, "pellets", 0.90,   14.00, 14.1748,  10 ], // amarillo
-        "add3":        [ 14.9,   3.95, "pellets", 0.75,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra
+        "add3":        [ 14.9,   3.95, "pellets", 0.90,   25.00, 17.2614,   4,  1.0, "dryHop" ], // citra, guess at freshness
 
         "evaporationRate":       0.757082,
         "fermentorVolume":       2.15768,

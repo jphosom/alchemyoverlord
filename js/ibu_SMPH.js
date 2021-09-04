@@ -10,6 +10,8 @@
 //         project.  The code was then modified to implement the SMPH method as
 //         described in the blog post "A Summary of Factors Affecting IBUs".
 //
+// Version 1.0.2 : Sep. 4, 2021: bug fix in AA concentration when dry hopping
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -81,12 +83,11 @@ this.initialize_SMPH = function() {
   this.verbose            = 5;
   this.integrationTime    = 0.01;  // minutes
 
-  this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_maxLimit  = 550.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_minLimit  = 210.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 570.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
   this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
-  this.AA_dryHop_lossFactor   = 0.01;  // estimated from Lafontaine p. 56
-  this.AA_dryHop_saturation   = 4.0;   // ppm, see Lafontaine p. 55
+  this.AA_dryHop_saturation   = 14.0;   // ppm, at beer pH (Shellhammer, p 170)
   this.scale_AA           = 0.885; // from Maye, MBAA TQ v.53, n.3, 2016, p. 135
 
   this.hop_nonExtract     = 1.0;
@@ -96,10 +97,10 @@ this.initialize_SMPH = function() {
   this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
   this.immersionMinTempC  = 50.0;         // must be > immersionChillerBaseTemp
 
-  this.IAA_LF_boil        = 0.52;   // SEARCH
+  this.IAA_LF_boil        = 0.51;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
 
-  this.oAA_storageFactor  = 0.32;   // estimate 0.22 from Maye data, then SEARCH
+  this.oAA_storageFactor  = 0.33;   // estimate 0.22 from Maye data, then SEARCH
   this.oAA_boilFactor     = 0.11;   // SEARCH
   this.oAA_LF_boil        = this.IAA_LF_boil; // assume same loss factor as IAA
   this.scale_oAA          = 0.9155; // from Maye, Figure 7
@@ -178,6 +179,7 @@ this.computeIBU_SMPH = function() {
   if (SMPH.verbose > 1)
     console.log("number of hops additions: " + ibu.add.length);
 
+  ibu.AA = 0.0;
   for (hopIdx = 0; hopIdx < ibu.add.length; hopIdx++) {
     ibu.add[hopIdx].AA_init = 0.0;       // units: ppm
     ibu.add[hopIdx].AA_dis_mg = 0.0;     // units: mg
@@ -1522,8 +1524,10 @@ function compute_LF_dryHop(ibu) {
 // for a specific hop addition, given AA concentration and AA loss factors.
 
 function compute_AA_beer(ibu, hopIdx) {
+  var AA_added = 0.0;
   var AA_concent = 0.0;
   var hops_concent = 0.0;
+  var newTotal = 0.0;
   var volume = ibu.fermentorVolume.value;
 
   if (volume <= 0) {
@@ -1537,12 +1541,26 @@ function compute_AA_beer(ibu, hopIdx) {
   if (ibu.add[hopIdx].kettleOrDryHop.value == "dryHop" &&
       ibu.useDryHopModelCheckbox.value) {
     hops_concent = ibu.add[hopIdx].weight.value * 1000.0 / volume;
-    AA_concent = hops_concent * (ibu.add[hopIdx].AA.value/100.0) *
-                 SMPH.AA_dryHop_lossFactor;
-    // model saturation of AA; 4 ppm (Lafontaine p. 55 citing other studies)
-    if (AA_concent > SMPH.AA_dryHop_saturation) {
-      AA_concent = SMPH.AA_dryHop_saturation;
+    AA_added = hops_concent * (ibu.add[hopIdx].AA.value/100.0);
+    // [AA] making it into beer is about 1% of added [AA], but nonlinear
+    // See Lafontaine thesis p. 56
+    AA_concent = 14.7 * (1.0 - Math.exp(-0.00109 * AA_added));
+    if (SMPH.verbose > 3) {
+      console.log("    Added " + AA_added.toFixed(2) + " ppm of AA; " +
+                  " yielding " + AA_concent.toFixed(3) + " ppm of AA in beer");
     }
+
+    // model saturation of AA, accounting for all dry-hop additions
+    newTotal = ibu.AA + AA_concent;
+    if (newTotal > SMPH.AA_dryHop_saturation) {
+      AA_concent = SMPH.AA_dryHop_saturation - ibu.AA;
+      if (SMPH.verbose > 3) {
+        console.log("      solubility limit exceeded; yield is only " +
+                    AA_concent.toFixed(3) + " ppm of AA");
+      }
+    }
+    ibu.AA += AA_concent;
+
     AA_concent *= compute_LF_dryHop(ibu);
     ibu.add[hopIdx].AA_dis_mg = AA_concent * volume;
     ibu.add[hopIdx].AA_wort = 0.0;
