@@ -437,7 +437,7 @@ function plotFunction(ctx, plot, name, functionName,
   prevYPx = undefined;
   minYPx = mapY(plot, plot.yMax);
   maxYPx = mapY(plot, plot.yMin);
-  for (xPx = 0; xPx < plot.widthPx; xPx++) {
+  for (xPx = 0; xPx < plot.widthPx+1; xPx++) {
     // get coordinates of point, get function of x, map function to pixels
     x = unmapX(plot, xPx);
     y = functionName(x, rest);

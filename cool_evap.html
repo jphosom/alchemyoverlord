@@ -1,0 +1,150 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+cool_evap.html : HTML for AlchemyOverlord web page, cooling/evaporation sub-page
+Written by John-Paul Hosom
+Copyright © 2021 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : September 26, 2021
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <a name="top_coolEvap"></a>
+  <div id="content">
+  <h2>Cooling and Evaporation Calculator</h2>
+  <p>This page provides a calculator for estimating the rate of "natural"
+  cooling (of wort or water) after boiling, without the use of cooling devices
+  such as a counterflow or immersion chiller.
+  This estimate may or may not be accurate enough for your purposes;
+  at temperatures below 140&deg;F to 160&deg;F (60&deg;C to 71&deg;C),
+  the estimate may be increasingly inaccurate.
+  At temperatures below 120&deg;F (50&deg;C), the estimate is almost
+  certainly wrong.
+  The temperature estimates are based on the results of my blog post
+  <a href="https://alchemyoverlord.wordpress.com/2018/06/24/predicting-wort-temperature-after-flameout/">Predicting Wort Temperature After Flameout</a>.
+  </p>
+  <p>
+  This page also provides a calculator for estimating the rate of evaporation
+  at a specified sub-boiling temperature.  (At boiling, the evaporation rate
+  is a function of how much heat is being supplied.)  This calculator assumes
+  that the evaporating steam is not under pressure.  The formula for evaporation
+  is based on several measurements and some guesswork, and it may or may not
+  be accurate enough for your needs.
+  </p>
+
+  <h3>Common Inputs:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td colspan="2">Input Units:
+    <input type="radio" value="metric" id="metric" name="coolEvap.units" onclick="common.set(coolEvap.units,1)" autocomplete="off">metric or
+    <input type="radio" value="imperial" id="imperial" name="coolEvap.units" onclick="common.set(coolEvap.units,1)" autocomplete="off" checked>imperial (e.g. gallons, ounces)
+    </td>
+  </tr>
+  <tr>
+  <td>Boiling Point of Water (<span id="boilTempUnits">&deg;F</span>):</td>
+  <td><input type="text" autocomplete="off" STYLE="text-align:left" id="coolEvap.boilTemp" onchange="common.set(coolEvap.boilTemp, 1)"></td>
+  </tr>
+  <tr>
+    <td>Kettle or Pot Diameter (<span id="kettleDiameterUnits">inches</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="coolEvap.kettleDiameter" onchange="common.set(coolEvap.kettleDiameter, 1)"> (surface area of liquid)</td>
+  </tr>
+  <tr>
+    <td>Opening Diameter (<span id="kettleOpeningUnits">inches</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="coolEvap.kettleOpening" onchange="common.set(coolEvap.kettleOpening, 1)"> (often same as kettle/pot diameter)</td>
+  </tr>
+  <tr>
+    <td>Volume (<span id="volumeUnits">G</span>):</td>
+    <td><input type="text" autocomplete="off" STYLE="text-align:left" id="coolEvap.volume" onchange="common.set(coolEvap.volume, 1)"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Cooling:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>At time:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="coolEvap.duration" onchange="common.set(coolEvap.duration,1)"> minutes after boiling,
+    temperature &approx; <span id="coolTemp">0.0</span><span id="coolTempUnits">&deg;F</span></td>
+  </tr>
+  <tr>
+    <td>Formula:</td>
+    <td><em>temperature</em> = <span id="coolParamA">A</span> &times;
+        exp(&minus;<span id="coolParamB">B</span> &times; <em>time</em>) +
+        <span id="coolParamC">C</span></td>
+  </tr>
+  <tr>
+    <td colspan=1000 id="tempPlot"><canvas id="canvas1" width="600" height="300"></canvas>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Evaporation:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>At temperature:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="coolEvap.temperature" onchange="common.set(coolEvap.temperature,1)"> <span id="tempUnits">&deg;F</span>,
+    evaporation rate &approx; <span id="evapRate">0.0</span> <span id="evapRateUnits">G/hr</span></td>
+  </tr>
+  <tr>
+    <td colspan=1000 id="evapPlot"><canvas id="canvas2" width="600" height="300"></canvas>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  </div>
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/coolEvap.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/plotLibrary.js" charset="utf-8"></script>
+
+  <script>
+  coolEvap.initialize_coolEvap();
+  </script>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2021-Sep-26)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_coolEvap">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord github home page</a>
+  <br>
+  <a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+  <p>
+  <p>
+  <center>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  <p>
+  <small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>

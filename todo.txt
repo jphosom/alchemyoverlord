@@ -225,7 +225,6 @@ TODO:
 --------------------------------------------------------------------------------
 
 NOTES on larger system:
-BrewPlan
 BrewStep
 
 Recipe: xxxx   (save / load)
