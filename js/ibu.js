@@ -36,6 +36,8 @@
 //                                and more possible output values,
 //                                lower the defaults freshness factors
 // Version 1.2.11: Aug 10, 2021 : add storage conditions to each hop addition
+// Version 1.2.12: Oct  5, 2021 : change "steep time" to "boil or steep time"
+//                                or just "boil time" depending on method
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -2045,7 +2047,7 @@ window.onclick = function(event) {
 // set table of hops additions, using either already-set values or defaults,
 // and set table of output values
 
-function hopAdditionsSet(updateFunction) {
+function hopAdditionsSet(param) {
   var arrayIdx = 0;
   var constructInputTable = false;
   var constructOutputTable = false;
@@ -2057,6 +2059,8 @@ function hopAdditionsSet(updateFunction) {
   var table = "";
   var tableID = "";
   var units = "";
+  var updateFunctionName = param[0];
+  var updateFunction = param[1];
   var varietyDefault = "(unspecified)";
   var varietyMenu = "";
   var weightDefault = 0.0;
@@ -2066,7 +2070,7 @@ function hopAdditionsSet(updateFunction) {
 
   // if calling function was unable to specify the update function,
   // get it from a different variable.  Assume scalingFactor already set.
-  if (updateFunction == "") {
+  if (updateFunction == "" || typeof updateFunction == "undefined") {
     if (ibu.scalingFactor) {
       updateFunction = ibu.scalingFactor.updateFunction;
       } else {
@@ -2443,7 +2447,7 @@ function hopAdditionsSet(updateFunction) {
   if (constructInputTable && ibu.hopTableSize >= 12) {
     table += "</tr> ";
     table += "<tr> ";
-    table += "<td> Kettle / Dry Hop: </td> "
+    table += "<td> Kettle <small>or</small> Dry Hop: </td> "
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);
@@ -2467,7 +2471,12 @@ function hopAdditionsSet(updateFunction) {
   if (constructInputTable) {
     table += "</tr> ";
     table += "<tr> ";
-    table += "<td> Steep Time: </td> "
+    // change description depending on if model accounts for post-boil additions
+    if (updateFunctionName == "mIBU" || updateFunctionName == "SMPH") {
+      table += "<td> Boil <small>or</small> Steep Time: </td> "
+    } else {
+      table += "<td> Boil Time: </td> "
+    }
   }
   for (idx = 1; idx <= numAdd; idx++) {
     arrayIdx = Number(idx-1);

@@ -53,7 +53,8 @@ this.initialize_Tinseth = function() {
     }
     ibu[keys[idx]].updateFunction = Tinseth.computeIBU_Tinseth;
   }
-  ibu.numAdditions.additionalFunctionArgs = Tinseth.computeIBU_Tinseth;
+  ibu.numAdditions.additionalFunctionArgs =
+    ["Tinseth", Tinseth.computeIBU_Tinseth];
   ibu.hopTableSize = 3; // compact: AA%, weight, boilTime
 
   // don't need to set() any variables that change with unit conversion;

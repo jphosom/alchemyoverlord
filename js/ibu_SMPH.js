@@ -11,6 +11,9 @@
 //         described in the blog post "A Summary of Factors Affecting IBUs".
 //
 // Version 1.0.2 : Sep. 4, 2021: bug fix in AA concentration when dry hopping
+// Version 1.0.3 : Oct. 5, 2021: don't reduce AA sol. limit with temperature;
+//                               make sure solubility limit is never exceeded;
+//                               pass in "SMPH" when building hops table
 //
 // -----------------------------------------------------------------------------
 
@@ -44,8 +47,8 @@ this.initialize_SMPH = function() {
     }
     ibu[keys[idx]].updateFunction = SMPH.computeIBU_SMPH;
   }
-  ibu.numAdditions.additionalFunctionArgs = SMPH.computeIBU_SMPH;
-  ibu.hopDecayMethod.additionalFunctionArgs = SMPH.computeIBU_SMPH;
+  ibu.numAdditions.additionalFunctionArgs = ["SMPH", SMPH.computeIBU_SMPH];
+  ibu.hopDecayMethod.additionalFunctionArgs = ["SMPH", SMPH.computeIBU_SMPH];
   ibu.hopTableSize = 12;   // number of inputs to specify each addition of hops
   ibu.detailedOutput = true;
 
@@ -83,10 +86,8 @@ this.initialize_SMPH = function() {
   this.verbose            = 5;
   this.integrationTime    = 0.01;  // minutes
 
-  this.AA_limit_minLimit  = 210.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_maxLimit  = 570.0; // ppm of alpha acids, from SEARCH
-  this.AA_limit_min_roomTemp  = 90.0;  // Malowicki [AA] limit, ppm, minimum
-  this.AA_limit_max_roomTemp  = 116.0; // Malowicki [AA] limit, ppm, maximum
+  this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
+  this.AA_limit_maxLimit  = 580.0; // ppm of alpha acids, from SEARCH
   this.AA_dryHop_saturation   = 14.0;   // ppm, at beer pH (Shellhammer, p 170)
   this.scale_AA           = 0.885; // from Maye, MBAA TQ v.53, n.3, 2016, p. 135
 
@@ -460,16 +461,13 @@ function compute_concent_wort(ibu) {
   var AA_init_mg = 0.0;         // initial amount of AA added, in mg
   var AA_limit_func_A = 0.0;    // AA solubility limit, function parameter A
   var AA_limit_func_B = 0.0;    // AA solubility limit, function parameter A
-  var AA_limit_minLimit = 0.0;  // AA solubility limit, minimum solubility
-  var AA_limit_minLimit_orig = SMPH.AA_limit_minLimit;
-  var AA_limit_maxLimit = 0.0;  // AA solubility limit, maximum solubility
-  var AA_limit_maxLimit_orig = SMPH.AA_limit_maxLimit;
+  var AA_limit_minLimit = SMPH.AA_limit_minLimit;  // minimum solubility
+  var AA_limit_maxLimit = SMPH.AA_limit_maxLimit;  // maximum solubility
   var AA_noLimit = 0.0;         // [AA] if there is no solubility limit
   var AA_noLimit_mg = 0.0;      // dissolved AA, in mg, if no solubility limit
   var AA_percent = 0.0;         // the percent of alpha acids added to wort
   var AA_xfer_mg  = 0.0;        // amount of AA (mg) transferred w/ counterflow
   var additionTime = 0.0;       // the time of a hop addition
-  var boilK = 0.0;              // the temperature at boiling, in Kelvin
   var boilTime = ibu.boilTime.value; // the total boil time
   var coolingMethod = ibu.forcedDecayType.value; // the cooling method
   var currVolume = 0.0;         // the current volume of wort at time t
@@ -506,7 +504,6 @@ function compute_concent_wort(ibu) {
   var relativeTemp = 0.0;       // relative temp. to get effectiveSteepTime
   var RF_IAA = 0.0;             // isomerization rate factor for IAA
   var roomTempK = 20.0+273.15;  // room temperature, in Kelvin
-  var slope = 0.0;              // slope for solubility limit as func. of temp.
   var subBoilEvapRate = 0.0;    // evaporation rate, maybe at below-boiling temp
   var t = 0.0;                  // current time, in minutes
   var tempC = 0.0;              // current wort temperature, in degrees Celsius
@@ -584,6 +581,19 @@ function compute_concent_wort(ibu) {
 
   //---------------------------------------------------------
   // other initialization
+
+  // check min and max solubility limits;
+  // compute function parameters 'a' and 'b'
+  if (AA_limit_maxLimit <= AA_limit_minLimit) {
+    AA_limit_maxLimit = AA_limit_minLimit + 0.0001;  // prevent log(<=0)
+  }
+  AA_limit_func_A = AA_limit_maxLimit;
+  AA_limit_func_B = -1.0*Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) /
+                    AA_limit_minLimit;
+  if (SMPH.verbose > 3) {
+    console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
+              ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
+  }
 
   // get post-boil volume; if zero, then set results to zero and return
   postBoilVolume = ibu.getPostBoilVolume();
@@ -841,44 +851,19 @@ function compute_concent_wort(ibu) {
 
         // if use solubility limit, see if we need to change AA concentration
         if (useSolubilityLimit) {
-          AA_limit_minLimit = AA_limit_minLimit_orig;
-          AA_limit_maxLimit = AA_limit_maxLimit_orig;
-          // if add hops at below boiling, lower the solubility limit
-          if (tempK < 373.15) {
-            // change AA_limit_minLimit, AA_limit_maxLimit based on temperature
-            boilK     = ibu.boilTemp.value + 273.15;
-            slope = (SMPH.AA_limit_minLimit - SMPH.AA_limit_min_roomTemp) /
-                    (boilK - roomTempK);
-            AA_limit_minLimit = slope * (tempK - roomTempK) +
-                                SMPH.AA_limit_min_roomTemp;
-            slope = (SMPH.AA_limit_maxLimit - SMPH.AA_limit_max_roomTemp) /
-                    (boilK - roomTempK);
-            AA_limit_maxLimit = slope * (tempK - roomTempK) +
-                                SMPH.AA_limit_max_roomTemp;
-            if (SMPH.verbose > 2) {
-              console.log("   change due to low temp " + tempK.toFixed(4) +
-                    ": AA_limit_maxLimit = " + AA_limit_minLimit.toFixed(4) +
-                    ", AA_limit_minLimit = " + AA_limit_maxLimit.toFixed(4));
-            }
-          }
-          if (AA_limit_maxLimit <= AA_limit_minLimit) {
-            AA_limit_maxLimit = AA_limit_minLimit + 0.0001;  // prevent log(<=0)
-          }
-          AA_limit_func_A = AA_limit_maxLimit;
-          AA_limit_func_B =
-               -1.0* Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) /
-                     AA_limit_minLimit;
-          if (SMPH.verbose > 3) {
-            console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
-                      ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
-          }
-
           // if pre-addition [AA] is above threshold, find out what [AA] would
           // be at this point in time if there was no solubility limit
           AA_dis = AA_dis_mg / currVolume;
           if (AA_dis > AA_limit_minLimit) {
-            AA_noLimit = -1.0*Math.log(1.0 - (AA_dis/AA_limit_func_A)) /
-                         AA_limit_func_B;
+            // if not yet at maximum, reverse computation of sol. limit;
+            // else we're at or above the maximum, so get an [AA] that's
+            // very large so that any new addition will contribute no AA.
+            if (AA_dis/AA_limit_func_A < 1.0) {
+              AA_noLimit = -1.0*Math.log(1.0 - (AA_dis/AA_limit_func_A)) /
+                           AA_limit_func_B;
+              } else {
+              AA_noLimit = 1.0e10;
+              }
           } else {
             AA_noLimit = AA_dis;
           }

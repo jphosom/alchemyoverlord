@@ -38,7 +38,8 @@ this.initialize_Garetz = function() {
     }
     ibu[keys[idx]].updateFunction = Garetz.computeIBU_Garetz;
   }
-  ibu.numAdditions.additionalFunctionArgs = Garetz.computeIBU_Garetz;
+  ibu.numAdditions.additionalFunctionArgs =
+    ["Garetz", Garetz.computeIBU_Garetz];
   ibu.hopTableSize = 11; // compact: AA%, weight, boilTime, hopForm, pellet fact
   ibu.defaultPelletFactor = 1.10;
 

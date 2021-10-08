@@ -90,6 +90,9 @@
 //         . implement more checking of inputs
 //         . if topoff volume is 0, show wortLossVol in gray
 //
+// Version 1.2.16 : Oct. 7, 2021
+//         . add a check for log of negative number as a precaution
+//
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -120,7 +123,7 @@ this.initialize_mIBU = function() {
     }
     ibu[keys[idx]].updateFunction = mIBU.computeIBU_mIBU;
   }
-  ibu.numAdditions.additionalFunctionArgs = mIBU.computeIBU_mIBU;
+  ibu.numAdditions.additionalFunctionArgs = ["mIBU", mIBU.computeIBU_mIBU];
   ibu.hopTableSize = 4; // cones/pellets, AA%, weight, steepTime
 
   // don't need to set() any variables that change with unit conversion;
@@ -410,8 +413,15 @@ this.computeIBU_mIBU = function() {
           // if pre-add [AA] is above thresh, find out what it would be at this
           // point in time if there was no solubility limit.
           if (AAatAdd > AA_limit_minLimit) {
-            AA_noLimit = -1.0 * Math.log(1.0 - (AAatAdd/AA_limit_func_A)) /
-                         AA_limit_func_B;
+            // if not yet at maximum, reverse computation of sol. limit;
+            // else we're at or above the maximum, so get an [AA] that's
+            // very large so that any new addition will contribute no AA.
+            if (AAatAdd/AA_limit_func_A < 1.0) {
+              AA_noLimit = -1.0 * Math.log(1.0 - (AAatAdd/AA_limit_func_A)) /
+                           AA_limit_func_B;
+              } else {
+              AA_noLimit = 1.0e10;
+              }
           } else {
             AA_noLimit = AAatAdd;
           }

@@ -5,7 +5,10 @@ ibu_SMPH.html : HTML for AlchemyOverlord web page, SMPH sub-page
 Written by John-Paul Hosom
 Copyright © 2018,2019,2020,2021 by John-Paul Hosom, all rights reserved.
 Version 1.0.1 : Nov. 22, 2018 to Aug. 28, 2021
-Version 1.0.2 : Sep. 04, 2021 : bug fix in AA concentration when dry hopping
+Version 1.0.2 : Sep. 04, 2021 : Bug fix in AA concentration when dry hopping
+Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
+                                Don't take log of negative numbers.
+                                Add explanation of 'boil or steep time'
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -41,6 +44,19 @@ Version 1.0.2 : Sep. 04, 2021 : bug fix in AA concentration when dry hopping
   <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
   adjustment based on the use of hop pellets instead of whole cones</a>, and
   IBUs from dry-hopping.
+  </p>
+
+  <p>
+  For "boil or steep time" with kettle additions, specify the number of
+  minutes before flameout.  A negative value indicates time after flameout.
+  For example, a value of 10 means that the hops are added at 10 minutes
+  before flameout (during the boil).
+  A value of 0 indicates a flameout addition.
+  A value of -10 means that the hops are added to the hot wort at 10 minutes
+  after flameout.
+  Post-flameout kettle additions can be made during a whirlpool or hop stand,
+  or while the wort is being force cooled.
+  For dry-hop additions, specify the number of days of dry hopping.
   </p>
 
   <p>
@@ -318,6 +334,7 @@ SMPH.initialize_SMPH();
 <h4>Versions:</h4>
 <b>1.0.1</b>: (2018-Nov-22 to 2021-Aug-28)  Initial version.<br>
 <b>1.0.2</b>: (2021-Sep-04)  Bug fix in AA concentration when dry hopping.<br>
+<b>1.0.3</b>: (2021-Oct-05)  Bug fix, and don't reduce solubility limit with temperature.<br>
 </small>
 
 <p>

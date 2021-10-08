@@ -37,7 +37,8 @@ this.initialize_Rager = function() {
     }
     ibu[keys[idx]].updateFunction = Rager.computeIBU_Rager;
   }
-  ibu.numAdditions.additionalFunctionArgs = Rager.computeIBU_Rager;
+  ibu.numAdditions.additionalFunctionArgs =
+    ["Rager", Rager.computeIBU_Rager];
   ibu.hopTableSize = 3; // compact: AA%, weight, boilTime
 
   // don't need to set() any variables that change with unit conversion;

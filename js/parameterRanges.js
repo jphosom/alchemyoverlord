@@ -210,7 +210,7 @@ var params = {
                 "param":    "AA_limit_maxLimit",
                 "default":  560.0,
                 "low":      540.0,
-                "high":     580.0,
+                "high":     590.0,
                 "inc":      10.0,
             },
         ],
@@ -242,17 +242,17 @@ var params = {
 
             {
                 "param":    "AA_limit_minLimit",
-                "default":  210.0,
-                "low":      210.0,
-                "high":     210.0,
+                "default":  200.0,
+                "low":      200.0,
+                "high":     200.0,
                 "inc":      1.0,
             },
 
             {
                 "param":    "AA_limit_maxLimit",
-                "default":  570.0,
-                "low":      570.0,
-                "high":     570.0,
+                "default":  580.0,
+                "low":      580.0,
+                "high":     580.0,
                 "inc":      1.0,
             },
 
