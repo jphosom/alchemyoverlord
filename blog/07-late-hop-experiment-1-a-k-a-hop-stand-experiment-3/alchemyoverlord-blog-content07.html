@@ -1,0 +1,394 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Late Hop Experiment #1 (a.k.a. Hop-Stand Experiment #3)</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Late Hop Experiment #1 (a.k.a. Hop-Stand Experiment #3)
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+In my quest for lots of hop flavor, I <a href="../03-hop-stand-experiment-1/alchemyoverlord-blog-content03.html">previously</a> found that a hop stand did not provide the increase in flavor I expected.  The current experiment looks at several aspects of the brewing process that might provide an increase hop flavor: covering the pot during the last minutes of the boil, varying the time of late-hop additions, and hop stands with a somewhat different technique than I used previously.
+
+<p>
+I found that covering the pot to prevent oils escaping with the steam <em>may</em> provide some improvement, but this result was not definitive.  A late-hop addition at flameout (followed by 10 minutes of natural cooling with the lid on) contributed much more hop flavor than additions at 5 or 10 minutes.  Holding the wort (and hops) at 170°F (77°C) for an additional 45 minutes may have contributed something, but <em>not</em> an increase in hop flavor.  It seems that hop flavor is lost with extended contact time with boiling wort, and not increased with below-boiling temperatures.
+
+<p>
+I've also created a <a href="../09-techniques-for-maximizing-hop-flavor-and-aroma/alchemyoverlord-blog-content09.html">summary blog post</a> that describes the techniques I've found to be useful at maximizing hop flavor and aroma.
+
+<p>
+
+<span id="heading1">1. Background</span><br>
+<p>
+<span id="heading2">1.1 Flameout Hops Additions and Hop Stands</span><br>
+When I first started brewing, I would immediately cool the wort when the 60-minute boil time was up.  That was fine, until I started reading about hops additions at zero minutes/flameout.  Why add a whole bunch of hops, only to immediately cool down the wort and remove them?  I came across <a href="http://www.beersmith.com/forum/index.php?topic=3781.0" target="_blank">a discussion on BeerSmith about adding hops at flameout and then letting the wort sit for a while</a>.  There's another interesting discussion at <a href="http://www.beeradvocate.com/community/threads/adding-hops-at-flameout-how-long-till-you-chill-your-wort.59606/" target="_blank">BeerAdvocate about how long to let the wort sit before cooling</a>.  There's also an article in <a href="https://byo.com/" target="_blank">BYO</a> on hop stands, in which it's explained that "pro brewers [give] their flameout hops extended contact time with the wort".  Last but not least, there's an interesting discussion on ProBrewer about <a href="http://discussions.probrewer.com/showthread.php?29386-How-long-do-you-Whirlpool" target="_blank">how long professional brewers whirlpool their hops</a> after flameout.  In short, the wort is often not cooled immediately, which creates a hop stand (whether or not hops are added at flameout, due to any hops already in the wort that have not yet reached maximum utilization).  This extended contact gives flameout hops time to contribute something to beer flavor (and bitterness) at below-boiling temperatures.  In my <a href="../03-hop-stand-experiment-1/alchemyoverlord-blog-content03.html">previous hop-stand experiments</a>, I added post-flameout hops only after the target temperature (e.g. 170°F (77°C)) had been reached, and steeped for a relatively long period of time (60 minutes).  Since those experiments didn't demonstrate an increase in hop flavor, maybe higher temperatures or shorter steep times are critical for hop flavor.  In the current experiment, I let all batches sit for 10 minutes after flameout, with the lid on.  (I chose 10 minutes pretty much by chance; now I think that shorter times are better.)
+
+<p>
+<p>
+<span id="heading2">1.2 Balancing Bitterness Across Conditions</span><br>
+The goal of the current experiment was to look at hop flavor, but I wanted to examine hop flavor independently of bitterness.  In other words, I wanted to vary the timing of late-hop additions and keep the wort at high temperatures after flameout, but hold the bitterness level of all conditions relatively constant.   If one uses a standard formula for computing IBUs (e.g. <a href="http://www.realbeer.com/hops/research.html" target="_blank">Tinseth's formula</a>), hops additions at 0 minutes contribute no bitterness to the beer.  This is true if one immediately force-cools the wort at flameout, but since I allowed the wort in this experiment to sit for 10 minutes after flameout at high temperatures, there was bitterness that was not accounted for by this formula.  In order to keep the conditions in this experiment at roughly the same bitterness level, I developed a <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">modified version of Tinseth's IBU formula that predicts bitterness contributions after flameout</a>.  I used this formula to vary the timing and amount of hops added to each condition, in an attempt to equalize bitterness levels. There was a bug in my code at the time I used it for this experiment, and I didn't have the finished beer tested for IBUs, so despite my good intentions I have no idea how well bitterness was kept constant.  (I've since <a href="../30-four-pilot-studies-for-maximizing-hop-flavor-with-late-hop-additions/alchemyoverlord-blog-content30.html">corrected those errors</a> in a different set of experiments.)
+
+<p>
+
+<span id="heading1">2. Introduction</span><br>
+This experiment looked at three techniques that may contribute to hop flavor: (1) covering the pot during the last minutes of the boil, (2) varying the time of late-hops additions, and (3) a 45-minute hop stand held at 170°F (77°C), with hops added at flameout instead of when the target temperature is reached.  In all cases, the wort was left to stand for 10 minutes after flameout, which may be a critical detail.
+
+<p>
+<p>
+<span id="heading2">2.1 Covering the Pot</span><br>
+It's well known that volatile oils from the hops escape with the steam during the boil <span style="color: #808080;"><small>(e.g. Daniels, <a href="https://www.amazon.com/Designing-Great-Beers-Ultimate-Brewing/dp/0937381500" target="_blank">Designing Great Beers</a>, p. 101; Fix and Fix, <a href="http://www.amazon.com/Analysis-Brewing-Techniques-George-Fix/dp/0937381470" target="_blank">An Analysis of Brewing Techniques</a>, p. 33; Lewis and Young, <a href="http://www.amazon.com/Brewing-Michael-J-Lewis/dp/0306472740" target="_blank">Brewing</a>, 2nd ed., p. 271; Papazian, <a href="https://www.amazon.com/Homebrewers-Companion-Charlie-Papazian/dp/0060584734" target="_blank">The Homebrewer's Companion</a>, p. 63)</small></span>. However, an uncovered boil is essential to drive off the precursors of DMS <span style="color: #808080;"><small>(e.g. Palmer, How to Brew, p. 82; Fix and Fix, An Analysis of Brewing Techniques, p. 50)</small></span>.  To minimize the risk of DMS, I usually leave my pot uncovered during the entire brewing process, in accordance with Papazian's instructions to "never cover a boiling wort with a lid". <span style="color: #808080;"><small>(Papazian, p. 138)</small></span>.  Most ales, however, "have DMS levels well below threshold" <span style="color: #828282;"><small>(Fix and Fix, p. 50)</small></span>.  Because SMM and DMS are reduced more at ale fermentation temperatures than at lager fermentation temperatures, "any hint of DMS in ales is likely from technical brewing errors, most notably contamination" <span style="color: #828282;"><small>(Fix, p. 75)</small></span>.  This then brings up the question:  will covering the pot during the last additions of hops yield more (good) hop flavor in the (hop-forward) beer than (bad) DMS?  There's only one way to find out:  brew one condition with the pot uncovered during the entire boil, then brew a nearly identical batch with the pot covered after the last addition of hops.
+
+<p>
+<p>
+<span id="heading2">2.2 Varying the Time of Late Hops Additions</span><br>
+Late hop additions are also well known to provide more hop flavor than early additions.  I've seen many general statements to the effect of "Thirty minutes is a traditional cut-off point for flavor hops" <small><span style="color: #828282;">(Daniels, p. 101)</span></small> or <a href="http://www.brewerspublications.com/books/brewing-better-beer-master-lessons-for-advanced-homebrewers-3/" target="_blank">"Flavor hops additions are considered to be in the last 10 to 20 minutes of the boil"</a> <small><span style="color: #828282;">(Strong, p. 65)</span></small>.  Papazian provides an informative graph, showing an increase in flavor starting at 0 minutes, peaking at 10 minutes, and decreasing to zero at 45 minutes <small><span style="color: #828282;">(Papazian, The Homebrewer's Companion, p. 68)</span></small>.  This graph is a "general guide," though, and I wanted to examine the effect of hops additions in the final 10 minutes, and include a 10-minute stand after flameout.  Therefore, the current experiment looks at the effect on flavor when adding hops at 10 minutes, 5 minutes, and 0 minutes before flameout.  In all cases, I let the wort cool for 10 minutes after flameout.  This post-flameout wait provided at least a brief hop stand for all batches, but it means that my results will be different from someone who does late hopping and then cools their wort at flameout.
+
+<p>
+<p>
+<span id="heading2">2.3 Hop Stand</span><br>
+In my <a href="../03-hop-stand-experiment-1/alchemyoverlord-blog-content03.html">previous attempts at a hop stand</a>, I found that the hops added during the stand contributed very little hop flavor, and that the resulting <a href="../05-hop-stand-experiment-2/alchemyoverlord-blog-content05.html">fuller-bodied beer was most likely the result of non-enzymatic browning of the wort</a>.  Not what I was looking for.  But I added the hops only <em>after</em> the wort had reached the target temperature.  Some (or most?  nearly all?) people conduct a hop stand by adding the hops <em>at</em> flameout, bringing the temperature down (either naturally or by forced cooling), and then (possibly) holding the wort at a target temperature.  In the current experiment, there is an additional condition in which I added the hops at flameout, let the wort cool naturally (while covered) for 10 minutes, force-cooled the wort to the hop-stand target temperature, and then held that temperature for 45 minutes. This allows a direct comparison of how effective a hop stand is for longer time periods at lower temperatures.
+
+<p>
+
+<span id="heading1">3. Methods</span><br>
+This experiment used five conditions:
+(<strong>A</strong>) The baseline: a beer with a late-hop addition at 10 minutes before flameout and no covering of the pot.  This was a pretty generic beer.  The "bittering" hop addition of 0.25 oz in 1.3 G of wort (7 g in 4.9 liters) was made at around the ~20 minute mark (instead of the normal 60 minute mark), under the assumption that at 20 minutes and more, the contribution to hop flavor is minimal.
+(<strong>B</strong>) A late-hop addition at 10 minutes, with the pot covered during the final 10 minutes.  The bittering hop addition of 0.25 oz (7 g) was also around the 20-minute mark.
+(<strong>C</strong>) A late-hop addition at 5 minutes, with the pot covered during the final 5 minutes.  The bittering hop addition was slightly more hops (0.30 oz or 8.5 g) at around the 30-minute mark, to attempt to keep the bitterness level about the same as in other conditions.
+(<strong>D</strong>) A late-hop addition at flameout (0 minutes).  The bittering hop addition was even more hops (0.35 oz or 10 g) at the 45-minute mark, to try to keep the bitterness level about the same as in other conditions.
+(<strong>E</strong>) A late-hop addition at flameout.  The hops additions (amount and timing) were the same as in Condition <strong>D</strong>.  This condition was different from Condition <strong>D</strong> in that it was followed by holding the wort at 170°F (77°C) for 45 minutes after the 10-minute natural cooling period.
+
+<p>
+For all conditions, the wort was left to cool for 10 minutes after flameout with the pot covered. The target OG of all conditions was 1.060.  More details are provided below in Table 1.
+
+<p>
+<p>
+<span id="heading2">3.1 Comparisons</span><br>
+Condition <strong>A</strong> can be compared with <strong>B</strong>, to determine if covering the pot during the last hop addition (at 10 minutes, in this case) improves hop flavor.  Conditions <strong>B</strong>, <strong>C</strong>, and <strong>D</strong> can be compared with each other to determine which late-hop time (10 minutes, 5 minutes, 0 minutes) yields the most hop flavor (given the subsequent 10-minute hop stand).  Conditions <strong>D</strong> and <strong>E</strong> can be compared to determine if a 45-minute hop stand at 170°F (77°C) contributes to increased hop flavor.
+
+<p>
+I originally intended to compare the bitterness levels across all conditions, as a test of a modification to <a href="http://www.realbeer.com/hops/research.html" target="_blank">Tinseth's IBU formula</a>.  However, due to a bug in my initial calculations, the bitterness level will probably be somewhat different across the batches.  I report on the perceived bitterness levels in the <em><strong>Results: Comparisons</strong> </em>section, below.
+
+<p>
+<p>
+<span id="heading2">3.2 Recipes</span><br>
+As usual in <a href="../05-hop-stand-experiment-2/alchemyoverlord-blog-content05.html">these experiments</a>, a very simple recipe of Briess liquid malt extract, Cascade hops (8.9% AA), Citra hops (13.9% AA), and Safale US-05 yeast was used.  Rather than brewing the best beer possible, the idea was to keep things as simple and as replicable as possible.  The target volume of the wort at the end of each boil was 1.3 G (4.9 liters).  The goal was to end up with more than 1 G (3.8 liters) per condition, and to ferment only 3½ quarts (3.3 liters), as it’s better to throw wort away (including wort used in SG readings and settled trub) than to not have enough.  The 3½ quarts (3.3 liters) leaves (just) sufficient head room for fermentation.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>condition
+A</b></td>
+<td><b>condition
+B</b></td>
+<td><b>condition
+C</b></td>
+<td><b>condition
+D</b></td>
+<td><b>condition
+E</b></td>
+</tr>
+<tr>
+<td><b>Extract:
+</b></td>
+<td>2½ lbs (1.13 kg) Briess light LME</td>
+<td>2½ lbs (1.13 kg) Briess light LME</td>
+<td>2½ lbs (1.13 kg) Briess light LME</td>
+<td>2½ lbs (1.13 kg) Briess light LME</td>
+<td>2½ lbs (1.13 kg) Briess light LME</td>
+</tr>
+<tr>
+<td><b>Initial Water:</b></td>
+<td>1.80 G
+(6.8 liters)</td>
+<td>1.68 G
+(6.3 liters)</td>
+<td>1.80 G
+(6.8 liters)</td>
+<td>1.95 G
+(7.4 liters)</td>
+<td>2.0 G
+(7.6 liters)</td>
+</tr>
+<tr>
+<td><b>Boil Time:</b></td>
+<td>30 min</td>
+<td>30 min</td>
+<td>35 min</td>
+<td>45 min</td>
+<td>45 min</td>
+</tr>
+<tr>
+<td><b>Bittering Hops Addition:</b></td>
+<td>0.25 oz (7 g) Cascade (8.9% AA) at 19 min</td>
+<td>0.25 oz (7 g) Cascade (8.9% AA) at 21.3 min</td>
+<td>0.30 oz (8.5 g) Cascade (8.9% AA) at 30.5 min</td>
+<td>0.35 oz (10 g) Cascade (8.9% AA) at 45 min</td>
+<td>0.35 oz (10 g) Cascade (8.9% AA) at 45 min</td>
+</tr>
+<tr>
+<td><b>Aroma/
+Flavor Hops Addition:
+</b></td>
+<td>0.4 oz (11 g) Cascade (8.9% AA) and
+0.4 oz (11 g) Citra (13.9% AA)
+at 9.3 min,
+not covered</td>
+<td>0.4 oz (11 g) Cascade (8.9% AA) and
+0.4 oz (11 g) Citra (13.9% AA)
+at 9.3 min,
+covered</td>
+<td>0.4 oz (11 g) Cascade (8.9% AA) and
+0.4 oz (11 g) Citra (13.9% AA)
+at 5.0 min,
+covered</td>
+<td>0.4 oz (11 g) Cascade (8.9% AA) and
+0.4 oz (11 g) Citra (13.9% AA)
+at 0 min,
+covered</td>
+<td>0.4 oz (11 g) Cascade (8.9% AA) and
+0.4 oz (11 g) Citra (13.9% AA)
+at 0 min,
+covered</td>
+</tr>
+<tr>
+<td><b>Hop Stand:
+</b></td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>45 minutes at 170°F (77°C)</td>
+</tr>
+<tr>
+<td><b>Final Target Volume:
+</b></td>
+<td>1.3 G
+(4.9 liters )</td>
+<td>1.3 G
+(4.9 liters )</td>
+<td>1.3 G
+(4.9 liters )</td>
+<td>1.3 G
+(4.9 liters )</td>
+<td>1.3 G
+(4.9 liters )</td>
+</tr>
+<tr>
+<td><b>Yeast:
+</b></td>
+<td>~3.4 g Safale US-05 in 1.6 oz water added to 3½ quarts (3.3 liters)</td>
+<td>~3.4 g Safale US-05 in 1.6 oz water added to 3½ quarts (3.3 liters)</td>
+<td>~3.4 g Safale US-05 in 1.6 oz water added to 3½ quarts (3.3 liters)</td>
+<td>~3.4 g Safale US-05 in 1.6 oz water added to 3½ quarts (3.3 liters)</td>
+<td>~3.4 g Safale US-05 in 1.6 oz water added to 3½ quarts (3.3 liters)</td>
+</tr>
+<tr>
+<td><b>Priming Sugar:
+</b></td>
+<td>0.5 oz (14 g)
+corn sugar</td>
+<td>0.5 oz (14 g)
+corn sugar</td>
+<td>0.5 oz (14 g)
+corn sugar</td>
+<td>0.5 oz (14 g)
+corn sugar</td>
+<td>0.5 oz (14 g)
+corn sugar</td>
+</tr>
+<tr>
+<td><b>Target OG:
+</b></td>
+<td>1.060</td>
+<td>1.061</td>
+<td>1.061</td>
+<td>1.060</td>
+<td>1.061</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Recipes and predicted values for the five conditions.</span>
+
+<p>
+These recipes assumed an evaporation rate of 0.90 G/hr (3.4 liter/hr) during the uncovered boil, 0.35 G/hr (1.3 liter/hr) at temperatures less than boiling (uncovered), and 0.10 G/hr (0.38 liter/hr) for a covered boil or stand.  (The value for the covered boil was a guess, and assumed some small amount of loss due to various factors.)  The amount of water, the weight of bittering hops, and the timing of all hops additions were varied to attempt to achieve about the same OG, the same post-boil volume, and the same bitterness levels.
+
+<p>
+At 10 minutes after flameout, each condition was cooled to 75°F (24°C) using a wort chiller and let sit for an additional 10 minutes.  After transferring 3½ quarts (3.3 liters) into a sterile 1 G (4 liter) container (a.k.a. milk jug), the jug was shaken vigorously for 90 seconds, the yeast was pitched, and an airlock was applied.  Fermentation and conditioning proceeded for 3 weeks at around 64°F (18°C), followed by bottling and bottle conditioning for an additional 3 weeks (also around 64°F (18°C)).  Priming used 0.50 oz (14 g) of glucose per condition to yield 2.11 volumes CO2. The yield was 8 12-oz bottles per condition.
+
+<p>
+I don't think that the level of precision indicated in these recipes is required in order to obtain perceptually identical beers; a point or two of OG difference or a variation of <a href="http://www.brewerspublications.com/books/designing-great-beers-the-ultimate-guide-to-brewing-classic-beer-styles/" target="_blank">5 IBU</a>s <small><span style="color: #828282;">(Daniels, p. 76)</span></small> probably won't be perceptible.  I tried my best to obtain the target numbers indicated, however, and hoped that any measurement errors would, on average, cancel each other out.
+
+<p>
+
+<span id="heading1">4. Results</span><br>
+<p>
+<span id="heading2">4.1 Results: (In)Ability to Follow the Recipes (a.k.a. Mistakes)</span><br>
+If I had been able to follow the recipes above to the letter and not had any bugs in my software, then this sub-section wouldn't be necessary.  But nothing new ever goes completely according to plan, and so there were some unintended deviations from the recipes.  This part discusses what went differently and if I think there may be an impact on results.
+
+<p>
+(1) <em>Evaporation Rates</em>: Apparently, the 0.90 G/hr (3.4 liter/hr) evaporation rate that I've measured in the past (when making 5-gallon batches) was larger than my observed evaporation rate in this experiment.  This may have been because I used a smaller pot (which had a smaller opening), or because I've been so worried about too much evaporation that I applied less heat overall.  Likewise, the below-boiling evaporation rate seems to have been slightly overestimated.  Finally, the evaporation rate when the pot was covered was probably much closer to zero.  I realized something was off when Condition <strong>A</strong> was finished with the boil.  My solution for conditions <strong>B</strong>, <strong>C</strong>, <strong>D</strong>, and <strong>E</strong> was to wait an additional 5 to 10 minutes during the boil before adding any hops.  Even so, my measured OG values were 1.059 to 1.060 instead of 1.060 to 1.061.  <a href="../05-hop-stand-experiment-2/alchemyoverlord-blog-content05.html">I don't believe that I can detect the difference of a few points of OG</a>, and the over-estimation of evaporation rate was roughly the same for all conditions, so I don't think that this will affect results.
+
+<p>
+(2) <em>Condition <strong>A</strong></em>: I mistakenly used 1.85 G (7.0 liters) of water instead of 1.80 G (6.8 liters).  In addition, because the assumed evaporation rates were incorrect, I ended up with 1.75 G (6.6 liters) of wort after the boil instead of 1.60 G (6.0 liters).  My solution was to use a hop-less stand after the boil (at 170°F (77°C)) for 30 minutes in order to evaporate the extra 0.15 G (0.57 liters).  This meant that Condition <strong>A</strong> probably had a little bit more body than Conditions <strong>B</strong>, <strong>C</strong>, and <strong>D</strong> <a href="../05-hop-stand-experiment-2/alchemyoverlord-blog-content05.html">due to non-enzymatic browning</a>, but body is not one of the factors I'm intending to evaluate in this experiment.
+
+<p>
+(3) <em>Condition <strong>E</strong></em>: By the time I got to Condition <strong>E</strong>, apparently I was starting to really increase the heat in order to increase evaporation.  I ended up with an OG of 1.061.  Since the other conditions ended up with OGs around 1.059, I added ¼ cup (60 ml) of water to the final 3½ quarts (3.3 liters), which resulted in an OG of 1.060.
+
+<p>
+(4) <em>Post-Flameout Temperature Decrease</em>: Before brew day, I did a quick experiment in my kitchen to measure how quickly temperatures decrease after flameout.  This test showed that for 1.6 G (6.0 liters) in an uncovered pot, the temperature after 10 minutes was 182°F (83°C), and for 1.6 G (6.0 liters) in a covered pot, the temperature after 10 minutes was 201.5°F (94°C).  Since I planned to keep the lid closed after flameout, I used a line based on the second measurement to predict post-flameout bitterness.  What I forgot to take into account was the minute or so immediately after flameout, when I stirred the wort one last time and took a sample for SG reading.  In this brief time, the temperature quickly dropped while the pot was uncovered.  Also, the temperature in my kitchen (68°F (20°C)) was much greater than in my garage where I brew (around 60°F (15.5°C)).  As a result, I ended up with temperatures between 190°F (88°C) and 195°F (90.5°C) at 10 minutes after flameout.  Because of lower observed temperatures, I achieved less hop utilization during the 10 minutes after flameout than I had predicted.
+
+<p>
+(5) <em>Bug in the Calculations</em>: While this batch was fermenting, I worked on <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">a blog post to explain a modification to the prediction of IBU values</a> that takes into account post-flameout bitterness.  In the course of this writeup, I found a bug in my code.  As a result of this bug, I was computing less post-utilization flameout than I should have been for earlier hops additions, and so the (hopefully) more correct bitterness levels (mIBU values) decrease with the later hops additions instead of being constant.
+
+<p>
+After all those mistakes, here is a table summarizing the observed original gravity and final gravity for each batch:
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>condition
+A</b></td>
+<td><b>condition
+B</b></td>
+<td><b>condition
+C</b></td>
+<td><b>condition
+D</b></td>
+<td><b>condition
+E</b></td>
+</tr>
+<tr>
+<td><b>Original
+Gravity
+</b></td>
+<td> 1.059</td>
+<td> 1.060</td>
+<td> 1.059</td>
+<td> 1.059</td>
+<td> 1.060</td>
+</tr>
+<tr>
+<td><b>Final
+Gravity
+</b></td>
+<td> 1.013</td>
+<td> 1.014</td>
+<td> 1.013</td>
+<td> 1.013</td>
+<td> 1.013</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Measurements of Each Condition</span>
+
+<p>
+<p>
+<span id="heading2">4.2 Results: Comparisons</span><br>
+The following table summarizes the results of the comparisons.  The top right half of the table (in <span style="color: #0000ff;">blue</span>) is for the “hops flavor” comparison, and the bottom left half of the table (in <span style="color: #008000;">green</span>) is for a “relative bitterness” comparison. The letter in each box indicates which of the two conditions was preferred; a question mark indicates that no difference could be <em>reliably</em> detected.  Multiple values indicate multiple comparisons of the two conditions, which I did to detect possible random variation.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>Condition A
+</b></td>
+<td><b>Condition B</b></td>
+<td><b>Condition C</b></td>
+<td><b>Condition D</b></td>
+<td><b>Condition E</b></td>
+</tr>
+<tr>
+<td><b>Condition A
+</b></td>
+<td><b> </b></td>
+<td> <strong><span style="color: #0000ff;">?</span>,<span style="color: #0000ff;">B</span>,<span style="color: #0000ff;">?</span></strong></td>
+<td> –<strong></strong>
+</td>
+<td> –</td>
+<td> –</td>
+</tr>
+<tr>
+<td><b>Condition B</b></td>
+<td> <strong><span style="color: #008000;">?</span>,<span style="color: #008000;">?</span>,<span style="color: #008000;">A</span></strong></td>
+<td><b> </b></td>
+<td> <strong><span style="color: #0000ff;">?</span>,<span style="color: #0000ff;">C</span>,<span style="color: #0000ff;">C</span></strong></td>
+<td> <strong><span style="color: #0000ff;">D</span>,<span style="color: #0000ff;">D</span></strong></td>
+<td> –</td>
+</tr>
+<tr>
+<td><b>Condition C</b></td>
+<td><strong> –</strong></td>
+<td> <strong><span style="color: #008000;">?</span>,<span style="color: #008000;">?</span>,<span style="color: #008000;">?</span></strong></td>
+<td><b> </b></td>
+<td> <strong><span style="color: #0000ff;">D</span>,<span style="color: #0000ff;">D</span>,<span style="color: #0000ff;">D</span></strong></td>
+<td><strong> –</strong></td>
+</tr>
+<tr>
+<td><b>Condition D</b></td>
+<td> –</td>
+<td> <strong><span style="color: #008000;">?</span>,<span style="color: #008000;">?</span></strong></td>
+<td> <strong><span style="color: #008000;">?</span>,<span style="color: #008000;">D</span>,<span style="color: #008000;">C</span></strong></td>
+<td><b> </b></td>
+<td><strong><span style="color: #0000ff;">  ?</span>,<span style="color: #0000ff;">?</span>,<span style="color: #0000ff;">?</span></strong>
+</td>
+</tr>
+<tr>
+<td><b>Condition E</b></td>
+<td> –<strong></strong>
+</td>
+<td> –</td>
+<td> –</td>
+<td> <strong><span style="color: #008000;">?</span>,<span style="color: #008000;">?</span>,<span style="color: #008000;">?</span></strong><strong>
+</strong></td>
+<td><b> </b></td>
+</tr>
+</tbody>
+</table>
+<span style="text-decoration: underline;"><strong>A</strong>/<strong>B</strong> Comparison Notes.</span> <em>First tasting</em>: condition <strong>A</strong> had slightly more body, as expected by the non-enzymatic browning caused by the extra time for evaporation. Condition <strong>B</strong> had very slightly more hops/citrus flavor, but not enough to be a reliable difference.  It seemed that covering the pot during the last 10 minutes had a negligible effect on flavor.  <em>Second tasting</em>:  Condition <strong>B</strong> had a very slightly crisper, more citrus flavor than <strong>A</strong>, as one would expect from Cascade and Citra hops.  The beers were very, very similar, but there was a reliable, detectable difference.  Bitterness levels were the same.  <em>Third tasting</em>:  This time, <strong>A</strong> seemed slightly more bitter; <strong>B</strong> more "mellow."  (In hindsight, it's likely that I was hallucinating the difference in bitterness; I'm also not sure what would make <strong>B</strong> more "mellow".)  I could detect only a very slight difference in hops flavor, with <strong>B</strong> having slightly more but not enough for me to consider it a reliable difference. <span style="color: #0000ff;"><strong>In short</strong></span>: <strong>B</strong> was preferred for hops flavor all three times, but only once did I think it noticeable enough to be considered a "reliable" difference.
+
+<p>
+<span style="text-decoration: underline;"><strong>B</strong>/<strong>C</strong> Comparison Notes.</span> <em>First tasting</em>: these beers had nearly identical taste.  At first I decided that <strong>C</strong> was ever so slightly more bitter than <strong>B</strong>; a half glass later, I decided that <strong>B</strong> was just slightly more bitter than <strong>C</strong>.  So I marked it as "no detectable difference" in terms of bitterness.  At first, I could detect no difference in hops flavor.  By the end of the first tasting, I thought that <strong>C</strong> had slightly more hops flavor than <strong>B</strong>, but not much.  <em>Second tasting</em>: this time, I could reliably detect a small amount of more hops flavor in <strong>C</strong>, even from the first sips.  Bitterness levels were about the same, although <strong>C</strong> seemed maybe just a little more bitter than <strong>B</strong>.  <em>Third tasting</em>: <strong>C</strong> had distinctly more hops flavor than <strong>B</strong>, although not dramatically more.  The difference was small but noticeable.  I thought <strong>B</strong> might have been a little bit more bitter than <strong>C</strong> (the opposite of my second tasting result), but not enough to make it a reliable difference.  <span style="color: #0000ff;"><strong>In short</strong></span>: bitterness levels were about the same, and <strong>C</strong> had consistently more hop flavor than <strong>B</strong>.
+
+<p>
+<span style="text-decoration: underline;"><strong>C</strong>/<strong>D</strong> Comparison Notes.</span> <em>First tasting</em>: OK, this was the first clear and compelling difference!  <strong>D</strong> definitely had more hops flavor.  This was a real plus.  On the other hand, it also had more of a tannin flavor.  I had a hard time deciding which was more bitter.  <strong>D</strong> might have been a tad sweeter, but it also seemed like it might have had more of a tannin or "astringent" bitterness, in contrast with the "clean" bitterness of <strong>C</strong>.  So in the end the bitterness level seemed about the same.  One unanswered question is whether the astringent bitterness was caused by the longer boil time of the "bittering" hops or the later addition of the "flavor" hops.  <em>Second tasting</em>: <strong>D</strong> had much more hops flavor, by a wide margin.  <strong>C</strong> had a definite citrus-hop character, but <strong>D</strong> brought it out much more.  I thought that <strong>D</strong> was more bitter, in contrast with the predicted bitterness levels.  <em>Third tasting</em>: Again, and without question, <strong>D</strong> had more hops flavor.  <strong>C</strong> seemed to be slightly more bitter, but the bitterness was a "cleaner" bitterness rather than an "astringent" or "grassy" bitterness.   Since these tastings, I've found a relevant comment by Greg Noonan: "the bitterness derived from long boiling is coarser than that from a more moderate period" (<a href="http://www.brewerspublications.com/books/new-brewing-lager-beer/" target="_blank">Noonan, New Brewing Lager Beer, p. 154</a>).  Condition <strong>D</strong> had a larger amount of bittering hops in the boil for a longer time, and so the difference in bitterness quality probably came from the bittering hop addition rather than the late hop addition.  <span style="color: #0000ff;"><strong>In short</strong></span>: <strong>D</strong> clearly had more hop flavor than <strong>C</strong>; bitterness levels were difficult to judge but about the same.
+
+<p>
+<span style="text-decoration: underline;"><strong>D</strong>/<strong>E</strong> Comparison Notes.</span> <em>First tasting</em>:  There was <em>almost</em> no difference between these beers.  There was a very slight and subtle difference, but I couldn't figure out if it <strong>E</strong> was slightly more astringent, or had more body, or what.  In short, there was no difference between <strong>D</strong> and <strong>E</strong> that I could label with any category.  <em>Second tasting</em>:  Same results as the first.  I thought there might be some difference between the two conditions, but I couldn't quite place what it was.  More bitter?  Fuller?  More sweet?  Crisper?  I really didn't know.  They were not identical, but not reliably different in either hops flavor or bitterness.  Third tasting:  This time I was able to pin a label on the difference: <strong>E</strong> was slightly smoother than <strong>D</strong>.  Once I had decided on that label, I could distinguish them.  Since "smooth" is neither hop flavor nor bitterness, I marked this comparison as "?" in both categories.  The "smoothness" description fits in well with the flavor effects of a hop stand that I observed in <a href="../03-hop-stand-experiment-1/alchemyoverlord-blog-content03.html">Hop Stand Experiment #1</a>.  <span style="color: #0000ff;"><strong>In short</strong></span>: bitterness and hop flavor levels were about the same for <strong>D</strong> and <strong>E</strong>; <strong>E</strong> was slightly "smoother".
+
+<p>
+<span style="text-decoration: underline;"><strong>B</strong>/<strong>D</strong> Comparison Notes.</span> After the main comparisons (<strong>A</strong>/<strong>B</strong>, <strong>B</strong>/<strong>C</strong>, <strong>C</strong>/<strong>D</strong>, <strong>D</strong>/<strong>E</strong>), I had enough bottles left to compare <strong>B</strong> and <strong>D</strong> twice, so I did.  <em>First tasting</em>: As expected, <strong>D</strong> had more hops flavor than <strong>B</strong>, but I couldn't detect a difference in bitterness... if anything, <strong>D</strong> seemed slightly more bitter.  <em>Second tasting</em>: Once again, <strong>D</strong> had more hops flavor than <strong>B</strong>.  At first I thought that <strong>B</strong> was more bitter, then I decided that I really couldn't tell.  <span style="color: #0000ff;"><strong>In short</strong></span>: <strong>D</strong> had more hops flavor than <strong>B</strong>.
+
+<p>
+
+<span id="heading1">5. Summary</span><br>
+Covering the lid during the final 10 minutes of the boil (immediately after the last hops addition) had a small impact.  There might be some benefit to covering the pot, resulting in a barely detectable increase in hops flavor.  Certainly there was no downside, and no extra effort.
+
+<p>
+A hops addition at flameout, with a 10-minute stand, contributed <em>much</em> more hops flavor than otherwise identical additions at 5 and 10 minutes.  A hop addition at 5 minutes contributed more hops flavor than a 10-minute addition, but much less than the flameout addition.  This may be compatible with Papazian's graph showing a peak in hops flavor at 10 minutes, since his graph may assume cooling at flameout, whereas my batches were kept hot for 10 minutes after flameout.
+
+<p>
+Holding the hops in the wort at 170°F (77°C) for 45 minutes yielded no reliably-quantifiable effect on hops flavor or bitterness, except for the possibility that the wort held at 170°F (77°C) was slightly smoother.  Unless you're really trying to squeeze every last possible iota of goodness from your process, when the wort cools to ~180°F (82°C), you might as well force-cool to pitching temperature and get on with the day.
+
+<p>
+
+<span id="heading1">6. Conclusion and Future Work</span><br>
+Within the constraints of this experimental setup, the best way to maximize hop flavor is to add hops at flameout, cover the pot, and let the wort cool naturally for 10 minutes.  Longer hops additions are not as effective as flameout additions.  Covering the pot provides a very small increase in flavor.  Holding the wort at 170°F (77°C) may provide some benefit, but is probably not worth the effort.
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

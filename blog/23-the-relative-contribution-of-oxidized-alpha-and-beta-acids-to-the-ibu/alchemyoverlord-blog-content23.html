@@ -1,0 +1,534 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>The Relative Contribution of Oxidized Alpha- and Beta-Acids to the IBU</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+The Relative Contribution of Oxidized Alpha- and Beta-Acids to the IBU
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+The IBU combines the concentration of isomerized alpha acids (IAAs) and the concentration of "auxiliary bittering compounds" (ABCs) in beer into a single measure of approximate bitterness.  While IAAs contribute the most to the IBU in typical beers, ABCs play a significant role and may have concentrations greater than IAAs in very late-hopped beers.  The auxiliary bittering compounds are composed of polyphenols, oxidized alpha acids, and oxidized beta acids.  This blog post estimates the relative contribution of oxidized alpha acids and oxidized beta acids to the IBU, using data from beer brewed with four varieties of hops.  The data indicate that when using well-preserved hops, the concentration of oxidized alpha acids in beer is much greater than the concentration of oxidized beta acids. It is estimated that the auxiliary bittering compounds in most beers made with well-preserved hops are composed primarily of oxidized alpha acids, with much lower contributions from malt polyphenols, hop polyphenols, and finally oxidized beta acids. When hops have been stored for long periods with exposure to oxygen, however, the oxidized beta acids may contribute significantly to the IBU.
+
+<p>
+
+<span id="heading1">1. Introduction</span><br>
+The IBU is a measure of the concentration of a number of different bitter compounds.  (To be more precise, the IBU is a measure of the absorbance of light at 275 nm through acidified beer.  A number of bitter compounds in beer absorb light at this frequency.  The greater the concentration of these compounds, the more light is absorbed, and the higher the IBU.)  In typical beers, the IBU value represents mostly the concentration of isomerized alpha acids (IAAs) <a href="#references_oAAoBA">[Peacock, pp. 164-165]</a>, which are produced during the boil from alpha acids (AA).  The other bitter compounds, known as "auxiliary bittering compounds" (ABCs), or nonIAA, are <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">polyphenols, oxidized alpha acids, and oxidized beta acids</a>.  These compounds can be considered to be present in the wort soon after the hops addition <a href="#references_oAAoBA">[e.g. Dierckens and Verzele, p. 454; Askew, p. 18]</a>.  (Alpha acids, which are present in wort <a href="#references_oAAoBA">[Hough et al., p. 491]</a> and also absorb light at 275 nm <a href="#references_oAAoBA">[Hough et al., p. 434, p. 491]</a>, are not bitter <a href="#references_oAAoBA">[Shellhammer, p. 169]</a> but also not typically present in the fermented beer <a href="#references_oAAoBA">[e.g. Lewis and Young, p. 259, Hough et al., p. 491]</a>.  Therefore, they do not contribute to the measured IBU value of beer <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">except when dry hopping</a>.)
+
+<p>
+While "typical" beers (if there is such a thing anymore) have a much greater concentration of IAAs compared to ABCs, beers produced with a large amount of hops added very late in (or after) the boil can have ABC concentrations greater than IAAs.  In modeling IBUs and getting a better understanding of the bitterness qualities of late-hopped beers, it is beneficial to have an estimate of the relative concentrations of the compounds that are collectively referred to as ABCs.  While the contribution of malt and hop polyphenols to the IBU is generally known (as discussed in Section 4), a quantitative analysis of the relative contribution of oxidized alpha- and beta-acids is not easily found in the literature.
+
+<p>
+This blog post estimates the relative concentrations of oxidized alpha- and beta-acids in beer by analysis of IBU values.  These IBU values were obtained by <a href="https://www.asbcnet.org/Methods/BeerMethods/Pages/default.aspx" target="_blank">ASBC Beer-23A</a> analysis of samples taken at different points in the boil from four beers brewed with different varieties of hops (and different alpha-acid and beta-acid ratings).
+
+<p>
+
+<span id="heading1">2. The Concentration of Isomerized Alpha Acids in Beer</span><br>
+Mark Malowicki developed formulas to estimate the concentration of IAAs in the wort from the initial concentration of alpha acids <a href="#references_oAAoBA">[Malowicki, p. 27]</a>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11 </sup>e<sup>-11858/</sup><em><sup>T</sup></em></td>
+<td align="right" valign="bottom" width="30">[1]</td>
+</tr>
+<tr>
+<td><em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/</sup><em><sup>T</sup></em></td>
+<td align="right" valign="bottom" width="30">[2]</td>
+</tr>
+<tr>
+<td>[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</td>
+<td align="right" valign="bottom" width="30">[3]</td>
+</tr>
+</tbody>
+</table>
+where <em>k</em><sub>1</sub>(<em>T</em>) and <em>k</em><sub>2</sub>(<em>T</em>) are empirically-derived rate constants, <em>T</em> is the temperature in Kelvin (i.e. 373.15 K for boiling), <em>t</em> is the steep time (in minutes), e is the constant 2.71828, and [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids in the wort (in ppm).  This concentration of IAA in the wort, [<em>IAA</em>]<sub>wort</sub>, decreases as IAAs are lost to trub and krausen during the boil and fermentation.  The concentration of IAAs in beer ([<em>IAA</em>]<sub>beer</sub>) can then be expressed as the IAA concentration in wort multiplied by a loss scaling factor, <em>scaling<sub>IAA</sub></em>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em></td>
+<td align="right" valign="bottom" width="30">[4]</td>
+</tr>
+</tbody>
+</table>
+
+<span id="heading1">3. The IBU Expressed as Concentrations of Bitter Compounds</span><br>
+Val Peacock <a href="#references_oAAoBA">[Peacock, p. 161]</a> provides an equation to express the IBU as a combination of the concentration of IAAs and ABCs (also called nonIAA):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + [<em>ABC</em>]<sub>beer</sub>)</td>
+<td align="right" valign="bottom" width="30">[5]</td>
+</tr>
+</tbody>
+</table>
+where <em>IBU</em> is the IBU value of the beer, [<em>IAA</em>]<sub>beer</sub> is the concentration of isomerized alpha acids in the finished beer (in ppm, from Section 2), and [<em>ABC</em>]<sub>beer</sub> is the concentration of all other bittering compounds (also in ppm).
+
+<p>
+The concentration of ABCs in beer ([<em>ABC</em>]<sub>beer</sub>) can be expressed as the sum of the concentrations of the individual ABC compounds multiplied by appropriate scaling factors that relate each concentration to absorption at 275 nm:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>ABC</em>]<sub>beer</sub> = [<em>PPmalt</em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em> + [<em>PPhops</em>]<sub>beer</sub> × <em>scale<sub>PPhops</sub></em> + [<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em> + [<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em></td>
+<td align="right" valign="bottom" width="30">[6]</td>
+</tr>
+</tbody>
+</table>
+where [<em>PPmalt</em>]<sub>beer</sub>, [<em>PPhops</em>]<sub>beer</sub>, [<em>oAA</em>]<sub>beer</sub>, and [<em>oBA</em>]<sub>beer</sub> are the concentrations in the beer of malt polyphenols, hop polyphenols, oxidized alpha acids, and oxidized beta acids, respectively, and <em>scale<sub>PPmalt</sub></em>, <em>scale<sub>PPhops</sub></em>, <em>scale<sub>oAA</sub></em>, and <em>scale<sub>oBA</sub></em> are the scaling factors that relate concentration to absorption at 275 nm for these compounds.
+
+<p>
+Alternatively, we can express the concentration of ABCs in beer as the concentration of total hop particles added to the wort, multiplied by a single scaling factor that accounts for (a) the proportion of each ABC compound to total hop matter, (b) different absorption factors of these compounds, and (c) losses of each ABC to trub and during fermentation:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>ABC</em>]<sub>beer</sub> = [<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>ABC</sub></em></td>
+<td align="right" valign="bottom" width="30">[7]</td>
+</tr>
+</tbody>
+</table>
+where [<em>hops</em>]<sub>wort</sub> is the concentration of hops added to the wort and <em>scaling<sub>ABC</sub></em> is the above-mentioned scaling factor.
+
+<p>
+We can estimate the scaling factors <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>ABC</sub></em> from these equations and measured IBU values of beer samples fermented from wort taken at different time points during the boil.  This technique is described in the blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.
+
+<p>
+
+<span id="heading1">4. The Concentration of Polyphenols in Beer</span><br>
+Polyphenols in beer come from both malt and hops. This section describes how to estimate their concentration in beer and their impact on IBUs.
+
+<p>
+<p>
+<span id="heading2">4.1 Malt Polyphenols</span><br>
+According to Tom Shellhammer, IBUs are in the range of 1 to 3 for unhopped beer <a href="#references_oAAoBA">[Shellhammer, p. 177]</a>.  In <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">one experiment</a>, I brewed several unhopped beers and developed a formula for predicting IBUs that come from malt polyphenols:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>PPmalt</sub></em> = ((<em>OG</em> − 1.0) × 1000) × 0.019) × ((1.734 × (5.75 − <em>pH</em>) / 0.7) + 1.0)</td>
+<td align="right" valign="bottom" width="30">[8]</td>
+</tr>
+</tbody>
+</table>
+where <em>IBU<sub>PPmalt</sub></em> is the IBU value obtained from malt polyphenols, <em>OG</em> is the original gravity of the beer, and <em>pH</em> is the post-boil pH.  This formula predicts 2.4 IBUs from an OG of 1.050 and post-boil pH of 5.15, which is generally in line with Shellhammer's statement.  We can convert this formula from a prediction of IBUs to a prediction of scaled malt polyphenol concentrations if we multiply by 7/5 (from Equations [5] and [6]):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>PP<sub>malt</sub></em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em> = 7/5 × <em>IBU<sub>PPmalt</sub></em></td>
+<td align="right" valign="bottom" width="30">[9]</td>
+</tr>
+</tbody>
+</table>
+where [<em>PP<sub>malt</sub></em>]<sub>beer</sub> is the concentration of malt polyphenols in the finished beer (in ppm) and <em>scale<sub>PPmalt</sub></em> is the scaling factor for light absorption at 275 nm.  This scaling factor is <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">dependent on both pH and boil time</a>, but we often don't need to determine the separate values of [<em>PP<sub>malt</sub></em>]<sub>beer</sub> and <em>scale<sub>PPmalt</sub></em>; knowing their product, as specified by 7/5 × <em>IBU<sub>PPmalt</sub></em>, is usually sufficient.  (The implication of a non-constant scaling factor is that not all of the malt polyphenols contribute to the IBU; those that do contribute are affected by pH and time.)
+
+<p>
+<p>
+<span id="heading2">4.2 Hop Polyphenols</span><br>
+Hop polyphenol levels are often reported in the range from 2% to 6% of the weight of the hops <a href="#references_oAAoBA">[Shellhammer, p. 169; Hough et al., p. 422; Algazzali, p. 5; Verzele and De Keukeleire, p. 9]</a>.  After having been added to the wort, polyphenols are removed "extensively by precipitation with proteins during wort boiling"; 80% of hop flavanols are removed in the trub when boiling hopped wort <a href="#references_oAAoBA">[McLaughlin, p. 7]</a>. Yeast has only a minor effect on polyphenol concentrations during fermentation <a href="#references_oAAoBA">[Leiper and Miedl, p. 136; Alexander]</a>, but losses to trub and krausen may be similar to those of <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">malt polyphenols, estimated at 30%</a>.  Finally, we need a scaling factor, <em>scale<sub>PPhops</sub></em>, to use with the concentration of hop polyphenols in Equation [6].  According to Ellen Parkin, "an increase of 100 mg/L of polyphenols was predicted to increase the [IBU] value by 2.2" <a href="#references_oAAoBA">[Parkin, p. 28]</a>, so that 1 ppm of hop polyphenols should increase the IBU by 0.022.  We can multiply this by 7/5 to convert from an IBU value to a concentration scaling factor (using Equations [5] and [6]).
+
+<p>
+From this, we can construct a model of the concentration of hop polyphenols in beer and the associated scaling factor, with an initial level of polyphenols at 4% of the weight of the hops, a loss factor (or combined solubility and loss factor) for polyphenols during the boil estimated at 0.20 (corresponding to 80% loss), and a loss factor of 0.70 (corresponding to 30% loss) during fermentation:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>PP<sub>hops</sub></em>]<sub>beer</sub> = 0.04 × 0.20 × 0.70 × <em>W</em> × 1000 / <em>V</em></td>
+<td align="right" valign="bottom" width="30">[10]</td>
+</tr>
+<tr>
+<td><em>scale<sub>PPhops</sub></em> = 7/5 × 0.022 = 0.0308</td>
+<td align="right" valign="bottom" width="30">[11]</td>
+</tr>
+</tbody>
+</table>
+where [<em>PP<sub>hops</sub></em>]<sub>beer</sub> is the concentration of hop polyphenols in the beer (in ppm), <em>W</em> is the weight of hops added (in grams), <em>V</em> is the final wort volume (in liters), and <em>scale<sub>PPhops</sub></em> is the scaling factor for light absorption at 275 nm.
+
+<p>
+<p>
+<span id="heading2">4.3 Relative Contributions of Malt and Hop Polyphenols</span><br>
+The majority of polyphenols in beer come from malt.  According to Steve Alexander, "roughly 75% of total beer phenolics come from malt, and the remaining 25% come from hops" <a href="#references_oAAoBA">[Alexander]</a>.  Denis De Keukeleire states that "hops may contribute up to about one third of the total polyphenols in beer" <a href="#references_oAAoBA">[De Keukeleire, p. 109]</a>.  According to Cynthia Almaguer et al., "about 20–30% of the polyphenols found in the wort come from the hop material" <a href="#references_oAAoBA">[Almaguer, p. 300]</a>.
+
+<p>
+
+<span id="heading1">5. Oxidized Alpha- and Beta-Acids in Beer</span><br>
+Alpha acids (before isomerization) "do not survive to any significant extent into beer" <a href="#references_oAAoBA">[e.g. Lewis and Young, p. 259]</a> and are not bitter <a href="#references_oAAoBA">[Shellhammer, p. 169]</a>, but as they age and become oxidized, the resulting oxidized alpha acids (oAAs) are both soluble in wort and bitter <a href="#references_oAAoBA">[Algazzali, pp. 14-15, p. 19, p.45; Maye et al, p. 23; Hough et al., pp. 435-436; Hough et al., p. 439; Lewis and Young, p. 265]</a>.  Oxidized alpha acids are also produced during the boil <a href="#references_oAAoBA">[Parkin, p. 11, Algazzali, p. 17; Dierckens and Verzele, p. 454; Oliver p. 471]</a>, but the amount of oxidized alpha acids produced in this way is unclear.
+
+<p>
+Oxidized beta acids (oBAs) are also soluble <a href="#references_oAAoBA">[Algazzali, p. 16]</a> and may be produced and contribute to bitterness in the same way as oxidized alpha acids <a href="#references_oAAoBA">[Malowicki, p. 2; Peacock, p. 157; Fix, p. 36; Lewis and Young, p. 265; Hall, p. 55; Oliver, p. 132; Oliver, p. 470; Parkin, p. 11; Algazzali, p. 17; Hough et al., p. 489]</a>. Val Peacock says that "the beta oxidation products contribute to analytical IBUs" <a href="#references_oAAoBA">[Peacock, p. 161]</a> and that "much of the nonIAA material originates from the oxidation of the beta acids as hops age" <a href="#references_oAAoBA">[Peacock, p. 164]</a>.  Oxidized beta acids may also be produced during the boil <a href="#references_oAAoBA">[Spetsig, p. 350]</a>.  Stevens and Wright provide an estimate of the amount of oxidized beta acids produced during the boil, noting that "as much as 10% of the beta acid had been converted into cohulupone" <a href="#references_oAAoBA">[Stevens and Wright, p. 500]</a>.  If 10% of the beta acids are oxidized during the boil, and if oxidized beta acids contribute to analytical IBUs, then oxidized beta acids can contribute to a significant portion of ABCs even when using fresh hops. If beta acids are not oxidized during the boil, then the contribution of oxidized beta acids may depend on how well the hops have been stored.  In this case, poorly-preserved hops may have a greater contribution of oxidized beta acids to the IBU than well-preserved hops.  Almaguer notes that "further oxidation of the [oxidized beta acids] will result in the non-bitter hulupinic acid" <a href="#references_oAAoBA">[Almaguer, p. 295]</a>.  It is not clear how quickly the oxidized beta acids are converted into hulupinic acid.  This process might occur very quickly, in which case even oxidized beta acids from poorly-stored hops will not contribute to the IBU.  Or, this transformation might occur over weeks or months, in which case oxidized beta acids may contribute significantly to the IBU.
+
+<p>
+In addition to the concentrations of these products in beer, [<em>oAA</em>]<sub>beer</sub> and [<em>oBA</em>]<sub>beer</sub>, we're also concerned with how their concentrations relate to IBU measurement via the scaling factors <em>scale<sub>oAA</sub></em> and <em>scale<sub>oBA</sub></em>.  According to the data in Maye et al. (Figure 7), the scaling factor for <em>scale<sub>oAA</sub></em> is 0.0130 / 0.0142 = 0.9155 <a href="#references_oAAoBA">[Maye, p. 25]</a>.   According to Hough et al., "[oxidized beta acids] exhibit 80-90% of the absorption of the iso-alpha-acids at [275 nm in acid solution]" <a href="#references_oAAoBA">[Hough et al., p. 491]</a>.  Therefore, the oxidized beta-acid scaling factor is about 0.85.
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>scale<sub>oAA</sub></em> = 0.0130 / 0.0142 = 0.9155</td>
+<td align="right" valign="bottom" width="30">[12]</td>
+</tr>
+<tr>
+<td><em>scale<sub>oBA</sub></em> = 0.85</td>
+<td align="right" valign="bottom" width="30">[13]</td>
+</tr>
+</tbody>
+</table>
+Although oxidized alpha- and beta-acids are both bitter and soluble, potentially contributing to the IBU measurement, the literature is not clear on the relative proportion of oxidized alpha acids to oxidized beta acids produced during the boil and ending up in the finished beer.
+
+<p>
+
+<span id="heading1">6. Experimental Overview</span><br>
+To evaluate the relative proportion of oxidized alpha- and beta-acids in beer, I designed two new experiments and took IBU data from three earlier experiments. The new experiments used <a href="http://www.hopslist.com/hops/aroma-hops/teamaker/" target="_blank">Teamaker</a> hops, known for having almost no alpha acids and a very high concentration of beta acids.
+
+<p>
+The three other experiments are described in the blog posts <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">The Impact of Krausen Loss on IBUs</a>, <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">The Effect of pH on Utilization and IBUs</a>, and <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Hop Cones vs. Pellets: IBU Differences</a>.  I took data from Condition <strong>B</strong> of the <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">Krausen Loss</a> experiment, Condition <strong>A</strong> of the <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">Effect of pH</a> experiment, and Condition <strong>A</strong> of the <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Cones vs. Pellets</a> experiment because those conditions were most similar to the new experiment with the exception of hop variety.  The primary difference between the different sets of data was in the variety of hops used, with different alpha- and beta-acid ratings, and in the storage conditions of the Teamaker hops.
+
+<p>
+
+<span id="heading1">7. Experimental Details and Results</span><br>
+<p>
+<span id="heading2">7.1 New Experiment #1 (Experiment #1)</span><br>
+The first new experiment used well-preserved Teamaker hops.  Wort was prepared from 4.13 lbs (1.87 kg) of <a href="http://www.briess.com/" target="_blank">Briess</a> <a href="http://www.brewingwithbriess.com" target="_blank">Pilsen Light Dried Malt Extract</a> and 3.22 G (12.20 liters) of 120<span class="ILfuVd"><span class="e24Kjd">°</span></span>F (49<span class="ILfuVd"><span class="e24Kjd">°</span></span>C) <a href="https://www.portlandoregon.gov/water/article/643100" target="_blank">low-alkalinity</a> water, yielding 3.48 G (13.17 liters) of room-temperature wort.  This wort sat for 90 minutes to let the <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">pH stabilize</a>.  The measured pre-boil specific gravity was 1.054.  The wort was boiled for 5 minutes before adding hops in order to reduce the foam associated with the start of the boil.
+
+<p>
+I used 2.01 oz (57.0 grams) of Teamaker hops in this experiment.  The hops were analyzed by <a href="https://www.aarlab.com/" target="_blank">AAR Lab</a> and showed an alpha-acid (AA) rating of 0.41% and a beta-acid (BA) rating of 11.93%, in line with expectations.  (I had harvested and dried these hops four weeks earlier and stored them in a vacuum-sealed bag in my freezer.  The resins were a deep orange color, in contrast with the normal bright yellow.  The AAR results also showed 13% moisture and a hop storage index (HSI) of 0.188.)
+
+<p>
+When the hops were added to the kettle (defined as time <em>t</em> = 0), the (temperature-corrected) specific gravity was 1.0565 and the pH was 5.74.  The estimated volume at the time when hops were added was 3.36 G (12.71 liters), estimated from the initial volume and gravity and the measured gravity at time 0.
+
+<p>
+After adding the hops, 15-oz (0.44 l) samples were periodically taken from the boiling wort and quickly cooled in an aluminum cup and ice bath.  Samples were taken after the hops had been steeping for 5, 10, 20, 40, and 60 minutes.  The kettle was covered during the boil to minimize evaporation and the resulting changes in specific gravity.  Once they reached 75<span class="ILfuVd"><span class="e24Kjd">°</span></span>F (24<span class="ILfuVd"><span class="e24Kjd">°</span></span>C),  the cooled samples were transferred to sanitized quart (liter) containers.  The wort in each container was aerated for 1 minute by vigorous shaking, and 0.011 oz (0.31 grams) of Safale US-05 yeast (age 7 months) was pitched to target 750,000 cells per ml and degree Plato.  At the end of the 60-minute boil, the specific gravity was 1.0577 and the pH was 5.69.
+
+<p>
+Each sample fermented for 8 days (with a small opening to vent CO<sub>2</sub>).  The krausen was left to deposit on the sides of the vessel during fermentation.  After a week the krausen was more "billowy" than normal, still covering the beer.  I removed this krausen one day before taking samples for IBU analysis by <a href="https://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.
+
+<p>
+The measured IBU values at 5, 10, 20, 40, and 60 minutes were 3.3, 3.6, 3.8, 3.8, and 4.0, respectively.  These values are plotted with a solid red line in Figure 1.
+
+<p>
+<p>
+<span id="heading2">7.2 Results from Experiment on Krausen Loss (Experiment #2)</span><br>
+The full details of the experiment on krausen loss are given in that <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">blog post</a>.  In summary, for Condition <strong>B</strong>, the gravity when the hops were added (<em>t</em> = 0) was 1.037 and the estimated volume was 8.38 G (31.72 liters).  I added 1.88 oz (53.31 grams) of Comet hops to the wort with an alpha-acid rating of 9.7% and a beta-acid rating of 3.7%, for an initial alpha-acid concentration of about 160 ppm.  The gravity at the end of the boil was 1.039 and the estimated volume was 8.06 G (30.49 liters).  The measured IBU values of the resulting beer are plotted with a solid green line in Figure 1.
+
+<p>
+<p>
+<span id="heading2">7.3 Results from Experiment on Impact of pH on Utilization and IBUs (Experiment #3)</span><br>
+The full details of the experiment on the effects of pH on IBUs are given in that <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">blog post</a>.  In summary, for Condition <strong>A</strong>, the gravity when the hops were added (<em>t</em> = 0) was 1.038 and the estimated volume was 4.25 G (16.09 liters).  I added 0.65 oz (18.28 grams) of Citra hops to the wort with an alpha-acid rating of 14.2% and a beta-acid rating of 3.35%, for an initial alpha-acid concentration of about 160 ppm.  The gravity at the end of the boil was 1.039 and the estimated volume was 4.08 G (15.43 liters).  The measured IBU values of the resulting beer are plotted with a solid blue line in Figure 1.
+
+<p>
+<p>
+<span id="heading2">7.4 Results from Experiment on Cones and Pellets (Experiment #4)</span><br>
+The full details of the experiment on the differences between hop cones and pellets are given in the blog post <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Hop Cones vs. Pellets: IBU Differences</a>.  In summary, for Condition <strong>A</strong>, the gravity when the hops were added (<em>t</em> = 0) was 1.039 and the estimated volume was 8.28 G (31.36 liters).  I added 3.72 oz (105.57 grams) of Willamette hops to the wort with an alpha-acid rating of 5.0% and a beta-acid rating of about 3.4%, for an initial alpha-acid concentration of about 170 ppm.  The gravity at the end of the boil was 1.039 and the estimated volume was 8.16 G (30.88 liters).  The measured IBU values of the resulting beer are plotted with a solid orange line in Figure 1.
+
+<p>
+<img src="oaaandoba-measuredibusandmodel-1.png" alt="Figure 1"/> <span id="caption"> Figure 1. Measured IBUs (solid lines) and model IBUs (dotted lines) from the four experiments in this blog post. Experiment #1 (red line) used 57.0 g of Teamaker hops with an alpha-acid rating of 0.4%. Experiment #2 (green line) used 53.3 g of Comet hops with an alpha-acid rating of 9.7%. Experiment #3 (blue line) used 18.3 g of Citra hops with an alpha-acid rating of 14.2%.  Experiment #4 (orange line) used 105.6 g of Willamette hops with an alpha-acid rating of 5.0%.</span>
+
+<p>
+<p>
+<span id="heading2">7.5 New Experiment #2 (Experiment #5)</span><br>The second new experiment had two conditions: (<strong>A</strong>) one condition using Teamaker hops stored in oxygen-barrier packaging in a freezer for six months (well-preserved hops), and (<strong>B</strong>) one condition using the same harvest of Teamaker hops stored with exposure to oxygen and at room temperature for six months (poorly-preserved hops).
+
+<p>
+Wort for each condition was prepared from 3.02 lbs (1.37 kg) of Briess Pilsen Light Dried Malt Extract and 3.31 G (12.53 liters) of 120°F (49°C) low-alkalinity water, yielding 3.50 G (13.25 liters) of room-temperature wort. This wort sat for 90 minutes to let the pH stabilize. The measured pre-boil specific gravity was 1.037. The wort was boiled for 5 minutes before adding hops in order to reduce the foam associated with the start of the boil.
+
+<p>
+I used 2.0 oz (56.7 grams) of Teamaker hops in each condition. The hops were analyzed by AAR Lab within one week of the experiment and showed an alpha-acid (AA) rating of 0.64% and a beta-acid (BA) rating of 10.92% for the well-preserved hops, and an AA rating of 0.57% and a BA rating of 3.61% for the poorly-preserved hops. (The AAR results also showed 9.8% moisture and a hop storage index (HSI) of 0.291 for the well-preserved hops, and 7.5% moisture and an <a href="../../index.html" target="_top">HSI of 1.050</a> for the poorly-preserved hops.)
+
+<p>
+When the hops were added to the kettle (defined as time t = 0), the specific gravity was 1.041 and the pH was 5.87. The estimated volume at the time when hops were added was 3.21 G (12.15 liters).
+
+<p>
+After adding the hops, 15-oz (0.44 l) samples were periodically taken from the boiling wort and quickly cooled in an aluminum cup and ice bath. Samples were taken after the hops had been steeping for 10, 20, and 40 minutes. The kettle was covered during the boil to minimize evaporation and the resulting changes in specific gravity. The cooled samples were transferred to sanitized quart (liter) containers once they reached 75°F (24°C). The wort in each container was aerated for 1 minute by vigorous shaking, and 0.009 oz (0.25 grams) of Safale US-05 yeast (age 10 months) was pitched to target 750,000 cells per ml and degree Plato. At the end of the 60-minute boil, the specific gravity was 1.042 and the pH was about 5.78.
+
+<p>
+Each sample fermented for 10 days (with a small opening to vent CO<sub>2</sub>). Very little krausen accumulated on the sides of the vessel during fermentation. IBU values were measured by Oregon BrewLab.
+
+<p>
+The measured IBU values for the well-preserved hops at 10, 20, and 40 minutes were 4.2, 5.1, and 5.7, respectively. The measured IBU values for the poorly-preserved hops at 10, 20, and 40 minutes were 18.0, 22.1, and 25.9, respectively. These values are plotted with blue (well-preserved hops) and red (poorly-preserved hops) lines in Figure 2.
+
+<p>
+<img src="oaaandoba-measuredibusandmodel-2.png"/> <span id="caption"> Figure 2. Measured IBU values from well-preserved Teamaker hops (blue line) and poorly-preserved Teamaker hops (red line).</span>
+
+<p>
+
+<span id="heading1">8. Analysis</span><br>
+We now have all of the information we need to estimate the concentrations of oxidized alpha acids and oxidized beta acids in finished beer.  First, we will consider oxidized beta acids produced during the boil using well-preserved hops.  Then we will consider what happens when using poorly-preserved hops
+
+<p>
+<p>
+<span id="heading2">8.1 Analysis Step 1</span><br>
+The first step is to estimate the concentrations of IAAs, malt polyphenols, and hop polyphenols in the beer and (using the associated scaling factors) subtract their effects from the measured IBUs, yielding the "remaining" IBUs that come from oxidized alpha- and beta-acids.  This step is repeated for all four experiments.  The rest of this section explains this step in more detail and provides the analysis results from each experiment.
+
+<p>
+To estimate the IAA concentration, we can use the technique described in <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a> to determine the values of <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>ABC</sub></em> for each experiment.  The results of fitting the data to this model are shown with the dashed red, green, blue, and orange lines in Figure 1 for Experiments #1, #2, #3, and #4, respectively.
+
+<p>
+We can combine Equations 4, 5, and 6 to be explicit about all of the contributions to the IBU, and highlight variables with "known" values in green and variables with "unknown" values in red:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><span style="color: #008000;"><em>IBU</em></span> = 5/7 × (<span style="color: #008000;">[<em>IAA</em>]<sub>wort</sub></span> × <span style="color: #008000;"><em>scaling<sub>IAA</sub></em></span> + (<span style="color: #008000;">[<em>PPmalt</em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em></span>) + <span style="color: #008000;">[<em>PPhops</em>]<sub>beer</sub></span> × <span style="color: #008000;"><em>scale<sub>PPhops</sub></em></span> + <span style="color: #ff0000;">[<em>oAA</em>]<sub>beer</sub></span> × <span style="color: #008000;"><em>scale<sub>oAA</sub></em></span> + <span style="color: #ff0000;">[<em>oBA</em>]<sub>beer</sub></span> × <span style="color: #008000;"><em>scale<sub>oBA</sub></em></span>)</td>
+<td align="right" valign="bottom" width="30">[14]</td>
+</tr>
+</tbody>
+</table>
+where "known" variables can have their values measured, computed, or estimated from the experimental data and equations described above. We can define <em>IBU<sub>remaining</sub></em> to represent the difference between the measured IBU and the other "known" portion of Equation [14] as follows:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>remaining</sub></em> = <em>IBU</em> − 5/7 × ([<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em> + [<em>PPmalt</em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em> + [<em>PPhops</em>]<sub>beer</sub> × <em>scale<sub>PPhops</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[15]</td>
+</tr>
+</tbody>
+</table>
+and note that, by rearranging terms from Equations [14] and [15], <em>IBU<sub>remaining</sub></em> is the sum of the (scaled) contributions from oxidized alpha- and beta-acids:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>remaining</sub></em> = 5/7 × ([<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em> + [<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[16]</td>
+</tr>
+</tbody>
+</table>
+We can define the IBUs that are derived from oxidized alpha- and beta-acids as <em>IBU<sub>oAA</sub></em> and <em>IBU<sub>oBA</sub></em>, and note their relationship with <em>IBU<sub>remaining</sub></em>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>oAA</sub></em> = 5/7 × ([<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[17]</td>
+</tr>
+<tr>
+<td><em>IBU<sub>oBA</sub></em> = 5/7 × ([<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[18]</td>
+</tr>
+<tr>
+<td><em>IBU<sub>remaining</sub></em> = <em>IBU<sub>oAA</sub></em> + <em>IBU<sub>oBA</sub></em></td>
+<td align="right" valign="bottom" width="30">[19]</td>
+</tr>
+</tbody>
+</table>
+While we don't (yet) know [<em>oAA</em>]<sub>beer</sub> or [<em>oBA</em>]<sub>beer</sub>, we can compute <em>IBU<sub>remaining</sub></em> from Equation [15].
+
+<p>
+For each of the four experiments, Table 1 lists (a) the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root-mean-square (RMS) error</a> between the measured IBU values and the model that solves for <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>ABC</sub></em>, (b) the IBUs at time 0 (when the hops are added to the boiling wort) according to this model, at which point the ABCs have been added to the wort but there is not yet any production of isomerized alpha acids, (c) the estimated IBUs from malt polyphenols (determined from the original gravity and Equation [8]), (d) the estimated IBUs from hop polyphenols (determined from Equations [10] and [11]), and (e) the remaining IBUs according to Equation [15].
+
+<p>
+In Experiment #1, there was an initial alpha-acid concentration of 18 ppm and an initial beta-acid concentration of 535 ppm.  In Experiment #2, the initial alpha-acid concentration was 163 ppm and the initial beta-acid concentration was 53 ppm.  In Experiment #3, the initial alpha-acid concentration was 161 ppm and the initial beta-acid concentration was 38 ppm.  In Experiment #4, the initial alpha-acid concentration was 168 ppm and the initial beta-acid concentration was 116 ppm.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>IBU model RMS error
+</b></td>
+<td><strong>model IBUs at time 0</strong>
+</td>
+<td><strong>IBUs from malt polyphenols</strong>
+</td>
+<td><b>IBUs from hop polyphenols
+</b></td>
+<td><strong>remaining IBUs</strong>
+</td>
+</tr>
+<tr>
+<td><b>Experiment #1
+</b></td>
+<td>0.136</td>
+<td>3.21</td>
+<td>1.23</td>
+<td>0.55</td>
+<td>1.42</td>
+</tr>
+<tr>
+<td><b>Experiment #2
+</b></td>
+<td>0.314</td>
+<td>6.42</td>
+<td>0.86</td>
+<td>0.21</td>
+<td>5.35</td>
+</tr>
+<tr>
+<td><b>Experiment #3
+</b></td>
+<td>0.295</td>
+<td>8.11</td>
+<td>0.85</td>
+<td>0.14</td>
+<td>7.12</td>
+</tr>
+<tr>
+<td><b>Experiment #4
+</b></td>
+<td>0.399</td>
+<td>8.78</td>
+<td>0.86</td>
+<td>0.42</td>
+<td>7.50</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Results from the IBU model for each of the four experiments.  The "RMS error" is the root-mean-square error between the measured IBUs and the model.  The "model IBUs at time 0" show the model with the effect of ABC but no isomerized alpha acids.  The "IBUs from malt polyphenols" shows the estimated IBUs contributed by the malt.  The "IBUs from hop polyphenols" shows the estimated IBUs contributed by the hop polyphenols.  The "remaining IBUs" shows the difference between the model IBU at time 0 and the effect of polyphenols, which is the effect of oxidized alpha- and beta-acids.</span>
+
+<p>
+<p>
+<span id="heading2">8.2 Analysis Step 2</span><br>Assuming that the hops have been preserved well and have undergone very little oxidation during storage, we can express the concentration of oxidized alpha acids in the beer as the initial concentration of alpha acids added to the wort multiplied by a scaling factor, <em>lossFactor<sub>oAA</sub></em>, that accounts for (a) the percentage of alpha acids that oxidize during the boil and (b) the percentage of oxidized alpha acids that remain after boiling and fermentation.  The same formulation can be applied to the beta acids:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>oAA</em>]<sub>beer</sub> = [<em>AA</em>]<sub>0</sub> × <em>lossFactor<sub>oAA</sub></em></td>
+<td align="right" valign="bottom" width="30">[20]</td>
+</tr>
+<tr>
+<td>[<em>oBA</em>]<sub>beer</sub> = [<em>BA</em>]<sub>0</sub> × <em>lossFactor<sub>oBA</sub></em></td>
+<td align="right" valign="bottom" width="30">[21]</td>
+</tr>
+</tbody>
+</table>
+where [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids (in ppm), [<em>BA</em>]<sub>0</sub> is the initial concentration of beta acids (in ppm), <em>lossFactor<sub>oAA</sub></em> is the scaling factor for alpha acids, and <em>lossFactor<sub>oBA</sub></em> is the scaling factor for beta acids.
+
+<p>
+We can then note the following relationships by combining Equations [17, 18, 20, 21]:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>oAA</sub></em> = 5/7 × ([<em>AA</em>]<sub>0</sub> × <em>lossFactor<sub>oAA</sub></em> × <em>scale<sub>oAA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[22]</td>
+</tr>
+<tr>
+<td><em>IBU<sub>oBA</sub></em> = 5/7 × ([<em>BA</em>]<sub>0</sub> × <em>lossFactor<sub>oBA</sub></em> × <em>scale<sub>oBA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[23]</td>
+</tr>
+</tbody>
+</table>
+All of this preparation has laid the groundwork for the formula that will be useful to us, obtained by combining Equations [19, 22, 23]:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>remaining</sub></em> = 5/7 × [<em>AA</em>]<sub>0</sub> × <em>lossFactor<sub>oAA</sub></em> × <em>scale<sub>oAA</sub></em> + 5/7 × [<em>BA</em>]<sub>0</sub> × <em>lossFactor<sub>oBA</sub></em> × <em>scale<sub>oBA</sub></em></td>
+<td align="right" valign="bottom" width="30">[24]</td>
+</tr>
+</tbody>
+</table>
+This formula expresses the remaining IBU value as a combination of the initial concentrations of oxidized alpha- and beta-acids multiplied by scaling factors and loss factors.  We know <em>IBU<sub>remaining</sub></em>, [<em>AA</em>]<sub>0</sub>, <em>scale<sub>oAA</sub></em>, [<em>BA</em>]<sub>0</sub>, and <em>scale<sub>oBA</sub></em>, and we want to estimate <em>lossFactor<sub>oAA</sub></em> and <em>lossFactor<sub>oBA</sub></em>.
+
+<p>
+We can solve for these two loss factors by using the data from the four experiments (obtained in Analysis Step 1) to construct four equations (based on Equation [24]) with the two unknowns:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>1.42 = 5/7 × 18.38 × <em>lossFactor<sub>oAA</sub></em> × 0.9155 + 5/7 × 534.87 × <em>lossFactor<sub>oBA</sub></em> × 0.85</td>
+<td align="right" valign="bottom" width="30">[25]</td>
+</tr>
+<tr>
+<td>5.35 = 5/7 × 163.03 × <em>lossFactor<sub>oAA</sub></em> × 0.9155 + 5/7 × 53.28 × <em>lossFactor<sub>oBA</sub></em> × 0.85</td>
+<td align="right" valign="bottom" width="30">[26]</td>
+</tr>
+<tr>
+<td>7.12 = 5/7 × 161.35 × <em>lossFactor<sub>oAA</sub></em> × 0.9155 + 5/7 × 38.06 × <em>lossFactor<sub>oBA</sub></em> × 0.85</td>
+<td align="right" valign="bottom" width="30">[27]</td>
+</tr>
+<tr>
+<td>7.50 = 5/7 × 168.32 × <em>lossFactor<sub>oAA</sub></em> × 0.9155 + 5/7 × 116.14 × <em>lossFactor<sub>oBA</sub></em> × 0.85</td>
+<td align="right" valign="bottom" width="30">[28]</td>
+</tr>
+</tbody>
+</table>
+We can perform a <a href="https://en.wikipedia.org/wiki/Least_squares" target="_blank">least-squares estimation</a>, minimizing the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root-mean-square (RMS) error</a> between predicted and observed remaining IBU values, to solve for <em>lossFactor<sub>oAA</sub></em> and <em>lossFactor<sub>oBA</sub></em>.  The results of this analysis are that <em>lossFactor<sub>oAA</sub></em> = 0.059 and <em>lossFactor<sub>oBA</sub></em> = 0.0023, with RMS error 0.76 IBUs.
+
+<p>
+Independent of any particular batch of beer, <em>lossFactor<sub>oAA</sub></em> and <em>lossFactor<sub>oBA</sub></em> describe our best estimate of the contribution of oxidized alpha- and beta-acids to the IBU.  For any batch of beer where we know [<em>AA</em>]<sub>0</sub> and [<em>BA</em>]<sub>0</sub>, we can use <em>lossFactor<sub>oAA</sub></em> and <em>lossFactor<sub>oBA</sub></em> to estimate [<em>oAA</em>]<sub>beer</sub> and [<em>oBA</em>]<sub>beer</sub>, and/or their contributions to the IBU.   (These estimates may be further influenced by <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">wort pH</a>, <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">age of the beer</a>, the <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">treatment of krausen</a>, among other factors.)
+
+<p>
+<p>
+<span id="heading2">8.3 Analysis of Aged Hops</span><br>
+The experiment comparing well-preserved and poorly-preserved hops clearly indicates that oxidation of the beta acids produced during storage can yield significant IBUs. (I find it remarkable that hops with only 0.57% alpha acids and 3.61% beta acids can yield a beer with more than 20 IBUs.  This beer not only tasted more bitter or astringent, it had a more "herbal" quality, similar to <a href="https://www.ricola.com/en-us" target="_blank">Ricola</a> "natural herb" throat drops.)  In Figure 2 it can be seen that the IBU values increase with boil time, which was unexpected. Is there some isomerization of oxidized beta acids that occurs along the same time-frame as the isomerization of alpha acids? Because there is no well-motivated explanation for why these IBU values increase, I will simplify the analysis by focusing on a single "representative" boil time, i.e. 20 minutes.
+
+<p>
+The increase in oxidized beta acids produced during aging at room temperature can be computed from the decrease in beta acids between the two conditions. The beta acids decreased from 10.92% to 3.61%, and so the increase in oxidized beta acids was 7.31% of the weight of the hops. With a volume of 3.16 G (11.96 liters) at the end of the boil and a weight of 2.0 oz (56.70 grams) of hops, the 4741 ppm of hops translates into 346.55 ppm of oxidized beta acids in the post-boil wort. If we assume various relative losses during fermentation and aging (<a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">fermentation loss of 0.85</a>, <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">krausen relative increase of 1.38</a> compared with normal krausen deposits, and an <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">age-related loss factor of 0.96</a>), there are 391 ppm of oxidized beta acids in the finished beer. The increase in IBUs between the two conditions (at a 20-minute boil time) is 17.0 IBUs. We can then map between IBUs and an "oxidized beta acid boil factor", <em>boilFactor<sub>oBA</sub></em>, which expresses the reduction in storage-produced oxidized beta acids during the boil:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU<sub>oBA</sub></em> = 5/7 × ([o<em>BA</em>]<sub>0</sub> × <em>boilFactor<sub>oBA</sub></em> × <em>fermentFactor<sub>oBA</sub></em> × <em>scale<sub>oAA</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[29]</td>
+</tr>
+<tr>
+<td>17.0 = 5/7 × (346.55 × <em>boilFactor<sub>oBA</sub></em> × 1.126 × 0.85)</td>
+<td align="right" valign="bottom" width="30">[30]</td>
+</tr>
+</tbody>
+</table>
+and so <em>boilFactor<sub>oBA</sub></em> equals 0.07. This implies that about 7% of the beta acids that oxidize during storage survive the boil and end up in the wort. This factor is about the same as the factor for oxidized alpha acids produced during the boil (0.06), indicating that both can contribute significantly to the IBU.
+
+<p>
+
+<span id="heading1">9. Conclusion</span><br>
+The estimated scaling factor <em>lossFactor<sub>oAA</sub></em> (0.059) being 25 times larger than the scaling factor <em>lossFactor<sub>oBA</sub></em> (0.0023) for well-preserved hops means that the oxidized alpha acids contribute much more to the IBU than oxidized beta acids, as long as the hops are well preserved.  The estimated contribution of oxidized beta acids is so low in this case, it seems quite likely that oxidized beta acids are not produced during the boil at all.
+
+<p>
+For poorly-preserved hops, however, the contribution from oxidized beta acids produced during storage appears to be roughly equal to the contribution from oxidized alpha acids produced during the boil. (The better the storage conditions, the less impact that beta acids will have on the IBU.)  With oxidized beta acids produced during aging and present in finished beer, the reduction in IBUs from using older hops with a lower alpha-acid content is offset by the oxidation products. As Hough et al. say, "The level of alpha-acid in hops falls during storage but the bittering potential of the hops does not fall to the same extent. This is because many of the oxidation products of both alpha- and beta-acids ... are capable of bittering beer" <a href="#references_oAAoBA">[Hough et al., p. 489]</a>.
+
+<p>
+If we consider a "typical" beer produced with well-preserved hops, such as an American Pale Ale as described by Ray Daniels <a href="#references_oAAoBA">[Daniels, pp. 167-172]</a>, we might have an original gravity of 1.050, a post-boil volume of 5.25 G (19.87 liters), and a post-boil pH of 5.25.  This beer might have five hop additions, all with 9% AA and 5.0% beta acids: one of 0.75 oz (21.26 g) at the start of the 60-minute boil, a second of 0.75 oz (21.26 g) at 45 minutes before flameout, a third of 0.50 oz (14.18 g) at 20 minutes before flameout, a fourth of 0.75 oz (21.26 g) at 10 minutes before flameout, and a dry-hop addition of 1.0 oz (28.35 g).  In this case, we might get 50.0 IBUs in total, 33 of those from isomerized alpha acids and 17 from ABCs.  Of these 17 ABC IBUs, using the model described above, oxidized alpha acids contribute 14.0 IBUs, oxidized beta acids contribute 0.3 IBUs, malt polyphenols contribute 2.1 IBUs, and hop polyphenols contribute 0.7 IBUs.  The oxidized alpha acids are therefore by far the greatest component of the auxiliary bittering compounds (at 82% of all ABC), followed by malt polyphenols (12%), then hop polyphenols (4%), and finally oxidized beta acids (2%). A single hop addition at 10 minutes before flameout will have about as many IBUs coming from oxidized alpha acids as from isomerized alpha acids.  This can be seen in Figure 1, with about 13.5 IBUs at a 10-minute steep time averaged over Experiments #2, #3, and #4, and about 7.5 IBUs estimated at time 0 when isomerization begins.
+
+<p>
+Even if you are uncomfortable with some (or all) of the assumptions made in this model, it is still clear from the measured IBUs in Figure 1 that oxidized beta acids produced during the boil can not contribute significantly to the IBU.  First, there is the fact that 535 ppm of beta acids in Experiment #1 yielded less than 4 IBUs, and at least some of those IBUs come from polyphenols.  Additionally, if we compare the results of Experiments #3 and #4, the IBU values are very similar.  Although the alpha-acid ratings of the hops in the two experiments were very different (14.2% and 5.0%), the amount of hops added to the kettle was set to target a similar alpha-acid concentration (160 to 170 ppm).  This resulted in Experiment #3 having an initial beta-acid concentration of 38 ppm and  Experiment #4 having an initial beta-acid concentration of 116 ppm.  The similarity of the IBU values between the two experiments, with three times the beta-acid concentration in Experiment #4, can best be explained by the alpha acids (both isomerized and oxidized) contributing to the vast majority of the IBU and the beta acids contributing very little to the IBU value.
+
+<p>
+
+<span id="heading1">10. Discussion</span><br>
+From the results of these experiments, it appears that (a) there is little or no production of oxidized beta acids during the boil, (b) about 7% of the oxidized beta acids produced during storage end up in the wort and finished beer, and (c) any transformation of oxidized beta acids to hulupinic acid ([Almaguer, p. 295]) occurs slowly (e.g. over the course of weeks or months).
+
+<p>
+It is interesting to note similarities between the <a href="https://www.realbeer.com/hops/FAQ.html#units" target="_blank">Rager</a> <a href="#references_oAAoBA">[Rager]</a> and <a href="https://realbeer.com/hops/research.html" target="_blank">Tinseth</a> <a href="#references_oAAoBA">[Tinseth]</a> IBU formulas and the model described here.  The Rager formula predicts 5% utilization even for a steep time of 0 minutes, which correlates extremely well with the estimated <em>lossFactor<sub>oAA</sub></em> of 0.059 in this blog post.  In both cases, before there is any significant isomerization, about 5% of the available alpha acids contribute to the IBU (in the form of oxidized alpha acids).  Tinseth, on the other hand, knew that isomerization can be modeled with a first-order reaction <a href="#references_oAAoBA">[Tinseth]</a>, and so the shape of the Tinseth utilization curve is similar to the rate of alpha-acid isomerization determined by Malowicki (Equation [3]).
+
+<p>
+The slopes of the lines formed by the IBU values in Experiments #2 and #3 imply that Experiment #2 had a higher concentration of alpha acids than Experiment #3 or less loss of isomerized alpha acids.  The AA rating of the hops would have to be increased from 9.7% to 12.6% for the loss of IAAs to be the same.  While AA levels can be highly variable even within the same bale of hops <a href="#references_oAAoBA">[Verzele and DeKeukeleire, p. 331]</a>, a 30% variation is larger than one would normally expect.  It is therefore unclear why there is such a difference between the results of these two experiments.  My best guess is that small differences in my degassing procedure when preparing samples for IBU analysis resulted in less loss of IAAs in Experiment #2, and that this effect was combined with normal variation in AA levels.  (I have seen a 12% difference in IBUs from the same beer that was degassed in slightly different ways.)  On the other hand, the similarity of the results between Experiments #3 and #4 is remarkable given the difference in AA ratings, amount of hops used, and other various differences.
+
+<p>
+
+<span id="heading1">11. Acknowledgment</span><br>
+I would like to thank Dana Garves at <a href="https://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for her attention to quality and detail that is reflected in the IBU measurements presented here.  The change in measured IBU values over time very closely follows the expected trend, even to the point of a fractional increase between 5 minutes and 60 minutes for the well-preserved Teamaker hops with an AA rating less than 1%.  An analysis can only be as good as the data it is based on, and so I greatly appreciate the data of such high caliber.
+
+<p>
+<p>
+<span id="heading1"><span id="references_oAAoBA">References</span></span><br>
+<ul>
+<li>S. Alexander, "Fear of Phenols", in <a href="https://www.morebeer.com/" target="_blank">MoreBeer!</a> articles, Nov. 30, 1999. Accessed most recently on Nov. 8, 2019.  <a href="https://www.morebeer.com/articles/Beer_Phenols" target="_blank">https://www.morebeer.com/articles/Beer_Phenols</a></li>
+<li>V. A. Algazzali, <em>The Bitterness Intensity of Oxidized Hop Acids: Humulinones and Hulupones</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>C. Almaguer, C. Schönberger, M. Gastl, E. K. Arendt, and T. Becker, "Humulus lupulus – a story that begs to be told: A review," in <em>Journal of the Institute of Brewing</em>, vol. 120, pp. 289-314, 2014.</li>
+<li>H. O. Askew, “Changes in Concentration of α and β Acids and of Iso-Compounds on Heating Extracts of Hops in Aqueous Solutions and Unhopped Wort,” in <em>Journal of the Institute of Brewing</em>, vol. 71, pp. 10-20, 1965.</li>
+<li>R. Daniels, <em>Designing Great Beers</em>.  Brewers Publications, 1st edition, 1996.</li>
+<li>D. De Keukeleire, "Fundamentals of Beer and Hop Chemistry", in <em>Química Nova</em>, vol. 23, no. 1, pp. 108 - 112, 2000.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science. Volume 2: Hopped Wort and Beer</em>. Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>K. A. Leiper and M. Miedl, "Colloidal Stability of Beer" in <em>Beer: A Quality Perspective (Handbook of Alcoholic Beverages)</em>, ed. C. Bamforth, I. Russell, and G. Stewart.  Academic Press, 1st edition, 2009.</li>
+<li>J. Dierckens and M. Verzele, "Oxidation Products of Humulone and Their Stereoisomerism," in <em>Journal of the Institute of Brewing</em>, vol. 75, pp. 453-456, 1969.</li>
+<li>G. Fix, <em>Principles of Brewing Science</em>. Brewers Publications, 2nd edition, 1999.</li>
+<li>M. L. Hall, "What's Your IBU," in <em>Zymurgy</em>.  Special Edition, 1997.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science.  Volume 2: Hopped Wort and Beer</em>.  Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>J. P. Maye, R. Smith, and J. Leker, "Humulinone Formation in Hops and Hop Pellets and Its Implications for Dry Hopped Beers", in <em>MBAA Technical Quarterly</em>, vol. 51, no. 1, pp. 23-27, 2016.</li>
+<li>I. R. McLaughlin, <em>Bitterness Modifying Properties of Hop Polyphenols</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>G. Oliver, <em>The Oxford Companion to Beer</em>, Oxford University Press, 2011.</li>
+<li>E. J. Parkin, <em>The Influence of Polyphenols and Humulinones on Bitterness in Dry-Hopped Beer</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>V. Peacock, "The International Bitterness Unit, its Creation and What it Measures," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>J. Rager, "Calculating Hop Bitterness in Beer", in <em>Zymurgy</em> Special Issue, vol. 13, no. 4, pp. 53-54, 1990.</li>
+<li>T. H. Shellhammer, "Hop Components and Their Impact on the Bitterness Quality of Beer," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>L. O. Spetsig, "The Bitter Substances of Spent Hops, Trub, and Yeast Cover: A Chromatographic Study," in <em>Journal of the Institute of Brewing</em>, vol. 74, pp. 346-351, 1967.</li>
+<li>R. Stevens and D. Wright, "Evaluation of Hops [Part] X. Hulupones and the Significance of <em>β</em> Acids in Brewing," in Journal of the Institute of Brewing, vol. 67, 1961.</li>
+<li>G. Tinseth, "Glenn's Hop Utilization Numbers".  Accessed most recently on Nov. 8, 2019.  <a href="http://realbeer.com/hops/research.html" target="_blank">http://realbeer.com/hops/research.html</a></li>
+<li>M. Verzele and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>.  Developments in Food Science 27.  Elsevier, 1991.</li>
+</ul>
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

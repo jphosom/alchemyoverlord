@@ -1,0 +1,150 @@
+/*----------------------------------------------------------------------------*/
+/* index.css : CSS for AlchemyOverlord web page                               */
+/* Written by John-Paul Hosom                                                 */
+/* Version 1.0 : January 30, 2017                                             */
+/*----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*/
+/* top-level definitions */
+
+html {
+  color: #404040;
+  /* background: #f2f2f2; */
+  background: #fefefe;
+}
+
+body {
+  margin: 50;
+  /* font-size: 90%; */
+  /* font-family: verdana; */
+  font-size: 100%;
+  font-family: sans-serif;
+  line-height: 140%;
+}
+
+a:link {
+  color: #47476b;
+}
+
+a:visited {
+  color: #8585ad;
+}
+
+table.formula {
+  border-collapse: collapse;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 95%;
+  line-height: 150%;
+}
+
+table.table {
+  border-collapse: collapse;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-size: 90%;
+  font-family: sans-serif;
+  line-height: 150%;
+}
+
+table.table td {
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+table.table tr:nth-child(odd) {
+  background-color: #f8f8f8;
+  }
+
+img {
+  margin-top: 24px;
+  display: block;
+  width: 75%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#smallimg {
+  width: 40%;
+}
+
+sup {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+
+sub {
+  vertical-align: baseline;
+  position: relative;
+  top: 0.4em;
+}
+
+pre {
+  overflow-x: auto;
+  margin-left: 50px;
+}
+
+#boldAlphaOL {
+  list-style: none;
+  counter-reset: list;
+}
+
+#boldAlphaLI:before {
+  margin-right: 0.1em;
+  content: counter(list, upper-alpha)". ";
+  counter-increment: list;
+  font-weight: bold;
+}
+
+#caption {
+  display: block;
+  font-style: italic;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 24px;
+}
+
+#title {
+  font-weight: bold;
+  font-size: 130%;
+  display: flex;
+  justify-content: center;
+  color: black;
+}
+
+#heading1 {
+  font-weight: bold;
+  font-size: 105%;
+  color: black;
+}
+
+#heading2 {
+  font-weight: bold;
+  font-style: italic;
+  color: black;
+}
+
+#heading3 {
+  font-style: italic;
+  text-decoration: underline;
+  color: black;
+}
+
+#footnote {
+  font-size: 80%;
+  display: flex;
+  justify-content: center;
+  line-height: 120%;
+  }
+  

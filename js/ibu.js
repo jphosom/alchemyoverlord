@@ -38,6 +38,7 @@
 // Version 1.2.11: Aug 10, 2021 : add storage conditions to each hop addition
 // Version 1.2.12: Oct  5, 2021 : change "steep time" to "boil or steep time"
 //                                or just "boil time" depending on method
+// Version 1.2.13: Nov 25, 2021 : change href targets from _parent to _blank
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -2623,7 +2624,7 @@ function hopAdditionsSet(param) {
 
     if (ibu.detailedOutput) {
       table += "<tr> ";
-      table += "<td class='outputTableTotalName'><a href='https://www.researchgate.net/publication/323690039_A_Comprehensive_Evaluation_of_the_Nonvolatile_Chemistry_Affecting_the_Sensory_Bitterness_Intensity_of_Highly_Hopped_Beers' target='_parent'>Bitterness Intensity</a>:</td>"
+      table += "<td class='outputTableTotalName'><a href='https://www.researchgate.net/publication/323690039_A_Comprehensive_Evaluation_of_the_Nonvolatile_Chemistry_Affecting_the_Sensory_Bitterness_Intensity_of_Highly_Hopped_Beers' target='_blank'>Bitterness Intensity</a>:</td>"
       table += "<td class='outputTableTotalValue' id='BIvalue'>0.00</td>"
       table += "<td colspan=100 class='outputTableTotalName'><small>(perceived bitterness, scale 0 to 20";
       // table += "<sup>&dagger;</sup>";

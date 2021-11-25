@@ -1,0 +1,788 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Hop Cones vs. Pellets: IBU Differences</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Hop Cones vs. Pellets: IBU Differences
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+Hop pellets are described as having greater utilization than hop cones.  The predicted amount of increase, however, varies quite a bit between different reports.  This blog post compares the IBUs from cones and pellets in a series of five experiments.  While the IBUs from pellets were found to be consistently higher than IBUs from cones, it seems that this increase in IBUs is <em>not</em> caused by an increase in the rate of isomerization (as is typically claimed), but by a greater concentration of bitter substances produced soon after a hop addition.  A <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">separate blog post </a>finds that these bitter substances are most likely not isomerized alpha acids, but probably oxidized alpha acids that are produced when hops are added to the boiling wort.  Furthermore, the amount of increase in IBUs seems to be dependent on the hop variety.   When controlling for the initial concentration of alpha acids, some hop varieties show very little increase (average 1.5 IBUs from 170 ppm of alpha acids), while others have a very large increase (average 10.8 IBUs from 170 ppm of alpha acids).  Because of this variety-dependent increase, predicting IBUs from hop pellets is even more challenging than predicting IBUs from hop cones. For hop cones, it is estimated that about 6% of the alpha acids added to the wort are quickly oxidized and survive into the finished beer.  (One ppm of oxidized alpha acids contributes about 0.7 IBUs.) Considering only the three hop varieties studied here, the increase in oxidized alpha acids from the use of pellet hops varies from a factor of 1.2 to a factor of 3.2. A rough (variety-independent) approximation for predicting IBUs from pellets is that the concentration of oxidized alpha acids produced during the boil doubles in beer made with pellets, from 6% to 12%.
+
+<p>
+<p>
+<span id="heading2">1.1 Utilization</span><br>
+Hop utilization, <em>U</em>, is the ratio of the amount of isomerized alpha acids (IAA) in finished beer divided by the amount of alpha acids added to the kettle, and then multiplied by 100 to convert to percent <a href="#references_pellets1">[e.g. Lewis and Young, p. 266]</a>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>U </em>= 100 × (isomerized alpha acids in beer) / (alpha acids added to kettle)</td>
+<td align="right" valign="bottom" width="30">[1]</td>
+</tr>
+</tbody>
+</table>
+Utilization refers only to the relative amount of isomerized alpha acids, not to IBUs.  While IBUs can be considered roughly equivalent to the concentration of IAA as a quick rule of thumb, <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">IBUs measure a number of bitter compounds in addition to IAA</a>.  With short boil times, <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">high hopping rates</a>, <a href="../10-an-analysis-of-sub-boiling-hop-utilization/alchemyoverlord-blog-content10.html">low steeping temperatures</a>, <a href="../../index.html" target="_top">improperly-stored hops</a>, and other factors, one can see significant differences between IBUs and the concentration of IAA.
+
+<p>
+<p>
+<span id="heading2">1.2 Reported Differences Between Cones and Pellets</span><br>Hop pellets are almost always described as having greater utilization than hop cones <a href="#references_pellets1">[e.g. Daniels p. 78]</a>.  According to Michael Lewis and Tom Young, “the alpha acids dissolve most easily from extracts, less easily from pellets …, and least with whole hops” <a href="#references_pellets1">[Lewis and Young, p. 266]</a>.  The higher rate at which alpha acids from pellets "dissolve," compared with whole cones, is because “the pelletization process ruptures the lupulin glands and spreads the resins over the hop particles, giving a larger surface area for isomerization” <a href="#references_pellets1">[Hall, p. 58]</a>.  Greg Noonan says that “with pelletized hops, ruptured and better-exposed lupulin glands give greater utilization” <a href="#references_pellets1">[Noonan, p. 154]</a>.
+
+<p>
+Expressing pellets as more efficient than whole hops, Noonan provides a pellet correction factor (in table form) that varies from 1.0 to 1.5, based on boil time and gravity <a href="#references_pellets1">[Noonan, p. 215]</a>.  Mark Garetz recommends a pellet correction factor of 1.10 for boil times up to 30 minutes, otherwise a correction factor of 1.0 <a href="#references_pellets1">[Garetz, p. 131, 141]</a>.  Hieronymus says that hop pellets are 10% to 15% more efficient than cones <a href="#references_pellets1">[Hieronymus, p. 188]</a>.  According to Michael Hall, Randy Mosher specifies a correction factor of 1.33 <a href="#references_pellets1">[Hall, p. 62]</a>.  This is a wide range of relative increase, from 0% to 50% according to Noonan, and from 0% to 33% according to other sources.
+
+<p>
+The purpose of this blog post is to get a better understanding of how large an IBU increase there is when using pellets and how this increase can be modeled.  A <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">separate blog post</a> looks at whether this increase is more likely to be the result of a greater concentration of isomerized alpha acids or an increase in other bittering compounds; it finds that the IBU increase is most likely caused by an increased concentration of oxidized alpha acids.
+
+<p>
+<p>
+<span id="heading2">1.3 A Model of the Isomerization of Alpha Acids</span><br>
+Mark Malowicki <a href="#references_pellets1">[p. 27]</a> provides a formula for the concentration of isomerized alpha acids (IAA) as a function of steep time (<em>t</em>, in minutes), temperature, and initial alpha-acid concentration ([<em>AA</em>]<sub>0</sub>, in ppm):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>/(<em>k</em><sub>2</sub>-<em>k</em><sub>1</sub>)) (e<sup>–<em>k</em><sub>1</sub><em>t</em></sup>-e<sup>–<em>k</em><sub>2</sub><em>t</em></sup>)</td>
+<td align="right" valign="bottom" width="30">[2]</td>
+</tr>
+</tbody>
+</table>
+where [<em>IAA</em>]<sub>wort</sub> is the concentration of isomerized alpha acids in the wort at time <em>t</em>, and e is the constant 2.71828.  The parameters <em>k</em><sub>1</sub> and <em>k</em><sub>2</sub> are two temperature-dependent rate constants.  At boiling, <em>k</em><sub>1</sub> = 0.0125 and <em>k</em><sub>2</sub> = 0.0031.
+
+<p>
+<p>
+<span id="heading2">1.4 Modeling IBUs from Pellets with a Scaling Factor</span><br>
+Figure 1 shows theoretical IBU values based on several scenarios described in this section.  These IBU values are based on Val Peacock's model of IBUs <a href="#references_pellets1">[Peacock, p. 157]</a>, in which
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>IBU = 5/7 × ([IAA] + [nonIAA])</td>
+<td align="right" valign="bottom" width="30">[3]</td>
+</tr>
+</tbody>
+</table>
+where [IAA] is the concentration of isomerized alpha acids in the finished beer and [nonIAA] is the concentration of other bittering substances in the beer.  (This model is described in more detail in the blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.)  In Figure 1, the black line shows theoretical IBU values from hop cones using Peacock's model.  The concentration of isomerized alpha acids (IAA) increases from 8.5 ppm at 10 minutes into the boil to 35.0 ppm at 60 minutes (using the IAA model from Section 1.3 and a loss factor of 0.5), and the dotted gold line (constant at 5 IBUs) shows the contribution of nonIAA in this model.
+
+<p>
+The effect of pellets is usually expressed in the literature as a scaling factor <a href="#references_pellets1">[Hall, p. 62]</a>, for example a factor of 1.20 that is applied to the IBU value predicted for hop cones.  In this case, if an IBU model developed for hop cones predicts 30 IBUs, a pellet correction factor of 1.20 would yield 36 IBUs (36 = 30 × 1.20).  In Figure 1, the blue line shows theoretical IBU values predicted using a scaling factor of 1.20.  Because this scaling factor depends on the IBU value, smaller "cone" IBU values result in a smaller increase, and larger "cone" IBUs result in a larger increase.  For example, in Figure 1 the increase in IBUs is 2.2 IBUs at 10 minutes and 6.0 IBUs at 60 minutes.
+
+<p>
+Another way to model an increase in IBUs is with a scaling factor that depends on the concentration of isomerized alpha acids.  Because IBUs are correlated with [IAA], the net effect is similar.  In Figure 1, the dashed green line shows theoretical IBU values for pellets using a scaling factor of 1.25 applied to the concentration of IAA.
+
+<p>
+A third way to model an increase in IBUs is with a scaling factor that doesn't depend on IBUs or [IAA], but on the concentration of nonIAA (which is also proportional to the total concentration of hops in the boil).  In Figure 1, the red line shows theoretical IBU values predicted by scaling the nonIAA concentration by a factor of 2.0.  In this case, every IBU value is simply increased by 5, because the concentration of nonIAA doesn't vary with boil time.
+
+<p>
+<img src="figure1-1.png" alt="Figure 1"/> <span id="caption"> Figure 1.  Hypothetical IBU values based on (a) Peacock's model (black line), (b) IBU scaling with a factor of 1.20 (blue line), (c) [IAA] scaling with a factor of 1.25 (dashed green line), (d) [nonIAA] scaling with a factor of 2.0 (red line).  The IBUs predicted when [IAA] is zero are shown with a dotted gold line.</span>
+
+<p>
+
+<span id="heading1">2. Experimental Overview and Methods</span><br>
+<p>
+<span id="heading2">2.1 Overview</span><br>
+Five experiments were conducted to look at the relative difference in IBUs between hop cones and pellets.  Within each experiment, two batches of beer were designed to be identical in all respects, except for the use of hop cones in one case (referred to as <strong>cones</strong>) and hop pellets in the other (referred to as <strong>pellets</strong>).  The five experiments looked at (a) three varieties of hops, (b) the impact of krausen, and (c) the age of the pellets.
+
+<p>
+In all experiments, the alpha-acid rating of the cones and pellets was comparable, and adjusted when necessary to yield the same concentration of approximately 170 ppm of alpha acids at the start of the hop addition.  For each batch, I took samples of wort at 10-minute intervals and quickly cooled them in an ice bath.  Each sample was fermented into beer and sent to <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for IBU analysis.
+
+<p>
+This set of experiments yielded 37 pairs of IBU values, with the values within a pair being directly comparable in terms of hop variety, boil gravity, initial alpha-acid concentration, boil time, and fermentation conditions.
+
+<p>
+The first experiment used Citra hops, the second and third used Willamette hops, and the fourth and fifth experiments used Comet hops.  The Comet pellets were very fresh in the fourth experiment and about 2½ years old in the fifth experiment.
+
+<p>
+<p>
+<span id="heading2">2.2 Procedures Common to All Experiments</span><br>
+Each experiment consisted of two batches brewed on the same day.  I used as large a batch size as I dared in my 10 G (38 l) kettle, in order to minimize the effect of measurement errors and evaporation rate.  I used 7.0 lbs (3.18 kg) of Briess Pilsen DME in 8.0 G (30.28 l) of water, yielding about 8.5 G (32 l) of wort with a specific gravity of about 1.037.  I did not adjust the water profile or pH; the <a href="https://www.portlandoregon.gov/water/article/546510" target="_blank">local water here in Portland, Oregon</a> has relatively <a href="https://adams.extension.wisc.edu/files/2013/01/Home-Water-Safety-Interpreting-Drinking-Water-Test-Results.pdf" target="_blank">low alkalinity and hardness</a>.  This resulted in a pre-boil wort pH of about 5.70 to 5.80.
+
+<p>
+I added hops (i.e. started the steep time at 0) after the wort had been boiling for 5 minutes, to avoid the foam associated with the start of the boil.  The hops were boiled for a steep time of 60 to 90 minutes with the cover on the kettle (except for taking samples) to minimize evaporation and the resulting changes in specific gravity.  I did not use a mesh bag with the cones, because I think that it is more standard practice to have the hops freely floating in the wort.  I targeted an initial alpha-acid concentration of 170 ppm in order to not exceed the <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">solubility limit of approximately 200 ppm at boiling</a>, using an estimated volume of about 8.28 G (31.36 l) when adding the hops and the experiment-specific alpha-acid (AA) ratings.  For Experiment #1, an AA rating of about 14.1% for both cones and pellets translated into a hop addition of 1.333 oz (37.81 g).  For Experiments #2 and #3, an AA rating of about 5.05% for both cones and pellets translated into an addition of 3.724 oz (105.57 g).  For Experiment #4, an AA rating of about 10.0% for both cones and pellets translated into an addition of 1.880 oz (53.31 g).  For Experiment #5, an AA rating of 9.70% for cones and 8.76% for pellets translated into additions of 1.939 oz (54.96 g) and 2.147 oz (60.86 g), respectively.
+
+<p>
+Samples were taken every 10 minutes from the start of steeping.  Each sample (about 15 oz (0.43 l)) was taken from the boil in a measuring cup and then transferred to an aluminum cup using a wire mesh sieve to remove larger hop particles.  The aluminum cup was placed in an ice bath and the contents were stirred to cool quickly.  Samples were cooled below 140°F (60°C) within about 45 seconds.  Once cooled to 75°F (24°C), the sample was transferred to a sanitized, sealed, and labelled quart (liter) container.  I aerated each sample by vigorous shaking for 60 seconds, then added about .01 oz (0.28 g) of Safale US-05 yeast to target 750,000 viable cells per ml and degree Plato <a href="#references_pellets1">[Fix and Fix, p. 68]</a>.  (The process of taking a sample, cooling it, transferring it to a sanitized container, aerating, and pitching yeast took between 5 and 10 minutes.)  (For the "cones" condition in Experiment #5, 32-oz (0.95-liter) samples were taken and transferred into 1.6 quart (1.5 liter) sanitized containers for fermentation with 0.017 oz (0.48 g) of Safale US-05 yeast.)  After all samples were taken, the containers were cracked open to vent, and they fermented for nine to ten days.  For every experiment except Experiment #2, I swirled the samples every day to remove most of the krausen deposits on the sides of the containers (mixing the krausen back into the beer).  For Experiment #2, I let krausen deposits accumulate on the sides of the containers.  After fermentation, I sent 4 oz (0.12 l) of each sample to <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for IBU measurement.
+
+<p>
+<p>
+<span id="heading2">2.3 Hops in Experiment #1</span><br>The hop cones in Experiment #1 were Citra from <a href="https://hopsdirect.com/" target="_blank">Hops Direct</a>.  The pellets were Citra from <a href="https://www.yakimavalleyhops.com/" target="_blank">Yakima Valley Hops</a>.  Both were from the same harvest year (2017), and were about 3 months old at the time of the experiment.  I purchased both the cones and the pellets soon after they became available and stored them in my freezer until the experiment.  I sent samples to both <a href="http://blogs.ifas.ufl.edu/sumterco/2018/02/05/430/" target="_blank">Alpha Analytics</a> and <a href="http://www.brewlaboratory.com/" target="_blank">Brew Laboratory</a> for analysis within 3 weeks of the experiment.  Alpha Analytics used the spectrophotometric method <a href="http://methods.asbcnet.org/summaries/hops-6.aspx" target="_blank">ASBC 6A</a>; Brew Laboratory used <a href="https://en.wikipedia.org/wiki/High-performance_liquid_chromatography" target="_blank">high-performance liquid chromatography</a> (HPLC).  The package ratings and analysis results are listed in Table 1.  It can be seen that the analysis results are very consistent with the package ratings, except for the pellets result from Alpha Analytics.  Verzele and De Keukeleire note that "there are easily differences up to 15-20% in alpha acids content between and within bales of a single hop delivery" <a href="#references_pellets1">[Verzele and De Keukeleire, p. 331]</a>, and so even this "outlier" (13.3%) is well within the expected variation.  Because of the small number of samples, it is more appropriate to take the median than the mean for a representative value of the alpha acids.  Therefore, the alpha-acid rating on brew day was about 14.2% for cones and 14.0% for pellets.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b><span style="text-decoration: underline;">Cones:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Cones:</span>Alpha Analytics</strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Cones:</span>Brew Laboratory</strong>
+</td>
+<td><strong><b><span style="text-decoration: underline;">Pellets:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Pellets:</span>Alpha Analytics</strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Pellets:</span>Brew Laboratory</strong>
+</td>
+</tr>
+<tr>
+<td><strong><b>alpha acids </b></strong></td>
+<td>14.3%</td>
+<td>14.2%</td>
+<td>14.1%</td>
+<td>14.0%</td>
+<td>13.3%</td>
+<td>14.0%</td>
+</tr>
+<tr>
+<td><strong><b>beta acids </b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>3.6%</td>
+<td>3.4%</td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>3.9%</td>
+<td>3.8%</td>
+</tr>
+<tr>
+<td><strong><b>HSI</b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.265</td>
+<td><span style="color: #808080;">N/A</span></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.293</td>
+<td><span style="color: #808080;">N/A</span></td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Results of hops analysis for Experiment #1, including alpha acids, beta acids, and (where available) the Hop Storage Index (HSI).</span>
+
+<p>
+<p>
+<span id="heading2">2.4 Hops in Experiments #2 and #3</span><br>
+In Experiments #2 and #3, I used Willamette hops from <a href="https://tools.yakimachief.com/lookup" target="_blank">Yakima Chief Hops</a>.  The cones  were from lot PR2-ZKUWIL5041 and the pellets were from lot P92-ZKUWIL5170, both about 2½ years old at the time of the experiment.  Analysis was performed by <a href="http://www.brewlaboratory.com/" target="_blank">Brew Laboratory</a> within two weeks of the experiment.  The package ratings and analysis results are listed in Table 2.  The alpha-acid rating on brew day was about 5.0% for both cones and pellets.
+
+<p>
+The reason for conducting Experiment #3 was that the results from Experiment #2 were so surprising to me (see Section 3) that I wanted to replicate the results.  In addition, in Experiment #2 I did not remove krausen deposits by swirling, and in Experiment #3 I made sure that fermentation conditions were the same as in Experiments #1, #4, and #5.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b><span style="text-decoration: underline;">Cones:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Cones:</span>Brew Laboratory</strong>
+</td>
+<td><strong><b><span style="text-decoration: underline;">Pellets:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Pellets:</span>Brew Laboratory</strong>
+</td>
+</tr>
+<tr>
+<td><strong><b>alpha acids </b></strong></td>
+<td>5.0%</td>
+<td>5.0%</td>
+<td>4.8%</td>
+<td>5.1%</td>
+</tr>
+<tr>
+<td><strong><b>beta acids </b></strong></td>
+<td>3.8%</td>
+<td>3.1%</td>
+<td>4.0%</td>
+<td>3.2%</td>
+</tr>
+<tr>
+<td><strong><b>HSI</b></strong></td>
+<td>0.252</td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.298</td>
+<td><span style="color: #808080;">N/A</span></td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Results of hops analysis for Experiment #2, including alpha acids, beta acids, and (where available) the Hop Storage Index (HSI).</span>
+
+<p>
+<p>
+<span id="heading2">2.5 Hops in Experiments #4 and #5</span><br>
+In Experiment #4, I used Comet hops from <a href="https://hopsdirect.com/" target="_blank">Hops Direct</a>.  (The customer service representative at Hops Direct was very helpful, and they were able to fulfill my request for both hop cones and pellets at close to 10% AA from the most recent (2018) harvest.) These hops were stored in vacuum-sealed packaging in my freezer.  Analysis was performed by <a href="https://www.aarlab.com/" target="_blank">Advanced Analytical Research</a> (AAR Lab) within one week of the experiment.  I used an AA rating of 10.0% for both cones and pellets as the best estimates at the time of the experiment.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b><span style="text-decoration: underline;">Cones:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Cones:</span>
+AAR Lab
+</strong></td>
+<td><strong><b><span style="text-decoration: underline;">Pellets:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Pellets:</span>
+AAR Lab
+</strong></td>
+</tr>
+<tr>
+<td><strong><b>alpha acids </b></strong></td>
+<td>9.9%</td>
+<td>10.8%</td>
+<td>10.0%</td>
+<td>9.84%</td>
+</tr>
+<tr>
+<td><strong><b>beta acids </b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>3.92%</td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>3.69%</td>
+</tr>
+<tr>
+<td><strong><b>HSI</b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.25</td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.33</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 3.  Results of hops analysis for Experiment #4, including alpha acids, beta acids, and (where available) the Hop Storage Index (HSI).</span>
+
+<p>
+In Experiment #5, conducted four months later, I used the same hop cones, but Comet pellets from <a href="https://tools.yakimachief.com/lookup" target="_blank">YCH Hops</a> (lot P92-ZLUCOM5216) that were 2½ years old at the time of the experiment.  Analysis was performed by AAR Lab with three weeks of the experiment.  Because of the age of the hops, I used the analysis results from AAR Lab (9.70% for cones and 8.76% for pellets) as the best estimates for the AA ratings at the time of the experiment.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b><span style="text-decoration: underline;">Cones:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Cones:</span>
+AAR Lab
+</strong></td>
+<td><strong><b><span style="text-decoration: underline;">Pellets:</span>Package Rating</b></strong>
+</td>
+<td><strong><span style="text-decoration: underline;">Pellets:</span>
+AAR Lab
+</strong></td>
+</tr>
+<tr>
+<td><strong><b>alpha acids </b></strong></td>
+<td>9.9%</td>
+<td>9.70%</td>
+<td>9.5%</td>
+<td>8.76%</td>
+</tr>
+<tr>
+<td><strong><b>beta acids </b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>3.17%</td>
+<td>4.3%</td>
+<td>3.22%</td>
+</tr>
+<tr>
+<td><strong><b>HSI</b></strong></td>
+<td><span style="color: #808080;">N/A</span></td>
+<td>0.35</td>
+<td>0.326</td>
+<td>0.42</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 4.  Results of hops analysis for Experiment #5, including alpha acids, beta acids, and (where available) the Hop Storage Index (HSI).</span>
+
+<p>
+
+<span id="heading1">3. Results</span><br>
+The estimated room-temperature volume at the start of steeping was 8.28 G (31.36 liters) for all conditions and all experiments.  The average specific gravity after 10 minutes of steeping was 1.0384 (minimum 1.0378, maximum 1.0392).  The specific gravity after a 90-minute steep time was about 1.0404.  The small change in specific gravity during the boil (due to keeping the lid on the kettle) means that there is little difference between using the measured IBU values for analysis or normalizing these IBUs by the volume when the sample was taken.  For simplicity and clarity, the measured IBU values are used below.
+
+<p>
+Figures 2, 3, and 4 show the measured IBU values from Experiments 1 through 5.  The average difference in IBUs between cones and pellets is provided in each figure.
+
+<p>
+<img src="conesvspellets-measuredibus-exp1.png" alt="Figure 2"/> <span id="caption"> Figure 2. Measured IBU values for Citra cones and pellets. The average difference is 5.2 IBUs.</span>
+
+<p>
+<img src="conesvspellets-measuredibus-exp3-week1.png" alt="Figure 3"/> <span id="caption"> Figure 3.  Measured IBU values for Willamette cones and pellets, in two separate experiments.   The average difference in Experiment #2 is 1.7 IBUs, and the average difference in Experiment #3 is 1.3 IBUs.</span>
+
+<p>
+<img src="conesvspellets-measuredibus-exp4.png" alt="Figure 4"/> <span id="caption"> Figure 4.  Measured IBU values for Comet cones and pellets, in two separate experiments.  In Experiment #4, both cones and pellets were recently harvested.  In Experiment #5, the pellets were 2.5 years old at the time of the experiment.  The average difference in Experiment #4 is 10.6 IBUs, and the average difference in Experiment #5 is 11.0 IBUs.</span>
+
+<p>
+In Experiment #2, krausen was allowed to build up on the sides of the fermentation vessels, which  explains the overall lower IBU values when compared with Experiment #3.  (Another <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">blog post looks at the impact of krausen on IBUs</a>; it finds that krausen that adheres to the sides of the fermentation vessel can cause a significant decrease in IBUs.)
+
+<p>
+The increase in IBUs in Experiment #5 (compared with Experiment #4) may have been caused by the greater weight of hops used in this experiment.  A greater weight of hops in the same volume was used to target the same initial alpha-acid concentration of 170 ppm.  This may have resulted in greater IBU values because (a) the estimated decrease in alpha-acid content over time was greater than the actual decrease, and so the greater weight of hops over-compensated for the decrease in AA levels, (b) variation in AA levels in the hops, (c) the greater weight of hops increased the concentration of nonIAA compounds, thereby increasing IBU levels, or (d) some combination of all of these reasons.
+
+<p>
+
+<span id="heading1">4. Analysis</span><br>
+<p>
+<span id="heading2">4.1 Visual Analysis of the Figures</span><br>
+It is easily seen in Figures 2, 3, and 4 that the increase in IBUs from the use of pellets is closer to the pattern associated with nonIAA scaling in Figure 1 than to the pattern of IAA or IBU scaling.  This constant offset is difficult to explain as a relative increase in IBUs or IAA (as illustrated in Figure 1), but very easy to explain as a relative increase in nonIAA concentration.  This may explain why Noonan used different utilization factors for cones and pellets at different steep times <a href="#references_pellets1">[Noonan, p. 215]</a>, resulting in a roughly constant increase for pellets regardless of steep time.
+
+<p>
+It is also clear that the increase in IBUs changes with the use of different hop varieties.  There is an average increase of 5.2 IBUs, 1.5 IBUs, and 10.8 IBUs for Citra, Willamette, and Comet pellets, respectively.  Within a variety, the increase in IBUs from cones to pellets is quite similar.  This topic is discussed more in Section 4.3.  Across varieties, the <strong>cone</strong> IBU values are much more similar than the <strong>pellet</strong> IBU values.  For example, at a 10-minute steep time, the <strong>cone</strong> IBU values are 14.0, 13.9, 14.8, 14.2, and 16.4 (standard deviation 0.9 IBUs) for Experiments #1 through #5, respectively, while the <strong>pellet</strong> IBU values are 18.7, 16.6, 16.3, 24.0, and 26.0 (standard deviation 4.0 IBUs).
+
+<p>
+<p>
+<span id="heading2">4.2 Modeling Analysis</span><br>
+We can use the technique described in <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a> to split IBU values into estimates of (a) the concentration of IAA and (b) the concentration of other bitter substances measured with the IBU that are called nonIAA.  In brief, we can use multiple IBU values from the same batch of beer, along with (a) the equation in Section 1.3 that describes the isomerization of alpha acids as a function of time and temperature <a href="#references_pellets1">[Malowicki, p. 27]</a> and (b) the equation in Section 1.4 that describes the IBU as a combination of IAA and nonIAA in the finished beer <a href="#references_pellets1">[Peacock, p. 161]</a>, in order to estimate two scaling factors: <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>nonIAAhops</sub></em>.  The <em>scaling<sub>IAA</sub></em> parameter is the scaling factor that accounts for losses of IAA during the boil, fermentation, and aging; <em>scaling<sub>nonIAAhops</sub></em> is the scaling factor from concentration of total hop particles in the wort to the concentration of hop-related nonIAA in the beer (excluding malt-related nonIAA).  With <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>nonIAAhops</sub></em>, as well as the weight of the hops, initial alpha-acid concentration, steep time, and original gravity, we can map from IBU value to IAA and nonIAA concentrations, and vice versa.
+
+<p>
+A <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">separate blog post</a> investigates the reason for the increase in IBUs associated with hop pellets, and concludes that this increase in IBUs is most likely caused by an increase in the concentration of oxidized alpha acids produced when the hops are added to the kettle.  Using models that predict <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">IBUs due to malt polyphenols</a>, <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">hop polyphenols, and oxidized beta acids</a>, we can change the <em>scaling<sub>nonIAAhops</sub></em> parameter from a single parameter estimating the combined effect of all hop-related auxiliary bittering compounds to a parameter estimating the effect of only oxidized alpha acids, <em>scaling<sub>oAA</sub></em>.
+
+<p>
+By searching over a large number of values of <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>oAA</sub></em> to minimize the error on the <strong>cones</strong> batch of IBU values in Experiment #1, we get <em>scaling<sub>IAA</sub></em> = 0.417 and <em>scaling<sub>oAA</sub></em> = 0.057.  These results indicate that somewhat less than half of the isomerized alpha acids from this batch made it into the finished beer, and about 6% of the alpha acids were oxidized and survived into the finished beer.  These scaling factors yield a root-mean-square (RMS) error of 0.77 IBUs on the nine IBU values, with a maximum difference of -1.39 IBUs at 90 minutes.  We can do the same search for <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>oAA</sub></em> using the set of nine values of <strong>pellets</strong> IBU data from Experiment #1.  In this case, we get <em>scaling<sub>IAA</sub></em> = 0.406 and <em>scaling<sub>oAA</sub></em> = 0.109, with an RMS error of 0.74 IBUs and a maximum difference of -1.42 IBUs at 50 minutes.  These results indicate that nearly the same percentage of IAA were produced and made it into the finished beer in both the <strong>cones</strong> and the <strong>pellets</strong> batches (i.e. hop utilization was the same in both cases), but that the concentration of oxidized alpha acids nearly doubled in the <strong>pellets</strong> batch.
+
+<p>
+Table 5 lists the IAA scaling factor (<em>scaling<sub>IAA</sub></em>) for both <strong>cones</strong> and <strong>pellets</strong> in the five experiments.  It can be seen that the IAA scaling factor is very similar between cones and pellets for all five experiments, slightly higher in some cases and slightly lower in other cases.  (The average cone-to-pellet IAA ratio is 1.05.)  These small differences are probably due to measurement error, and it seems most likely that the IAA scaling factor is basically the same for both cones and pellets.  (The IAA scaling factor in Experiment #2 is expected to be lower than all of the others because the krausen was not mixed back into the beer in this experiment, resulting in greater loss of both IAA and oAA.)
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b>Exp. #1</b></strong>
+</td>
+<td><strong><b>Exp. #2</b></strong></td>
+<td><strong><b>Exp. #3</b></strong></td>
+<td><strong><b>Exp. #4</b></strong></td>
+<td><strong><b>Exp. #5</b></strong></td>
+</tr>
+<tr>
+<td><strong><b>IAA scaling factor: cones</b></strong>
+</td>
+<td>0.417</td>
+<td>0.339</td>
+<td>0.416</td>
+<td>0.461</td>
+<td>0.472</td>
+</tr>
+<tr>
+<td><strong><b>IAA scaling factor: pellets</b></strong>
+</td>
+<td>0.406</td>
+<td>0.307</td>
+<td>0.359</td>
+<td>0.465</td>
+<td>0.476</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 5.  IAA scaling factors for cones and pellets in each experiment.  These values were estimated using the model described in Section 4.2.</span>
+
+<p>
+We can then set the IAA scaling factor within each experiment to be the average of the IAA scaling factors for cones and pellets, and re-estimate the oAA scaling factors.  Table 6 shows the new estimates for IAA scaling factors (<em>scaling<sub>IAA</sub></em>) and oAA scaling factors (<em>scaling<sub>oAA</sub></em>).  Table 7 shows the measured IBU values and estimated IBU values using the model and scaling factors from Table 6.  The RMS errors are as follows: Exp #1 cones: 0.78, pellets 0.75; Exp #2 cones: 0.44, pellets 0.39; Exp #3 cones: 1.16, pellets: 1.17; Exp #4 cones: 0.91, pellets: 0.58; Exp #5 cones: 0.43, pellets: 0.62. The RMS error over all experiments is 0.80 IBUs.  Note that the average oAA scaling factor for cones estimated here (6.3%) is close to the value estimated in Section 8.2 of <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">The Relative Contribution of Oxidized Alpha- and Beta-Acids to the IBU</a> (5.9%).
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b>Exp. #1</b></strong>
+</td>
+<td><strong><b>Exp. #2</b></strong></td>
+<td><strong><b>Exp. #3</b></strong></td>
+<td><strong><b>Exp. #4</b></strong></td>
+<td><strong><b>Exp. #5</b></strong></td>
+</tr>
+<tr>
+<td><strong><b>IAA scaling factor</b></strong>
+</td>
+<td>0.4115</td>
+<td>0.323</td>
+<td>0.3875</td>
+<td>0.463</td>
+<td>0.474</td>
+</tr>
+<tr>
+<td><strong><b>oAA scaling factor: cones</b></strong>
+</td>
+<td>0.059</td>
+<td>0.072</td>
+<td>0.071</td>
+<td>0.046</td>
+<td>0.066</td>
+</tr>
+<tr>
+<td><strong><b>oAA scaling factor: pellets</b></strong>
+</td>
+<td>0.107</td>
+<td>0.088</td>
+<td>0.084</td>
+<td>0.148</td>
+<td>0.150</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 6.  Averaged IAA scaling factor and oAA scaling factors for cones and pellets in each experiment.</span>
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong>10 min</strong>
+</td>
+<td><strong>20 min</strong>
+</td>
+<td><strong>30 min</strong>
+</td>
+<td><strong>40 min</strong>
+</td>
+<td><strong>50 min</strong>
+</td>
+<td><strong>60 min</strong>
+</td>
+<td><strong>70 min</strong>
+</td>
+<td><strong>80 min</strong>
+</td>
+<td><strong>90 min</strong>
+</td>
+</tr>
+<tr>
+<td><strong><b>Exp 1: cones</b><br></strong>
+(meas., est.)</td>
+<td>14.0,<br>
+13.8</td>
+<td>18.8,<br>
+19.1</td>
+<td>24.2,<br>
+23.7</td>
+<td>26.6,<br>
+27.6</td>
+<td>31.6,<br>
+31.0</td>
+<td>32.8,<br>
+33.8</td>
+<td>36.3,<br>
+36.3</td>
+<td>37.9,<br>
+38.3</td>
+<td>41.6,<br>
+40.0</td>
+</tr>
+<tr>
+<td><strong><b>Exp 1: pellets</b><br></strong>
+(meas., est.)</td>
+<td>18.7,<br>
+19.1</td>
+<td>24.2,<br>
+24.3</td>
+<td>29.7,<br>
+28.8</td>
+<td>32.1,<br>
+32.8</td>
+<td>37.5,<br>
+36.2</td>
+<td>39.5,<br>
+39.0</td>
+<td>41.5,<br>
+41.5</td>
+<td>42.4,<br>
+43.5</td>
+<td>44.7,<br>
+45.3</td>
+</tr>
+<tr>
+<td><strong><b>Exp 2: cones</b><br></strong>
+(meas., est.)</td>
+<td>13.9,<br>
+14.1</td>
+<td>17.5,<br>
+18.2</td>
+<td>22.3,<br>
+21.8</td>
+<td>25.0,<br>
+24.9</td>
+<td>27.3,<br>
+27.6</td>
+<td>30.3,<br>
+29.8</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 2: pellets<br></strong>
+(meas., est.)</td>
+<td>16.6,<br>
+15.8</td>
+<td>19.9,<br>
+19.9</td>
+<td>23.2,<br>
+23.5</td>
+<td>26.4,<br>
+26.5</td>
+<td>29.4,<br>
+29.2</td>
+<td>31.0,<br>
+31.4</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 3: cones<br></strong>
+(meas., est.)</td>
+<td>14.8,<br>
+14.9</td>
+<td>19.1,<br>
+19.9</td>
+<td>23.7,<br>
+24.1</td>
+<td>26.7,<br>
+27.8</td>
+<td>30.4,<br>
+30.9</td>
+<td>35.1,<br>
+33.6</td>
+<td>34.8,<br>
+35.9</td>
+<td>40.1,<br>
+37.8</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 3: pellets<br></strong>
+(meas., est.)</td>
+<td>16.3,<br>
+16.3</td>
+<td>21.5,<br>
+21.2</td>
+<td>27.6,<br>
+25.4</td>
+<td>28.3,<br>
+29.0</td>
+<td>33.2,<br>
+32.2</td>
+<td>34.7,<br>
+34.8</td>
+<td>35.1,<br>
+37.1</td>
+<td>38.5,<br>
+39.0</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 4: cones<br></strong>
+(meas., est.)</td>
+<td>14.2,<br>
+13.5</td>
+<td>19.7,<br>
+19.6</td>
+<td>25.1,<br>
+24.8</td>
+<td>28.6,<br>
+29.3</td>
+<td>31.7,<br>
+33.2</td>
+<td>35.9,<br>
+36.5</td>
+<td>39.6,<br>
+39.3</td>
+<td>43.3,<br>
+41.7</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 4: pellets<br></strong>
+(meas., est.)</td>
+<td>24.0,<br>
+24.5</td>
+<td>31.4,<br>
+30.4</td>
+<td>34.6,<br>
+35.6</td>
+<td>40.2,<br>
+40.0</td>
+<td>44.2,<br>
+43.8</td>
+<td>46.7,<br>
+47.0</td>
+<td>49.4,<br>
+49.8</td>
+<td>52.4,<br>
+52.1</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 5: cones<br></strong>
+(meas., est.)</td>
+<td>16.4,<br>
+15.7</td>
+<td>21.2,<br>
+21.7</td>
+<td>26.6,<br>
+26.9</td>
+<td>31.3,<br>
+31.4</td>
+<td>35.2,<br>
+35.3</td>
+<td>39.0,<br>
+38.6</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Exp 5: pellets<br></strong>
+(meas. est.)</td>
+<td>26.0,<br>
+26.6</td>
+<td>33.6,<br>
+32.7</td>
+<td>37.8,<br>
+38.0</td>
+<td>41.6,<br>
+42.5</td>
+<td>46.9,<br>
+46.5</td>
+<td>49.9,<br>
+49.8</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 7.  Measured and estimated IBUs for each sample in each experiment. Samples are identified by the duration of hop steeping, in minutes (column headings). Experiments and condition (<strong>cones</strong> or <strong>pellets</strong>) are identified by row headings. Each cell in the table shows measured IBUs followed by estimated IBUs. Estimates are from the model described in Section 4.2.</span>
+
+<p>
+The change in oAA factor between cones and pellets for each experiment is listed in Table 8, expressed as a ratio of <strong>pellets</strong>/<strong>cones</strong>.  It can be seen that these factors vary from an 18% to 222% increase for pellets compared with cones, and that this increase is approximately the same within a hop variety but different between varieties. For example, for Willamette the ratios 1.22 and 1.18 are very similar, and for Comet the ratios 3.22 and 2.27 are more similar to each other than they are to the ratios of other varieties.  The average ratios for each variety are 1.81, 1.20, and 2.74 for Citra, Willamette, and Comet, respectively.  Over all three varieties, the pellet-to-cone ratio is 1.9, representing an approximate doubling in the concentration of oxidized alpha acids in the finished beer.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b>Exp. #1</b></strong>
+</td>
+<td><strong><b>Exp. #2</b></strong></td>
+<td><strong><b>Exp. #3</b></strong></td>
+<td><strong><b>Exp. #4</b></strong></td>
+<td><strong><b>Exp. #5</b></strong></td>
+</tr>
+<tr>
+<td><strong><b>oAA pellet-to-cone ratio</b></strong>
+</td>
+<td>1.81</td>
+<td>1.22</td>
+<td>1.18</td>
+<td>3.22</td>
+<td>2.27</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 8.  oAA pellet-to-cone ratios estimated for the five experiments. This ratio expresses the relative increase in oxidized alpha acids that contribute to the observed increase in IBUs with the use of hop pellets.</span>
+
+<p>
+
+<span id="heading1">5. Predicting an Increase in IBUs</span><br>
+<p>
+<span id="heading2">5.1 Variety-Specific Factors</span><br>
+The results from Sections 3 and 4 indicate that the increase in IBUs and oAA concentration that results from using hop pellets is dependent on the hop variety. We can check if any quantitative descriptions of these varieties might allow us to predict the amount of increase in oxidized-alpha acid concentration.
+
+<p>
+Table 9 lists a variety of quantitative descriptions of the three varieties used here. The alpha-acid and beta-acid levels are taken from the averages of cones and pellets in Section 2, and the other descriptions are taken from <em>The Hops List</em> <a href="#references_pellets1">[Healey]</a>. Each cell shows the typical composition (in percent or ml/100g) and the approximate concentration used in these experiments. If a descriptor is associated with the oAA pellet-to-cone ratio, we would expect a correlation between the concentration of this descriptor and the oAA pellet-to-cone ratio for this variety. In other words, we are looking for concentration values that increase in order from Willamette to Citra to Comet. None of these descriptors show such a trend, meaning that we can not currently predict the oAA pellet-to-cone ratio from knowledge of the hop variety or characteristics.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><strong><b>alpha acid (%)</b></strong>
+</td>
+<td><strong><b>beta acid (%)</b></strong>
+</td>
+<td><strong><b>cohumulone</b></strong></td>
+<td><strong><b>total oil</b></strong>
+</td>
+<td><strong><b>storability</b></strong>
+</td>
+</tr>
+<tr>
+<td><strong><b>Citra</b></strong>
+</td>
+<td>14.1%<br>
+170 ppm</td>
+<td>3.67%<br>
+44 ppm</td>
+<td>27.5%<br>
+47 ppm</td>
+<td>2.25 ml/100g<br>
+3% v/v</td>
+<td>75%</td>
+</tr>
+<tr>
+<td><strong><b>Comet</b></strong>
+</td>
+<td>10.0%<br>
+170 ppm</td>
+<td>3.5%<br>
+60 ppm</td>
+<td>41%<br>
+70 ppm</td>
+<td>1.98 ml/100g<br>
+3% v/v</td>
+<td>49%</td>
+</tr>
+<tr>
+<td><strong><b>Willamette</b></strong>
+</td>
+<td>5.0%<br>
+170 ppm</td>
+<td>3.5%<br>
+120 ppm</td>
+<td>32.5%<br>
+55 ppm</td>
+<td>1.25 ml/100g<br>
+4% v/v</td>
+<td>62%</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 9.  Quantitative descriptions of the three hop varieties used in these experiments. The descriptions are provided as both typical composition (in percent or ml/100g) and approximate concentration in these experiments (in ppm or %v/v). The exception is "storability," which is the percent of alpha acids remaining after storage for six months at room temperature.</span>
+
+<p>
+Another possibility is that there is a transformation (other than oxidation) which happens while pellets age in their nitrogen-flushed packaging, and this hypothetical transformation causes less of a pellet-based IBU increase with older hops. The purpose of Experiment #5 was, in fact, to test this hypothesis. In Experiment #1, the Citra pellets were about 3 months old at the time of the experiment, and the pellet-based IBU increase was moderate. In Experiments #2 and #3, the Willamette pellets were several years old at the time of the experiment, and the pellet-based IBU increase was minor. In Experiment #4, the Comet pellets were extremely fresh and the increase was quite large. Therefore, Experiment #5 used Comet pellets that were deliberately several years old at the time of the experiment. If the results of Experiment #5 showed an increase in IBUs similar to that of the Willamette hops, then this hypothesis of older pellet hops having less increase would have been supported. However, the results showed just as large an increase in IBUs as in Experiment #4, indicating that the age of the (properly stored and nitrogen flushed) pellets has no impact on the increase in IBUs.
+
+<p>
+This leaves us with measuring the variety-specific ratio for each variety of hops. With hundreds of available hop varieties (e.g. <a href="#references_pellets1">[Healey]</a>), this is a nearly impossible task. The more practical but less accurate approach is to treat all hop varieties as having the same increase as the average of the three varieties studied here, i.e. an oAA pellet-to-cone ratio of about 1.9.  (It is also possible that there is no variety-specific increase, but that the differences in the ratios are due to differences in the pellet-production process at each manufacturer.  Checking this hypothesis would require further study of both variety-specific and manufacturer-specific pellets.)
+
+<p>
+<p>
+<span id="heading2">5.2 Modeling an Increase in IBUs</span><br>
+As seen in Table 6, when using hop cones, about 6% of the alpha acids added to the wort are oxidized and survive into the finished beer.  For pellet hops, about 12% of the alpha acids added to the wort are oxidized and survive into the beer.  There is a factor of 0.9155 for <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">scaling the light absorption at 275 nm</a> from oxidized alpha acids to isomerized alpha acids, as seen in Figure 7 of Maye et al. <a href="#references_pellets1">[Maye, p. 25]</a>, and a scaling factor of 51.2/69.68 to convert the light absorption of isomerized alpha acids to IBUs <a href="#references_pellets1">[Peacock, p. 161]</a>.  Therefore, 1 ppm of oxidized alpha acids will produce 0.67 IBUs.  Let's consider an example to see how to model the use of pellet hops.  If we have a beer made with 1.50 oz (42.52 g) of 10% AA hops boiled for 60 minutes in 5.50 gallons (20.82 liters) of wort (and ignoring evaporation), when we add the hops we have 204 ppm of alpha acids added to the wort (204 ppm = 0.10 × 42.52 g × 1000 / 20.82 l).  From the 0.150 oz (4.252 g) of alpha acids added to the wort, with hop cones we get 0.009 oz (0.2551 g) of oxidized alpha acids, or 12.25 ppm, in the finished beer (12.25 ppm = 4.252 g × 0.06 × 1000 / 20.82 l), increasing the IBU by 8.24 (0.673 × 12.25 ppm).  With hop pellets, we get 0.018 oz (0.5102 g) of oxidized alpha acids, or 24.51 ppm, increasing the IBU by 16.48.  These oxidized-alpha-acid IBUs are in addition to the IBUs from isomerized alpha acids (e.g. 30 IBUs) and the IBUs from malt and hop polyphenols (e.g. 2 IBUs), resulting in 40 IBUs for cones and 48 IBUs for pellets.  In this example, then, pellets demonstrate a 20% increase in IBUs compared with cones.
+
+<p>
+
+<span id="heading1">6. Summary and Conclusion</span><br>
+The IBU data from these five experiments showed an unexpected but consistent pattern: the increase in IBUs from pellets is constant over a range of steep times, instead of increasing with steep time.  It therefore seems that the increase in IBUs when using pellets is not caused by an increase in the rate of isomerization or availability of alpha acids, and should not be modeled with a multiplication factor applied to [IAA] or IBUs. Instead, this increase in IBUs can be modeled by an increase in the concentration of oxidized alpha acids produced during the boil, as discussed in a <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">separate blog post</a>.  The amount of increase appears to be dependent on the hop variety and is not easily predicted from characteristics within each variety.  Therefore, the most practical way to model this increase in IBUs is to treat the isomerization of alpha acids in the same way as hop cones, but to double the concentration of oxidized alpha acids ending up in the finished beer.
+
+<p>
+
+<span id="heading1">7. Acknowledgement</big></strong></span><br>I greatly appreciate the high-quality IBU analysis provided by Dana Garves at <a href="http://www.oregonbrewlab.com" target="_blank">Oregon BrewLab</a>. This accuracy can be seen in the smooth and consistent shape of the IBU plots in Figures 2, 3, and 4.  Without such consistent accuracy, it would not be possible to draw meaningful conclusions from the data.
+
+<p>
+<p>
+<span id="heading1"><span id="references_pellets1">References</span></span><br>
+<ul>
+<li>R. Daniels, <em>Designing Great Beers: The Ultimate Guide to Brewing Classic Beer Styles</em>.  Brewers Publications, 2000.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
+<li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>M. L. Hall, "What's Your IBU," in <em>Zymurgy</em>.  Special Edition, 1997.</li>
+<li>J. Healey, <em>The Hops List: 265 Beer Hop Varieties From Around the World</em>. Healey, 1st edition, 2016.</li>
+<li>S. Hieronymus, <em>For the Love of Hops: The Practical Guide to Aroma, Bitterness, and the Culture of Hops</em>.  Brewers Publications, 2012.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>J. P. Maye, R. Smith, and J. Leker, "Humulinone Formation in Hops and Hop Pellets and Its Implications for Dry Hopped Beers," in <em>Master Brewers Association of the Americas Technical Quarterly</em>, vol. 53, no. 1, pp. 23-27, 2016.</li>
+<li>G. J. Noonan, <em>New Brewing Lager Beer</em>. Brewers Publications, 1996.</li>
+<li>V. Peacock, "The International Bitterness Unit, its Creation and What it Measures," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>M. Verzele and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>.  Developments in Food Science 27.  Elsevier, 1991.</li>
+</ul>
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

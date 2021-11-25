@@ -1,0 +1,628 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Hopping Rate Correction Based on Alpha-Acid Solubility</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Hopping Rate Correction Based on Alpha-Acid Solubility
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+It is well known that doubling the amount of hops in the boil can yield less than double the IBUs in the finished beer. When modeling IBUs, therefore, a hopping-rate correction factor is needed, with utilization decreasing as the concentration of hops increases. This post describes a model of alpha-acid solubility at boiling, based on the work of Mark Malowicki and experimental data. This solubility model can be used for hopping-rate correction in IBU prediction. This model is a refinement of the model described in <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>. In this revised model, the alpha-acid solubility at boiling and typical wort pH is not a fixed value, but begins at 240 ppm and increases gradually to 490 ppm. At concentrations below 240 ppm, all of the alpha acids dissolve into the wort. At concentrations greater than 240 ppm, the solubility limit can be modeled with the equation 490 × (1 − <a href="https://en.wikipedia.org/wiki/E_(mathematical_constant)" target="_blank">e</a><sup>−0.00280×[<em>AA</em>]<sub>0</sub></sup>) where [<em>AA</em>]<sub>0</sub> is the concentration of alpha acids when added to the wort. Any alpha acids that are above this limit are quickly degraded and do not contribute to the isomerized alpha acids (or <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">oxidized alpha acids</a>) in the finished beer. This model demonstrates a good fit to available IBU data at a variety of hopping rates and boil times.
+
+<p>
+
+<span id="heading1">1. Introduction</span><br>
+
+<p>
+<p>
+<span id="heading2">1.1 Hopping Rates and Utilization</span><br>
+The relative amount of hops in the wort affects utilization. As Lewis and Young say, “a high hopping rate reduces extraction efficiency” <a href="#references_AAsol">[Lewis and Young, p. 267]</a>. Daniels phrases this as “simply adding more and more hops does not produce a linear increase in the amount of bitterness produced” <a href="#references_AAsol">[Daniels, p. 85]</a>. Fix also notes that the utilization rate is affected by hop concentration <a href="#references_AAsol">[Fix, p. 47]</a>. Hough et al. say that “hops are utilized more efficiently at low rates” <a href="#references_AAsol">[Hough et al., p. 489]</a>. (Utilization is the ratio of isomerized alpha acids present in the finished beer divided by the total alpha acids added.)
+
+<p>
+Garetz provides a quantitative model of the relationship between amount of hops and utilization. He proposes a hopping-rate correction factor (also described by Hall and Daniels) that depends on volume and “desired IBU” to determine the weight of hops needed <a href="#references_AAsol">[Garetz (b), p. 137; Hall, p. 63; Daniels, p. 86]</a>. If we focus on full boils (instead of boiling a higher-gravity wort and then adding water), we can write the Garetz correction factor as
+<p style="padding-left: 30px;">HF(<em>IBU</em>) = (<em>IBU</em>/260) + 1</p>
+where HF is the hopping-rate correction factor that depends on the (desired) IBU value, <em>IBU</em>. If the IBU value is to be estimated from the weight of hops, Hall provides a method to compute this correction factor in two steps rather than through the iterative process suggested by Garetz <a href="#references_AAsol">[Hall, p. 63]</a>. I've <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">previously found</a> that this correction factor can overestimate predicted IBU values at high hopping rates.
+
+<p>
+<p>
+<span id="heading2">1.2 Hopping Rates, Utilization, and Alpha-Acid Solubility</span><br>
+Previous work has indicated a relationship between the solubility of alpha acids and the reduced utilization found at high hopping rates. While alpha acids have a solubility limit between 70 and 90 ppm at room temperature and pH 5.2 <a href="#references_AAsol">[Malowicki, p. 54; Spetsig, p. 1423]</a>, Spetsig has estimated the solubility at boiling and pH 5.2 to be about 300 ppm <a href="#references_AAsol">[Spetsig, p. 1423]</a>. (Malowicki notes a solubility limit of 200 ppm at boiling and pH 5.0 based on Spetsig's graph <a href="#references_AAsol">[Malowicki, p. 34]</a>, but this seems to be a typo, with actual values of 250 ppm at pH 5.0 and 300 ppm at pH 5.2.) This value of 300 ppm is based on extrapolation from conditions at 77°F (25°C) and 104°F (40°C), and should be considered an approximation <a href="#references_AAsol">[Spetsig, p. 1424]</a>. Maule has noted that "when humulone was used at rates greater than 200 [ppm] the amount appearing as humulone and iso-humulone on break increased at the expense of the amounts remaining in the wort" <a href="#references_AAsol">[Maule, p. 289]</a>. (Humulone is the most prevalent of the alpha acids, and the "chemistry of the other iso-alpha acids is practically identical to that of the isohumulones" <a href="#references_AAsol">[Verzele and De Keukeleire, p. 88]</a>, so the terms "humulone" and "iso-humulone" are often considered generally equivalent to the terms "alpha acid" and "isomerized alpha acid," respectively (to the chagrin of Verzele and De Keukeleire <a href="#references_AAsol">[p. 89]</a>).) Maule then notes that what is not actually adsorbed to the break "represents the difference between the amount of resin present and its solubility in wort under the conditions employed" <a href="#references_AAsol">[Maule, p. 289]</a>. This suggests an alpha-acid solubility limit closer to 200 ppm at boiling. (The solubility limit of the isomerized alpha acids is much higher, at 900 ppm in wort <a href="#references_AAsol">[Rudin, p. 18]</a>, and is not considered further in this post.) Hough et al. remark that "as may be anticipated from the solubility of humulone, hops are utilized more efficiently at low rates than at high ones. Indeed, it was concluded that the solubility of humulone was the limiting factor in its utilization" <a href="#references_AAsol">[Hough et al., p. 489]</a>. These statements present a link between alpha-acid solubility and reduced utilization at high hopping rates, with an alpha-acid solubility limit between roughly 200 and 300 ppm.
+
+<p>
+In a previous blog post, <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>, I suggested a model for hopping-rate correction based on alpha-acid solubility. In this model, the concentration of isomerized alpha acids (IAA) that ends up in the wort is limited by the solubility of alpha acids at boiling, but the <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">bitter substances other than IAA that contribute to measured IBU values</a> (nonIAA) increase linearly with the amount of hops added. These other bitter substances include oxidized alpha acids, hop polyphenols, malt polyphenols, and oxidized beta acids. I estimated the alpha-acid solubility limit in boiling wort at 270 ppm, which is in between the estimates from the literature of 200 to 300 ppm. In this model, the alpha acids only go into solution at concentrations of 270 ppm or less (at boiling and typical wort pH). Above this limit, the alpha acids are quickly degraded (or permanently removed from solution) and do not yield IAA in the finished beer. This model yielded a good fit to the available data, but it is an over-simplification in that oxidized alpha acids produced during the boil should be limited to the same extent that isomerization is limited. (<a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">Oxidized alpha acids produced during the boil may be the second-largest contributor to IBUs</a>, after isomerized alpha acids.) The current blog post describes possible revisions to this model and more experiments to evaluate this model at different boil times.
+
+<p>
+<p>
+<span id="heading2">1.3 Isomerization of Undissolved Alpha Acids</span><br>
+Alpha acids generally isomerize according to first-order reactions when dissolved in boiling wort, as described below <a href="#references_AAsol">[Malowicki, p. 24]</a>. But what happens when the concentration of alpha acids is greater than the alpha-acid solubility limit? The <em>dissolved</em> alpha acids presumably undergo isomerization in the usual way, but the fate of those that are not (yet) dissolved is unclear. If the previous assumption that these alpha acids are quickly degraded into some other form is not correct, then the alpha acids may still undergo isomerization, presumably still as a first-order reaction but with an unknown rate constant.
+
+<p>
+Heat is the <em>only</em> requirement for alpha-acid isomerization; in other words, the presence of wort is not required (although it may be a catalyst). Isomerization can happen not only in the presence of boiling wort or alkaine media <a href="#references_AAsol">[Verzele and De Keukeleire, pp. 102-106]</a>, but also by exposure to light (photo-isomerization) <a href="#references_AAsol">[Verzele and De Keukeleire, pp. 106-109]</a>, or at high heat with the solid metal salts of humulone <a href="#references_AAsol">[Verzele and De Keukeleire, pp. 109-111]</a>. In thermal isomerization, "humulone resists heating up to 100°C ... Above 180°C the thermal transformations and degradations of humulone occur very rapidly" <a href="#references_AAsol">[Verzele and De Keukeleire, p. 109]</a>, which implies that the alpha acids might be fairly stable at boiling in the absence of water or oxygen. On the other hand, "heat may also cause other reactions of the sensitive hop bitter acids and high temperatures must therefore be avoided" in the preparation of hop extracts <a href="#references_AAsol">[Verzele and De Keukeleire, p. 13]</a>, indicating that high temperatures might degrade the alpha acids through reactions not involving isomerization. It's also known that isomerization can be catalyzed by "calcium or magnesium ions, either in methanol solution or the solid state" <a href="#references_AAsol">[Hough et al., p. 493; Kappler et al., p. 332]</a>. What are the chemical properties of the resin containing the undissolved alpha acids, and how do these properties affect isomerization? Does a lack of oxygen severely reduce the rate of isomerization? (Oxidation is "one of the first things to happen in the complex chemistry of humulone isomerization" <a href="#references_AAsol">[Dierckens and Verzele, p. 454]</a>; a lack of oxygen might therefore slow down the rate of isomerization.) Does the presence of some catalyst in the resin increase the rate of isomerization? Do other reactions in the presence of heat cause degradation of the alpha acids? At what rate do the undissolved alpha acids dissolve into the wort as the dissolved alpha acids are converted into isomerized alpha acids?
+
+<p>
+Because the answers to these questions are not currently clear, we can construct a model of isomerization that tests various possibilities, and see which settings of the model produce the best fit to the available data. The resulting model and settings will not have been proven to be correct, but this will provide the most likely explanation (in a statistical sense) given the available data.
+
+<p>
+<p>
+<span id="heading2">1.4 A Model of Isomerization for Dissolved Alpha Acids</span><br>
+I'll briefly introduce the model of alpha-acid isomerization developed by Mark Malowicki, which forms the foundation of the current hopping-rate correction model. This model of isomerization describes a general process for the conversion of alpha acids (AA) into (bitter) isomerized alpha acids (IAA), and the conversion of IAA into "uncharacterized degradation products" that aren't bitter (including humulinic acid, isobutyraldehyde, and iso-hexenoic acid) <a href="#references_AAsol">[Malowicki, p. 13, pp. 26-27; Hough et al., p. 480]</a>. In this model, the concentration of IAA at time <em>t</em> can be determined from the initial concentration of alpha acids and two first-order reactions with temperature-dependent <a href="https://en.wikipedia.org/wiki/Reaction_rate_constant" target="_blank">rate constants</a>:
+<p style="padding-left: 30px;">[<em>IAA</em>] = [<em>AA</em>]<sub>0</sub> (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>)-<em>k</em><sub>1</sub>(<em>T</em>))) (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t</em></sup>-e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</p>
+where [<em>IAA</em>] is the concentration of isomerized alpha acids in the wort at time <em>t</em> and temperature <em>T</em>, in parts per million (ppm), and [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids in the wort (also in ppm). (<a href="https://en.wikipedia.org/wiki/E_(mathematical_constant)" target="_blank">e is the mathematical constant 2.71828...</a>) The variable <em>k</em><sub>1</sub>(<em>T</em>) is the rate constant for the conversion of alpha acids into isomerized alpha acids and <em>T</em> is the temperature in degrees Kelvin,
+<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup></p>
+and <em>k</em><sub>2</sub>(<em>T</em>) is the rate constant for the conversion of isomerized alpha acids into other products,
+<p style="padding-left: 30px;"><em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup></p>
+At boiling (<em>T</em>=373.15°K), <em>k</em><sub>1</sub>(<em>T</em>) is 0.0125 and <em>k</em><sub>2</sub>(<em>T</em>) is 0.0031. Malowicki also provides a different form of the same equation <a href="#references_AAsol">[Malowicki, p. 27]</a>, in which the IAA concentration at time <em>t</em> is not computed from the initial level of alpha acids. Instead, the <em>change</em> in concentration of alpha acids at any time point is computed from the current concentration of alpha acids, and the <em>change</em> in IAA is computed from the current concentrations of alpha acids and IAA:
+<p style="padding-left: 30px;"><em>d</em>([<em>AA</em>])/<em>dt</em> = -<em>k</em><sub>1</sub>(<em>T</em>)×[<em>AA</em>]
+<em>d</em>([<em>IAA</em>])/<em>dt</em> = <em>k</em><sub>1</sub>(<em>T</em>)×[<em>AA</em>] - <em>k</em><sub>2</sub>(<em>T</em>)×[<em>IAA</em>]</p>
+where <em>d</em>([<em>AA</em>])/<em>dt</em> is the change in alpha-acid concentration as a function of time (e.g. expressed in ppm per minute), and <em>d</em>([<em>IAA</em>])/<em>dt</em> is the change in IAA concentration as a function of time. If we start at time 0 with an alpha-acid concentration [AA]<sub>0</sub> and an IAA concentration of zero, these changes in concentration can be integrated over a range of time values to arrive at a total concentration of AA and IAA at time <em>t</em>. We can approximate the integration on a computer using a very small time increment, <em>t</em><span lang="grc"><em><sub>δ</sub></em></span>. While the numerical result is the same in these two forms of equations, one advantage of the second form is that multiple hop additions can be dealt with very easily when applying an alpha-acid solubility limit. Another advantage is that we can express the concentrations of undissolved alpha acids and IAA, and their transformation over time, in the same way.
+
+<p>
+
+<span id="heading1">2. Approach</span><br>
+<p>
+<span id="heading2">2.1 Developing a General Model</span><br>
+The proposed model starts with Malowicki's formulas for the conversion of dissolved alpha acids. We can then predict IAA concentration in the wort from either (a) parallel formulas for the conversion of <em>undissolved</em> alpha acids into <em>undissolved</em> IAA, the production of <em>undissolved</em> degradation products, and the conversion of undissolved into dissolved components, and/or (b) a solubility limit that increases gradually as a function of initial alpha-acid concentration.
+
+<p>
+For the conversion of undissolved alpha acids into undissolved IAA, if we have alpha acids above the solubility limit at time <em>t</em>, then at the next time instant (<em>t</em>+<em>t</em><span lang="grc"><em><sub>δ</sub></em></span>) some of the alpha acids in solution will have been converted into IAA. This lowers the dissolved alpha-acid concentration at <em>t</em>+<em>t</em><span lang="grc"><em><sub>δ</sub></em></span>, allowing some of the alpha acids not yet in solution to dissolve into the wort at this time, potentially bringing the dissolved alpha-acid level back up to the solubility limit (as long as there are still undissolved alpha acids). This model then has multiple simultaneous processes: the conversion of dissolved alpha acids into (dissolved) IAA, the conversion of undissolved alpha acids into (undissolved) IAA, and the dissolving of the alpha acids and IAA into the wort. For each of these processes, there is an associated rate constant or two. The model is complex, but it can (a) replicate the more simple model in which alpha acids above a constant solubility limit are quickly degraded and (b) test a wide variety of other possible conversions.
+
+<p>
+The <a href="https://www.pharmpress.com/files/docs/remington-education-physical-pharmacy-sample-chapter-3.pdf" target="_blank">rate of dissolution</a> of alpha acids into the wort can be modeled using the <a href="https://en.wikipedia.org/wiki/Arthur_Amos_Noyes" target="_blank">Noyes–Whitney equation</a>, although at the solubility limit this rate can not be faster than the rate of conversion of dissolved alpha acids into IAA. Rather than model each of the five parameters this equation, we can recognize that all components except the surface area are constant at the solubility limit, and (<a href="https://en.wikipedia.org/wiki/Spherical_cow" target="_blank">assuming a spherical shape</a> for the undissolved alpha acids) the surface area is proportional to the mass of alpha acids raised to the power of 2/3. Therefore, the rate of dissolution (in mg/second) is some (unknown) factor multiplied by the weight of undissolved alpha acids raised to the power of 2/3.
+
+<p>
+The solubility data provided by Malowicki at room temperature <a href="#references_AAsol">[Malowicki, p. 53]</a> and estimated in a previous post (<a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>) show a gradual rise in solubility as the initial alpha-acid concentration increases above some minimum threshold (see Figure 1). We can therefore also model the solubility limit as a function of initial alpha-acid concentration, instead of using a constant value (e.g. 270 ppm at boiling). In this case, the solubility limit is not reached until some minimum concentration of alpha acids is exceeded, e.g. 200 ppm. As the initial concentration gets larger, the solubility limit also gets somewhat larger, so that an initial concentration of 800 ppm might have solubility of 400 ppm. This approach describes the shape of the observed data better than than a single value, although I don't have a good explanation for <em>why</em> the solubility would change like this. Because Malowicki observed a similar shape at room temperature, it is unlikely that this shape is a byproduct of the types of isomerization and dissolution discussed in the previous paragraph.
+
+<p>
+<img src="solexp-fig1-combined.png" alt="Figure 1"/> <span id="caption"> Figure 1. Estimated solubility of alpha acids at room temperature (from Malowicki, p. 53; image reproduced under the <a href="https://www.copyright.gov/fair-use/more-info.html" target="_blank">fair use doctrine</a>) and at boiling (from <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha Acid Utilization and IBUs</a>).</span>
+
+<p>
+For quantifying a gradually-increasing solubility limit, we can specify a minimum limit at concentration [<em>AA</em>]<sub>limitMin</sub> and a maximum limit at [<em>AA</em>]<sub>limitMax</sub>. At concentrations below [<em>AA</em>]<sub>limitMin</sub>, all of the alpha acids dissolve in the boiling wort. Above this concentration, the solubility increases with concentration according to the formula
+<p style="padding-left: 40px;">[<em>AA</em>]<sub>limit</sub> = [<em>AA</em>]<sub>limitMax</sub> × (1 − exp(<em>slope</em> × [<em>AA</em>]<sub>0</sub>))</p>
+where <em>slope</em> is a parameter that expresses how quickly solubility changes with increasing initial concentration, and exp() is the <a href="https://en.wikipedia.org/wiki/Exponential_function" target="_blank">natural exponential function</a>. The <em>slope</em> parameter is defined so that the result of this function at [<em>AA</em>]<sub>limitMin</sub> equals [<em>AA</em>]<sub>limitMin</sub>:
+<p style="padding-left: 40px;"><em>slope</em> = log(1 − ([<em>AA</em>]<sub>limitMin</sub> / [<em>AA</em>]<sub>limitMax</sub>)) / [<em>AA</em>]<sub>limitMin</sub></p>
+where log() is a function to take the <a href="https://en.wikipedia.org/wiki/Natural_logarithm" target="_blank">natural logarithm</a>. This approach allows us to describe the solubility limit with two parameters: [<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub>. For example, we might set the minimum solubility to 200 ppm and the maximum solubility to 500 ppm. If [<em>AA</em>]<sub>0</sub> is less than 200 ppm, then all alpha acids dissolve and no adjustment is needed. If [<em>AA</em>]<sub>0</sub> is 200 ppm, then the solubility limit, [<em>AA</em>]<sub>limit</sub>, is 200 ppm. If [<em>AA</em>]<sub>0</sub> is 400 ppm, then the solubility limit is 320 ppm, and if [<em>AA</em>]<sub>0</sub> is 1000 ppm, then the limit is 461 ppm.  The limit will never be greater than 500 ppm in this example.
+
+<p>
+<p>
+<span id="heading2">2.2 Specific Models</span><br>Using the general model of isomerization, solubility, and dissolution described above, we can create ten specific models that reflect different assumptions. Model <strong>A</strong> has no solubility limit for alpha acids; we would expect this model to have the highest error when evaluated on measured data with high concentrations of [<em>AA</em>]<sub>0</sub>. Model <strong>B</strong> has a single (constant) solubility limit for alpha acids, and alpha acids that are not immediately dissolved are quickly turned into degradation products. Model <strong>C</strong> has a "soft" limit for alpha acids, with solubility a function of the initial alpha-acid concentration and described by two parameters, lower and upper solubility limits. Model <strong>D</strong> has no isomerization or other transformation of undissolved alpha acids (as hinted at by Verzele and De Keukeleire) with two parameters: a solubility limit and a rate of dissolution. Model <strong>E</strong> has no isomerization of undissolved alpha acids with three parameters: a lower solubility limit, an upper limit, and a rate of dissolution. Model <strong>F</strong> has no isomerization of undissolved alpha acids and a rate of dissolution that would be greater than the rate of conversion from alpha acids to IAA. This model has a single parameter, the solubility limit. Model <strong>G</strong> allows isomerization of the undissolved alpha acids and has a very high potential rate of dissolution. Because of the fast dissolution, the rate constant for transforming undissolved IAA into degradation products doesn't much matter. This model has two parameters, the solubility limit and the rate of isomerization of undissolved alpha acids. Model <strong>H</strong> has isomerization of undissolved alpha acids using three parameters: the solubility limit, the rate of isomerization of undissolved alpha acids, and the rate of dissolution. In this model, the undissolved IAA are assumed to be stable. Model <strong>I</strong> also has isomerization of undissolved alpha acids using three parameters: the solubility limit, the rate of isomerization of undissolved alpha acids, and the rate of dissolution. In this model, the undissolved IAA are assumed to degrade quickly. Finally, Model <strong>J</strong> has the most flexibility with four parameters: a solubility limit, a rate of conversion of undissolved alpha acids to IAA, a rate of conversion of undissolved IAA to degradation products, and a rate of dissolution.
+
+<p>
+<p>
+<span id="heading2">2.3 Testing the Models</span><br>The approach used in this set of experiments was to create four conditions (i.e. four batches of beer) with different concentrations of hops, with one condition having an alpha-acid concentration well below the expected solubility limit. The wort from each condition was sampled at 10-minute intervals (from 10 to 100 minutes) during the boil, and each sample was fermented into beer. The resulting plots of IBUs as a function of boil time and hop concentration were then fit to each model of isomerization.
+
+<p>
+The best values of the model parameters can be estimated by finding those values that minimize the error between the model and measured IBU values. <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">IBU levels are not the same as IAA levels</a>, but we can use a <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">technique</a> that estimates the loss factors for IAA and auxiliary bittering compounds (particularly <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">oxidized alpha acids</a>), and use these loss factors with the model's production of IAA and auxiliary bittering compounds to estimate IBU values. The models that have a better description of the actual conversion of undissolved alpha acids to dissolved IAA should have a better fit to the measured IBU values and lower error.
+
+<p>
+
+<span id="heading1">3. Experimental Methods and Data</span><br>
+I brewed four batches of beer for this experiment. The four batches were designed to be identical in all respects, except for the initial concentration of alpha acids. (The first two batches were brewed on the same day, and the last two batches were brewed three weeks later.) The first batch had two hop additions, with 1.15 oz (32.6 g) of hops in 8.45 G (32 liters) added at steep time 0 (100 minutes before flameout) and another 1.15 oz (32.6 g) added at steep time 45 (55 minutes before flameout). For all batches, I took samples of wort at 10-minute intervals during the 100-minute boil, and quickly cooled them in an ice bath. In order to minimize any effects caused by removing samples of wort, I used as large a batch size as I dared in my 10 G (40 l) kettle. Targeting a boil gravity of 1.050, I used 8.5 lbs (3.85 kg) of Briess Pilsen DME in 7.867 G (29.78 l) of water, yielding about 8.6 G (32.55 l) of wort with a specific gravity of 1.047. I added hops after the wort had been boiling for 10 minutes, to avoid the foam associated with the start of the boil. The wort was boiled with the cover mostly on the kettle, except for taking samples and occasionally stirring the wort.
+
+<p>
+I used a 1 lb (0.45 kg) bag of Citra hops from <a href="https://www.yakimachief.com/" target="_blank">YCH Hops (now Yakima Chief Hops)</a> for this experiment, with hops from the same bag used in all four batches. (The hops were vacuum-sealed and stored in a freezer during the three weeks between brewing sessions.) This bag (lot number <a href="https://www.yakimachief.com/commercial/resources/lot-lookup/" target="_blank">PR2-AAUCIT5065</a>) was from the most recent harvest and had an alpha-acid rating of 13.3% and beta-acid rating of 3.9%. YCH claimed at the time that their hops are stored in nitrogen-flushed packaging to minimize oxidation over time. In <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">a previous experiment</a> using YCH Hops, I confirmed that the alpha-acid rating on my brew day (at about 10 months after harvest) was very similar to the package rating, and I expected the same in this experiment. Unfortunately, the measured IBU values from the first two batches of this experiment were dramatically lower than I was expecting. The most plausible explanation for this is that significant oxidation had occurred over the 7 or 8 months from harvest to brewing, greatly reducing the level of alpha acids (and also increasing the levels of oxidized alpha and beta acids). It's also unfortunate that, because I then needed all of the rest of this bag of hops for the remaining two experiments, I didn't have enough left over for testing the Hop Storage Index to confirm this hypothesis. Assuming that oxidation was the culprit, my best guesses are that the nitrogen flushing process didn't work with this bag, the bag didn't entirely seal, and/or the bag received a small puncture soon after packaging. The bag then presumably sat at room temperature and exposed to oxygen for 8 months. (Getting the measured IBU values from these experiments and realizing the implication was extremely disheartening, to put it mildly.)
+
+<p>
+During the boil, I contained the hops in a large nylon coarse-mesh bag in order to not include large hop particles in my samples. Previous experiments (from <a href="http://brulosophy.com/" target="_blank">Brülosophy</a>: 25 IBUs (bagged) vs. 27 IBUs (loose), and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>: 36 IBUs (bagged) vs. 37 IBUs (loose) and 34 IBUs (bagged) vs. 34 IBUs (loose)) have not shown a significant impact of a mesh bag on measured IBU values. In order to maximize contact of the hops with the wort, I added brass weights (a total of 3.2 oz (90.7 g)) to the mesh bag so that the hops would be quickly submerged and hydrated.
+
+<p>
+Each sample (about 14 oz (0.41 l)) was taken from the boil in an aluminum cup, which was placed in an ice bath and stirred to cool quickly. Once cooled to 75°F (24°C), the sample was transferred to a sanitized, sealed, and labeled quart (liter) container. I aerated each sample by vigorous shaking for 60 seconds, then added .01 oz (0.28 g) of Safale US-05 yeast (age 9 months) to target 750,000 viable cells per ml and degree Plato <a href="#references_AAsol">[Fix and Fix, p. 68]</a>. (The process of taking a sample, cooling it, transferring it to a sanitized container, aerating, and pitching yeast took between 5 and 10 minutes.) After all samples were taken, the containers were cracked open to vent, and they fermented for a week. After one week of fermentation, I sent 4 oz (0.12 l) of each sample to <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for IBU measurement. The final gravity of all samples was about 1.008 (minimum 1.0075; maximum 1.0085).
+
+<p>
+Table 1 shows the measured data for each batch, including initial wort volume, weight of hops added, volume and gravity at steep time 0, post-boil gravity (after 100 minutes), and pre- and post-boil pH. Tables 2 through 5 show the measured data for each sample, including estimated volume, estimated specific gravity, and measured IBUs. The volume at steep time 0 was estimated from the initial wort volume and the change in specific gravity from the initial wort to a sample taken at steep time 0. The specific gravity at each sample time was estimated by linear interpolation between the gravity at time 0 and the post-boil gravity. The volume at each sample time was estimated by interpolation using the time of the sample, volume at time 0, and the ratio of gravity at time 0 to gravity of the sample. Figure 2 shows the measured IBU values from the four batches at each 10-minute interval. Figure 2 also shows, for the first batch, the fit of the model described in Section 4.1 (blue line) using the estimated hops degradation factor of 0.75 and estimated harvest AA rating of 12.0%.
+
+<p>
+In general, from looking at Figure 2, the measured IBU values seem to fit well with the general concept of a first-order conversion from alpha acids to IAA and another first-order conversion from IAA to degradation products. However, the values at 90 and 100 minutes from the fourth batch (highest concentration of hops) show an unexpected decrease in IBUs. It's unclear why IBUs would decrease for this batch at these time points but not the other three batches, and I don't think that any parameter settings from Malowicki's model or the proposed model would explain this decrease (except for temperatures well in excess of boiling). I will assume for now that this decrease was a consequence of both the very long boil time and very high hopping rate. Because these two data points can not be easily modeled, and because they represent an extreme scenario not likely to be encountered by most brewers, I leave them out of further analysis and modeling.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>Batch 1</b></td>
+<td><b>Batch 2</b></td>
+<td><b>Batch 3</b></td>
+<td><b>Batch 4</b></td>
+</tr>
+<tr>
+<td><b>initial wort volume
+</b></td>
+<td>8.45 G <br> 31.99 l</td>
+<td>8.45 G <br> 31.99 l</td>
+<td>8.57 G <br> 32.44 l</td>
+<td>8.43 G <br> 31.91 l</td>
+</tr>
+<tr>
+<td><b>weight of hops added
+</b></td>
+<td>1.15 oz / 32.60 g at start (t = 0);<br>another 1.15 oz / 32.60 g at t=55</td>
+<td>2.923 oz <br> 82.86 g</td>
+<td>4.25 oz <br> 120.49 g</td>
+<td>6.25 oz <br> 177.18 g</td>
+</tr>
+<tr>
+<td><b>initial specific gravity
+</b></td>
+<td>1.0467</td>
+<td>1.0475</td>
+<td>1.0465</td>
+<td>1.0468</td>
+</tr>
+<tr>
+<td><b>initial pH of wort
+</b></td>
+<td>5.80</td>
+<td>5.78</td>
+<td>5.76</td>
+<td>5.76</td>
+</tr>
+<tr>
+<td><b>specific gravity at steep time 0
+</b></td>
+<td>1.0482</td>
+<td>1.0490</td>
+<td>1.0475</td>
+<td>1.0482</td>
+</tr>
+<tr>
+<td><b>wort volume at steep time 0
+</b></td>
+<td>8.187 G <br> 30.99 l</td>
+<td>8.187 G <br> 30.99 l</td>
+<td>8.390 G <br> 31.76 l</td>
+<td>8.185 G <br> 30.98 l</td>
+</tr>
+<tr>
+<td><b>post-boil specific gravity</b></td>
+<td>1.0507</td>
+<td>1.0519</td>
+<td>1.0521</td>
+<td>1.0525</td>
+</tr>
+<tr>
+<td><b>post-boil pH
+</b></td>
+<td>5.55</td>
+<td>5.47</td>
+<td>5.43</td>
+<td>5.42</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Measured values for the four batches. Measurements include initial wort volume, weight of hops added (two additions for the first batch), initial specific gravity (before heating the wort), initial pH of wort, specific gravity at steep time 0 (when the hops were added), wort volume at time 0, post-boil specific gravity (after steeping for 100 minutes), and post-boil pH.</span>
+
+<p>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>time:</b></td>
+<td><b>10 min
+</b></td>
+<td><b>20 min</b></td>
+<td><b>30 min</b></td>
+<td><b>40 min</b></td>
+<td><b>50 min</b></td>
+<td><b>60 min</b></td>
+<td><b>70 min</b></td>
+<td><b>80 min</b></td>
+<td><b>90 min</b></td>
+<td><b>100 min</b></td>
+</tr>
+<tr>
+<td><b>vol.
+</b></td>
+<td>8.145 G<br>
+30.83 l</td>
+<td>8.103 G<br>
+30.67 l</td>
+<td>8.062 G<br>
+30.52 l</td>
+<td>8.021 G<br>
+30.36 l</td>
+<td>7.980 G<br>
+30.21 l</td>
+<td>7.940 G<br>
+30.06 l</td>
+<td>7.900 G<br>
+29.90 l</td>
+<td>7.861 G<br>
+29.76 l</td>
+<td>7.822 G<br>
+29.61 l</td>
+<td>7.783 G<br>
+29.46 l</td>
+</tr>
+<tr>
+<td><b>SG</b></td>
+<td>1.0485</td>
+<td>1.0487</td>
+<td>1.0490</td>
+<td>1.0492</td>
+<td>1.0495</td>
+<td>1.0497</td>
+<td>1.0499</td>
+<td>1.0502</td>
+<td>1.0504</td>
+<td>1.0507</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>8.0</td>
+<td>11.0</td>
+<td>14.5</td>
+<td>16.5</td>
+<td>19.5</td>
+<td>22.5</td>
+<td>28.0</td>
+<td>32.5</td>
+<td>33.5</td>
+<td>37.0</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Values for each sample from <strong>Batch 1</strong>. Volumes are given in gallons (G) and liters (l). SG is the specific gravity estimated at the time the sample was taken.</span>
+
+<p>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>time:</b></td>
+<td><b>10 min
+</b></td>
+<td><b>20 min</b></td>
+<td><b>30 min</b></td>
+<td><b>40 min</b></td>
+<td><b>50 min</b></td>
+<td><b>60 min</b></td>
+<td><b>70 min</b></td>
+<td><b>80 min</b></td>
+<td><b>90 min</b></td>
+<td><b>103 min</b></td>
+</tr>
+<tr>
+<td><b>vol.
+</b></td>
+<td>8.143 G<br>
+30.82 l</td>
+<td>8.096 G<br>
+30.65 l</td>
+<td>8.048 G<br>
+30.46 l</td>
+<td>8.002 G<br>
+30.29 l</td>
+<td>7.956 G<br>
+30.12 l</td>
+<td>7.910 G<br>
+29.94 l</td>
+<td>7.865 G<br>
+29.77 l</td>
+<td>7.821 G<br>
+29.61 l</td>
+<td>7.777 G<br>
+29.44 l</td>
+<td>7.734 G<br>
+29.28 l</td>
+</tr>
+<tr>
+<td><b>SG</b></td>
+<td>1.0493</td>
+<td>1.0496</td>
+<td>1.0499</td>
+<td>1.0502</td>
+<td>1.0505</td>
+<td>1.0507</td>
+<td>1.0510</td>
+<td>1.0513</td>
+<td>1.0516</td>
+<td>1.0519</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>19.5</td>
+<td>27.5</td>
+<td>32.5</td>
+<td>38.0</td>
+<td>42.5</td>
+<td>48.0</td>
+<td>47.5</td>
+<td>50.0</td>
+<td>54.0</td>
+<td>52.5</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 3.  Values for each sample from <strong>Batch 2</strong>. Volumes are given in gallons (G) and liters (l). SG is the specific gravity estimated at the time the sample was taken.</span>
+
+<p>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>time:</b></td>
+<td><b>10 min
+</b></td>
+<td><b>20 min</b></td>
+<td><b>30 min</b></td>
+<td><b>40 min</b></td>
+<td><b>50 min</b></td>
+<td><b>60 min</b></td>
+<td><b>70 min</b></td>
+<td><b>80 min</b></td>
+<td><b>90 min</b></td>
+<td><b>100 min</b></td>
+</tr>
+<tr>
+<td><b>vol.
+</b></td>
+<td>8.309 G<br>
+31.45 l</td>
+<td>8.230 G<br>
+31.15 l</td>
+<td>8.153 G<br>
+30.86 l</td>
+<td>8.077 G<br>
+30.57 l</td>
+<td>8.002 G<br>
+30.29 l</td>
+<td>7.929 G<br>
+30.01 l</td>
+<td>7.857 G<br>
+29.74 l</td>
+<td>7.786 G<br>
+29.47 l</td>
+<td>7.717 G<br>
+29.21 l</td>
+<td>7.649 G<br>
+28.95 l</td>
+</tr>
+<tr>
+<td><b>SG</b></td>
+<td>1.0480</td>
+<td>1.0484</td>
+<td>1.0489</td>
+<td>1.0493</td>
+<td>1.0498</td>
+<td>1.0503</td>
+<td>1.0507</td>
+<td>1.0512</td>
+<td>1.0516</td>
+<td>1.0521</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>20.5</td>
+<td>30.0</td>
+<td>39.0</td>
+<td>48.5</td>
+<td>51.5</td>
+<td>59.0</td>
+<td>62.0</td>
+<td>66.5</td>
+<td>69.5</td>
+<td>72.5</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 4.  Values for each sample from <strong>Batch 3</strong>. Volumes are given in gallons (G) and liters (l). SG is the specific gravity estimated at the time the sample was taken.</span>
+
+<p>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>time:</b></td>
+<td><b>10 min
+</b></td>
+<td><b>20 min</b></td>
+<td><b>30 min</b></td>
+<td><b>40 min</b></td>
+<td><b>50 min</b></td>
+<td><b>60 min</b></td>
+<td><b>70 min</b></td>
+<td><b>80 min</b></td>
+<td><b>90 min</b></td>
+<td><b>100 min</b></td>
+</tr>
+<tr>
+<td><b>vol.
+</b></td>
+<td>8.113 G<br>
+30.71 l</td>
+<td>8.042 G<br>
+30.44 l</td>
+<td>7.972 G<br>
+30.18 l</td>
+<td>7.903 G<br>
+29.92 l</td>
+<td>7.836 G<br>
+29.66 l</td>
+<td>7.769 G<br>
+29.41 l</td>
+<td>7.704 G<br>
+29.16 l</td>
+<td>7.640 G<br>
+28.92 l</td>
+<td>7.577 G<br>
+28.68 l</td>
+<td>7.515 G<br>
+28.45 l</td>
+</tr>
+<tr>
+<td><b>SG</b></td>
+<td>1.0486</td>
+<td>1.0491</td>
+<td>1.0495</td>
+<td>1.0499</td>
+<td>1.0503</td>
+<td>1.0508</td>
+<td>1.0512</td>
+<td>1.0516</td>
+<td>1.0521</td>
+<td>1.0525</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>34.0</td>
+<td>43.0</td>
+<td>53.0</td>
+<td>64.0</td>
+<td>68.0</td>
+<td>75.5</td>
+<td>81.0</td>
+<td>83.0</td>
+<td>79.0</td>
+<td>74.0</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 5.  Values for each sample from <strong>Batch 4</strong>. Volumes are given in gallons (G) and liters (l). SG is the specific gravity estimated at the time the sample was taken.</span>
+
+<p>
+<img src="solexp-measuredibus-1.png" alt="Figure 2"/> <span id="caption"> Figure 2. Measured IBU values from the four batches, and the best estimate from the model for Batch 1 (light blue line). Batch 1 had two hop additions, at 0 and 55 minutes, and no line is plotted between the two measured samples where a discontinuity is expected.</span>
+
+<p>
+
+<span id="heading1">4. Parameter Estimation and Results</span><br>
+<p>
+<span id="heading2">4.1 Estimating the Alpha-Acid Rating of the Hops</span><br>
+The measured IBU values from this experiment were far too low to be consistent with the alpha-acid (AA) rating of 13.3% on the package of hops. In order to get a better estimate of the AA rating on brew day, I estimated the hop degradation factor at 0.75, using the Garetz model <a href="#references_AAsol">[Garetz (a)]</a> and assuming 8 months of storage at room temperature, a loss factor of 25% for Citra hops, and with the hops sealed in barrier packaging but not free from oxygen (storage factor 0.75). Then I used the technique described in the blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a> to estimate the levels of IAA and auxiliary bittering compounds in <strong>Batch 1</strong> (with all alpha acids presumably dissolved), and adjusted the harvest AA rating to reflect a typical IAA loss factor of about 0.5. The resulting harvest AA rating was 12.0%, lower than the package rating of 13.3% by 10% but well within the possible 20% variation reported by Verzele and De Keukeleire <a href="#references_AAsol">[Verzele and De Keukeleire, p. 331]</a>.
+
+<p>
+While the estimated values of the hop degradation factor and harvest AA rating are plausible, an inability to have real confidence in these values means that the solubility-limit results in this blog post can not be presented with certainty. The results presented here are therefore my best estimate, but further experiments will be needed to gain confidence in (or revise) the results.
+
+<p>
+The measured IBU values, modeled IBU values (with degradation factor 0.75 and AA rating 12.0%), and differences are listed in Table 6.  The modeled IBU values are shown in Figure 2 with a light-blue line.  The root-mean-square (RMS) error over the 10 data points was 1.27.
+<table class="table" >
+<tbody>
+<tr>
+<td><b>time:</b></td>
+<td><b>10 min
+</b></td>
+<td><b>20 min</b></td>
+<td><b>30 min</b></td>
+<td><b>40 min</b></td>
+<td><b>50 min</b></td>
+<td><b>60 min</b></td>
+<td><b>70 min</b></td>
+<td><b>80 min</b></td>
+<td><b>90 min</b></td>
+<td><b>100 min</b></td>
+</tr>
+<tr>
+<td><b>meas. IBU
+</b></td>
+<td>8.0</td>
+<td>11.0</td>
+<td>14.5</td>
+<td>16.5</td>
+<td>19.5</td>
+<td>22.5</td>
+<td>28.0</td>
+<td>32.5</td>
+<td>33.5</td>
+<td>37.0</td>
+</tr>
+<tr>
+<td><b>model IBU</b></td>
+<td>7.99</td>
+<td>10.76</td>
+<td>13.15</td>
+<td>15.19</td>
+<td>16.93</td>
+<td>24.05</td>
+<td>28.36</td>
+<td>32.03</td>
+<td>35.14</td>
+<td>37.76</td>
+</tr>
+<tr>
+<td><b>diff.</b></td>
+<td>-0.01</td>
+<td>-0.24</td>
+<td>-1.35</td>
+<td>-1.31</td>
+<td>-2.57</td>
+<td>1.55</td>
+<td>0.36</td>
+<td>-0.47</td>
+<td>1.64</td>
+<td>0.76</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 6.  Measured IBU values, modeled IBU values, and the difference between these two values, all from <strong>Batch 1</strong>.</span>
+
+<p>
+<p>
+<span id="heading2">4.2 Estimating the Model Parameters</span><br>
+We have ten different models for the production of IAA from alpha acids, described in Section 2.3. We have a way to convert between IAA values generated by this model and IBU values, described in the blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>. This conversion is modified by the various ways discussed in Section 2 for expressing solubility, conversion of undissolved alpha acids into IAA, and dissolution of undissolved alpha acids. (One additional modification is that the same solubility limit applied to alpha acids for affecting isomerization is applied to alpha acids that oxidize during the boil.) For each model, we can take a guess at parameter values for the model, compute the IAA and nonIAA concentrations using these values, map from IAA and nonIAA concentrations to an IBU value, and take the difference between estimated and measured IBU values. We do this many, many times with different guesses for the parameter values and all measured IBU values from Batches 2, 3, and 4 to see which values minimize the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root-mean-square (RMS) error</a>. In order to base the parameter estimates on a greater variety of initial alpha-acid concentrations, I also used 10 data points from <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha Acid Utilization and IBUs</a>, experiments #3 and #4. Once we've determined the parameter values that yield the lowest error for a model, we can compare the ten models in terms of how well they fit the data.
+
+<p>
+For Model <strong>A</strong> (no solubility limit), the RMS error is 10.4. For Model <strong>B</strong> (a constant solubility limit and fast degradation of undissolved alpha acids), the RMS error is 3.8 with a limit of 380 ppm. For Model <strong>C</strong> (lower and upper solubility limits), the RMS error is 1.6 with a lower limit of 240 ppm and an upper limit of 490 ppm. For Model <strong>D</strong> (no isomerization of undissolved alpha acids), the RMS error is 3.2 with solubility 300 ppm and a rate constant for dissolution (at boiling) of 0.225. For Model <strong>E</strong> (no isomerization of undissolved alpha acids, with a "soft" solubility limit) the RMS error is 1.6 with a lower limit of 240 ppm, an upper limit of 480 ppm, and a dissolution rate constant of 0.015. For Model <strong>F</strong> (no isomerization of undissolved alpha acids and fast dissolution) the RMS error is 4.1 and the solubility limit is 280 ppm. For Model <strong>G</strong> (with isomerization of undissolved alpha acids and fast dissolution), the RMS error is 2.8 with solubility 200 ppm and a rate constant of 0.006 for conversion of alpha acids to IAA. For Model <strong>H</strong> (with isomerization of undissolved alpha acids, stable undissolved IAA, and a slower dissolution rate), the RMS error is 2.1 with solubility 240 ppm, a rate constant of 0.375 for conversion of alpha acids to IAA, and a dissolution rate constant of 0.112. For Model <strong>I</strong> (with isomerization of undissolved alpha acids, fast degradation of undissolved IAA, and a slower dissolution rate), the RMS error is 2.8 with solubility 300 ppm, a rate constant of 0.044 for conversion of alpha acids to IAA, and a dissolution rate constant of 0.510. For Model <strong>J</strong> (with parameters for isomerization and degradation of undissolved alpha acids and IAA), the RMS error is 1.9 with solubility 240 ppm, a rate constant of 0.076 for conversion of alpha acids to IAA, a rate constant of 0.028 for conversion of IAA to degradation products, and a dissolution rate constant of 0.187.
+
+<p>
+From these results, the best model is Model <strong>C</strong>, with error 1.6 and two parameters: a lower solubility limit of 240 ppm and an upper solubility limit of 490 ppm. (Model <strong>C</strong> is preferred over Model <strong>E</strong> because of its <a href="https://quoteinvestigator.com/2011/05/13/einstein-simple/" target="_blank">greater simplicity</a>.) While Model <strong>C</strong> has been selected as the best model, it should be re-stated that this conclusion is tentative because of the difficulty in getting a reliable estimate of the alpha-acid rating and degradation factor of the hops that were used.
+
+<p>
+Results from this model for Batches 2, 3, and 4 are plotted in Figure 3 with solid green lines. The measured IBU values for Batches 2, 3, and 4 are plotted in this figure with solid blue lines, and Batch 1 is plotted with a dashed gray line. The solubility limit function for Model <strong>C</strong> is plotted in Figure 4.
+
+<p>
+<img src="solexp-modelibus.png" alt="Figure 3"/> <span id="caption"> Figure 3. Estimated IBU values using solubility model <strong>C</strong>, compared with measured IBU values. The measured IBU values for Batches 2, 3, and 4 are plotted in blue. The model (estimated) values for these batches are plotted with solid green lines. The measured IBU values for Batch 1 are plotted in gray for reference.</span>
+
+<p>
+<img src="solexp-solubilitymodel.png" alt="Figure 4"/> <span id="caption"> Figure 4. The "soft" solubility function estimated from this set of data, with a lower limit of 240 ppm and an upper limit of 490 ppm.</span>
+
+<p>
+
+<span id="heading1">5. Conclusion</span><br>
+This blog post has discussed a general model for the isomerization of alpha acids at concentrations greater than the solubility limit. The model can be configured to evaluate different hypotheses, e.g. (a) the alpha acids above the solubility limit are quickly degraded, as I assumed in an earlier model, (b) the alpha acids not yet dissolved in wort are fairly stable, implied as a possibility by a statement by Verzele and De Keukeleire <a href="#references_AAsol">[Verzele and De Keukeleire, p. 109]</a>, (c) there are no expectations for the rate of conversion of alpha acids and IAA or the dissolving of alpha acids into wort, other than that they are first-order reactions, or (d) the solubility limit is a function of the initial concentration of alpha acids. The model with a gradually-increasing solubility limit as a function of [<em>AA</em>]<sub>0</sub> had the best fit to the entire set of data. Because of difficulties in estimating [<em>AA</em>]<sub>0</sub> in the data and the indirect methods used to estimate [IAA], the conclusion is not that this model is correct, but only that it is the most <em>likely</em> explanation for this set of data.
+
+<p>
+To obtain a more reliable estimate of the solubility of alpha acids at boiling, the best approach would be to use pure alpha acids and measure IAA levels directly, as in Mark Malowicki's thesis <a href="#references_AAsol">[Malowicki]</a>. A second-best approach would be to re-do the analysis described in this blog post with hops that have a more reliable estimate of alpha-acid content and storage conditions.
+
+<p>
+In the "soft limit" solubility model, the estimated alpha-acid solubility limit starts at about 240 ppm and increases gradually, with an upper limit at 490 ppm. One complication is that, according to Spetsig's extrapolations, the solubility limit of alpha acids at the pH of the wort used in these experiments (about 5.75) should be about 1000 ppm. However, another <a href="../20-alpha-acid-solubility-and-ph/alchemyoverlord-blog-content20.html">experiment that looks at alpha-acid solubility at boiling and a lower pH</a> indicates that the influence of pH at boiling is not as extreme as indicated by Spetsig's graph.
+
+<p>
+<p>
+<span id="heading1">Acknowledgements</span><br>
+I am extremely grateful to (in alphabetical order) Nev Ash at <a href="http://onlinebrewingsupplies.com/" target="_blank">Online Brewing Supplies</a>, Dana Garves at <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon Brewlab</a>, and <a href="https://www.linkedin.com/in/hannahmcmullen/" target="_blank">Hannah McMullen</a> for their contributions to this post, including: feedback on the writing, help with concepts, measuring IBU values, and/or tracking down related published work. Any errors are, of course, the sole responsibility of the author.
+
+<p>
+<p>
+<span id="heading1"><span id="references_AAsol">References</span></span><br>
+<ul>
+<li>R. Daniels, <em>Designing Great Beers: The Ultimate Guide to Brewing Classic Beer Styles</em>. Brewers Publications, 2000.</li>
+<li>J. Dierckens and M. Verzele, "Oxidation Products of Humulone and Their Stereo-Isomerism," in <em>Journal of the Institute of Brewing</em>, vol. 75, pp. 453-456, 1969.</li>
+<li>G. Fix, <em>Principles of Brewing Science</em>. Brewers Publications, 2nd edition, 1999.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
+<li>M. Garetz (a), “Hop Storage: How to Get – and Keep – Your Hops’ Optimum Value” in <em>Brewing Techniques</em>, January/February 1994, <a href="https://www.morebeer.com/articles/storing_hops_properly" target="_blank">hosted on morebeer.com</a>.</li>
+<li>M. Garetz (b), <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>M. L. Hall, “What’s Your IBU,” in <em>Zymurgy</em>. Special Edition, 1997.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science. Volume 2: Hopped Wort and Beer</em>. Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>D. R. Maule, “The Fate of Humulone During Wort Boiling and Cooling”, in <em>Journal of the Institute of Brewing</em>, vol. 72, pp. 285-290, 1966.</li>
+<li>V. Peacock, “The International Bitterness Unit, its Creation and What it Measures,” in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>A. D. Rudin, "Solubility of Iso-Compounds in Water and Their State in Solution", in Journal of the Institute of Brewing, vol. 66, pp. 18-22, 1960.</li>
+<li>L. O. Spetsig, “Electrolytic Constants and Solubilities of Humulinic Acid, Humulone, and Lupulone,” in <em>Acta Chemica Scandinavica</em>, vol. 9, pp. 1421-1424, 1955.</li>
+<li>M. Verzele and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>, vol. 27, 1st edition, Elsevier, ISBN 0-444-88165-4, eBook ISBN 9781483290867, 1991.</li>
+</ul>
+&nbsp;
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

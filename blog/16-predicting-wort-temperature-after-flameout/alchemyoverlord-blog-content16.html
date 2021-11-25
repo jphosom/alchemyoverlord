@@ -1,0 +1,509 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Predicting Wort Temperature After Flameout</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Predicting Wort Temperature After Flameout
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+In a <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">previous post</a>, I described a method for estimating IBUs that are produced in hot wort after flameout.  This method relies on both (a) relative utilization as a function of temperature, described <a href="../10-an-analysis-of-sub-boiling-hop-utilization/alchemyoverlord-blog-content10.html">elsewhere</a>, and (b) a function that describes the decrease in wort temperature after flameout (but before "forced cooling" with a wort chiller).  In this blog post, I describe temperature data collected under a variety of conditions and the resulting formula for predicting the temperature of wort as it naturally cools after flameout.  The data suggest that this rate of natural cooling is primarily influenced by (a) the release of steam, which is in turn influenced by the wort volume, surface area of wort exposed to air, and size of the opening in the kettle through which steam can escape, and (b) radiation of heat from the kettle.  Other factors, such as ambient temperature, are of much lesser significance.  The resulting formula, for homebrew-scale batch sizes, is <em>T</em> = 53.70 × exp(-<em>b</em> × <em>t</em>) + 319.55, where <em>b</em> = (0.0002925 × <em>effectiveArea </em>/ <em>volume</em>) + .00538 and <em>effectiveArea</em> = (<em>surfaceArea</em> × <em>openingArea</em>)<sup>0.5</sup>.  The parameter <em>T</em> is temperature (in degrees Kelvin), <em>t</em> is time after flameout (in minutes), <em>b</em> is the rate constant that describes how quickly the temperature decreases, <em>effectiveArea</em> is the "effective" area through which steam ventilates, <em>surfaceArea</em> is the surface area of wort exposed to air (in square centimeters), <em>openingArea</em> is the area of the opening in the kettle (in square centimeters), and <em>volume</em> is the wort volume (in litres).
+
+<p>
+
+<span id="heading1">1. Motivation</span><br>
+The motivation for the work described here was to predict the temperature decrease of wort after flameout, in order to facilitate computation of the <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">mIBU method of predicting IBUs</a> for homebrew-scale batch sizes.
+
+<p>
+If one thinks about the various factors that might influence this temperature decrease, many things may come to mind:
+<ol>
+<li>The wort volume, with larger volumes potentially cooling more slowly,</li>
+<li>The size or surface area of the kettle (which may be much larger than the wort volume), with larger kettles potentially radiating more heat than smaller kettles,</li>
+<li>The size of the opening in the kettle (with potentially slower cooling for a smaller opening that traps more heat),</li>
+<li>The ambient or room temperature (with wort potentially cooling faster if the room temperature is 10°C (50°F) as opposed to 30°C (86°F)),</li>
+<li>The relative humidity (with wort potentially cooling faster in drier conditions),</li>
+<li>The specific gravity of the wort (with higher specific gravities potentially cooling differently from water),</li>
+<li>The removal of the kettle from the heat source (with potentially slower cooling if the kettle remains on a still-hot burner),</li>
+<li>The kettle material (with materials such as aluminum potentially cooling faster than materials such as stainless steel), and</li>
+<li>Whether the kettle is insulated or not (with potentially slower cooling for an insulated kettle).</li>
+</ol>
+In order to investigate these possibilities, I tested these factors with either wort or (for simplicity) water, plotted the results, and determined which factors have the greatest impact on the rate of temperature change.  With this information, I then constructed a formula for predicting wort temperature after flameout as a function of time.  This function can be used directly in the mIBU method.
+
+<p>
+
+<span id="heading1">2. Data</span><br>
+I measured the decrease in temperature after boiling for 33 conditions in order to test the various factors listed above; these conditions are listed in Table 1 at the very bottom of this post.  (I did not control for ambient temperature and relative humidity separately; generally, a lower ambient temperature was correlated with a higher relative humidity.)  I measured the temperature of wort or water after flameout in 22 conditions with the kettle uncovered, and additional 11 conditions with the kettle partially or fully covered.   I used wort in 5 cases and water in 28 cases.  I used a <a href="https://www.thermoworks.com/Thermapen-Mk4" target="_blank">Thermapen Mk4</a> for measuring temperature in all cases except condition <strong>AG</strong>, in which I used a <a href="https://www.teltru.com/" target="_blank">TelTru</a> analog thermometer with a 30 cm (12") probe.  I took measurements at 1-minute intervals for the first 15 or 20 minutes after flameout. (Measurements were taken for only 15 minutes for three conditions: <strong>T</strong>, <strong>U</strong>, and <strong>V</strong>.)  For the conditions using water, I measured volume to the nearest 30 ml (1 ounce) using a "Legacy Pro" 4000-ml (128-oz) graduated pitcher (which looks identical to the <a href="https://www.usplastic.com/catalog/item.aspx?sku=80741&amp;gclid=EAIaIQobChMI6PPY9q262wIVEKrsCh3GogITEAQYAiABEgKtOvD_BwE" target="_blank">US Plastics Corp. Accu-Pour™ PP Measuring Pitcher</a>),  recorded the temperature of each addition, and normalized from this volume and temperature to the volume at boiling using Equation 3 in "<a href="https://nvlpubs.nist.gov/nistpubs/jres/097/jresv97n3p335_A1b.pdf" target="_blank">ITS-90 Density of Water Formulation for Volumetric Standards Calibration</a>" (Jones and Harris, <em>Journal of Research of the National Institute of Standards and Technology</em>, vol 97, no. 3, pp. 335-340 (1992)).  For the conditions using wort, I estimated the volume at close to boiling using a measuring stick or the difference between pre- and post-boil specific gravity.  Twelve of the more interesting conditions are plotted in Figure 1, with time on the horizontal axis and temperature (in degrees Celsius) on the vertical axis.
+
+<p>
+I will mostly use metric units throughout this blog post in order to simplify the presentation, with apologies to readers in the United States.  The final formula uses degrees Kelvin.
+
+<p>
+<img src="tempdecayexp-fig1-rawdata1.png" alt="Figure 1"/> <span id="caption"> Figure 1. Temperature (in degrees Celsius) as a function of time (in minutes) for twelve of the 33 conditions.  The legend for each condition specifies the volume of liquid (water or wort, in litres), the amount by which the kettle was covered (in percent; 0% = uncovered and 100% = completely covered), the size of the kettle (in litres), and any other details about the condition, such as ambient temperature or insulation.  Only one of the conditions in this plot used wort (specific gravity 1.052); the other cases here used water.</span>
+
+<p>
+
+<span id="heading1">3. Parameter Estimation</span><br>
+<p>
+<span id="heading2">3.1 Exponential Decay</span><br>
+It can be seen that all of the data in Figure 1 can have a good fit to a function with exponential decay.  Those conditions not plotted in Figure 1 also show a similar goodness of fit to an exponential decay function.  (For many of the cases, a straight line also seems to be a good fit, but the exponential decay function can model nearly-straight lines as well as curved lines of the type seen here.)  An exponential decay function is of the general form <em>a</em> × exp(-<em>b</em>×<em>t</em>) + <em>c</em>, where <em>t</em> is (in this case) time, <em>a</em>, <em>b</em>, and <em>c</em> are parameters that describe the shape of the function, and exp(<em>x</em>) indicates the constant "e" to the power of <em>x</em>, or 2.71828<em><sup>x</sup></em>.  In this case, the parameter <em>b</em> is called the rate constant, and it describes how quickly the function (or temperature) decreases.  (I like using <a href="http://fooplot.com" target="_blank">fooplot</a> to visualize different functions and parameter values; one can enter something like "54*exp(-0.03x)+46" on this page to see a representative exponential decay function, setting the graph lower limits to 0, the x-axis upper limit to 50, and the y-axis upper limit to 100.)  The liquid was at boiling in all cases at time 0, with an average measured temperature over all conditions of 100.1°C.  (The expected <a href="https://www.engineeringtoolbox.com/boiling-points-water-altitude-d_1344.html" target="_blank">boiling point of water</a> at my elevation (76 meters above sea level) is 99.7°C.  However, the <a href="http://beerandwinejournal.com/boil-theory/" target="_blank">boiling point of wort is higher than that of water</a>, so the average boiling point over all conditions (with 5 of the 33 cases using wort) was higher than 99.7°C.  The difference of less than 0.4°C is within the  <a href="https://www.thermoworks.com/Thermapen-Mk4" target="_blank">specified accuracy</a> of my Thermapen, which is ±0.4°C.)    If <em>t</em> = 0, then exp(-<em>b</em>×<em>t</em>) is 1 for any value of <em>b</em>, and so <em>a</em> + <em>c</em> must equal 100.1.
+
+<p>
+In order to simplify the parameter estimation, I searched over conditions <strong>A</strong> through <strong>V</strong> (those conditions in which the kettle is uncovered) minimizing the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root-mean-square (RMS) error</a> to find the best value of <em>b</em> in each case and the values of <em>a</em> and <em>c</em> that were the best over all conditions.  (In other words, <em>a</em> and <em>c</em> were optimized to have the same value over all conditions, whereas <em>b</em> was optimized per condition.)  If the total RMS error over all conditions is small with constant values of <em>a</em> and <em>c</em>, then the different shapes of each curve can be described well with a single parameter, <em>b</em>.
+
+<p>
+The search for <em>a</em> and <em>c</em> yielded <em>a</em>=53.70°C and <em>c</em>=46.40°C with an overall RMS error of 0.31°C.   The maximum RMS error was 0.64°C for condition <strong>O</strong>.  The small RMS error over all conditions indicates that we can, in fact, describe the different rates of temperature decay of these conditions with a single parameter, the rate constant <em>b</em>.  The question then becomes whether we can predict <em>b</em> from the various factors in each condition, and if so, if certain factors are more important than others in predicting <em>b</em>.  (It's also worth noting that the optimal value of <em>c</em> in this case is not room temperature.  Presumably, if time were measured in hours instead of minutes, the values of <em>a</em> and <em>c</em> would have turned out differently, with <em>c</em> at around room temperature.  Or, there are other factors involved at longer time scales that don't fit well to a simple exponential decay function.)
+
+<p>
+<p>
+<span id="heading2">3.2 Predicting the Rate Constant for Uncovered Kettles</span><br>
+Figure 2 plots the values of <em>b</em> that minimize the RMS error in each uncovered-kettle condition with <em>a</em>=53.70°C and <em>c</em>=46.40°C.  The horizontal axis is the volume of wort or water, and the vertical axis is the value of <em>b</em>.  A few clear patterns emerge: the data obtained from a single kettle are grouped in a curved line with negative slope (for the two cases where there are multiple data points per kettle), and these curves (representing different kettles) are separated from each other by possibly constant scaling factors.  The curved line with negative slope for the 38-litre kettle looks like a function of the form 1/<em>x</em>, where <em>x</em> in this case is volume.  This suggests that <em>b</em> can be approximated as a function of <em>scaling</em>/<em>volume</em>, where <em>scaling</em> is some (still unknown) property of the kettle and <em>volume</em> is the wort volume (in litres).
+
+<p>
+<img src="tempdecayexp-fig2-rateconstvsvolume1.png" alt="Figure 2"/> <span id="caption"> Figure 2. Temperature-decay rate constants for all conditions with uncovered kettles, plotted as a function of wort volume.  Each group (e.g. black squares or red diamonds) is for a different kettle (and kettle diameter).</span>
+
+<p>
+After considering various possibilities for the factor called <em>scaling</em>, the area of the kettle opening (<span class="ILfuVd yZ8quc"><b>π</b></span><em>r</em><sup>2</sup>), which equals the surface area of wort exposed to the air, shows a good fit to this set of data.  The black "<strong>×</strong>" marks in Figure 3 plot the values of <em>area</em>/<em>volume</em> on the horizontal axis for the uncovered kettle (where <em>area</em> is the area of the kettle opening (or <span class="ILfuVd yZ8quc"><b>π</b></span><em>r</em><sup>2</sup>, where <em>r</em> is the radius of the kettle) in square centimeters, and <em>volume</em> is the volume of liquid, in litres) and values of the rate constant <em>b</em> on the vertical axis.  The approximately straight line of black <strong>×</strong> marks in Figure 3 is interesting.  It implies that the rate of temperature decay, represented by the parameter <em>b</em>, can be predicted quite well from only the area of the kettle opening and the volume of liquid.  The value of <em>b</em> when the area is zero implies a rate of cooling caused by heat radiated from the kettle (with an entirely closed system), and the slope of the line implies faster cooling as more steam escapes the kettle with greater wort surface area.  In other words, if <em>b</em> is modeled as a straight line of the form <em>b</em> = <em>slope</em> × (<em>area </em>/ <em>volume</em>) + <em>offset</em>, where <em>slope</em> is the slope of the line and <em>offset</em> is the value when <em>area</em> = 0, then <em>offset</em> represents the temperature decay due to heat radiated from the kettle, and <em>slope</em> represents the temperature decay caused by the loss of heat in the steam.  In this case, a good fit can be seen for the line <em>b</em> = 0.0002925 × (<em>area</em> / <em>volume</em>) + 0.00538.
+
+<p>
+<img src="tempdecayexp-fig3-rateconstvsarea.png" alt="Figure 3"/> <span id="caption"> Figure 3. Temperature-decay rate constant as a function of (kettle opening area) divided by volume, for uncovered kettles. In this case, the kettle opening area equals the area of wort exposed to air.</span>
+
+<p>
+<p>
+<span id="heading2">3.3 The Rate Constant for (Partially) Covered Kettles</span><br>
+I then plotted the values of <em>b</em> for those cases in which the kettle is partially or completely covered, as shown in Figure 4 (with much lower limits on the X and Y axes of this graph).  The cases in which the kettle is completely covered cluster somewhat around the predicted value of <em>b</em> when the area is zero.  Larger kettles and volumes have smaller values of <em>b</em>, implying <em>less</em> radiated heat loss from larger kettles and/or volumes.  Conditions <strong>Z</strong> and <strong>AG</strong> are nearly identical except for the size of the kettle; <strong>Z</strong> used 15.4 litres of water in a covered 18.9 litre kettle, and <strong>AG</strong> used 15.6 litres of water in a covered 37.9 litre kettle.  The temperature after 20 minutes was very close in both conditions, and the estimated value of <em>b</em> is nearly the same in both cases (0.00371 vs 0.00373).  Therefore, it seems that the size of the kettle has very little impact on the rate of temperature decay through radiated heat, but the volume of liquid does have an impact on radiated heat.
+
+<p>
+Again looking at Figure 4, the conditions in which the kettle is only partially covered deviate from the predicted line, regardless of whether <em>area</em> (the horizontal axis) is (a) the exposed wort surface area (blue circles) or (b) the kettle opening area (green squares).  The predicted line lies somewhere between these two extremes.  This suggests that if the kettle is partially covered, the amount of steam produced is (still) roughly proportional to the surface area of the wort exposed to air (i.e. the area of the fully-open kettle), but that this steam is not able to escape quite as quickly, leaving more heat trapped in the kettle.  (For an uncovered kettle, the area of the opening in the kettle and the surface area of wort exposed to air are the same.)
+
+<p>
+One possibility is that the rate of heat loss is proportional to the <a href="https://en.wikipedia.org/wiki/Geometric_mean" target="_blank">geometric average</a> of the wort surface area and the opening area.  We can call this the "effective area," i.e. <em>effectiveArea</em> = (<em>surfaceArea</em> × <em>openingArea</em>)<sup>0.5</sup>, where <em>surfaceArea</em> is the wort surface area, <em>openingArea</em> is the area of the kettle opening, and (<em>x</em>)<sup>0.5</sup> indicates the square root of <em>x</em>.  In this case, when the area of the opening is zero (for a covered kettle), the effective area is also zero.  When the area of the opening equals the surface area of the wort, the effective area is the same as the surface area of the wort.  When we plot <em>effectiveArea</em> / <em>volume</em> on the horizontal axis and <em>b</em> on the vertical axis in Figure 5, we observe that the data from the partially-covered conditions are much closer to the straight line, allowing us to predict temperature decay fairly well with a small number of parameters.
+
+<p>
+<img src="tempdecayexp-fig4-rateconstcoveredkettle.png" alt="Figure 4"/> <span id="caption"> Figure 4. Rate constants for uncovered kettles (black "×" marks), fully-covered kettles with area = 0 (red triangles), partially-covered kettles with area = area of kettle opening (green squares), and (the same) partially-covered kettles with area = wort surface area (blue circles). The line with the best fit to uncovered-kettle data is also plotted.</span>
+
+<p>
+<img src="tempdecayexp-fig5-rateconstcoveredkettleeffectivearea.png" alt="Figure 5"/> <span id="caption"> Figure 5. Rate constants for uncovered kettles (black "×" marks), partially covered kettles (dark red diamonds), and fully covered kettles (light red triangles), plotted as a function of "effective area". Effective area is the geometric mean of the exposed wort surface area and kettle opening area.</span>
+
+<p>
+
+<span id="heading1">4. Model Accuracy</span><br>
+<p>
+<span id="heading2">4.1 Looking at Factors Potentially Influencing Temperature</span><br>
+In the model we have developed, we can predict temperature after flameout using three parameters: wort volume, kettle diameter (to compute exposed wort surface area), and kettle opening diameter (to compute the area of the opening).  Other factors, such as ambient temperature and specific gravity, have a fairly small deviation from the predicted line, indicating that these factors have only a minor impact on the decrease in temperature.  For example, in Figures 3, 4, and 5 there are two rate constants that have the same <em>area</em>/<em>volume</em> value of 46.9 cm<sup>2</sup>.  (This is most easily seen in the two "×" marks at <em>area</em>/<em>volume</em>=46.9 on the right-hand side of Figure 4.)  The one just below the predicted line, with a value of 0.0190, was from Condition <strong>C</strong> with water from an uncovered 19-litre kettle and an ambient temperature of 12°C (53°F).   This case has a predicted temperature of 86.9°C after 15 minutes, which is very close to the measured temperature of 86.8°C.  The one even lower than the predicted line, with a value of 0.0176, was obtained under the same conditions except with an ambient temperature of 33°C (91°F), Condition <strong>J</strong>.  This case has the same predicted temperature of 86.9°C, but a measured temperature of 87.8°C after 15 minutes.  From this, we can conclude that ambient temperature does have an effect on the rate of temperature decrease, with warmer ambient temperatures yielding a slower decrease in temperature.  However, this effect is minor, with a large difference in ambient temperatures (21°C (38°F)) yielding a small difference of 1.0°C (1.8°F) after 15 minutes.  (I also learned that brewing in very hot climates would not be very pleasant for me.  I respect anyone with the dedication to brew when the temperature is above 30°C (86°F).)
+
+<p>
+Over all conditions, the average absolute difference in temperature at 15 minutes between measured and modeled temperatures is 0.8°C.  The largest difference at 15 minutes, 1.9°C, is for Condition <strong>AE</strong>, which has a large volume in an entirely closed kettle.
+
+<p>
+<p>
+<span id="heading2">4.2 Factors Potentially Influencing Temperature</span><br>
+In general, we can look at the difference in measured temperatures at 15 minutes between two conditions when only one factor is different between the conditions.  A factor with a larger difference can be considered more important in influencing temperature decay than a factor with a smaller difference.  (The value of 15 minutes is somewhat arbitrary but I think not unreasonable.  It is the largest time point for which I have measured data in all conditions.)  One issue with this metric is that smaller volumes will generally have greater temperature differences over time than larger volumes.  In addition, the diameter of the kettle and area of the kettle opening will have an impact on the magnitude of the measured temperatures.  In order to normalize for these factors, one could look at the difference divided by the temperature of one of the conditions, but this relative error is less intuitive.  I'm not aware of an intuitive error metric that addresses the dependence on volume and kettle characteristics, so I'll simply report the measurement difference as well as the volume.  Unless otherwise indicated, the kettle diameter and area of the kettle opening are the same within each comparison.
+
+<p>
+As discussed in the previous section, a high ambient temperature can have a measured temperature difference after 15 minutes of 1.0°C at 15.6 litres.  Removing the kettle from the hot metal burner yields a measured difference of -0.8°C at 25 litres.  A stainless steel kettle (instead of an aluminum kettle) yields a measured difference of 1.0°C at 7.8 litres.  The enamel kettle yields a measured difference of -3.3°C at 11.7 litres, but the two kettles have different exposed surface areas (75.2 cm<sup>2</sup> for enamel, 60.6 cm<sup>2</sup> for aluminum), and so this difference may appear larger than it is, even after accounting for volume.  (The predicted difference in temperature for the enamel kettle is -1.4°C).  An insulated kettle yields a measured difference of 1.0°C at 15.6 litres.  (The insulation in this case was a combination of closed-cell foam insulation and mylar wrap, around and over the aluminum kettle.)   As noted earlier for covered kettles, larger volumes have slower temperature decay than smaller volumes, with a measured difference of 0.7°C for 31.2 litres compared with 15.6 litres.
+
+<p>
+To compare the decrease in temperature of wort with water, we can compare (a) the temperature of the 24.6-litre wort case (<strong>R</strong>) with the 27.3-litre water case (<strong>M</strong>), with a difference in measured temperatures of -0.3°C; (b) the temperature of the same 24.6-litre wort case (<strong>R</strong>) with the 23.4-litre water case (<strong>D</strong>), with a difference of 1.1°C; (c) the temperature of the 29.1-litre wort case (<strong>T</strong>) with the 31.2-litre water case (<strong>E</strong>), with a difference of 0.2°C; and (d) the temperature of the 28.9-litre wort case (<strong>U</strong>) with the 31.2-litre water case (<strong>E</strong>), with a difference of 0.8°C.  In short, Condition <strong>R</strong> has no real difference with the temperature of water, while conditions <strong>T</strong> and <strong>U</strong> have a small positive difference that is contrary to the expected small negative difference based on different volumes.  The difference between measured and predicted temperatures for conditions <strong>R</strong>, <strong>T</strong>, <strong>U</strong>, and <strong>V</strong> are 1.5°C, 0.6°C, 1.3°C, and 0.0°C, respectively.  Overall there does not seem to be a large difference between the temperature decrease of wort and of water, although the model may predict slightly lower temperatures than are observed.
+
+<p>
+<p>
+<span id="heading2">4.3 Incorporating Additional Factors into the Model</span><br>
+Because the factors described above seem to have at least some impact on the rate of temperature decrease, should we be modeling them in the temperature-decrease formula?  The answer to that question depends on our purpose (predicting IBUs) and our tolerance for error.  If we have a scenario with fairly typical homebrewing conditions, we can look at how a temperature difference of 3°C after 15 minutes impacts IBUs predicted with the <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">mIBU method</a>.  A difference of 3°C at 15 minutes is somewhat arbitrary, and is 1.5 times larger than the largest observed difference in these 33 conditions, but might be observed with a combination of factors different from those factors used to develop the formula.  Given a post-boil volume of 19.9 litres (5.25 gallons) in an uncovered kettle with diameter 36.8 cm (14.5 inches), a single addition of 28.35 g (1.0 oz) of 10% AA hops at flameout, and a 15-minute hop stand, the predicted temperature after 15 minutes with the formula developed in this blog post is 85.55°C (186.0°F), and we predict 9.92 IBUs using the mIBU method.  If we change the rate constant from 0.02106 to 0.01614 so that the temperature after 15 minutes is 88.55°C (191.4°F), or 3°C warmer, we then predict 10.87 IBUs, or a difference of 0.95 IBUs. If the temperature decreases by 3°C using a rate constant of 0.02638, we predict 9.06 IBUs, or a difference of -0.86 IBUs.  If, instead of a 15-minute whirlpool, we use the same rate constants with a 45-minute whirlpool, we predict 12.48 IBUs when the temperature is 85.55°C after 15 minutes, 14.31 IBUs when the temperature is 88.55°C after 15 minutes, and 10.97 IBUs when the temperature is 83.55°C after 15 minutes, or IBU differences of 1.83 and -1.51 in a 45-minute whirlpool.
+
+<p>
+Can we tolerate a difference of about 1 to 2 IBUs if our temperature decay model is off by 3°C after 15 minutes?   The short answer to that question is "yes," for two reasons.  First, it has been reported that people can't detect a difference less than 5 IBUs (e.g. J. Palmer, <em>How to Brew</em>, p. 56).  So a prediction error of even 2 IBUs is well below our ability to detect with our taste buds.  Second, there are a wide variety of other factors that make IBU prediction so inexact that getting anywhere close to a measured IBU value is cause for celebration.  For example, things that are not accounted for in the Tinseth or basic <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">mIBU</a> formulas are: (a) the inherent variability (up to 15 to 20%) in alpha acid levels within a single bale of hops (M. Verzele, and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>, p. 331), (b) the <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">hopping rate</a>, which can have a significant impact on IBUs, (c) <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">wort pH</a>, which can affect IBU losses, (d) <a href="../27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">wort clarity</a>, (e) <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">krausen deposits or loss</a>, (f) <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">age of the beer</a>, (g) <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">the effect of pellets instead of hop cones</a>, and (h) the <a href="../../index.html" target="_top">age and storage conditions of the hops</a>.  Any of these factors alone can yield a difference greater than 2 IBUs, and in combination the net effect is a high degree of uncertainty in predicted IBU values.
+
+<p>
+In summary, factors such as ambient temperature, kettle size, insulation, kettle material, etc. do have an impact on the rate of temperature decay.  However, for our purposes, it does not seem necessary to extend the formula to specifically account for these factors.
+
+<p>
+
+<span id="heading1">5. Summary and Conclusion</span><br>
+The final formula for predicting wort temperature as a function of time after flameout, for homebrew-scale batch sizes, is
+<p style="padding-left: 30px;"><em>T</em> = 53.7 × exp(-<em>b</em> × <em>t</em>) + 319.55
+<em>b</em> = (0.0002925 × <em>effectiveArea </em>/ <em>volume</em>) + 0.00538
+<em>effectiveArea</em> = (<em>surfaceArea</em> × <em>openingArea</em>)<sup>0.5</sup></p>
+where<em> T</em> is temperature (in degrees Kelvin), <em>t</em> is time after flameout (in minutes), <em>b</em> is the rate constant that describes how quickly the temperature decays, <em>effectiveArea</em> is the "effective" area through which steam ventilates, <em>surfaceArea</em> is the surface area of wort exposed to air (in square centimeters), <em>openingArea</em> is the area of the opening in the kettle (in square centimeters), and <em>volume</em> is the wort volume (in litres).  The area values can be easily determined from the diameters of the kettle and the kettle opening.
+
+<p>
+It is not clear how well this formula will scale up to commercial-size batches.  If anyone who has such a system can provide me with the necessary parameter values and temperature measurements, I'll be happy to evaluate the formulas and adjust as necessary.  To contact me for this or any other reason, send an e-mail to the name associated with this blog (no spaces or other punctuation) at yahοο.
+
+<p>
+<p>
+<span id="heading1">Appendix: Specifics of Each Condition</span><br>
+This section lists some details about each condition in table form.  The volume is either of water or wort; if specific gravity is not specified, water was used.  For partially-covered kettles, I constructed cardboard and aluminum-foil "lids" that had openings of 25%, 50%, or 75% of the area of the open kettle.  The kettle size is noted using approximate capacity, in litres.  Unless otherwise noted, the ambient temperature was approximately 13<b><strong>°</strong></b>C (55<b><strong>°</strong></b>F), and the kettle material was aluminum.
+
+<p>
+&nbsp;
+<table class="table" >
+<tbody>
+<tr>
+<td><b>Condition</b></td>
+<td><b>volume (litres)
+</b></td>
+<td><b><strong>kettle size (litres)</strong>
+</b></td>
+<td><b><strong>wort surface area (cm<sup>2</sup>)</strong>
+</b></td>
+<td><b><strong>percent of kettle covered</strong></b></td>
+<td><b><strong>other notes</strong>
+</b></td>
+<td><b><strong>measured temp. at 15 minutes (°C)</strong>
+</b></td>
+<td><b><strong>predicted temp. at 15 minutes (°C)</strong>
+</b></td>
+</tr>
+<tr>
+<td><b>A
+</b></td>
+<td>7.8</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td></td>
+<td>78.4</td>
+<td>79.6</td>
+</tr>
+<tr>
+<td><b>B</b></td>
+<td>15.6</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>81.8</td>
+<td>82.9</td>
+</tr>
+<tr>
+<td><b>C</b></td>
+<td>15.6</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td></td>
+<td>86.8</td>
+<td>86.9</td>
+</tr>
+<tr>
+<td><b>D</b></td>
+<td>23.4</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>87.6</td>
+<td>86.8</td>
+</tr>
+<tr>
+<td><b>E</b></td>
+<td>31.2</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>88.9</td>
+<td>88.9</td>
+</tr>
+<tr>
+<td><b>F</b></td>
+<td>7.8</td>
+<td>11.4</td>
+<td>457.30</td>
+<td>0%</td>
+<td>stainless steel kettle</td>
+<td>84.2</td>
+<td>84.7</td>
+</tr>
+<tr>
+<td><b>G</b></td>
+<td>7.8</td>
+<td>11.4</td>
+<td>500.39</td>
+<td>0%</td>
+<td></td>
+<td>83.2</td>
+<td>83.7</td>
+</tr>
+<tr>
+<td><b>H</b></td>
+<td>7.8</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>73.0</td>
+<td>73.3</td>
+</tr>
+<tr>
+<td><b>I</b></td>
+<td>15.6</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td>ambient temp. 27°C</td>
+<td>87.8</td>
+<td>86.9</td>
+</tr>
+<tr>
+<td><b>J</b></td>
+<td>15.6</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td>ambient temp. 33°C</td>
+<td>87.8</td>
+<td>86.9</td>
+</tr>
+<tr>
+<td><b>K</b></td>
+<td>3.9</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>61.7</td>
+<td>61.0</td>
+</tr>
+<tr>
+<td><b>L</b></td>
+<td>11.7</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>78.6</td>
+<td>79.4</td>
+</tr>
+<tr>
+<td><b>M</b></td>
+<td>27.3</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>89.0</td>
+<td>88.0</td>
+</tr>
+<tr>
+<td><b>N</b></td>
+<td>11.7</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td></td>
+<td>83.9</td>
+<td>84.4</td>
+</tr>
+<tr>
+<td><b>O</b></td>
+<td>11.7</td>
+<td>18.9</td>
+<td>881.21</td>
+<td>0%</td>
+<td>enamel kettle</td>
+<td>80.6</td>
+<td>82.0</td>
+</tr>
+<tr>
+<td><b>P</b></td>
+<td>19.5</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td></td>
+<td>85.2</td>
+<td>85.2</td>
+</tr>
+<tr>
+<td><b>Q</b></td>
+<td>15.6</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td>insulated kettle</td>
+<td>82.8</td>
+<td>82.9</td>
+</tr>
+<tr>
+<td><b>R</b></td>
+<td>24.6</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td> wort (SG=1.052)</td>
+<td>88.7</td>
+<td>87.2</td>
+</tr>
+<tr>
+<td><b>S</b></td>
+<td>25.4</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td> wort (SG=1.052), kettle removed from heat source</td>
+<td>87.8</td>
+<td>87.5</td>
+</tr>
+<tr>
+<td><b>T</b></td>
+<td>29.1</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td> wort (SG=1.042), loose cones</td>
+<td>89.1</td>
+<td>88.5</td>
+</tr>
+<tr>
+<td><b>U</b></td>
+<td>28.9</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>0%</td>
+<td> wort (SG=1.042), pellets</td>
+<td>89.7</td>
+<td>88.4</td>
+</tr>
+<tr>
+<td><b>V</b></td>
+<td>4.6</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>0%</td>
+<td>wort (SG=1.065), mIBU Exp.#3</td>
+<td>71.6</td>
+<td>71.6</td>
+</tr>
+<tr>
+<td><strong>W</strong></td>
+<td>15.4</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>25%</td>
+<td></td>
+<td>87.3</td>
+<td>88.0</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>15.4</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>50%</td>
+<td></td>
+<td>88.2</td>
+<td>89.3</td>
+</tr>
+<tr>
+<td><strong>Y</strong></td>
+<td>15.5</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>75%</td>
+<td></td>
+<td>89.7</td>
+<td>91.2</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td>15.4</td>
+<td>18.9</td>
+<td>710.33</td>
+<td>100%</td>
+<td></td>
+<td>97.2</td>
+<td>95.9</td>
+</tr>
+<tr>
+<td><strong>AA</strong></td>
+<td>23.4</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>50%</td>
+<td></td>
+<td>87.8</td>
+<td>89.3</td>
+</tr>
+<tr>
+<td><strong>AB</strong></td>
+<td>23.4</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>75%</td>
+<td></td>
+<td>90.9</td>
+<td>91.1</td>
+</tr>
+<tr>
+<td><strong>AC</strong></td>
+<td>31.2</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>50%</td>
+<td></td>
+<td>90.8</td>
+<td>90.9</td>
+</tr>
+<tr>
+<td><strong>AD</strong></td>
+<td>31.2</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>75%</td>
+<td></td>
+<td>92.4</td>
+<td>92.3</td>
+</tr>
+<tr>
+<td><strong>AE</strong></td>
+<td>31.2</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>100%</td>
+<td></td>
+<td>97.8</td>
+<td>95.9</td>
+</tr>
+<tr>
+<td><strong>AF</strong></td>
+<td>7.8</td>
+<td>11.4</td>
+<td>500.39</td>
+<td>100%</td>
+<td></td>
+<td>94.8</td>
+<td>95.9</td>
+</tr>
+<tr>
+<td><strong>AG</strong></td>
+<td>15.6</td>
+<td>37.9</td>
+<td>1083.80</td>
+<td>100%</td>
+<td></td>
+<td>97.2</td>
+<td>95.9</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Details about each condition in this blog post.</span>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

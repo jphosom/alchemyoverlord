@@ -1,0 +1,368 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>An Analysis of Sub-Boiling Hop Utilization</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+An Analysis of Sub-Boiling Hop Utilization
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+In a previous post, "<a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">A Modified IBU Calculation (Especially for Late Hopping and Whirlpool Hops)</a>", one of the components of the modified <a href="http://www.realbeer.com/hops/research.html" target="_blank">Tinseth IBU formula</a> is an estimation of relative <em>α</em>-acid utilization at below-boiling temperatures.  The current experiment investigates this relative utilization as a function of temperature.  One result of this experiment is that the measured IBU at 145°F (63°C) is about half the measured IBU value at boiling.  However, IBU values are not the same as iso-<em>α</em>-acid concentrations (especially at low temperatures and short steep times), due to the presence of oxidized alpha acids, oxidized beta acids, and polyphenols.  Therefore, IBU values cannot be used to directly estimate relative <em>α</em>-acid utilization.  Instead, the data from this experiment are applied to a <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">detailed model of IBUs developed in another post</a> to estimate iso-<em>α</em>-acid concentration and, from that, relative <em>α</em>-acid utilization is estimated.  It is shown that this estimate of relative <em>α</em>-acid utilization is consistent with a formula proposed by <a href="https://ir.library.oregonstate.edu/xmlui/bitstream/handle/1957/22805/MalowickiMarkG2005.pdf" target="_blank">Malowicki</a>, although because of some dependencies, this estimate is not an independent verification of the formula.  While Malowicki's formula is also time-dependent, a reasonable time-independent representation of relative utilization as a function of temperature can be expressed as <em>U<sub>rel</sub></em>(<em>T</em>) = 2.39×10<sup>11</sup> × e<sup>-9773/<em>T</em></sup> (where <em>T</em> is temperature in degrees Kelvin).  Note that this utilization is relative to the amount of utilization at boiling.  This time-independent function is used in the <a href="../15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">mIBU method</a> of estimating post-flameout IBUs.  The time-dependent function (the original Malowicki formula) is used in the <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH method of IBU prediction</a>.
+
+<p>
+
+<span id="heading1">1. Introduction</span><br>
+Hop utilization is defined as isomerized <em>α</em>-acids (iso-<em>α</em>-acids, or IAA) in finished beer divided by total <em>α</em> acids added.  It would be nice to have a model of this utilization as a function of (sub-boiling) temperature, in order to better predict the increase in IBUs that happens after flameout.
+
+<p>
+I've seen reports that utilization decreases as a function of temperature, from maximum utilization at boiling, down to zero utilization at around 180°F (82°C).  (I’ve seen two numbers: 175°F (79°C) according to <a href="https://byo.com/" target="_blank">BYO</a> and a <a href="http://www.theelectricbrewery.com/forum/viewtopic.php?t=26263" target="_blank">discussion at theelectricbrewery</a>, and 185°F (85 °C) according to a <a href="https://www.homebrewersassociation.org/forum/index.php?topic=13015.0" target="_blank">homebrewersassociation discussion</a> and a <a href="http://discussions.probrewer.com/showthread.php?28064-Hop-Utilization-of-Whirlpool-Additions" target="_blank">probrewer discussion</a>).  However, just knowing a maximum (full utilization) and a minimum (zero utilization) doesn't mean that a straight line is the best fit to the actual utilization.  In addition, I haven't seen any justification for this lower limit; just because I read it on the Internet doesn't necessarily mean it's true.
+
+<p>
+Next, let's look at isomerized <em>α</em>-acids, which are the biggest contributor to IBU values and the numerator of the utilization definition.  <a href="https://ir.library.oregonstate.edu/xmlui/bitstream/handle/1957/22805/MalowickiMarkG2005.pdf" target="_blank">Malowicki</a>, <a href="http://www.ijbbb.org/papers/161-E005.pdf" target="_blank">Huang <em>et al</em>.</a>, <a href="http://www.ijbbb.org/papers/161-E005.pdf" target="_blank">Kappler <em>et al</em>.</a>, and others (e.g. <a href="http://www.ncbi.nlm.nih.gov/pubmed/18598038" target="_blank">Jaskula</a>) have done a lot of work looking at <em>α</em>-acid isomerization at temperatures other than boiling.  Malowicki provides formulas for the temperature dependence of the loss of <em>α</em> acids (converted into iso-<em>α</em>-acids) and the loss of iso-<em>α</em>-acids (converted into "uncharacterized degradation products" due to the continued presence of heat).  For the loss of <em>α</em> acids, this first-order reaction has a rate constant <em>k</em><sub>1</sub> = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup> (<em>T</em> in degrees Kelvin), e.g. [<em>α</em>-acids] = [<em>α</em>-acids<em><sub>initial</sub></em>]×e<sup><em>-k</em><sub>1</sub><em>t</em></sup>, where angle brackets ([]) indicate concentration and <em>t</em> is the steep time in minutes.  For the loss of iso-<em>α</em>-acids, this first-order reaction has a rate constant <em>k</em><sub>2</sub> = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup> (<em>T</em> in degrees Kelvin).
+
+<p>
+One can take Malowicki's function for the loss of <em>α</em> acids as a function of temperature and assume a corresponding decrease in utilization.  For example, <em>k</em><sub>1</sub> equals 0.01249 at 212°F (100°C) and 0.00622 at 198°F (92°C), and so the rate of the reaction is halved (reaction time is doubled) at 198°F (92°C).  If one assumes that the concentration of <em>α</em> acids is directly (and inversely) tied to alpha-acid utilization, one can conclude that utilization is also 50% at 198°F (92°C), relative to utilization at 212°F (100°C).
+
+<p>
+We can improve upon this assumption by including the loss of iso-<em>α</em>-acids during the boil, referring to work by <a href="https://ir.library.oregonstate.edu/xmlui/bitstream/handle/1957/22805/MalowickiMarkG2005.pdf" target="_blank">Malowicki</a> (and also reported by  <a href="http://www.ijbbb.org/papers/161-E005.pdf" target="_blank">Huang, Tippmann, and Becker (2013)</a>). Malowicki (on page 27) provides an equation for the concentration of iso-<em>α</em>-acids as a function of time (<em>t</em>) and temperature by combining the two rate constants into a single formula: [iso-<em>α</em>-acids] = [<em>α</em>-acids<em><sub>initial</sub></em>](<em>k</em><sub>1</sub>/(<em>k</em><sub>2</sub>-<em>k</em><sub>1</sub>))(e<sup><em>-k<sub>1</sub>t</em></sup>-e<sup><em>-k<sub>2</sub>t</em></sup>). (The temperature dependence is implicit in the values of <em>k</em><sub>1</sub> and <em>k</em><sub>2</sub>.)  We can then plot the concentration of iso-<em>α</em>-acids (relative to the initial concentration of <em>α</em>-acids, not taking into account volume changes produced during the boil) as a function of time for various temperatures (see Figure 1, below).  It can be seen that at 30 minutes, the relative iso-<em>α</em>-acid concentration is 0.2976 at 212°F (100°C) and 0.1696 at 198°F (92°C).  The value 0.1696 is 14% larger than would have been predicted by our first assumption (half the value at boiling, or 0.1488).  Also, according to this formula, there is still noticeable utilization happening at 175°F (79°C), with 5% to 10% utilization between 30 and 60 minutes.
+
+<p>
+<img src="isoalphaacidconcentraion.jpg"/> <span id="caption"> Figure 1: iso-α-acid concentration, relative to initial α-acid concentration, as a function of time and temperature, according to a formula by Malowicki (2005).</span>
+
+<p>
+We can use this formula to plot relative utilization as a function of temperature for different steep times (Figure 2).  In this case, regardless of the steep time, the relative utilization at boiling is defined to be 1.0, and utilization at other temperatures is relative to 212°F (100°C).
+
+<p>
+<img src="huangutilasfunctionoftemp.png"/> <span id="caption"> Figure 2: Relative utilization as a function of temperature (boiling = 1.0) and various steep times, according to equation by Malowicki (2005).</span>
+
+<p>
+These values of relative utilization are dependent on both time and temperature, although the temperature component has a much larger impact than the time component.  We can approximate this as a function of only temperature, by choosing a single steep time to represent the general case, e.g. 40 minutes.  We can then fit the relative utilization data to an equation.  In this case, a root-mean-squared fitting error of 0.013 can be obtained with the Arrhenius function <em>U<sub>rel</sub></em>(<em>T</em>) = 2.39×10<sup>11</sup> e<sup>-9773/<em>T</em></sup> (where <em>T</em> is temperature in degrees Kelvin).  In this case, at 373.15 Kelvin (or 212°F or 100°C), <em>U<sub>rel</sub></em>(<em>T</em>) is close to 1.00; at 194°F (90°C), the utilization is half that of boiling.
+
+<p>
+The experiment that follows measured IBU values as a function of (sub-boiling) temperature, with hops steeped for 10 minutes, to compare measured IBU values with utilization prediction by this equation.  IBU values are not, however, a substitute for isomerized <em>α</em> acid levels (<a href="http://www.mbaa.com/store/Pages/51984.aspx" target="_blank">except for the boil times, hop concentrations, and hop storage conditions of the 1960's</a>), and so the measured IBU values need to then be converted into estimated isomerized <em>α</em>-acid levels.  This conversion is done using a <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">detailed model of IBUs developed in a separate blog post</a>.  This model uses, in part, the formula from Malowicki to estimate utilization at sub-boiling temperatures.  Therefore, the IBU values from the model are dependent upon the assumption that this formula is correct.  Because of the dependence of the model on the formula, the results of this experiment don't provide independent verification of the formula.  However, the results do show that the model can be used to find good estimates of measured IBU values, and therefore this formula can provide a reasonable estimate of temperature-dependent utilization.
+
+<p>
+
+<span id="heading1">2. Methods</span><br>
+<p>
+<span id="heading2">2.1 Conditions</span><br>
+Each condition in this experiment consisted of a small batch (1.3 G (4.92 liters) pre-boil volume) of beer brewed with a single 10-minute addition of hops, as described below.  The hops were added (and maintained) at a different target temperature for each condition within a set.
+
+<p>
+Because of constraints on my time and energy, I divided this experiment into two sets.  Within a set, each condition sampled from the same batch of wort and hops.  Since the wort and hops varied between sets, one condition in each set was the reference point, with a target temperature of 212°F (100°C) and a relative utilization (compared with other temperatures) of 1.0.  Other target temperatures ranged from 145°F (63°C) to 200°F (93°C), as listed in the Table 1 (below).
+
+<p>
+Finished beer from each condition was sent to <a href="http://www.analysislaboratory.com/" target="_blank">Analysis Laboratory</a> for analysis of IBUs and original gravity.  (Scott Bruslind from Analysis Laboratory was very responsive and encouraging with these experiments, providing a full set of measurements (including gravity, pH, and attenuation, in addition to IBUs.))  The IBU level of each condition was divided by the IBU level of the reference condition (target temperature of 212°F (100°C)) in order to obtain a relative IBU level.  Since all other conditions were held as constant as possible (including boil volume, specific gravity, pH, hop steeping time, <em>α</em> acids, oxidized <em>β</em> acids, polyphenols, and fermentation conditions), any difference in IBU levels is due to decreased utilization at the target temperature, an error in measurement (as explained below), or some combination of both. By fitting a smooth function to the data, we'd like to be able to average out errors and estimate utilization in finished beer as a function of temperature.  The problem is that <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">the IBU is not just a measurement of isomerized <em>α</em> acids</a>; it includes other bitter substances that don't increase at the same rate as isomerized <em>α</em> acids during the boil.  We'll come back to this problem later in this post.
+
+<p>
+<p>
+<span id="heading2">2.2 Sources of Error</span><br>
+This experiment relies on just nine IBU values, with only one value at each sub-boiling temperature, due to limited time and effort.  If one had the luxury (and energy) to repeat this experiment 10 times, one would get a variety of different relative IBU values at a given target temperature, hopefully all clustered together fairly closely.  These differences can be considered errors with respect to the "true" relative IBU value at each temperature.  What causes these errors?   The small batch size (1.3 G (4.92 liters) pre-boil) makes it very difficult to maintain a consistent target temperature, evaporation rate, and concentration of alpha acids and other bitter substances, making it difficult to replicate results exactly.  Measured IBU values that do not conform to a simple pattern are very likely off due to such errors, and these errors are unavoidable with my current methodology.  The methods used here are probably sufficient, however, to find a "reasonable" fit to the data by minimizing the error.
+
+<p>
+<p>
+<span id="heading2">2.3 Recipe</span><br>
+There were two sets, Set 1 (Conditions A, B, C, and D) and Set 2 (Conditions F, G, H, I, and J).  (No, I'm not very good at fanciful names for these things.  Yes, there was a Condition E, but it was not entirely relevant to this analysis and is omitted here.  Each condition maintained (close to) a target temperature for steeping, listed below in Table 1.
+
+<p>
+The wort for each set was prepared with 9¼ lbs (4.2 kg) Briess Pilsen DME dissolved in 7 G (26.5 liters) of water, yielding about 7⅔ G (29 liters) of pre-boil wort.  This wort was heated, boiled for 30 minutes uncovered, and then cooled with a wort chiller.  The cooled wort was stored with the lid on, in order to minimize chances of infection.  For Set 1, the measured specific gravity prior to boiling each condition was 1.060; for Set 2, the specific gravity was 1.061.  For each condition, ~1.3 G (4.9 liters) was taken from the larger pool of wort, heated to boiling, and then cooled to the target temperature.  Once the target temperature was reached, 1.60 oz (45.36 g) of Cascade hop cones were added, within a large coarse mesh bag.  (The hops were collected in advance from a larger mixture of 8 oz to 9 oz (227 g to 255 g) per set.)  The kettle was covered, and the target temperature was maintained as closely as possible for 10 minutes.  (Temperature readings were taken at one-minute intervals with a long thermometer probe through a very small hole in the lid.)  After 10 minutes, the hops were removed and the wort was cooled as quickly as possible.  This wort was left to settle for 5 minutes, after which 3½ quarts (3.31 liters) were decanted into a 1-gallon (~4 liter) container.  This container was sealed until all conditions within the set were ready.  Once ready, 1½ packets of Safale US-05 yeast were added to ~0.9 cups of water.  Each condition was aerated for 90 seconds by vigorous shaking, and 1½ oz (42.5 g) from the pool of yeast slurry was added.  Airlocks were applied.  Time passed and beer bubbled.  After 3 weeks, each condition was bottled with a small amount of simple syrup to target about 2.1 volumes CO2.  After 3 more weeks, samples were taken from the bottles (leaving behind the yeast sediment), degassed, and sent for analysis at <a href="http://www.analysislaboratory.com/" target="_blank">Analysis Laboratory</a>.   The original gravity and IBU values in Table 1 come from this analysis; the original gravity is <a href="../../index.html" target="_top">converted from degrees Plato</a>.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>target temp. </b></td>
+<td><b>average temp. </b></td>
+<td><b>original gravity</b></td>
+<td><b>post-boil volume</b></td>
+<td><b>measured IBUs</b></td>
+<td><b>relative IBUs</b></td>
+</tr>
+<tr>
+<td><b>Condition A
+</b></td>
+<td>212°F<br>
+100°C</td>
+<td>212°F<br>
+100°C</td>
+<td>1.0658</td>
+<td>1.18 G<br>
+4.47 l</td>
+<td>33.3</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><b>Condition B
+</b></td>
+<td>200°F<br>
+93.3°C</td>
+<td>198.8°F<br>
+92.7°C</td>
+<td>1.0645</td>
+<td>1.20 G<br>
+4.54 l</td>
+<td>28.9</td>
+<td>0.868</td>
+</tr>
+<tr>
+<td><b>Condition C
+</b></td>
+<td>190°F<br>
+87.8°C</td>
+<td>191.1°F<br>
+88.4°C</td>
+<td>1.0645</td>
+<td>1.23 G<br>
+4.66 l</td>
+<td>30.8</td>
+<td>0.925</td>
+</tr>
+<tr>
+<td><b>Condition D
+</b></td>
+<td>185°F<br>
+85.0°C</td>
+<td>185.4°F<br>
+85.2°C</td>
+<td>1.0641</td>
+<td>1.24 G<br>
+4.69 l</td>
+<td>25.5</td>
+<td>0.766</td>
+</tr>
+<tr>
+<td><b>Condition F
+</b></td>
+<td>212°F<br>
+100°C</td>
+<td>212°F<br>
+100°C</td>
+<td>1.0645</td>
+<td>1.23 G<br>
+4.66 l</td>
+<td>40.6</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><b>Condition G
+</b></td>
+<td>175°F<br>
+79.4°C</td>
+<td>176.4°F<br>
+80.2°C</td>
+<td>1.0628</td>
+<td>1.26 G<br>
+4.77 l</td>
+<td>23.6</td>
+<td>0.581</td>
+</tr>
+<tr>
+<td><b>Condition H
+</b></td>
+<td>165°F<br>
+73.9°C</td>
+<td>166.3°F<br>
+74.6°C</td>
+<td>1.0628</td>
+<td>1.26 G<br>
+4.77 l</td>
+<td>24.5</td>
+<td>0.603</td>
+</tr>
+<tr>
+<td><b>Condition I
+</b></td>
+<td>155°F<br>
+68.3°C</td>
+<td>155.6°F<br>
+68.7°C</td>
+<td>1.0624</td>
+<td>1.27 G<br>
+4.81 l</td>
+<td>23.1</td>
+<td>0.569</td>
+</tr>
+<tr>
+<td><b>Condition J
+</b></td>
+<td>145°F<br>
+62.8°C</td>
+<td>145.6°F<br>
+63.1°C</td>
+<td>1.0624</td>
+<td>1.27 G<br>
+4.81 l</td>
+<td>21.8</td>
+<td>0.537</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Target temperature, measured average temperature, original gravity, measured IBU values, and (measured) relative IBU values for each of the nine conditions.</span>
+
+<p>
+
+<span id="heading1">3. Raw Results</span><br>
+Table 1 shows the target temperature, measured values, and relative IBU values for each condition in the experiment.  (The post-boil volume was computed from the ratio of pre-boil gravity points to post-boil gravity points, multiplied by the initial volume of 1.3 G (4.9 liters)).  The measured IBU values were converted to relative IBU values by dividing the measured IBU of that condition by the IBU value at boiling in that set (Condition A or F).  A plot of these relative IBU values as a function of average steep temperature is shown below in Figure 3.
+
+<p>
+<img src="mibu_exp2_relativeibu.png"/> <span id="caption"> Figure 3. Relative IBU values as a function of temperature (in °C).</span>
+
+<p>
+Other than the results at 191°F (88.4°C) and 176°F (80.2°C), the data fit quite well to an exponential function.  I assume that the relatively large differences for these two extreme values are due to a relatively higher or lower concentration of <em>α</em> acids (and other components) in the wort, compared with the reference condition, as explained above in the section <em>Sources of Error</em>.  Fitting an exponential function to the eight available data points of relative utilization, we get <em>U</em>(<em>T</em>) = 0.11245 e<sup>0.01031<em>T</em></sup> (where <em>T</em> is temperature in °F) or <em>U</em>(<em>T</em>) = 0.15642 e<sup>0.01856<em>T</em></sup> (where <em>T</em> is temperature in °C).  The root-mean-squared error of either function is 0.059.
+
+<p>
+
+<span id="heading1">4. Data Analysis</span><br>
+When comparing the theoretical relative utilization (with about 50% utilization at 194°F (90°C), expressed by the formula above for <em>U<sub>rel</sub></em>(<em>T</em>) and plotted in Figure 2) with the relative IBU values from Table 1, it quickly becomes clear that the relative IBU values are quite a bit larger (with a 50% value at around 140°F (60°C)) than the theoretical values.  This puzzled me for quite a while, but it can be explained by the components of the IBU measurement that are not isomerized <em>α</em> acids.  (See "The International Bitterness Unit, its Creation and What it Measures" by Val Peacock, in <em><a href="http://www.mbaa.com/store/Pages/51984.aspx" target="_blank">Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</a></em>; several of the same points are discussed <a href="https://beersensoryscience.wordpress.com/2011/04/05/the-ibu-assay/" target="_blank">here</a>.)
+
+<p>
+The IBU measures contributions from both isomerized <em>α</em> acids (IAA) and other "interfering substances" (non-IAA components, including oxidized <em>α</em> and <em>β</em> acids and polyphenols, all of which contribute to bitterness).  Normally, the contribution of non-IAA components is much lower than the contribution of IAA.  (In the 1960's, about 70% of the IBU value was from IAA and 30% was from non-IAA components.  With improvements in the storage conditions of hops over the past decades, the IAA proportion with a 60-minute or greater boil time can now easily be higher than 70%.)  In this experiment, however, the short boil time (10 minutes), high boil gravity (about 1.064), and relatively large hop additions (1.6 oz in 1.3 G, or 45 g in 4.9 liters) caused the non-IAA contribution to the IBU to be much greater than the IAA contribution, even for the condition at boiling.  As the temperature decreased with each experimental condition, the contribution of IAA to the IBU also decreased, but the non-IAA contribution remained more constant.  Therefore, the IBU values from this experiment cannot be used to directly estimate relative <em>α</em>-acid utilization.
+
+<p>
+
+<span id="heading1">5. Estimating Alpha-Acid Utilization with a Model of IBUs</span><br>
+In <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">another blog post</a>, I present a model of IBUs that accounts for both <em>α</em>-acid isomerization and the effects of oxidized <em>α</em> acids, oxidized <em>β</em> acids, and polyphenols on IBU values.  This model uses the equation from Malowicki to estimate the temperature-dependent isomerization of <em>α</em> acids.  It also takes into account the age of the hops, the fact that oxidized <em>α</em> acids are produced during the boil (<a href="http://ir.library.oregonstate.edu/xmlui/bitstream/handle/1957/53179/Algazzali%20Thesis%202014.pdf?sequence=1" target="_blank">Algazzali</a>, p. 17), and various losses that impact IBUs.  The model can estimate the IBU values from this experiment with a maximum difference of 3.01 IBUs.  The IBU values in Table 1 vary by as much as 3.5 IBUs from the expected smooth line, and so the error from the model is more or less in line with the observed measurement error.  This model can also be used to  estimate the concentrations of isomerized <em>α</em> acids and non-IAA components in the finished beer. This gives us two ways to use the measured IBU values (and other data from the experiment) to estimate <em>α</em>-acid utilization, both of which produce similar results: (1) determine utilization directly from the model, by dividing the model estimate of iso-<em>α</em>-acids in the finished beer by total <em>α</em> acids added, or (2) estimate iso-<em>α</em>-acids by multiplying the measured IBU value by the estimated percent of the IBU that comes from isomerized <em>α</em> acids, and divide that value by total <em>α</em> acids.  In both cases, the utilization at each temperature is divided by the utilization at boiling to determine a relative utilization.
+
+<p>
+In the search for model parameter values, I allowed allowed some flexibility in the AA rating of the hops and the <a href="../../index.html" target="_top">freshness factor</a> due to the age and storage conditions of the hops.  The reason for this flexibility was that I couldn't determine reliable values for these parameters.  The AA rating on the package of hops was 8.4% for Set 1 and 7.9% for Set 2.  I set aside some of each set of hops for testing at <a href="http://www.karlabs.com/" target="_blank">KAR Laboratories</a>, which came back with 5.75% AA for Set 1 and 6.25% AA for Set 2. Despite the fact that alpha-acid content can easily vary 10% to 15% within the same bale of hops (<a href="https://www.amazon.com/Malting-Brewing-Science-Hopped-Wort/dp/0834216841" target="_blank">Hough, Briggs, Stevens, and Young</a> say that "sampling of hops is extremely difficult due to their heterogeneous nature" (p. 432)), the measured values are too low to be explained by random variation alone.  Instead, the hops seem to have been subject to oxidation even though they were purchased in vacuum-sealed mylar bags.  The hops seem to have degraded about 20% to 30% from their initial values, which <a href="../../index.html" target="_top">could be explained by being stored in vacuum-sealed but not nitrogen-flushed bags for a year or more at refrigerator temperatures</a>.  As a result, I allowed the search for model parameters to vary the harvest AA rating by 10% of the AA rating on the package, and the freshness factor to vary between 0.50 and 0.90.  Results of fitting the model to the data yielded an AA rating of 7.56% and a freshness factor of 0.75 for Set 1, and an AA rating of 7.90% and a freshness factor of 0.80 for Set 2.
+
+<p>
+Table 2 provides, for each condition, (a) the concentration of <em>α</em> acids when added to the wort (<em>α</em>-acid concentration, in parts per million (ppm)); (b) IBU values estimated from the model; (c) the estimated percent of the IBU value that comes from IAA; (d) estimated iso-<em>α</em>-acid concentration (in ppm) in the finished beer; and (e) relative utilization determined by dividing the utilization of that condition by the utilization at boiling.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>alpha acid concentration (ppm)
+</b></td>
+<td><b>model IBU
+</b></td>
+<td><b>percent of IBU from IAA
+</b></td>
+<td><b>estimated IAA (ppm)</b></td>
+<td><b>relative utilization
+</b></td>
+</tr>
+<tr>
+<td><b>Condition A
+</b></td>
+<td>546.21</td>
+<td>36.31</td>
+<td>37%</td>
+<td>18.72</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><b>Condition B
+</b></td>
+<td>547.91</td>
+<td>29.32</td>
+<td>24%</td>
+<td>9.98</td>
+<td>0.533</td>
+</tr>
+<tr>
+<td><b>Condition C
+</b></td>
+<td>617.65</td>
+<td>30.06</td>
+<td>17%</td>
+<td>7.32</td>
+<td>0.391</td>
+</tr>
+<tr>
+<td><b>Condition D
+</b></td>
+<td>566.25</td>
+<td>26.64</td>
+<td>14%</td>
+<td>5.30</td>
+<td>0.283</td>
+</tr>
+<tr>
+<td><b>Condition F
+</b></td>
+<td>692.17</td>
+<td>39.86</td>
+<td>38%</td>
+<td>21.12</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><b>Condition G
+</b></td>
+<td>631.17</td>
+<td>24.28</td>
+<td>10%</td>
+<td>3.53</td>
+<td>0.167</td>
+</tr>
+<tr>
+<td><b>Condition H
+</b></td>
+<td>644.50</td>
+<td>23.68</td>
+<td>6%</td>
+<td>2.09</td>
+<td>0.099</td>
+</tr>
+<tr>
+<td><b>Condition I
+</b></td>
+<td>631.17</td>
+<td>22.57</td>
+<td>4%</td>
+<td>1.15</td>
+<td>0.054</td>
+</tr>
+<tr>
+<td><b>Condition J
+</b></td>
+<td>644.50</td>
+<td>22.65</td>
+<td>2%</td>
+<td>0.66</td>
+<td>0.031</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Values related to relative utilization that have been determined by fitting the IBU model to available data.</span>
+
+<p>
+Figure 4 shows the relative utilization determined by the two methods discussed above; it can be seen that they yield similar results, and that these results are close to the values predicted by Malowicki's equation.
+
+<p>
+<img src="mibu_exp2_relativeutilization.png"/> <span id="caption"> Figure 4. Relative utilization as a function of temperature, estimated by the two methods described in the text (method 1 in green; method 2 in blue), and relative utilization predicted from the Malowicki formula (red).</span>
+
+<p>
+
+<span id="heading1">6. Discussion: What I'd Do Differently Next Time</span><br>
+I used such a large amount of hops in these experiments in order to get higher IBU values and thereby (marginally) increase the accuracy of the relative values.  However, I've since found that “a high hopping rate reduces extraction efficiency” (<a href="https://www.amazon.com/Brewing-Michael-J-Lewis/dp/0306472740" target="_blank">Lewis and Young, p. 267</a>), and I now think that the concentration of <em>α</em> acids I used (~550 ppm to ~700 ppm) was much greater than the <em>α</em>-acid solubility limit at high temperatures (with a <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">lower limit of about 200 ppm</a>), greatly reducing the amount of isomerized <em>α</em> acids produced but increasing the concentration of non-IAA components.  This experiment used a steep time of 10 minutes, which at boiling would yield a utilization factor of only 0.074 according to the Tinseth model (which doesn't take into account a high hopping rate).  The greatly reduced degree of <em>α</em>-acid utilization in this experiment, compared with typical beers, resulted in a much lower ratio of IAA to non-IAA components in the resulting IBU values.  If I were to re-do this experiment, I would increase the boil time instead of the hop concentration in order to increase utilization, and target an <em>α</em>-acid concentration of about 200 ppm.  I would also use well-preserved hops (with a freshness factor close to 1.0) in order to remove that source of uncertainty.
+
+<p>
+
+<span id="heading1">7. Conclusion</span><br>
+One obvious result from this experiment is that IBU values can not be directly substituted for isomerized <em>α</em>-acid values, especially at short steep times, high hopping rates, and sub-boiling temperatures.  This is because IBU values reflect not only isomerized <em>α</em>-acid values, but also contributions from oxidized <em>α</em> and <em>β</em> acids and polyphenols.
+
+<p>
+The results of this experiment don't provide an independent verification of relative utilization based on Malowicki's equation.  However, the results do show that this equation can be used as part of a larger model to provide good estimates of measured IBU values, and that the iso-<em>α</em>-acid levels and relative utilization estimated from measured IBU values conform well to expectations.  By converting Malowicki's equation from absolute to relative values and removing the time dependency (using a single representative time point), relative utilization can be modeled with the function <em>U<sub>rel</sub></em>(<em>T</em>) = 2.39×10<sup>11</sup> e<sup>-9773/<em>T</em></sup> (where <em>T</em> is temperature in degrees Kelvin).
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

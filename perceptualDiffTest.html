@@ -8,7 +8,8 @@ perceptualDiffTest.html : HTML for AlchemyOverlord web page,
                           explanation of perceptual (sensory) difference tests
 Written by John-Paul Hosom
 Copyright © 2021 by John-Paul Hosom, all rights reserved.
-Version 1.0.0 : Mar. 16, 2021
+Version 1.0.0 : Mar. 16, 2021. Initial version
+Version 1.0.1 : Nov. 25, 2021. Minor updates.
 ================================================================================
 ---------------------------------------------------------------------------- -->
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -65,7 +66,7 @@ Version 1.0.0 : Mar. 16, 2021
           period. If you use a negative simulation delay, the per-sample
           graphics will be omitted, and the simulation will show only
           the summary results. The simulations depend on
-          <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator" target="_parent">pseudo-random numbers</a>;
+          <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator" target="_blank">pseudo-random numbers</a>;
           if you want to see the effect of changing the starting point
           for these pseudo-random numbers, change the value of "random
           number seed" (above) to any value you like between 0 and 10000.</p>
@@ -75,15 +76,15 @@ Version 1.0.0 : Mar. 16, 2021
           statistics, having taught a small subset of statistical
           concepts for 10 years at the graduate level, the area of
           statistical significance testing sometimes seems like a game
-          of <a href="https://en.wikipedia.org/wiki/List_of_games_in_Star_Trek#Fizzbin" target="_parent">Fizzbin</a>:
+          of <a href="https://en.wikipedia.org/wiki/List_of_games_in_Star_Trek#Fizzbin" target="_blank">Fizzbin</a>:
           just when you think you understand the rules, there's another
           exception or special case to consider. There has also been a
-          <a href="https://link.springer.com/article/10.1007/s00259-019-04467-5#ref-CR19" target="_parent">
+          <a href="https://link.springer.com/article/10.1007/s00259-019-04467-5#ref-CR19" target="_blank">
           vocal debate in many research communities</a> about the best
           methods for significance testing and evaluating results. This
           tutorial certainly won't settle any of that debate, and I'm
           not at all interested in debating points on which
-          <a href="https://en.wikipedia.org/wiki/Wikipedia:Reasonableness" target="_parent">
+          <a href="https://en.wikipedia.org/wiki/Wikipedia:Reasonableness" target="_blank">
           reasonable people may disagree</a>. This page is simply my attempt
           to explain what I have learned about evaluating perceptual
           difference tests in a (hopefully) logical and intuitive
@@ -185,14 +186,14 @@ Version 1.0.0 : Mar. 16, 2021
           rather insensitive to others. (In the case of bitterness, there
           is a very wide range of sensitivity levels between people, with
           some people being very sensitive (so-called "<a
-          href="https://en.wikipedia.org/wiki/Supertaster" target="_parent">super tasters</a>")
+          href="https://en.wikipedia.org/wiki/Supertaster" target="_blank">super tasters</a>")
           and others not so sensitive.) Since we're using a generic term
           "objective units" to describe the physical stimuli, we can use a
           similarly generic term, "perceptual units," to describe the
           sensory reaction to the stimuli. It doesn't matter if these
           perceptual units are in neural impulses per second or some other
           scale, as long as there is a direct (but possibly <a
-          href="https://en.wikipedia.org/wiki/Nonlinear_system" target="_parent">nonlinear</a>)
+          href="https://en.wikipedia.org/wiki/Nonlinear_system" target="_blank">nonlinear</a>)
           mapping between objective units and perceptual units.
           For simplicity, we'll say that this direct mapping translates
           objective units into perceptual units on the same scale, and
@@ -202,26 +203,26 @@ Version 1.0.0 : Mar. 16, 2021
           evaluation, there are a number of factors that affect their
           perception of the sample. This change in their perception may
           be caused by general random variation in neural responses,
-          <a href="https://en.wikipedia.org/wiki/Recall_(memory)" target="_parent">memory</a>
+          <a href="https://en.wikipedia.org/wiki/Recall_(memory)" target="_blank">memory</a>
           and
-          <a href="https://en.wikipedia.org/wiki/Neural_adaptation" target="_parent">adaptation</a>
+          <a href="https://en.wikipedia.org/wiki/Neural_adaptation" target="_blank">adaptation</a>
           effects, an unintended
-          <a href="https://en.wikipedia.org/wiki/Priming_(psychology)" target="_parent">priming effect</a>,
+          <a href="https://en.wikipedia.org/wiki/Priming_(psychology)" target="_blank">priming effect</a>,
           or (for
-          <a href="https://dictionary.apa.org/between-subjects-design" target="_parent">between-subjects studies</a>)
+          <a href="https://dictionary.apa.org/between-subjects-design" target="_blank">between-subjects studies</a>)
           differences in people's sensitivity. Because of
           these factors, when we give subjects multiple samples of <b>A</b>,
           the perceived sweetness won't always be exactly at 0.0
           perceptual units; sometimes it will be higher, and sometimes
           lower. On average, though, <b>A</b> will have 0.0 perceptual
           units and <b>B</b> will have 1.0 perceptual units, and we say
-          that the <a href="https://en.wikipedia.org/wiki/Mean" target="_parent">mean</a>
+          that the <a href="https://en.wikipedia.org/wiki/Mean" target="_blank">mean</a>
           of <b>A</b> is 0.0 and the mean of <b>B</b> is 1.0. </p>
 
         <p> This is a good place to introduce probabilities, since
           probabilities allow us to talk about uncertain information
           such as perceived sweetness. There are
-          <a href="https://en.wikipedia.org/wiki/Probability" target="_parent">
+          <a href="https://en.wikipedia.org/wiki/Probability" target="_blank">
           different ways to define probability</a>, but the definition I'd
           like to use is very practical: a probability is the relative
           frequency with which we <em>expect</em> an event to occur.
@@ -245,27 +246,27 @@ Version 1.0.0 : Mar. 16, 2021
           is either 0.48 or 0.50, depending on which method we use. </p>
 
         <p> For the type of model we'll talk about in this tutorial (namely a
-          <a href="https://en.wikipedia.org/wiki/Thurstonian_model" target="_parent">Thurstonian model</a>),
+          <a href="https://en.wikipedia.org/wiki/Thurstonian_model" target="_blank">Thurstonian model</a>),
           we'll also assume that the perceived sweetness varies according to a
-          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_parent">normal distribution</a>
+          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank">normal distribution</a>
           (also called a
           <a href="https://www.mathsisfun.com/data/standard-normal-distribution.html">bell curve</a>),
           and so the probability of getting a certain level of perceived
           sweetness can be described using the
-          <a href="https://www.mathsisfun.com/data/standard-deviation.html" target="_parent">standard deviation</a>
+          <a href="https://www.mathsisfun.com/data/standard-deviation.html" target="_blank">standard deviation</a>
           of the perceived values, called sigma (represented with the Greek
           letter <em>&sigma;</em> or the letter <em>s</em>).  The standard
           deviation is a
-          <a href="https://en.wikipedia.org/wiki/Standard_deviation" target="_parent">measure of the amount of variation in a set of values</a>.
+          <a href="https://en.wikipedia.org/wiki/Standard_deviation" target="_blank">measure of the amount of variation in a set of values</a>.
           For simplicity, we'll also assume that the standard deviations for
           the perception of <b>A</b> and <b>B</b> are the same. (A
           normal distribution is commonly found in nature. If an event
           in nature (or perception) is the result of many independent
           processes, the
-          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_parent">central limit theorem says that the resulting event will have a
+          <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank">central limit theorem says that the resulting event will have a
             normal distribution</a>. In the case of bitterness, it would
           be better to model the perception as (at least)
-          <a href="https://en.wikipedia.org/wiki/Multimodal_distribution" target="_parent">bimodal</a>,
+          <a href="https://en.wikipedia.org/wiki/Multimodal_distribution" target="_blank">bimodal</a>,
           or the summation of two (or more) normal distributions,
           reflecting both the variance within an individual and the
           different perceptual-unit means for "super-tasters" and less
@@ -286,7 +287,7 @@ Version 1.0.0 : Mar. 16, 2021
           stimulus level. (The "|" or "given" notation in probabilities
           can be thought of as first constraining the world of
           possibilities so that <em>Y</em> is considered to be true.
-          This <a href="https://en.wikipedia.org/wiki/Conditional_probability" target="_parent">conditional probability </a>
+          This <a href="https://en.wikipedia.org/wiki/Conditional_probability" target="_blank">conditional probability </a>
           function tells us the probability of observing <em>x</em>
           "under the condition" that <em>Y</em> is true.  For example,
           <em>p</em>(sunshine | summer) is a large value in most places
@@ -313,12 +314,12 @@ Version 1.0.0 : Mar. 16, 2021
           at providing magnitude estimates of their perceptions. We're
           much better at communicating relative perceptions. This model
           is therefore called a
-          <a href="https://en.wikipedia.org/wiki/Latent_variable" target="_parent">latent</a>
+          <a href="https://en.wikipedia.org/wiki/Latent_variable" target="_blank">latent</a>
           (or "hidden") model, because it can't be observed directly. </p>
 
         <p> An important concept in this model is that of <em>d'</em>
           (d prime), or the
-          <a href="https://en.wikipedia.org/wiki/Sensitivity_index" target="_parent">sensitivity index</a>.
+          <a href="https://en.wikipedia.org/wiki/Sensitivity_index" target="_blank">sensitivity index</a>.
           Intuitively, <em>d'</em> is a measurement of how perceptually
           different two stimuli are. If two stimuli are perceptually
           indistinguishable, the <em>d'</em> value is 0. If two stimuli are
@@ -328,22 +329,22 @@ Version 1.0.0 : Mar. 16, 2021
           deviation of the perception of these stimuli. We have conveniently
           defined the difference between the means as always 1.0, and so in
           our case <em>d'</em> is 1.0/&sigma;.
-          (<a href="https://en.wikipedia.org/wiki/Effect_size#Cohen's_d" target="_parent">Cohen's <em>d</em></a> effect size is the same as <em>d'</em>, in
+          (<a href="https://en.wikipedia.org/wiki/Effect_size#Cohen's_d" target="_blank">Cohen's <em>d</em></a> effect size is the same as <em>d'</em>, in
           case you're familiar with effect size.) </p>
 
         <p> This leads to the concept of a
-          "<a href="https://en.wikipedia.org/wiki/Just-noticeable_difference" target="_parent">just noticeable difference</a>",
+          "<a href="https://en.wikipedia.org/wiki/Just-noticeable_difference" target="_blank">just noticeable difference</a>",
           or JND. The JND is the threshold at which a stimulus or change is
           detected half the time. This forms an <a
-href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-Sensory-Testing-Hout/110c8065c7a7848548f8041a4b763e848306027d" target="_parent">often-used threshold</a> for determining whether two stimuli are the
+href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-Sensory-Testing-Hout/110c8065c7a7848548f8041a4b763e848306027d" target="_blank">often-used threshold</a> for determining whether two stimuli are the
           same or different. In a
-          <a href="https://en.wikipedia.org/wiki/Two-alternative_forced_choice" target="_parent">two-alternative forced-choice</a>
+          <a href="https://en.wikipedia.org/wiki/Two-alternative_forced_choice" target="_blank">two-alternative forced-choice</a>
           (2-AFC) task, if the two stimuli are identical then performance
           will be 50% (reflecting random guessing). The JND is at 75% correct
           in a 2-AFC task, halfway in between random guessing (50%) and
           perfect identification (100%). A 75% correct response rate on a
           2-AFC task corresponds with a <em>d'</em> value of 0.954, using
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">a formula for this mapping</a>.
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_blank">a formula for this mapping</a>.
           It is common to round <em>d'</em> up to 1.0, corresponding to 76%
           correct on the 2-AFC task. </p>
 
@@ -387,7 +388,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           the standard deviation (<em>&sigma;</em>) is, <b>(c)</b> the
           probability of discrimination, <em>p<sub>d</sub></em>, (also
           called the
-          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0950329313000554" target="_parent">proportion of distinguishers</a>)
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0950329313000554" target="_blank">proportion of distinguishers</a>)
           with a value of 0% for perceptually-identical stimuli and 100% for
           easily-distinguished stimuli, and <b>(d)</b> what the
           probability of correctly identifying <b>A</b> from <b>B</b>
@@ -428,7 +429,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           <em>p<sub>2AFC</sub></em>, will also be called the "model
           correct" or "theoretical correct" value. For the 2-AFC task,
           the formula can be found in a
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">paper by R. H. B. Christensen, Equation 6</a>.
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_blank">paper by R. H. B. Christensen, Equation 6</a>.
           As the number of simulation tests increases (e.g. from 10 to 100
           to 1000), the percent correct from the simulation becomes closer
           to the model-correct value. </p>
@@ -496,10 +497,10 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> This tutorial describes the case where each test sample is
           presented to a different test subject, which is called a
-          "<a href="https://dictionary.apa.org/between-subjects-design" target="_parent">between-subjects</a>"
+          "<a href="https://dictionary.apa.org/between-subjects-design" target="_blank">between-subjects</a>"
           design. It is also possible to present each test sample to the
           same subject, which is called a
-          "<a href="https://dictionary.apa.org/within-subjects-design" target="_parent">within-subjects</a>"
+          "<a href="https://dictionary.apa.org/within-subjects-design" target="_blank">within-subjects</a>"
           design. A within-subjects design can have lower perceptual
           variation (<em>&sigma;</em> in <a href="#Section3">Section 3</a>)
           and therefore a larger value of <em>d'</em>, but the results will
@@ -522,7 +523,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           the stimuli along that known dimension (e.g. sweetness). There are
           a number of other types of perceptual tests not discussed here,
           including
-          <a href="https://en.wikipedia.org/wiki/Discrimination_testing" target="_parent">duo-trio, paired comparison, ABX, two-out-of-five, and same-different</a>.
+          <a href="https://en.wikipedia.org/wiki/Discrimination_testing" target="_blank">duo-trio, paired comparison, ABX, two-out-of-five, and same-different</a>.
         </p>
 
         <p> <a href="#Worksheet2">Worksheet 2</a> (below) shows the same
@@ -533,7 +534,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> In a 3-AFC test, each subject is given two samples of <b>A</b>
           and one sample of <b>B</b>, and is
-          <a href="http://www.columbia.edu/~ld208/jmp12.pdf" target="_parent">asked to pick the one with the largest value of an attribute</a>
+          <a href="http://www.columbia.edu/~ld208/jmp12.pdf" target="_blank">asked to pick the one with the largest value of an attribute</a>
           (e.g. the highest level of sweetness). Because <b>B</b> is
           known to have the largest value of this attribute, the subject
           is effectively asked to pick stimulus <b>B</b> from the three
@@ -572,7 +573,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           is called the "model correct" value. The formulas for the
           model-correct value from the 3-AFC and triangle test can be found
           in the
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">paper by Christensen in Equations 5 and 7, respectively</a>.
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_blank">paper by Christensen in Equations 5 and 7, respectively</a>.
           It can be seen that for any non-zero value of <em>d'</em> the
           3-AFC test has a larger model-correct value than the triangle
           test, until both tests reach 100% accuracy. This is because of
@@ -580,7 +581,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           one sample that is different is more likely to be an extreme
           value than it is to be the sample with the largest distance to
           the other two. (H. S. Lee and M. O'Mahony have a
-          <a href="https://www.researchgate.net/publication/285865885_Sensory_difference_testing_Thurstonian_models" target="_parent">more detailed and better explanation of the differences between these tests</a>.)</p>
+          <a href="https://www.researchgate.net/publication/285865885_Sensory_difference_testing_Thurstonian_models" target="_blank">more detailed and better explanation of the differences between these tests</a>.)</p>
 
         <p> In <a href="#Worksheet2">Worksheet 2</a>, just below the test
           type, you can enter the number of subjects for a simulation, as
@@ -736,7 +737,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> A trial that has a probability of <em>p</em> correct
           responses from <em>N</em> subjects can be described using a
-          <a href="https://en.wikipedia.org/wiki/Binomial_distribution" target="_parent">binomial distribution</a>.
+          <a href="https://en.wikipedia.org/wiki/Binomial_distribution" target="_blank">binomial distribution</a>.
           A binomial distribution is a function,
           Binomial(<em>x</em>; <em>N</em>, <em>p</em>), which returns
           the probability of seeing exactly <em>x</em> correct values
@@ -749,7 +750,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           equals 0.634 (i.e. Binomial(6; 10, 0.634) = 0.24), then out of
           100 trials we expect that on average there will be 24 trials
           with exactly 6 out of 10 correct responses. The
-          "<a href="https://en.wikipedia.org/wiki/Expected_value" target="_parent">expected</a>"
+          "<a href="https://en.wikipedia.org/wiki/Expected_value" target="_blank">expected</a>"
           or most likely value from a binomial distribution is with <em>x</em>
           equal to <em>N</em> &times; <em>p</em>. (Although the values of
           <em>x</em> used by the binomial function are integers, this expected
@@ -909,7 +910,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           are perceptually the same (which we hope to disprove) requires
           no knowledge about all the ways in which they might be
           different. We'll call this hypothesis H0, or the
-          <a href="https://en.wikipedia.org/wiki/Exclusion_of_the_null_hypothesis" target="_parent">null hypothesis</a>.
+          <a href="https://en.wikipedia.org/wiki/Exclusion_of_the_null_hypothesis" target="_blank">null hypothesis</a>.
           For H0, we only need to know the number of subjects in order to
           create a binomial distribution; the probability of a correct
           response is the same as random guessing, or 0.333. We don't need
@@ -932,7 +933,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           <em>p</em>(<em>X</em>&ge;<em>C</em> | H0)), and so we compute
           probabilities from the binomial distribution for all values from
           <em>C</em> to <em>N</em> and sum them up. This is called the
-          "<a href="https://en.wikipedia.org/wiki/P-value" target="_parent"><em>p</em> value</a>"
+          "<a href="https://en.wikipedia.org/wiki/P-value" target="_blank"><em>p</em> value</a>"
           of the experiment. If this <em>p</em> value, or the probability
           of getting a result of at least <em>C</em> when H0 is true, is
           less than some threshold, then we conclude that this result is
@@ -942,7 +943,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           not zero, and we therefore conclude that there is a perceptual
           difference. A test that rejects H0 is said to have demonstrated
           significance. This type of hypothesis testing is referred to as
-          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_parent">null hypothesis significance testing</a>", or NHST.</p>
+          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_blank">null hypothesis significance testing</a>", or NHST.</p>
 
         <p> One complication with NHST is that if we don't reject H0, then
           we can't say anything at all about the two stimuli. Not
@@ -961,7 +962,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           definition of H0. For now, though, we'll stick with the classics.
 
         <p> The threshold for rejecting H0 is called <em>alpha</em>,
-          <a href="https://en.wikipedia.org/wiki/Statistical_significance" target="_parent">the probability of rejecting the null hypothesis given that it
+          <a href="https://en.wikipedia.org/wiki/Statistical_significance" target="_blank">the probability of rejecting the null hypothesis given that it
             was assumed to be true</a>. I'll use the subscript H0 to be
           clear that this is the threshold for rejecting H0, i.e.
           <em>alpha<sub>H0</sub></em>.  A commonly used value for
@@ -1197,13 +1198,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> H1 is a different hypothesis about the value of <em>d'</em>.
           What should this value be? This is a bit of a
-          <a href="https://en.wikipedia.org/wiki/Catch-22_(logic)" target="_parent">catch-22</a>.
+          <a href="https://en.wikipedia.org/wiki/Catch-22_(logic)" target="_blank">catch-22</a>.
           Ideally, it is the best estimate we already have for <em>d'</em>,
           based on
-          <a href="https://research.usu.edu//irb/wp-content/uploads/sites/12/2015/08/A_Researchers_Guide_to_Power_Analysis_USU.pdf" target="_parent">pilot data or a literature search</a>.
+          <a href="https://research.usu.edu//irb/wp-content/uploads/sites/12/2015/08/A_Researchers_Guide_to_Power_Analysis_USU.pdf" target="_blank">pilot data or a literature search</a>.
           This ideal isn't always practical, though.  There are many times
           when we have no
-          <a href="https://en.wikipedia.org/wiki/Pilot_experiment" target="_parent">pilot data</a>. Using values of <em>d'</em> from similar studies
+          <a href="https://en.wikipedia.org/wiki/Pilot_experiment" target="_blank">pilot data</a>. Using values of <em>d'</em> from similar studies
           found in the literature is one possibility, but the uncertainty
           in our estimate will be very large even if we can find several
           such studies. And, of course, sometimes we're performing an
@@ -1213,14 +1214,14 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
         <p> Without pilot data or an estimate from the literature, a
           common option in some fields is to guess that <em>d'</em> is
           0.5, which is considered a
-          <a href="https://www.simplypsychology.org/effect-size.html" target="_parent">"medium" effect size</a>.
-          <a href="https://en.wikipedia.org/wiki/Jacob_Cohen_(statistician)" target="_parent">Jacob Cohen</a>
+          <a href="https://www.simplypsychology.org/effect-size.html" target="_blank">"medium" effect size</a>.
+          <a href="https://en.wikipedia.org/wiki/Jacob_Cohen_(statistician)" target="_blank">Jacob Cohen</a>
           classified an effect size of 0.5 as medium
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_parent">because such an effect is "visible to the naked eye of a careful observer"</a>,
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_blank">because such an effect is "visible to the naked eye of a careful observer"</a>,
           but he noted that his suggested categorizations should be flexible
           and he
-          "<a href="https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1536&amp;context=jmasm" target="_parent">warned about ... them becoming de facto standards for research</a>".  Instead, his
-          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_parent">ballpark categories provide a general guide that should also be informed by context</a>".
+          "<a href="https://digitalcommons.wayne.edu/cgi/viewcontent.cgi?article=1536&amp;context=jmasm" target="_blank">warned about ... them becoming de facto standards for research</a>".  Instead, his
+          "<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3444174/" target="_blank">ballpark categories provide a general guide that should also be informed by context</a>".
           For perceptual testing, a <em>d'</em> of 0.5 means a probability
           of discrimination (<em>p<sub>d</sub></em>, defined in
           <a href="#Section3">Section 3</a>) of only 28%, which seems
@@ -1243,13 +1244,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           rejecting H0 when it is true (<em>alpha<sub>H0</sub></em>), we
           can also estimate the probability of an inconclusive result
           when H1 is true, called
-          <a href="https://ncu.libguides.com/statsresources/alphabeta" target="_parent"><em>beta</em></a>.
+          <a href="https://ncu.libguides.com/statsresources/alphabeta" target="_blank"><em>beta</em></a>.
           I will refer to it as <em>beta<sub>H1</sub></em> to emphasize
           that this probability is conditioned on H1 being true. It is
           common to target a <em>beta<sub>H1</sub></em> value of 0.20,
           meaning that if H1 is true we will have an inconclusive result
           (on average) 20% of the time. The
-          <a href="https://en.wikipedia.org/wiki/Power_of_a_test" target="_parent">power</a>
+          <a href="https://en.wikipedia.org/wiki/Power_of_a_test" target="_blank">power</a>
           of a test is defined as 1 &minus; <em>beta<sub>H1</sub></em>, and
           so a test with high power has a low probability of being
           inconclusive. </p>
@@ -1436,17 +1437,17 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           not require demonstrating statistical significance. What happens
           when we conduct a test and the results don't demonstrate
           significance? Rather than give up entirely, we can use the <a
-          href="https://en.wikipedia.org/wiki/Likelihood-ratio_test" target="_parent">likelihood ratio</a> to interpret our result. The likelihood ratio tells
+          href="https://en.wikipedia.org/wiki/Likelihood-ratio_test" target="_blank">likelihood ratio</a> to interpret our result. The likelihood ratio tells
           us how likely one hypothesis is over the other, given the
           result. There is no threshold for acceptance, but the higher the
           ratio, the more compelling the result is. </p>
 
-        <p> The <a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_parent">likelihood</a>
+        <p> The <a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_blank">likelihood</a>
           of a hypothesis given a result is defined as the probability
           of the result given the hypothesis. In mathematical notation,
           <em>L</em>(<em>H</em> | <em>C</em>) = <em>p</em>(<em>C</em> |
           <em>H</em>). The likelihood function, <em>L</em>,
-          "<a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_parent">measures the goodness of fit of a statistical model to a sample of
+          "<a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_blank">measures the goodness of fit of a statistical model to a sample of
           data</a>". When talking about probabilities, the hypothesis
           is fixed (or given) and we evaluate the possible outcomes.
           With likelihoods, the outcome is fixed (e.g. 13 correct
@@ -1460,9 +1461,9 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           likelihood of H1 divided by the likelihood of H0, or <em>L</em>(H1
           | <em>C</em>) / <em>L</em>(H0 | <em>C</em>). (For those of
           you who are into
-          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_parent">Bayesian statistics</a>,
+          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_blank">Bayesian statistics</a>,
           the likelihood ratio is the same as the
-          <a href="https://rss.onlinelibrary.wiley.com/doi/pdf/10.1111/j.1740-9713.2006.00204.x" target="_parent">Bayes factor</a>
+          <a href="https://rss.onlinelibrary.wiley.com/doi/pdf/10.1111/j.1740-9713.2006.00204.x" target="_blank">Bayes factor</a>
           when constraining the Bayes factor hypotheses to single outcomes.)
           If <em>L</em>(H1 | <em>C</em>) is 0.132 and <em>L</em>(H0 |
           <em>C</em>) is 0.025, then we can say that H1 is 5.3 times more
@@ -1482,7 +1483,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           interesting to consider a range of possible <em>d'</em>
           values for H1, such as <em>d'</em> &ge; 1. However, doing this
           (using the Bayes factor), requires knowing or assuming <a
-            href="https://en.wikipedia.org/wiki/Prior_probability" target="_parent">prior probabilities</a>
+            href="https://en.wikipedia.org/wiki/Prior_probability" target="_blank">prior probabilities</a>
           that we don't really know anything about.
           To keep things simple, we can focus on two specific values of
           <em>d'</em>. </p>
@@ -1543,7 +1544,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           likelihood ratio will always be greater than or equal to 1.)
           If this likelihood ratio is greater than 200, the value "200+"
           is shown for visual clarity, because
-          <a href="https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1167&amp;context=jps" target="_parent">anything over 150 is generally considered "decisive"</a>.
+          <a href="https://docs.lib.purdue.edu/cgi/viewcontent.cgi?article=1167&amp;context=jps" target="_blank">anything over 150 is generally considered "decisive"</a>.
           For example, a value such as "H1 = 18.51" says that the <em>d'</em>
           value from H1 is 18.51 times more likely than a <em>d'</em>
           value of 0. A value such as "H0 = 2.24" says that a <em>d'</em>
@@ -1627,7 +1628,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           strongly suggest that neither H0 nor H1 are true. If the true
           value of <em>d'</em> isn't even close to either hypothesis,
           then the likelihood ratio of the two hypotheses is in some sense a
-          "<a href="https://en.wikipedia.org/wiki/Misdirection_(magic)" target="_parent">misdirection</a>,"
+          "<a href="https://en.wikipedia.org/wiki/Misdirection_(magic)" target="_blank">misdirection</a>,"
           forcing us to look over here (at H0 and H1) when the interesting
           information is over there (a much larger <em>d'</em>).
           Fortunately, there is an easy solution to this problem that we
@@ -1654,13 +1655,13 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> Testing multiple hypotheses at the same time is possible,
           but it is important to understand the
-          <a href="https://www.stat.berkeley.edu/~mgoldman/Section0402.pdf" target="_parent">implications</a>.
+          <a href="https://www.stat.berkeley.edu/~mgoldman/Section0402.pdf" target="_blank">implications</a>.
           A common pitfall with testing multiple hypotheses is that as
           you add more and more comparisons, it becomes more and more
           likely that at least one hypothesis will demonstrate
           significance. (This effect has been nicely illustrated by
-          <a href="https://en.wikipedia.org/wiki/Randall_Munroe" target="_parent">Randall Munroe</a>
-          at <a href="https://xkcd.com/882/" target="_parent">XKCD</a>.)
+          <a href="https://en.wikipedia.org/wiki/Randall_Munroe" target="_blank">Randall Munroe</a>
+          at <a href="https://xkcd.com/882/" target="_blank">XKCD</a>.)
           If the success of an experiment (or a series of experiments) is
           dependent on demonstrating significance in only one case, then
           testing multiple hypotheses often makes it (artificially) easier
@@ -1686,7 +1687,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           values of <em>d'</em>, and then select the hypothesis that
           best fits the data? The first reason is that this is
           confounding a
-          <a href="https://en.wikipedia.org/wiki/Hypothesis" target="_parent"><em>hypothesis</em></a>
+          <a href="https://en.wikipedia.org/wiki/Hypothesis" target="_blank"><em>hypothesis</em></a>
           (which, by definition, is made before conducting a test) with
           a <em>result</em>. If we specify our hypothesis based on the
           outcome of a test, then it is a result, not a hypothesis. We
@@ -1835,7 +1836,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           according to our model, a perceptual distance with the true
           value of <em>d'</em>. We don't know if our test result is at
           the peak of this binomial distribution associated with <em>d'</em>,
-          but <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Book%3A_Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.02%3A_The_Binomial_Distribution" target="_parent">the best (maximum-likelihood) estimate we have of <em>p</em> for this test is <em>C</em>/<em>N</em></a>
+          but <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Book%3A_Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.02%3A_The_Binomial_Distribution" target="_blank">the best (maximum-likelihood) estimate we have of <em>p</em> for this test is <em>C</em>/<em>N</em></a>
           which we can call <em>p<sub>est</sub></em>. Because this test has
           the true value of <em>d'</em>, the best estimate of
           <em>p<sub>d'</sub></em> is the same as <em>p<sub>est</sub></em>,
@@ -1847,7 +1848,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           yields a unique value of <em>p</em>. Previously we've computed
           <em>p</em> from <em>d'</em>, <em>N</em>, and the test type
           (Sections 3 and 4, using
-          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_parent">equations from Christensen</a>).
+          <a href="https://cran.r-project.org/web/packages/sensR/vignettes/methodology.pdf" target="_blank">equations from Christensen</a>).
           We can determine the value of <em>d'</em> that corresponds with
           <em>p<sub>est</sub></em> by computing <em>p</em> for a large
           number of values of <em>d'</em> and finding the closest match
@@ -1876,10 +1877,10 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           The more atypical our result <em>C</em> is, compared with a
           large number of similar (but hypothetical) tests, the worse
           our estimate is. We will never know how good our estimate is,
-          but we can use <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_parent">confidence intervals</a>
+          but we can use <a href="https://en.wikipedia.org/wiki/Confidence_interval" target="_blank">confidence intervals</a>
           to get some sense of the likely range of <em>d'</em> values.
           Before getting to the confidence interval, we should define the
-          "<a href="https://www.statisticshowto.com/population-mean/" target="_parent">population mean</a>". If we had measurements of <em>C</em> from every
+          "<a href="https://www.statisticshowto.com/population-mean/" target="_blank">population mean</a>". If we had measurements of <em>C</em> from every
           human on earth taking multiple tests, each with the true value
           of <em>d'</em>, we could compute the mean value of <em>C</em>
           associated with <em>d'</em> over all humans; this mean is the
@@ -1894,7 +1895,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           In particular, if one were to conduct the same experiment
           again with the same number of subjects and otherwise identical
           circumstances, the 95% confidence interval says that
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_parent">95% of the time that one does such an experiment, the confidence
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5635437/" target="_blank">95% of the time that one does such an experiment, the confidence
             interval will contain the population mean</a>.
           Once we have a lower limit and upper limit for the expected number
           of correct responses (based on the confidence interval), we can
@@ -1907,12 +1908,12 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
 
         <p> There are many ways to compute a confidence interval. My
           favorite is the
-          "<a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/MIT18_05S14_Reading24.pdf" target="_parent">bootstrap confidence interval</a>".
+          "<a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/MIT18_05S14_Reading24.pdf" target="_blank">bootstrap confidence interval</a>".
           It has the advantages of not making assumptions about the
           underlying
-          <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions" target="_parent">distribution of the data</a>,
+          <a href="https://en.wikipedia.org/wiki/List_of_probability_distributions" target="_blank">distribution of the data</a>,
           it doesn't assume that the interval is symmetric around the
-          <a href="https://en.wikipedia.org/wiki/Point_estimation" target="_parent">point estimate</a>,
+          <a href="https://en.wikipedia.org/wiki/Point_estimation" target="_blank">point estimate</a>,
           and it's very easy to implement on a computer.  The worksheet
           below uses bootstrapping to compute the confidence interval. </p>
 
@@ -1923,7 +1924,7 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           for most cases. On the right-hand side, under
           <b><em>d'</em> Estimates:</b>, there are three rows. The first
           row shows the
-          (<a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation" target="_parent">maximum-likelihood</a>,
+          (<a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation" target="_blank">maximum-likelihood</a>,
           or ML) estimate of <em>d'</em> based on the number of correct
           responses. The second row shows the lower estimate of expected
           correct responses based on the specified confidence interval,
@@ -2014,12 +2015,12 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
         <p> This tutorial has presented a number of techniques for
           evaluating whether two stimuli are perceptually different or
           not. If you're a fan of
-          <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_parent">Ronald Fisher</a>,
+          <a href="https://en.wikipedia.org/wiki/Ronald_Fisher" target="_blank">Ronald Fisher</a>,
           then go ahead and use only H0 and <i>alpha</i> in your analysis.
           (If you're really a fan, then
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_parent">be flexible with <i>alpha</i></a>.)
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_blank">be flexible with <i>alpha</i></a>.)
           If you prefer the
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_parent">hybrid Fisher and Neyman-Pearson approach</a>
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4347431/" target="_blank">hybrid Fisher and Neyman-Pearson approach</a>
           described in <a href="#Section7">Section 7</a>,
           then use beta and the power of the test. If it makes you
           uncomfortable to consider rejecting H1, then don't attempt it.
@@ -2056,15 +2057,15 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
           experiment. Such probabilities can give us an even better
           picture of our data if we have them. In some fields it may be
           possible to estimate these probabilities; for example,
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4448847/#RSOS140216C7" target="_parent">there may be only a 10% chance of a clinical trial being successful</a>,
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4448847/#RSOS140216C7" target="_blank">there may be only a 10% chance of a clinical trial being successful</a>,
           and so p(H0) is 0.90 and p(H1) is 0.10. For perceptual testing,
           I'm not sure that these probabilities can be estimated very well
           in the general case, and so I've left them, and the whole world of
-          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_parent">Bayesian estimation</a>,
+          <a href="https://en.wikipedia.org/wiki/Bayesian_statistics" target="_blank">Bayesian estimation</a>,
             out of this tutorial. </p>
 
         <p> It has been commented that
-          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6945059/" target="_parent">researchers should publish not just the results that show success, but all results</a>.
+          <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6945059/" target="_blank">researchers should publish not just the results that show success, but all results</a>.
           When simply testing H0, the story that "we did all this work and
           can conclude nothing" is not very interesting to the writer, the
           reviewer, or the reader. However, being able to say "we did all
@@ -2195,7 +2196,8 @@ href="https://www.semanticscholar.org/paper/Measuring-Meaningful-Differences%3A-
     </div>
     <hr>
     Version 1.0.0 : March 16, 2021. Initial version.<br>
-    <p>Go to <a href="index.html" target="_top">AlchemyOverlord github home page</a></p>
+    Version 1.0.1 : Nov. 25, 2021. Minor updates.<br>
+    <p>Go to <a href="index.html" target="_top">AlchemyOverlord home page</a></p>
     <p> Copyright &#169; 2021 John-Paul Hosom, all rights reserved. While I
       hope that you find this page useful, I make no guarantees about
       the accuracy or suitability of the results.</p>

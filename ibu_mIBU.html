@@ -24,6 +24,7 @@ Version 1.2.14 : Nov  7, 2020
 Version 1.2.15 : Nov 22, 2020
 Version 1.2.16 : Aug 28, 2021
 Version 1.2.17 : Oct  5, 2021
+Version 1.2.18 : Nov 25, 2021
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -38,7 +39,7 @@ Version 1.2.17 : Oct  5, 2021
   <h2>mIBU Calculator</h2>
   <p>This page provides a calculator for predicting IBUs using the mIBU
   method, which is described in a blog post
-  <a href="https://alchemyoverlord.wordpress.com/2015/05/12/a-modified-ibu-measurement-especially-for-late-hopping/">
+  <a href="blog/06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">
   "A Modified IBU Calculation (Especially for Late Hopping and Whirlpool Hops)"</a>.  This method modifies the
   Tinseth IBU formula to account for post-flameout utilization.
   This calculator takes into account utilization from any hop stand or whirlpool,
@@ -46,19 +47,19 @@ Version 1.2.17 : Oct  5, 2021
   counterflow chiller, or ice bath.
   There are a number of additional modifications to the Tinseth formula, all of which
   are optional:
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
   an alpha-acid solubility limit</a>,
-  <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
   adjustment of IBUs based on wort pH</a>,
   adjustment of IBUs based on
-  <a href="https://alchemyoverlord.wordpress.com/2020/10/21/how-lautering-and-wort-clarity-affect-ibus/">
+  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">
   wort clarity</a> and
-  <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
+  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">
   krausen loss</a>,
-  and <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
+  and <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
   adjustment based on the use of hop pellets instead of whole cones</a>.
   This calculator is described in more detail in
-  <a href="https://alchemyoverlord.wordpress.com/2018/05/07/an-on-line-calculator-for-the-mibu-technique/">
+  <a href="blog/15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">
   An On-Line Calculator for the mIBU Technique</a>.
   </p>
 
@@ -174,13 +175,13 @@ Version 1.2.17 : Oct  5, 2021
   <p style="margin-left:3em">
   <span id="solubilityLimitColor">
   <input type="checkbox" id="ibu.applySolubilityLimitCheckbox" onchange="common.set(ibu.applySolubilityLimitCheckbox,1)"> Apply
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
   alpha-acid solubility-limit correction</a>
   </span>
   <br>
   <span id="pHColor">
   <input type="checkbox" id="ibu.pHCheckbox" onchange="common.set(ibu.pHCheckbox,1)"> Apply
-  <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
   pH correction</a> with wort pH =
   <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.pH" onchange="common.set(ibu.pH, 1)">
     <input type="radio" value="preBoilpH" id="preBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off">pre-boil or
@@ -315,15 +316,16 @@ cooling with immersion chiller.<br>
 <b>1.2.6</b>: (2019-Jun-28) Adjust volume use in computations; impacts hopping rates around 200ppm.<br>
 <b>1.2.7</b>: (2020-Feb-21) Add ability to save and load files.<br>
 <b>1.2.8</b>: (2020-Jun-09) Minor update to the effect of pH on auxiliary bittering compounds.<br>
-<b>1.2.9</b>: (2020-Sep-16) Many thanks to Marko Heyns at <a href="https://grainfather.com/" target="_parent">Grainfather</a> for finding several bugs related to the solubility limit and temperature decay!<br>
+<b>1.2.9</b>: (2020-Sep-16) Many thanks to Marko Heyns at <a href="https://grainfather.com/" target="_blank">Grainfather</a> for finding several bugs related to the solubility limit and temperature decay!<br>
 <b>1.2.10</b>: (2020-Sep-20) Update solubility-limit model and pH-loss model</br>
 <b>1.2.11</b>: (2020-Oct-21) Add adjustment factor for wort clarity<br>
 <b>1.2.12</b>: (2020-Oct-31) Add adjustment factor for pellets<br>
 <b>1.2.13</b>: (2020-Nov-01) Stop when degree of utilization reaches 0.01 instead of 0.001<br>
-<b>1.2.14</b>: (2020-Nov-07) Thanks again to Marko Heyns at <a href="https://grainfather.com/" target="_parent">Grainfather</a> for finding a bug with the use of pellets at high hopping rate!<br>
+<b>1.2.14</b>: (2020-Nov-07) Thanks again to Marko Heyns at <a href="https://grainfather.com/" target="_blank">Grainfather</a> for finding a bug with the use of pellets at high hopping rate!<br>
 <b>1.2.15</b>: (2020-Nov-22) Minor bug fixes, checking, and cleanup.<br>
 <b>1.2.16</b>: (2021-Aug-28) Minor HTML cleanup.<br>
 <b>1.2.17</b>: (2021-Oct-05) Specify meaning of "boil or steep time". Check for log of negative number.<br>
+<b>1.2.18</b>: (2021-Nov-25) Minor updates.<br>
 </small>
 
 <p>
@@ -331,9 +333,7 @@ cooling with immersion chiller.<br>
 Navigate to:<br>
 <a href="#top_mIBU">top of page</a>
 <br>
-<a href="index.html" target="_top">AlchemyOverlord github home page</a>
-<br>
-<a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+<a href="index.html" target="_top">AlchemyOverlord home page</a>
 <p>
 <p>
 <center>

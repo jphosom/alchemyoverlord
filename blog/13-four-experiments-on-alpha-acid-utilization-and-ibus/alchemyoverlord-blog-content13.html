@@ -1,0 +1,915 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Four Experiments on Alpha-Acid Utilization and IBUs</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Four Experiments on Alpha-Acid Utilization and IBUs
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+This post summarizes <a href="https://www.quotes.net/mquote/1195618" target="_blank">a series of experiments I conducted</a> in order to explore factors that might affect alpha-acid utilization and IBUs.  I found that (a) the use of a mesh bag to contain whole-cone hops had no noticeable impact on IBUs, (b) the age of the beer can have a noticeable impact on IBUs during the first few months, (c) the contribution of malt polyphenols to IBUs can be modeled as a function of original gravity, and (d) alpha-acid utilization can be modeled as linear with initial alpha-acid concentration up to roughly 270 ppm, above which an increasing alpha-acid concentration has little effect on utilization.  (I now have an additional <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">post on utilization as a function of concentration</a>.)
+
+<p>
+
+<span id="heading1">1. Introduction</span><br>
+When I was first writing the post "<a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>", the cumulative error in an early version of the quantitative model was suspiciously high.   In my <a href="../12-mibu-experiments-1-and-3/alchemyoverlord-blog-content12.html">mIBU experiments</a>, measured IBU values were always lower than predicted values when using the recommended Tinseth scaling factor of 4.15.  It seemed that the model was missing some factor (or factors) that affects IBUs.  After going over the data several times, I thought of two possibilities: (1) alpha acids, being notably sticky <a href="#references_fourExp">[e.g. Malowicki, p. 20]</a>, might adsorb much more to the aluminum kettle I was using than to the stainless steel kettles that most people use, thereby greatly decreasing utilization, or (2) my use of a mesh bag to contain the hops in the wort might be having a much greater impact on utilization than the 10% correction factor suggested by Mark Garetz <a href="#references_fourExp">[Garetz, p. 141]</a>.  While neither of these options seemed very likely, the first experiment in this series tested both of these hypotheses.  Although neither hypothesis ended up showing any significant impact on IBUs, the results here might be of interest to others who are considering such factors.  I also tested IBUs from this experiment at four and five weeks after the start of fermentation, to see if IBUs might be decreasing more quickly than I expected over time.
+
+<p>
+Tom Shellhammer has noted that the IBU measurement "yields a finite value in the range of 1-3 [IBU] for unhopped beer" <a href="#references_fourExp">[Shellhammer, p. 177]</a>.  These IBUs come from the polyphenols in malt, and presumably a greater concentration of malt yields more IBUs. I wanted to better quantify Shellhammer's statement, so I conducted a second experiment to develop a formula for malt-derived IBUs as a function of original gravity and age of the beer.
+
+<p>
+After the results of the first experiment showed that neither kettle material nor the use of a mesh bag was significantly impacting IBU values, I thought (in some desperation) that the hopping-rate correction factor described by Garetz <a href="#references_fourExp">[Garetz, p. 137]</a> might be an underestimate.  The third experiment checked to see if the hopping rate has a larger-than-expected impact on IBUs.  Results from the first experiment indicated that IBUs can decrease noticeably in the space of one week, so I also used several of the conditions from this third experiment to look at changes in IBUs over time.  These experiments showed that the hopping rate and age of the beer can have a large impact on IBUs (enough to explain the discrepancies in my earlier experiments).
+
+<p>
+The fourth experiment was designed to continue to separate the influence of isomerized alpha acids from other components that affect IBUs, in order to estimate the solubility limit of alpha acids at boiling.  (Unfortunately, I have no way to measure the concentration of isomerized alpha acids directly.)   Based on the results from the third and fourth experiments, I concluded that the solubility limit of alpha acids in boiling wort is approximately 270 ppm, under the assumption that alpha acids in the boil and above this concentration are very quickly degraded.  (I've since conducted another set of experiments along these lines, <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">Hopping Rate Correction Based on Alpha Acid Solubility</a>.)
+
+<p>
+In all of these experiments, IBU values were measured by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.  I've been very happy with the enthusiasm, support, and quantitative results from both <a href="http://www.analysislaboratory.com/" target="_blank">Analysis Laboratory</a> and <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>; I switched to Oregon BrewLab for this set of experiments for a couple of minor, more personal, reasons.  I highly recommend having your beers tested, at least so that you can calibrate your typical brewing process and resulting IBU levels with a formula such as Tinseth's.  I've also found laboratory measurements of pH, original gravity, final gravity, and color very informative.  Testing is easy, affordable, and quick.
+
+<p>
+
+<span id="heading1">2. Utilization Experiment #1</span><br>
+The first utilization experiment looked at the impact on IBUs from the material the kettle is made from (aluminum vs. stainless steel) and the use of a nylon mesh bag to contain the hops in the kettle.  This experiment also measured IBUs at four and five weeks after the start of fermentation, to see if IBUs can change noticeably during this period.
+
+<p>
+The alpha acids in hops are known to be sticky, so they readily adsorb to many surfaces <a href="#references_fourExp">[e.g. Malowicki, p. 20]</a>. I thought that the aluminum kettle I use might have some properties that increase the adsorption of alpha acids (relative to the more common stainless steel kettle used in brewing), which would lead to lower alpha-acid utilization and therefore lower IBU values.  Conditions <strong>X</strong> and <strong>Y</strong> of the first experiment test this hypothesis: Condition <strong>X</strong> was identical in all respects to Condition <strong>Y</strong>, except that <strong>X</strong> was boiled in a stainless steel kettle and <strong>Y</strong> was boiled in an aluminum kettle.
+
+<p>
+Garetz has published a number of modifications to predicted IBU values based on a wide variety of factors.  In particular, he says that "if you use a hop bag to boil your hops in, then your utilization will be decreased by about 10%" <a href="#references_fourExp">[Garetz, p. 141]</a>.  I thought that a reduction of 10% might be an underestimate, and so Conditions <strong>Y</strong> and <strong>Z</strong> tested the effect of using a mesh bag to contain whole-cone hops:  Condition <strong>Y</strong> had the hop cones floating loose in the kettle, while Condition <strong>Z</strong> kept the hops in a nylon coarse-mesh bag.   (I've found that using such a mesh bag greatly simplifies my cleanup, so it's my preferred mode of brewing.  Marshall Schott at the awesome <a href="http://brulosophy.com/" target="_blank">Brülosophy</a> site also tested bagged vs. loose hops.  He found that while the impact on IBUs was small to negligible, there was a statistically significant impact on flavor, with the loose hops being generally preferred.)
+
+<p>
+(I've labeled the conditions in this Experiment <strong>X</strong>, <strong>Y</strong>, and <strong>Z</strong> (instead of <strong>A</strong>, <strong>B</strong>, and <strong>C</strong>) in part to avoid confusion with Experiments #2, #3, and #4.)
+
+<p>
+<p>
+<span id="heading2">2.1 Experiment #1: Methods</span><br>
+Three batches of beer were brewed for this experiment: Conditions <strong>X</strong>, <strong>Y</strong>, and <strong>Z</strong>.  I made one batch of wort and divided it into equal portions for each condition.  In this case, 8.60 lbs (3.90 kg) of Briess Pilsen dry malt extract was added to 7.25 G (27.44 liters) of water to yield 7.88 G (29.83 liters) of wort, with a specific gravity of 1.051.   For each condition, 1.75 G (6.62 liters) was taken from this larger pool of wort and heated to boiling.  When boiling was reached, 0.75 oz (21.26 g) of Cascade hops (package rating of 8.1% alpha acids, 7.6% beta acids) were added.
+
+<p>
+For this experiment, I used hop cones from <a href="https://www.yakimachief.com/" target="_blank">Yakima Chief Hops (YCH)</a>, which were claimed on their website to be stored in nitrogen packaging, although this was not stated directly on the packages I used.  An analysis of the same batch of hops 6 weeks later (for Experiment #3) showed an AA rating of 7.7%, a beta-acid value of 6.8%, and an HSI of 0.231, indicating that these hops were, in fact, stored extremely well.  YCH provides <a href="https://www.yakimachief.com/commercial/resources/lot-lookup/" target="_blank">information about the lot number</a>, and this lot (PR2-YLUCAS5069) was harvested in 2015, so it was about 10 months old at the time of this first experiment (July 2016).
+
+<p>
+The wort was boiled for 20 minutes (with the kettle covered), stirring approximately every 5 minutes.  When the 20-minute mark was reached, 1.5 quarts (1.42 liters) were removed and cooled in an ice bath to 75°F (24°C) and sealed.  After about 30 more minutes of settling, almost all of this wort was decanted into a sterile 1 G (4 liter) container and sealed.
+
+<p>
+Once all conditions were ready, 0.26 oz (7.42 g) of Safale US-05 yeast was mixed with 2.6 oz (74 g) of 80°F (27°C) water.  Each condition was aerated by vigorous shaking for 90 seconds, and 0.41 oz (11.6 g) of the yeast slurry was added.
+
+<p>
+Airlocks were applied, yeast proceeded to ferment sugars into alcohol, and wort was magically transformed into beer.  After three weeks of fermentation and conditioning, 0.80 quarts (0.76 liters) of each condition were decanted and bottled with 0.10 oz (2.83 g) of sucrose.  IBU values were measured at approximately 4 and 5 weeks after the start of fermentation.
+
+<p>
+The conditions were different in only the following ways: Condition <strong>X</strong> was boiled in a stainless steel kettle with loose hops; Condition <strong>Y</strong> was boiled in an aluminum kettle with loose hops, and Condition <strong>Z</strong> was boiled in an aluminum kettle with hop cones contained within a nylon mesh bag.
+
+<p>
+<p>
+<span id="heading2">2.2 Experiment #1: Results &amp; Analysis</span><br>
+Table 1 (below) shows measured and modeled IBU values for each of the conditions in Experiment 1, along with a variety of other measured parameters (e.g. original gravity).  Post-boil volume was computed by taking the ratio of pre-boil gravity points divided by post-boil gravity points, and multiplying that by the initial volume.
+
+<p>
+The measured IBU values show about the same variation across the one-week measurement interval as they do across conditions.  The IBU values decreased by an average of 2.0 in the one week (5%), and the average difference between conditions was also 2.0.   The maximum difference between conditions was the change from 34 to 37 IBUs with the stainless steel and aluminum kettles, respectively.  This difference is probably not significant, and is also in the opposite direction of what I'd expect if alpha acids adsorb more readily to aluminum than to stainless steel.  The differences of 0 and 1 IBUs between loose hops and a mesh bag is definitely within the type of random variation I've seen in measured IBU values, and so the use of a mesh bag did not demonstrate any real impact on IBU levels.  The difference across time was consistent for all three conditions, and the time period of one week is small, and so these results, while inconclusive, suggest that IBUs <em>might</em> change quite a bit with age of the beer.
+
+<p>
+The alpha-acid concentrations of about 300 ppm are higher than the threshold that I determined later to be the approximate limit for a linear increase in IBU values with alpha-acid concentration.  In addition, I assume that Tinseth measured his IBU values soon (e.g. one week) after the start of fermentation, and my results were measured after more time had elapsed.  Therefore, with the benefit of hindsight, I'd now expect the Tinseth IBU estimates (using the recommended scaling factor of 4.15) to be a bit on the high side, since the Tinseth formula doesn't account for hopping rate (alpha-acid concentration) or age of the beer.  Results from the Tinseth formula are provided in Table 1.
+
+<p>
+In a separate blog post, I present a <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">more detailed model of IBUs</a>; the values obtained from that model for this experiment (at week 4) are also given in Table 1.  This more detailed model takes into account factors such as original gravity, hopping rate, age and storage conditions of the hops, and age of the beer.  Using this model, the AA rating at harvest was 8.9% (somewhat higher than the value on the package) and the estimated degradation factor was 1.00 (generally comparable with the HSI value of 0.247).  The root-mean-square (RMS) error from this model was 2.68 IBUs, with a maximum difference of -2.88 IBUs (Condition <strong>Y</strong>).  According to this model, isomerized alpha acids contributed 74% to the IBU values in all conditions.  These IBU values are lower than the estimates from the Tinseth equation at 20 minutes using "typical" brewing values, presumably due primarily to the concentration of alpha acids in this experiment being somewhat higher than the estimated threshold of solubility.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>condition
+X: stainless steel, loose hops
+</b></td>
+<td><b>condition
+Y: aluminum, loose hops
+</b></td>
+<td><b>condition
+Z: aluminum, mesh bag
+</b></td>
+</tr>
+<tr>
+<td><b>original gravity
+</b></td>
+<td>1.056</td>
+<td>1.058</td>
+<td>1.059</td>
+</tr>
+<tr>
+<td><b>post-boil volume</b></td>
+<td>1.67 G / 6.32 l</td>
+<td>1.47 G / 5.56 l</td>
+<td>1.52 G / 5.75 l</td>
+</tr>
+<tr>
+<td><b>final gravity
+</b></td>
+<td>1.009</td>
+<td>1.009</td>
+<td>1.009</td>
+</tr>
+<tr>
+<td><b>measured IBUs: week 4 (from OBL)
+</b></td>
+<td>34</td>
+<td>37</td>
+<td>36</td>
+</tr>
+<tr>
+<td><b>measured IBUs: week 5 (from OBL)
+</b></td>
+<td>33</td>
+<td>34</td>
+<td>34</td>
+</tr>
+<tr>
+<td><b>IBUs from Tinseth formula
+</b></td>
+<td> 37.4</td>
+<td> 38.2</td>
+<td> 38.6</td>
+</tr>
+<tr>
+<td><b>IBUs from detailed model (week 5)
+</b></td>
+<td> 30.3</td>
+<td> 31.1</td>
+<td> 31.5</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Measured and modeled values of the three conditions in the first utilization experiment.  Results provided by <a href="http://www.oregonbrewlab.com" target="_blank">Oregon BrewLab</a> are indicated by "OBL".</span>
+
+<p>
+<p>
+<span id="heading2">2.3 Experiment #1: Conclusion</span><br>
+The use of stainless steel vs. aluminum, the use of a mesh bag vs. loose hop cones, and the impact of one week of age (between 4 and 5 weeks after the start of fermentation) all had a small and inconclusive impact on measured IBU values.   The good news is that kettle material and the use of a mesh bag don't seem to require special attention when developing a quantitative model of IBUs.
+
+<p>
+
+<span id="heading1">3. Utilization Experiment #2</span><br>
+The second experiment looked at the contribution of malt polyphenols to IBUs.
+
+<p>
+<p>
+<span id="heading2">3.1 Experiment #2: Methods</span><br>
+I brewed three batches of beer with target original gravity (OG) values of 1.050, 1.070, and 1.090, and had the IBUs measured after 1, 3, and 5 weeks from the start of fermentation.  The amount of Briess Pilsen Light DME used in each batch, the volume of water, the amount of yeast, and the measured IBUs are listed in Table 2.  The first step in each condition was to combine the specified amounts of malt extract and water to obtain about 0.395 G (1.50 liters) of wort.  The extract was fully dissolved in the water before heating.  The wort was then boiled for 10 minutes with the cover off and then another 10 minutes with the cover on.  After boiling, the wort was cooled to about 75°F (24°C) using an ice bath. Then, the wort was aerated by vigorous shaking for 90 seconds, and the specified amount of Safale US-05 yeast (age 15 months) was pitched. After 1 week, the beer was decanted into a secondary fermentation vessel (plastic container).  Samples were sent to Oregon BrewLab for IBU analysis after 1, 3, and 5 weeks.  (OG analysis was performed by Oregon BrewLab on the 1-week sample.)  The conditions are labeled here <strong>M50</strong>, <strong>M70</strong>, and <strong>M90</strong> to avoid confusion with other conditions described in this post.
+
+<p>
+<p>
+<span id="heading2">3.2 Experiment #2: Results &amp; Analysis</span><br>
+The IBU values are, as expected, very small, and Oregon BrewLab was kind enough to send results with more places past the decimal point than normal.  In general, the measured values are within the expected range of 1 to 3 IBUs noted by Shellhammer <a href="#references_fourExp">[p. 177]</a>.  Except for conditions <strong>M50</strong> and <strong>M70</strong> at week 1, the IBU values all increase with original gravity.  I was expecting the measured IBU values to decrease over time, but any such decrease is within the variability of the measurements. I fit the data to a linear function, and observed the same results when using all data points or when excluding the outlier from <strong>M50</strong> at week 1. The best fit to the data is obtained with the function <em>IBU<sub>maltPP</sub></em> = <em>points</em> × 0.025, where <em>IBU<sub>maltPP</sub></em> is the contribution to the IBU from malt polyphenols and <em>points</em> is the number of points in the original gravity, e.g. an OG of 1.052 is 52 points.  This function is not dependent on the age of the beer.  With this formula, the expected IBU values from original gravities of 1.050, 1.070, and 1.090 are 1.25, 1.75, and 2.25, respectively.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>condition M50: target OG 1.050
+</b></td>
+<td><b>condition M70: target OG 1.070
+</b></td>
+<td><b>condition M90: target OG 1.090
+</b></td>
+</tr>
+<tr>
+<td><b>amount of DME
+</b></td>
+<td>0.3025 lbs / 137 g</td>
+<td>0.4325 lbs / 196 g</td>
+<td>0.5445 lbs / 247 g</td>
+</tr>
+<tr>
+<td><b>volume of added water
+</b></td>
+<td>0.3726 G / 1.41 l</td>
+<td>0.3637 G / 1.38 l</td>
+<td>0.3547 G / 1.34 l</td>
+</tr>
+<tr>
+<td><b>amount of yeast pitched
+</b></td>
+<td>0.031 oz / 0.88 g</td>
+<td>0.043 oz / 1.21 g</td>
+<td>0.054 oz / 1.53 g</td>
+</tr>
+<tr>
+<td><b>measured OG
+(from OBL)
+</b></td>
+<td>1.0467</td>
+<td>1.0706</td>
+<td>1.0878</td>
+</tr>
+<tr>
+<td><b>measured IBUs at week 1
+(from OBL)
+</b></td>
+<td>2.0</td>
+<td>1.8</td>
+<td>2.2</td>
+</tr>
+<tr>
+<td><b>measured IBUs at week 3
+(from OBL)
+</b></td>
+<td>1.5</td>
+<td> 1.8</td>
+<td> 2.0</td>
+</tr>
+<tr>
+<td><b>measured IBUs at week 5
+(from OBL)
+</b></td>
+<td> 1.2</td>
+<td> 1.6</td>
+<td> 2.2</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Target and measured values of the three conditions in the second experiment.  Results provided by <a href="http://www.oregonbrewlab.com" target="_blank">Oregon BrewLab</a> are indicated by "OBL".</span>
+
+<p>
+
+<span id="heading1">4. Utilization Experiment #3</span><br>
+The third experiment looked at two factors that might have an influence on IBUs: (1) the hopping rate (the relative amount of hops, and especially alpha acids, in the wort) and (2) the age of the beer.
+
+<p>
+There is <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">consensus in the literature</a> that "simply adding more and more hops does not produce a linear increase in the amount of bitterness produced" <a href="#references_fourExp">[Daniels, p. 85]</a>.  Garetz provides the only quantitative model for this effect that I've found <a href="#references_fourExp">[Garetz, p. 137]</a>, but he notes that some of his correction factors are "new and still largely unproven" <a href="#references_fourExp">[Garetz, p. 128]</a>.  Based on the IBU data I'd collected so far, I thought that his model might underestimate the impact of a high hopping rate.  This experiment was designed to look at the impact on IBUs resulting from adding larger and larger amounts of hops to the wort.
+
+<p>
+I've heard that IBUs decrease with age, but the time scales I've read about are on the order of six months to a year.  For example, Peacock <a href="#references_fourExp">[Peacock, p. 164]</a> reports a study of 25 commercial beers that showed a 14% relative loss of IBUs after 8 months at 72°F (22°C).   I wanted to see how IBUs change during a beer's first weeks in my homebrew bottled beer, which is different from commercial beer in that there is probably less filtering, more active yeast, and more oxygen in the headspace.
+
+<p>
+<p>
+<span id="heading2">4.1 Experiment #3: Methods</span><br>
+In this experiment, six batches of beer were brewed in one very long day.  The six conditions (Conditions <strong>A</strong> through <strong>F</strong>) had an increasing amount of hops in the same volume of wort.  Two (identical) batches of wort were created, each with 8.60 lbs (3.90 kg) of Briess Pilsen Light Dried Malt Extract added to 7.25 G (27.44 liters) of water, yielding 7.85 G (29.72 liters) of wort with specific gravity 1.051.  The first four conditions were taken from the first batch, and the remaining two conditions were taken from the second batch.
+
+<p>
+For each condition, 1.75 G (6.62 liters) were taken from the larger pool and heated to boiling.  Once boiling was reached, the wort was boiled for 7 minutes (uncovered) before adding (loose) hop cones.  After that, the wort was boiled for an additional 12 minutes, covered.  The wort was stirred twice during this time.  When the 12 minutes of boiling were finished, the wort was quickly cooled to 75°F (24°C) by transferring it into an empty pot sitting in an ice bath; a sieve was used during transfer to remove most of the hop cones, and the wort was stirred in order to cool it quickly.  The cooled wort then sat for 5 minutes before 3½ quarts (3.31 liters) were decanted into a sterile 1 G (4 liter) container (plastic milk jug).  After all conditions were ready, 0.74 oz (21 g) of Safale US-05 yeast was added to 6.10 oz (173 g) of 80°F (27°C) water.  Each condition was aerated by vigorous shaking for 90 seconds.  Then, approximately 1 oz (28 grams) of the yeast slurry was pitched into each condition, airlocks were applied, and wort fermented into beer.
+
+<p>
+The hops were the same Cascade hops (i.e. the same lot number) as Experiment #1, from <a href="https://www.yakimachief.com/" target="_blank">Yakima Chief Hops</a>, with a package rating of 8.1% AA.  The hops were analyzed by <a href="http://blogs.ifas.ufl.edu/sumterco/2018/02/05/430/" target="_blank">Alpha Analytics</a> within four days of brewing, with (as mentioned above in Experiment #1) an AA rating of 7.7%, a beta-acid value of 6.8% and an HSI of 0.231.
+
+<p>
+For Conditions <strong>A</strong> through <strong>F</strong>, the amount of hops added was 0.37 oz (10.49 g), 0.74 oz (20.98 g), 1.11 oz (31.47 g), 1.48 oz (41.96 g), 1.85 oz (52.45 g), and 2.22 oz (62.94 g), respectively.  In other words, each condition had 0.37 oz (10.49 g) more than the preceding condition, and so the rate of increase of hops in each condition was linear.
+
+<p>
+The beers were decanted and bottled after 3 weeks of fermentation and conditioning.  Conditions <strong>C</strong> and <strong>F</strong> had no priming sugar, and the other conditions were primed with 0.42 oz (11.9 g) of sucrose to target 2.1 volumes CO2.
+
+<p>
+IBU values were measured over time, relative to the start of fermentation.  Condition <strong>A</strong> was measured at 3, 7, and 13 weeks.  Condition <strong>B</strong> was measured at 3 and 7 weeks.  Condition <strong>C</strong> was measured at 1, 2, 3, 6, 7, and 13 weeks.  Conditions <strong>D</strong> and <strong>E</strong> were measured at 3 and 7 weeks.  Condition <strong>F</strong> was measured at 1, 2, 3, 6, 7, and 13 weeks.
+
+<p>
+<p>
+<span id="heading2">4.2 Experiment #3: Results &amp; Analysis</span><br>
+Table 3 (below) shows measured and estimated values for Conditions <strong>A</strong> through <strong>F</strong>.   Specific gravity values are from hydrometer readings.  The measured IBU values in Table 3 are labeled with the age of the beer in weeks from the start of fermentation.  Note that the predicted IBU values from the Tinseth equation increase linearly (a constant increase of 13.2 IBUs per condition), because this equation doesn't account for any effects of hopping rate.  The values from the "<a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">detailed model</a>" were obtained using the quantitative model developed in a previous blog post, <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.
+
+<p>
+<span style="text-decoration: underline;"><em>Analysis of Individual Results</em></span>
+In general, the measured IBU values change smoothly as a function of time and hopping rate.  The measured IBU values at week 3, however, were all higher than expected when compared with other weeks, for reasons that are unclear to me.  It's possible that I did something different when collecting these samples for analysis and bottling, e.g. decant or de-gas the finished beer in such a way as to increase the levels of bitter compounds.  Figure 1 plots IBUs from Conditions <strong>C</strong> and <strong>F</strong> as a function of age of the beer.  It can be seen that at week 3, the IBU values are about 16% higher than would be expected (since IBU values are not expected to quickly increase and then decrease; they should generally only decrease over time).  Because of this anomaly, I estimated "corrected" IBU values for week 3, by taking the measured values and multiplying by 0.8625.  The corrected values are also shown in Figure 1.   These corrected values for week 3 are close to the values from week 7 multiplied by 1.09, again indicating that results from all samples from week 3 were off by a constant factor.  In subsequent analyses using IBU values from week 3, I use the corrected values.  In addition, for Condition <strong>B</strong> at week 7, the measured IBU value was only 13, which was very surprising given that at week 3 the measured (and corrected) value was 24.15.  Oregon BrewLab re-measured this sample, coming up with 14 IBUs, indicating that there was a problem with the sample I took, not the analysis.  I sent in one more sample from Condition <strong>B</strong> at week 8, which came back at 23 IBUs.  Interpolating between 24.15 at week 3 and 23 at week 8, a corrected value for Condition <strong>B</strong> at week 7 is 23.25.  In subsequent analyses using this data point, I use this corrected value.
+
+<p>
+<img src="utilexp2-figure1-correctedibus.png" alt="Figure 1"/> <span id="caption"> Figure 1. Measured IBU values for Conditions <strong>C</strong> and <strong>F</strong> (dark lines) and corrected values for week 3 (light lines).</span>
+
+<p>
+<span style="text-decoration: underline;"><em>Modeling the Decrease in IBUs as a Function of Age</em></span>
+Figure 2 shows the measured IBU values as a function of the age of the beer, in weeks, for Conditions <strong>C</strong> and <strong>F</strong>.   The <em>rate</em> of decrease is greater for the hoppier beer, which suggests that we may be able to use a single correction factor (i.e. a multiplication factor) to account for the age of the beer when modeling IBUs, independent of the initial IBU level.  I fit the data to an exponential decay function with age measured in weeks.  For Condition <strong>C</strong>, the best fit was obtained with <em>IBU</em>(<em>age</em>) = 29.3 × e<sup>-0.0189×<em>age</em></sup> + 3.1 (with <em>IBU</em>(<em>age</em>) being the age-adjusted IBU value and <em>age</em> being the age of the beer, in weeks), yielding a value at time 0 of 32.4 IBUs.  For Condition <strong>F</strong>, the best fit was obtained with <em>IBU</em>(<em>age</em>) = 15.3 × e<sup>-0.1230×<em>age</em></sup> + 40.8, yielding a value at time 0 of 56.1 IBUs.  I then converted all IBU values to relative values by dividing by the estimated IBU level at time 0, yielding age-related multiplication factors at each age.  The best fit to the relative values of both sets was obtained with <em>factor</em>(<em>age</em>) = 0.33 × e<sup>-0.076×<em>age</em></sup> + 0.67,  where <em>factor</em>(<em>age</em>) is the age-related IBU correction factor, as a function of age of the beer.  The IBU value at time <em>age</em> can then be estimated from <em>IBU</em>(<em>age</em>) = <em>IBU</em><sub>0</sub> × (0.33 × e<sup>-0.076×<em>age</em></sup> + 0.67), where <em>IBU</em><sub>0</sub> is the (hypothetical) IBU value at time 0.  If you know the IBU level at week <em>w</em>, you can compute <em>IBU</em><sub>0</sub> from <em>IBU</em>(<em>w</em>) / (0.33 × e<sup>-0.076×<em>age</em></sup> + 0.67), and thus an IBU value at any time point.
+
+<p>
+We can also estimate the impact of age on the <em>hop</em> contribution to IBU values, by subtracting the estimated contribution of malt polyphenols from IBU values.  Because the contribution of malt polyphenols doesn't seem to change much over time, we end up with a slightly different function:  <em>factor<sub>hops</sub></em>(<em>age</em>) = 0.35 × e<sup>-0.073×<em>age</em></sup> + 0.65.  This function is useful if you're separately modeling the hop and malt contributions to the IBU, as is done in <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.
+
+<p>
+Figure 2 also shows the estimated IBUs for Conditions <strong>C</strong> and <strong>F</strong> that are obtained by multiplying the time-zero IBU estimates (32.4 and 56.1, respectively) by the age-related IBU correction factor.  The fit of the model to the data appears reasonable, although there is a very limited amount of data to judge this by.  Table 3 provides the IBU estimate at week 5 for all conditions, based on values from weeks 3 and 7 and this formula.
+
+<p>
+I then had measurements of all conditions made after 1 year.  The IBU levels seem to have stabilized before the year was up, because the exponential decay model predicted values at 52 weeks that were lower than observed.  Using IBU values from both weeks 3 and 7 to compute <em>IBU</em><sub>0</sub> values, the exponential decay model reached the measured 52-week IBU level after an average of 16 weeks.  So, IBU values seem to decrease with an exponential decay for about 16 weeks, after which they remain stable.
+
+<p>
+<img src="utilexp2-figure2-ibuvsage.png" alt="Figure 2"/> <span id="caption"> Figure 2. Measured IBU values for Conditions <strong>C</strong> and <strong>F</strong>, and estimated IBUs based on IBU estimate at time 0 and age-related IBU factor with an exponential decay.</span>
+
+<p>
+<span style="text-decoration: underline;"><em>Modeling a Hopping-Rate Correction Factor</em></span>
+Garetz has proposed a hopping-rate correction factor (described by both Hall and Daniels) that depends on volume and "desired IBU" to determine the weight of hops needed <a href="#references_fourExp">[Garetz, p. 137; Hall, p. 63; Daniels, p. 86]</a>. If we focus on full boils (instead of boiling a higher-gravity wort and then adding water), we can write the Garetz correction factor as HF(<em>IBU</em>) = (<em>IBU</em>/260) + 1, where HF is the hop-rate correction factor that depends on the (desired) IBU value, <em>IBU</em>. If the IBU value is to be estimated from the weight of hops, Hall provides a method to compute this correction factor in two steps rather than through the iterative process suggested by Garetz <a href="#references_fourExp">[Hall, p. 63]</a>.  Table 3 shows the IBU values predicted by the Tinseth equation, the IBU correction factor computed for each condition using Hall's modification of the Garetz method, and IBU values predicted from the Tinseth equation and then modified by the Garetz correction factor.
+
+<p>
+In Figure 3, the measured IBUs at weeks 3 and 7 are plotted as a function of weight of the hops added.  Figure 3 also plots, in addition to the measured IBU values, the IBU values predicted from the Tinseth equation, and the predictions from the Tinseth equation modified by the Garetz hopping-rate correction factor.  It can be seen that the correction factor provided by Garetz does underestimate the decrease in IBUs as a function of weight of the hops.  (In other words, the IBU values predicted from the Garetz correction factor are still too large when compared with measured IBU values.)  Because measured IBUs are only available for all conditions at weeks 3 and 7, and because Tinseth may have measured his IBUs much sooner after the start of fermentation, I estimated IBU values for week 1, based on the measured values from weeks 3 and 7 and the age-related correction factor described above.  It can be seen that even the IBU values at 1 week are lower than values predicted by the Garetz correction factor.
+
+<p>
+<img src="utilexp2-figure3-ibuvsweight.png" alt="Figure 3"/> <span id="caption"> Figure 3. Measured IBU values for Conditions <strong>A</strong> through <strong>F</strong> (week 3: dark blue line; week 7: light blue line), estimated IBU values for the same conditions at week 1 (very dark green line) based on age-related decay factor, IBU values predicted by Tinseth equation (red line), and IBU values predicted by Tinseth equation with Garetz hopping-rate correction factor (light green line).</span>
+
+<p>
+Rather than make adjustments to the Garetz correction factor, it seems that a simpler explanation (and model) may be possible.  This explanation depends on the fact that IBUs measure a combination of both isomerized alpha acids (IAAs) and bitter components other than IAAs (nonIAAs).  As explained by Peacock, this relationship can be expressed as <em>IBU</em> = 5/7 × (<em>IAA</em> + <em>nonIAA</em>) <a href="#references_fourExp">[Peacock, p. 157]</a>.  It may be that after the solubility limit of alpha acids is reached, adding more alpha acids to the wort doesn't contribute any more IAAs to the beer.  (In other words, isomerization only occurs for the alpha acids that are dissolved in wort.)  However, adding more and more nonIAAs may continue to provide a linear contribution to the IBU measurement.  This would explain the increase in IBUs in Figure 3 looking like two separate lines: up to around 0.75 oz (21 g) in this experiment, the IAAs and nonIAAs both contribute linearly and equally to the IBU; above 0.75 oz (21 g), the IAA level is constant but the nonIAA level continues to increase linearly, resulting in a line with a more shallow slope.
+
+<p>
+Figure 4 illustrates this concept, with initial concentration of alpha-acids (in parts per million) on the X axis instead of weight of the hops.  (Note that the small dip in the plot for Condition <strong>D</strong> in Figure 3 is no longer present, and the measured IBU values for Conditions <strong>B</strong> through <strong>F</strong> have an increase very close to linear.  This change is due to the switch from weight of the hops in Figure 3 to alpha-acid concentration in Figure 4.)  In Figure 4, IAAs and nonIAAs contribute equally to the IBU at lower alpha-acid concentrations (and at the boil time of 12 minutes).  At concentrations above 260 ppm, the IAA contribution (dark blue line) remains constant, but the nonIAA contribution (light blue line) continues to increase linearly.  The sum of the IAA and nonIAA concentrations, multiplied by 5/7, gives the estimated IBU value (red line), as described by Peacock.  With these assumptions (equal contributions from IAA and nonIAA at lower concentrations and boil time of 12 minutes, and an alpha-acid limit of 260 ppm), estimated IBU values (with a mapping of 0.06 from initial alpha-acid concentration to bottled-beer IAA and nonIAA concentrations) have a surprisingly good fit to the measured IBU values from week 7 (green line).
+
+<p>
+<img src="utilexp2-figure4-iaavsconcentration.png" alt="Figure 4"/> <span id="caption"> Figure 4. Measured IBU values for Conditions <strong>A</strong> through <strong>F</strong> at week 7 (green line), hypothetical concentration of isomerized alpha acids (IAA) for beer (dark blue line), hypothetical concentration of other bitter components in beer (nonIAA) (light blue line), and predicted IBU obtained by combining IAA and nonIAA components according to Peacock's IBU formulation (red line).  The IAA and nonIAA concentrations assume equal contributions after a 12-minute boil at low alpha-acid concentrations, and the IAA level assumes that no isomerized alpha acids make it into the beer once the initial alpha-acid concentration exceeds 260 ppm.</span>
+
+<p>
+The last row of Table 3 provides IBU values estimated from the <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">detailed model</a> described in <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>, with an age of 5 weeks.  In this model, the AA rating at harvest was 8.5% (a bit higher than the value on the package) and the estimated degradation factor was 0.85 (lower than would be expected with an HSI value of 0.247).  The root-mean-square (RMS) error from this model was 0.70 IBUs, with a maximum difference of 1.14 IBUs (Condition <strong>C</strong>).  According to this model, isomerized alpha acids contributed 44%, 46%, 46%, 46%, 45%, and 43% to the IBU values of conditions <strong>A</strong> through <strong>F</strong>, respectively.  (Note that these values are close to the hypothetical equal contributions of IAA and nonIAA in Figure 4.)
+
+<p>
+<p>
+<span id="heading2">4.3 Experiment #3: Conclusion</span><br>
+Experiment #3 indicates that the IBU level in a home-brewed beer can be modeled as a function of age of the beer stored at room temperature with the formula <em>IBU</em>(<em>age</em>) = <em>IBU</em><sub>0</sub> × (0.33 × e<sup>-0.076×<em>age</em></sup> + 0.67), where <em>age</em> is the age of the beer in weeks and <em>IBU</em><sub>0</sub> is the hypothetical IBU value at time 0 (start of fermentation).  This formula can be used up to about 16 weeks, after which the IBU value remains stable.  It also indicates the potential for a hopping-rate correction factor being modeled by (a) a limit on the solubility of alpha acids in boiling wort at around 260 ppm and (b) the assumption that non-soluble alpha acids do not convert into isomerized alpha acids that are present in the finished beer.  The resulting hopping-rate correction model simply limits the (effective) initial amount of alpha acids in the wort to 260 ppm.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>condition
+A</b></td>
+<td><b>condition
+B</b></td>
+<td><b>condition
+C</b></td>
+<td><b>condition
+D</b></td>
+<td><b>condition
+E</b></td>
+<td><b>condition
+F</b></td>
+</tr>
+<tr>
+<td><b>weight of hops
+</b></td>
+<td>0.37 oz <br>
+10.49 g</td>
+<td>0.74 oz <br>
+20.98 g</td>
+<td>1.11 oz <br>
+31.47 g</td>
+<td>1.48 oz <br>
+41.96 g</td>
+<td>1.85 oz <br>
+52.45 g</td>
+<td>2.22 oz <br>
+62.94 g</td>
+</tr>
+<tr>
+<td><b>post-boil volume
+</b></td>
+<td>1.64 G <br> 6.21 l</td>
+<td>1.62 G <br> 6.13 l</td>
+<td>1.62 G <br> 6.13 l</td>
+<td>1.65 G <br> 6.25 l</td>
+<td>1.61 G <br> 6.09 l</td>
+<td>1.61 G <br> 6.09 l</td>
+</tr>
+<tr>
+<td><b>original gravity
+</b></td>
+<td>1.0545</td>
+<td>1.0550</td>
+<td>1.0550</td>
+<td>1.0540</td>
+<td>1.0555</td>
+<td>1.0555</td>
+</tr>
+<tr>
+<td><b>final gravity
+</b></td>
+<td>1.0088</td>
+<td>1.0084</td>
+<td>1.0084</td>
+<td>1.0096</td>
+<td>1.0099</td>
+<td>1.0104</td>
+</tr>
+<tr>
+<td><b>initial alpha-acid concentration</b></td>
+<td>136.9 ppm</td>
+<td>277.1 ppm</td>
+<td>415.6 ppm</td>
+<td>544.1 ppm</td>
+<td>697.0 ppm</td>
+<td>836.5 ppm</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 1
+</b></td>
+<td>---</td>
+<td>---</td>
+<td>32</td>
+<td>---</td>
+<td>---</td>
+<td>54</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 2
+</b></td>
+<td>---</td>
+<td>---</td>
+<td>31</td>
+<td>---</td>
+<td>---</td>
+<td>53</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 3 (orig)
+</b></td>
+<td>16</td>
+<td>28</td>
+<td>36</td>
+<td>45</td>
+<td>53</td>
+<td>60</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 3 (corrected)
+</b></td>
+<td>13.8</td>
+<td>24.15</td>
+<td>31.0</td>
+<td>38.8</td>
+<td>45.7</td>
+<td>51.75</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 6
+</b></td>
+<td>---</td>
+<td>---</td>
+<td>29</td>
+<td>---</td>
+<td>---</td>
+<td>48</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 7
+</b></td>
+<td>12</td>
+<td>13 (orig) or 23.25 (corr.)</td>
+<td>29</td>
+<td>34</td>
+<td>41</td>
+<td>47</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 13
+</b></td>
+<td>12</td>
+<td>---</td>
+<td>26</td>
+<td>---</td>
+<td>---</td>
+<td>44</td>
+</tr>
+<tr>
+<td><b>measured IBUs, week 52
+</b></td>
+<td>11.5</td>
+<td>19.5</td>
+<td>25.5</td>
+<td>31.5</td>
+<td>37.0</td>
+<td>43.0</td>
+</tr>
+<tr>
+<td><b>estimated IBUs, week 5
+</b></td>
+<td>12.84</td>
+<td>23.64</td>
+<td>29.91</td>
+<td>36.25</td>
+<td>43.19</td>
+<td>49.20</td>
+</tr>
+<tr>
+<td><b>IBUs: Tinseth
+</b></td>
+<td>12.71</td>
+<td>25.62</td>
+<td>38.43</td>
+<td>50.76</td>
+<td>64.16</td>
+<td>76.99</td>
+</tr>
+<tr>
+<td><b>Garetz correction factor
+</b></td>
+<td>0.955</td>
+<td>0.917</td>
+<td>0.884</td>
+<td>0.857</td>
+<td>0.830</td>
+<td>0.807</td>
+</tr>
+<tr>
+<td><b>IBUs: Tinseth with Garetz
+</b></td>
+<td>12.14</td>
+<td>23.5</td>
+<td>33.99</td>
+<td>43.49</td>
+<td>53.25</td>
+<td>62.14</td>
+</tr>
+<tr>
+<td><b>IBUs: detailed model (week 5)
+</b></td>
+<td>12.40</td>
+<td>23.18</td>
+<td>31.05</td>
+<td>36.97</td>
+<td>42.85</td>
+<td>48.43</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 3.  Measured and modeled values of the six conditions in the third experiment.</span>
+
+<p>
+
+<span id="heading1">5. Utilization Experiment #4</span><br>
+In looking at Figure 4, with the benefit of hindsight and knowing reasonable parameter values, it seems clear that an alpha-acid concentration limit of about 260 ppm and an equal contribution of IAA and nonIAA to the IBU after 12 minutes of boiling provide a good fit to the data, but this was not obvious to me after finishing Experiment #3.  Also, measured IBUs from different boil times might produce results that contradict this simple hopping-rate correction model.  Therefore, I conducted a fourth experiment, with varying boil times and amounts of hops, in order to get additional data for estimating the amount of alpha acids that contribute to isomerization as a function of initial alpha-acid concentration.  Under the assumption that only soluble alpha acids contribute to the IAA levels in finished beer, this will tell us the solubility limit of alpha acids at boiling.
+
+<p>
+<p>
+<span id="heading2">5.1 Experiment #4: Approach to the Problem</span><br>
+
+<span id="heading3">5.1.1 High-Level Approach</span><br>
+This experiment had five conditions (labeled here as Conditions <strong>H</strong> through <strong>L</strong>, respectively, to avoid confusion with Experiment #3).  (Condition <strong>G</strong> is not included in this post.)  Each condition varied in the amount of hops, duration of the boil, and (for Condition <strong>L</strong>) the temperature at which hops were steeped.  The steep times for Conditions <strong>H</strong> through <strong>L</strong> are listed in Table 4 (below).  I was fortunate enough to obtain hops from the same lot number as in Experiments #1 and #2, keeping that factor fairly constant.
+
+<p>
+Conditions <strong>H</strong> through <strong>L</strong> were designed to yield an IAA level that is some multiple of the IAA level in another condition, as summarized in Table 4 (below).  In particular, the amount of hops and steep time of Condition <strong>H</strong> were designed to yield twice the amount of isomerized alpha acids when compared with Condition <strong>A</strong> from Experiment #3.  The amount of hops and steep time of Condition <strong>I</strong> were designed to yield twice the amount of IAA when compared with Condition <strong>C</strong>.  Condition <strong>J</strong> was designed to be identical with Condition <strong>C</strong> in Experiment #3, to check IBU values across the two experiments.  Condition <strong>K</strong> was designed to yield 1.5 times the amount of IAA when compared with Condition <strong>F</strong>.  Condition <strong>L</strong> was designed to be the same as Condition <strong>K</strong>, but with a steep temperature that yields less than 5% of the isomerization at boiling, in order to look at the impact of nonIAA components.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>cond. H
+</b></td>
+<td><b>cond. I
+</b></td>
+<td><b>cond. J
+</b></td>
+<td><b>cond. K
+</b></td>
+<td><b>cond. L
+</b></td>
+</tr>
+<tr>
+<td><b>relative IAA level
+</b></td>
+<td>2 × cond. <strong>A</strong></td>
+<td>2 × cond. <strong>C</strong></td>
+<td>1 × cond. <strong>C</strong></td>
+<td>1.5 × cond. <strong>F</strong></td>
+<td>&lt; 0.05 × cond. <strong>K</strong></td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 4.  Targeted relative IAA levels for conditions <strong>H</strong> through <strong>L</strong>.</span>
+
+<p>
+<p>
+<span id="heading3">5.1.2 Determining Relative IAA Levels and Boil Times</span><br>
+The relative amount of IAA produced (and therefore the amount of time needed for each boil) was determined from an equation by Mark Malowicki <a href="#references_fourExp">[Malowicki, p. 27]</a> (also reported by Huang et al. <a href="#references_fourExp">[Huang, p. 51]</a>):
+<p style="padding-left: 30px;">[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>)-<em>k</em><sub>1</sub>(<em>T</em>))) (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t</em></sup>-e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</p>
+where [<em>IAA</em>]<sub>wort</sub> is the concentration of isomerized alpha acids in the wort after time <em>t</em> and temperature <em>T</em> (in Kelvin).  [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids, and <em>k</em><sub>1</sub>(<em>T</em>) and <em>k</em><sub>2</sub>(<em>T</em>) are temperature-dependent rate constants determined by Malowicki.  As long as the initial concentration of alpha acids is the same, the level of IAA at 26.9 minutes is twice that of the IAA level at 12.0 minutes, and the level of IAA at 19.0 minutes is 1.5 times that at 12.0 minutes (with all cases at boiling).  Also, according to this equation, with a 19-minute boil at 145°F (62.8°C), the IAA produced will be only 3.4% of that at boiling.
+
+<p>
+<p>
+<span id="heading3">5.1.3 Modeling Levels of IAA and nonIAA using IBUs</span><br>
+The goal of this experiment was to estimate the amount of alpha acids that contribute to isomerization, as a function of the initial alpha-acid concentration (when added to the wort).  Based on results from Experiment #3, I expected that these amounts would increase linearly up to some point and then level off once the alpha-acid solubility limit is reached.  In other words, I hypothesized that the solubility of alpha acids limits the amount of alpha acids that can isomerize, and that this solubility limit is responsible for the hopping-rate correction factor noted by others.  Because I can't measure IAA levels directly (I can only measure IBUs, which are a combination of IAA and nonIAA components), the first step is to estimate levels of nonIAA components in each condition, so that the nonIAA contribution can be removed.  The technique described below is discussed with even more detail in <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.
+
+<p>
+I assumed that nonIAA levels increase linearly with the concentration of hop particles in the wort, i.e. 1000 × hops weight (in grams) / volume (in liters).  This assumption brings up one question: how quickly are nonIAA components created and/or dissolved?  Oxidized alpha acids are produced during the boil <a href="#references_fourExp">[Parkin, p. 11, Algazzali, p. 17; Dierckens and Verzele, p. 454; Oliver p. 471]</a> (in addition to being a product of age-related hop oxidation).  (<a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">It appears that oxidized beta acids are not produced during the boil</a>.)  While the soluble polyphenols and age-oxidized alpha- and beta acids are presumably dissolved very quickly, the rate of production of oxidized alpha acids during the boil might create a time dependency.   However, "[oxidized alpha acid] formation on wort boiling can be one of the first things to happen in the complex chemistry of humulone isomerization" <a href="#references_fourExp">[Dierckens and Verzele, p. 454]</a>.  Therefore, it seems reasonable to assume that all nonIAA components are produced and/or dissolved quickly at the start of the boil, and that there is little or no change in nonIAA levels during the boil.
+
+<p>
+By making these assumptions, we can have an (unknown) factor map from hop-particle concentration to nonIAA levels in the finished beer.  For example, if the initial hop-particle concentration is 2000 ppm from a weight of 0.423 oz (12.0 g) of hops in 1.585 G (6.0 liters) of wort, and the mapping factor is 0.01, then there will be 20 ppm of nonIAA in the finished beer; if the concentration of hops doubles to 4000 ppm by doubling the amount of hops added, then there will be 40 ppm of nonIAA.
+
+<p>
+Next, using the equation for IBUs proposed by Peacock <a href="#references_fourExp">[Peacock, p.157]</a>, namely
+<p style="padding-left: 30px;"><em>IBU</em> = 5/7 × (<em>IAA</em> + <em>nonIAA</em>)</p>
+we can take measured IBU values and the (still unknown) mapping factor in order to predict the levels of IAA and nonIAA in each condition.  First, though, I will update Peacock's general formula, changing 5/7 to the more precise 51.2/69.68 (as noted in <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>), then adding in the factor for malt-derived polyphenols (discussed above) separately from hop-derived IBU components:
+<p style="padding-left: 30px;"><em>IBU<sub>maltPP</sub></em> = ((<em>OG</em> - 1.0) × 1000) × 0.025
+<em>IBU</em> = (51.2/69.68 × (<em>IAA</em> + <em>nonIAA</em>)) + <em>IBU<sub>maltPP</sub></em></p>
+where <em>OG</em> is the original gravity of the beer.
+
+<p>
+For example, if we have a hop concentration of 2000 ppm, an original gravity of 1.040, a measured IBU value of 31.0, and an assumed mapping factor of 0.01, then
+<p style="padding-left: 30px;"><em>nonIAA</em> = [<em>hops</em>] × <em>factor</em> = 2000 × 0.01 = 20 ppm
+<em>IAA</em> = (69.68/51.2 × (<em>IBU</em>-<em>IBU<sub>maltPP</sub></em>)) - <em>nonIAA</em> = (69.68/51.2 × (31.0-1.0)) - 20 = 20.83 ppm</p>
+<p>
+<span id="heading3">5.1.4 Estimating the nonIAA Mapping Factor</span><br>
+The next question is how to determine the mapping factor with some method better than randomly guessing at a value.  Because the boil times in each condition were varied in order to obtain exactly 1.0, 1.5, or 2.0 times the IAA levels in certain conditions in Experiment #3, we know what IAA differences to expect between certain conditions.  For example, in Condition <strong>C</strong> at week 5, an IBU level of 29.92, [<em>hops</em>] level of 5133.77 ppm (from hops weight 31.47 g and final volume 6.13 liters), OG of 1.055, and mapping factor of 0.007 yields an IAA<sub>Cond<strong>C</strong></sub> value of 2.91.  In Condition <strong>I</strong>, an IBU level of 43.00, [<em>hops</em>] level of 5227.57 ppm (from weight 31.47 g and final volume of 6.02 liters), OG of 1.0563, and mapping factor of 0.007 yields an IAA<sub>Cond<strong>I</strong></sub> value of 20.01.  But we also know that IAA<sub>Cond<strong>I</strong></sub> should be twice that of IAA<sub>Cond<strong>C</strong></sub> because of the different boil times.  Therefore, in this case, the <em>difference</em> in expected values is (20.01 - (2×2.91)), or 14.19.  Keeping everything else the same but changing the mapping factor from 0.007 to 0.004, IAA<sub>Cond<strong>C</strong></sub> becomes 18.32 and IAA<sub>Cond<strong>I</strong></sub> becomes 35.69, for a difference in expected values of (35.69 - (2×18.32)) = -1.00.  Therefore, in this one case, a mapping factor of 0.004 is a <em>much</em> better fit to the data than 0.007.  We can then search over a large number of mapping factors and all expected differences, and find the mapping factor that minimizes the error in expected IAA differences.
+
+<p>
+Given an optimal (in the minimal-error sense) value for the mapping factor, we can use the hop weight, post-boil volume, OG, and measured IBU values to compute IAA and nonIAA for each condition.  Also, for Condition <strong>A</strong>, we can compute the ratio of initial alpha-acid concentration to (estimated) IAAs.  If we assume that Condition <strong>A</strong> has [<em>AA</em>]<sub>0</sub> less than the solubility limit, we can then multiply this ratio by the IAAs estimated for other conditions to determine the level of alpha acids contributing to isomerization as a function of initial alpha-acid concentration.
+
+<p>
+<p>
+<span id="heading2">5.2 Experiment #4: Methods</span><br>
+One large batch of wort was created from 10 lbs and 1.36 oz (4.57 kg) of Briess Pilsen light DME added to 8.5 G (32.2 liters) of water, yielding 9.25 G (35.0 liters) of wort with specific gravity 1.051.  Similar to Experiment #3, for each condition, 1.75 G (6.62 liters) were taken from the larger pool and heated to boiling (with an average of 17 minutes to reach boiling).  For Conditions <strong>H</strong> through <strong>K</strong>, once at boiling, the wort continued to boil for another 7 minutes (uncovered) before adding (loose) hops.  For Condition <strong>L</strong>, the wort was boiled for 7 minutes, then cooled with a wort chiller to the target temperature of 145°F (62.8°C) before hops were added.  After the hops were added, the hops steeped in the wort with the cover on for the target steep time, with stirring about every 5 minutes.  Once the steep time was reached, the wort was quickly cooled to 75°F (24°C) by transferring it into an empty pot sitting in an ice bath; a sieve was used during transfer to remove most of the hop cones, and the wort was then stirred in order to cool it quickly.  The cooled wort then sat for 5 minutes before 3½ quarts (3.31 liters) were decanted into a sterile 1 G (4 liter) container.  After all conditions were ready, 0.74 oz (21 g) of Safale US-05 yeast was added to 6.10 oz (173 g) of 80°F (27°C) water.  Each condition was aerated by vigorous shaking for 90 seconds.  Then, approximately 1 oz (28 grams) of the yeast slurry was pitched into each condition, airlocks were applied, and wort fermented into beer.
+
+<p>
+The hops were the same Cascade hops (i.e. the same lot number) as Experiments #1 and #3, from <a href="https://www.yakimachief.com/" target="_blank">Yakima Chief Hops</a>, with a package rating of 8.1% AA.  The hops were again analyzed by <a href="http://blogs.ifas.ufl.edu/sumterco/2018/02/05/430/" target="_blank">Alpha Analytics</a> within four days of brewing, with an AA rating of 7.7%, a beta-acid value of 6.8% and an HSI of 0.231.  These values are similar enough to the values from Experiment #3 (especially considering the <a href="../04-hops-harvest/alchemyoverlord-blog-content04.html">variation I've seen in measured AA values of hops from the same bine</a>) that it seems fair to treat the hops between Experiments #3 and #4 as essentially the same.
+
+<p>
+IBU levels were measured at five weeks after the start of fermentation.  Measurements were again provided by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.
+
+<p>
+<p>
+<span id="heading2">5.3 Experiment #4: Results &amp; Analysis</span><br>
+Table 5 (below) shows measured and estimated values for Conditions <strong>A</strong> through <strong>F</strong> (Experiment #3) and Conditions <strong>H</strong> through <strong>L</strong> (Experiment #4).   For Conditions <strong>A</strong> through <strong>F</strong>, the IBU values are estimated values at week 5 (using the formula developed in Experiment #3) in order to have IBU values comparable with Experiment #4.  Specific gravity values are from hydrometer readings.  The values from the "<a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">detailed model</a>" in this table are taken from the quantitative model developed in a previous blog post, <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.
+
+<p>
+The optimal mapping from hop concentration to nonIAA was 0.0045, with a root-mean-squared error of 1.79 over four comparisons (Condition <strong>H</strong> IAA is 2 times Condition <strong>A</strong>; Condition <strong>I</strong> IAA is 2 times Condition <strong>C</strong>; Condition <strong>J</strong> IAA equals Condition <strong>C</strong> IAA; Condition <strong>K</strong> IAA is 1.5 times Condition <strong>F</strong>).  This mapping value is heavily dependent on the hops used, age of the hops, age of the beer, and other factors during and after the boil, and may not generalize to other beers.
+
+<p>
+If the level of alpha acids that contribute to isomerization (i.e. yield IAAs in the finished beer) was always linear with the initial alpha-acid concentration, then there would be no need for a hopping-rate correction factor; if I added twice as much hops between one condition and the next, I'd get twice as much IAA and twice as much nonIAA, yielding twice as many IBUs.  If, however, the alpha acids that contribute to isomerization rise linearly up to some (initial) concentration and then level off, then this function may be a good model for the hopping-rate correction that is needed.  We can also postulate a reason for such a rise and then leveling off: the solubility of alpha acids. By this reasoning, once the solubility limit is reached, the addition of more alpha acids (that do not dissolve in the wort) has little impact on IAA levels.
+
+<p>
+In Table 5, the row labeled "AA solubility" is an estimate of how much of the alpha acids were dissolved in solution for each condition.  This solubility level was determined from the estimated amount of IAA in a condition multiplied by a conversion factor from IAA to initial alpha-acid concentration.  This conversion factor was obtained by dividing the initial alpha-acid concentration for Condition <strong>A</strong> by the IAA level estimated for Condition <strong>A</strong>, under the assumption that Condition <strong>A</strong> had less alpha acids than the solubility limit.  Therefore, for Condition <strong>A</strong> the alpha-acid solubility (in ppm) is the same as the initial alpha-acid concentration.  For other conditions, under the assumption that only soluble alpha acids contribute to the isomerized alpha acids in the finished beer, the IAA level at a 12-minute boil multiplied by the conversion factor yields the estimated solubility of alpha acids for this condition.  The IAA level at a 12-minute boil is obtained either (a) directly from the value of a condition with a 12-minute boil, or (b) from the estimated IAA level divided by the expected relative IAA level for that condition, e.g. 1.5 or 2.0.
+
+<p>
+Figure 5 plots the alpha acids that contribute to IAA levels as a function of initial alpha-acid concentration, at boiling.  Under the assumption that only soluble alpha acids contribute to isomerized alpha acids in the finished beer, the Y axis can be interpreted as the alpha-acid solubility level at boiling, in ppm.  Averaging all conditions except <strong>A</strong> and <strong>H</strong> (expected to be below the solubility limit), the alpha-acid solubility limit is about 270 ppm.  The dashed green line in Figure 5 shows the proposed model of alpha-acid solubility, in which solubility increases linearly up to 270 ppm, and then remains constant at higher initial alpha-acid concentrations.  It can be seen that, similar to the alpha-acid solubility at room temperature and pH 5.2 found by Malowicki <a href="#references_fourExp">[Malowicki, p. 53]</a>, solubility doesn't reach an abrupt limit at a certain concentration, but continues to increase slightly with higher concentrations.  The same phrasing from Malowicki applies to these results: "Although the curve did not completely plateau, there was a distinct knee in the curve" <a href="#references_fourExp">[Malowicki, p. 52]</a>.  The boil time does not seem to have much of an effect on the estimated solubility limit; Conditions <strong>H</strong> and <strong>K</strong> (with boil times 26.9 and 19 minutes) have estimated values slightly less than Conditions <strong>A</strong> and <strong>F</strong> (12-minute boils), respectively, and Condition <strong>I</strong> (boil time 26.9 min) is very close to Condition <strong>C</strong> (12 minutes).  (Conditions <strong>I</strong> and <strong>C</strong> in Figure 5 are so close that they may be difficult to identify; they are just below Condition <strong>J</strong>, at around 400 ppm.)
+
+<p>
+For Condition <strong>L</strong>, 2.22 oz (62.94 g) of hops were steeped at approximately 145°F (62.8°C) for 19 minutes. An average temperature of 146.5°F (63.6°C) was maintained (minimum 141.8°F (61.0°C) , maximum 150°F (65.6°C)) for 19 minutes.  The measured IBU value at week 5 was 25.  At this temperature, the amount of IAA produced should be only 3.72% of the IAAs produced at boiling, according to Huang's equation.  A nonIAA factor of 0.0045 and temperature-based scaling of 0.0372 yields nonIAA of 30.96 and IAA of 1.19. Therefore, the IBU value of 25 in Condition <strong>L</strong> is comprised of about 1.19 ppm of IAA, 30.96 ppm of nonIAA, and 1.36 ppm of barley-based IBUs.  This 31 ppm of hop-based nonIAA is less than the 47 ppm of hop-based nonIAA estimated for condition <strong>K</strong> (at boiling).
+
+<p>
+One implication of the results from Conditions <strong>K</strong> and <strong>L</strong> is that the production of oxidized alpha acids during the boil is temperature dependent.  (A <a href="../26-the-production-of-oxidized-alpha-acids-at-hop-stand-temperatures/alchemyoverlord-blog-content26.html">subsequent blog post</a> concludes the opposite; that at common hop-stand temperatures, the production of oxidized alpha acids is not greatly affected by temperature.)  Another implication is that oxidized alpha acids produced during the boil contribute significantly to the nonIAA value, and that they are a notable component of the overall IBU value, especially at shorter boil times.  (A <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">subsequent blog post</a> also finds that oxidized alpha acids are likely to be the largest contributor to nonIAA.)  It's also quite clear that even with almost no isomerization (at 145°F (62.8°C)) and the use of very well-preserved hops, sizable IBU levels can still be found in the finished beer.
+
+<p>
+Table 5 shows the IBU values from Experiment #4 estimated from the <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">detailed model</a> described in <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.  In this model, similar to the previous experiments, the AA rating at harvest was 8.1% (the same as the value on the package) and the estimated degradation factor was 0.85 (lower than would be expected with an HSI value of 0.247).  The root-mean-square difference was 1.07 IBUs, and the maximum difference was -1.99 IBUs (Condition <strong>C</strong>).
+
+<p>
+Table 5 also shows the IAA and hop-based nonIAA levels in each condition, estimated using the process described in this blog post with a nonIAA factor of 0.0045.  From these values and an estimation of the malt-based IBU contribution, we can also estimate the percent of IAA contributing to the IBU.  For the two conditions below the solubility limit, the IAA contributions are 46% and 57%,  supporting the assumption in Experiment #3 that in the 12-minute boil and with well-preserved hops, the IAA and nonIAA components contributed about equally to the IBU value.
+
+<p>
+<img src="utilexp2-figure5-aasolubility3-e1516484468785.png" alt="Figure 5"/> <span id="caption"> Figure 5. Estimated alpha-acid solubility (for Conditions A through F and H through K) plotted as a function of the initial concentration of alpha acids (at the start of the boil). The dashed green line shows the model of alpha-acid solubility at boiling based on these data points, with solubility increasing linearly from 0 up to the limit of 270 ppm.</span>
+
+<p>
+<p>
+<span id="heading2">5.4 Experiment #4: Summary and Conclusion</span><br>
+This fourth experiment separated IAA from nonIAA components in measured IBU values by targeting <em>relative</em> levels of IAA through different boil times.  The relative levels were computed from work on alpha-acid utilization by Mark Malowicki.  The mapping between IBU, IAA, and nonIAA values was based on a formula from Val Peacock.  The determination of IAA levels depended on the assumptions that (a) nonIAA components did not reach their solubility limit in this experiment and therefore increased linearly with amount of hops added, (b) the level of oxidized alpha acids produced during the boil reached a stable value soon after the start of the boil, and (c) there is a linear mapping between nonIAA concentration in the final beer and initial hop concentration, as long as the same hops are used.   The estimated IAA levels in the finished beer were than mapped to alpha-acid solubility under the assumptions that (d) alpha acids in the boil and above the solubility limit are very quickly degraded and (e) Condition <strong>A</strong> had an initial alpha-acid concentration below the solubility limit.  Of these assumptions, the weakest is probably (d), but it still seems to be reasonable first approximation.  Given these assumptions, the results indicate an alpha-acid solubility limit of around 270 ppm at boiling.  (This general result is refined in <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">Hopping Rate Correction Based on Alpha-Acid Solubility</a>.)
+
+<p>
+This experiment also found evidence which suggests that the production of oxidized alpha  acids during the boil can make a significant contribution to IBU values.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>cond. A</b></td>
+<td><b>cond. B</b></td>
+<td><b>cond. C</b></td>
+<td><b>cond. D</b></td>
+<td><b>cond. E</b></td>
+<td><b>cond. F</b></td>
+<td><b>cond. H</b></td>
+<td><b>cond. I</b></td>
+<td><b>cond. J</b></td>
+<td><b>cond. K</b></td>
+<td><b>cond. L</b></td>
+</tr>
+<tr>
+<td><b>weight of hops
+</b></td>
+<td>0.37 oz <br>
+10.49 g</td>
+<td>0.74 oz <br>
+20.98 g</td>
+<td>1.11 oz <br>
+31.47 g</td>
+<td>1.48 oz <br>
+41.96 g</td>
+<td>1.85 oz <br>
+52.45 g</td>
+<td>2.22 oz <br>
+62.94 g</td>
+<td>0.37 oz <br>
+10.49 g</td>
+<td>1.11 oz <br>
+31.47 g</td>
+<td>1.11 oz <br>
+31.47 g</td>
+<td>2.22 oz <br>
+62.94 g</td>
+<td>2.22 oz <br>
+62.94 g</td>
+</tr>
+<tr>
+<td><b>boil time (min)
+</b></td>
+<td>12.0</td>
+<td>12.0</td>
+<td>12.0</td>
+<td>12.0</td>
+<td>12.0</td>
+<td>12.0</td>
+<td>26.9</td>
+<td>26.9</td>
+<td>12.0</td>
+<td>19.0</td>
+<td>19.0</td>
+</tr>
+<tr>
+<td><b>post-boil volume
+</b></td>
+<td>1.64 G <br> 6.21 l</td>
+<td>1.62 G <br> 6.13 l</td>
+<td>1.62 G <br> 6.13 l</td>
+<td>1.65 G <br> 6.25 l</td>
+<td>1.61 G <br> 6.09 l</td>
+<td>1.61 G <br> 6.09 l</td>
+<td>1.59 G <br> 6.02 l</td>
+<td>1.59 G <br> 6.02 l</td>
+<td>1.62 G <br> 6.13 l</td>
+<td>1.59 G <br> 6.02 l</td>
+<td>1.63 G <br> 6.17 l</td>
+</tr>
+<tr>
+<td><b>original gravity
+</b></td>
+<td>1.0545</td>
+<td>1.0550</td>
+<td>1.0550</td>
+<td>1.0540</td>
+<td>1.0555</td>
+<td>1.0555</td>
+<td>1.0562</td>
+<td>1.0563</td>
+<td>1.0550</td>
+<td>1.0562</td>
+<td>1.0546</td>
+</tr>
+<tr>
+<td><b>final gravity
+</b></td>
+<td>1.0088</td>
+<td>1.0084</td>
+<td>1.0084</td>
+<td>1.0096</td>
+<td>1.0099</td>
+<td>1.0104</td>
+<td>1.0087</td>
+<td>1.0093</td>
+<td>1.0090</td>
+<td>1.0098</td>
+<td>1.0088</td>
+</tr>
+<tr>
+<td><b>initial alpha-acid concentration (ppm)
+</b></td>
+<td>136.9</td>
+<td>277.1</td>
+<td>415.6</td>
+<td>544.1</td>
+<td>697.0</td>
+<td>836.5</td>
+<td>141.1</td>
+<td>423.5</td>
+<td>415.6</td>
+<td>847.0</td>
+<td>826.2</td>
+</tr>
+<tr>
+<td><b>measured IBUs
+</b></td>
+<td>12.85</td>
+<td>23.52</td>
+<td>29.92</td>
+<td>36.26</td>
+<td>43.20</td>
+<td>49.21</td>
+<td>17</td>
+<td>43</td>
+<td>31</td>
+<td>56</td>
+<td>25</td>
+</tr>
+<tr>
+<td><b>IBUs from detailed model
+</b></td>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+<td>17.01</td>
+<td>43.16</td>
+<td>29.01</td>
+<td>55.72</td>
+<td>26.30</td>
+</tr>
+<tr>
+<td><b>IAA (ppm)
+</b></td>
+<td>7.98</td>
+<td>14.48</td>
+<td>15.47</td>
+<td>17.28</td>
+<td>17.74</td>
+<td>18.16</td>
+<td>12.89</td>
+<td>31.88</td>
+<td>16.91</td>
+<td>26.26</td>
+<td>1.19</td>
+</tr>
+<tr>
+<td><b>hop-based nonIAA (ppm)
+</b></td>
+<td>7.60</td>
+<td>15.39</td>
+<td>23.09</td>
+<td>30.23</td>
+<td>38.72</td>
+<td>46.47</td>
+<td>7.84</td>
+<td>23.53</td>
+<td>23.09</td>
+<td>47.05</td>
+<td>30.96</td>
+</tr>
+<tr>
+<td><strong>IAA percent of total (%)</strong></td>
+<td>45.7</td>
+<td>45.6</td>
+<td>38.3</td>
+<td>35.0</td>
+<td>30.4</td>
+<td>27.3</td>
+<td>56.9</td>
+<td>55.6</td>
+<td>40.4</td>
+<td>34.9</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td><b>AA solubility (ppm)
+</b></td>
+<td>136.0</td>
+<td>243.7</td>
+<td>260.4</td>
+<td>296.3</td>
+<td>296.8</td>
+<td>303.9</td>
+<td>106.5</td>
+<td>263.4</td>
+<td>284.7</td>
+<td>289.2</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 5.  Measured and modeled values of the six conditions in the third experiment (Conditions <strong>A</strong> through <strong>F</strong>) and the five conditions in the fourth experiment (Conditions <strong>H</strong> through <strong>L</strong>).  IBU values are from week 5.</span>
+
+<p>
+
+<span id="heading1">6. Overall Summary</span><br>
+This blog post reports on four experiments that were designed to assist in the development of formulas and parameters for a <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">detailed model of IBUs</a>.  Results indicate that the use of a mesh bag for hops during the boil has a negligible impact on IBUs, and that the kettle material (stainless steel vs. aluminum) also has a negligible impact.  The contribution of malt polyphenols to the IBU can be estimated with <em>IBU<sub>maltPP</sub></em> = ((<em>OG</em> - 1.0) × 1000) × 0.025, where <em>IBU<sub>maltPP</sub></em> is the contribution of malt polyphenols to the IBU and <em>OG</em> is the original gravity of the beer.  The IBU levels in a beer can decrease fairly quickly during the initial weeks after fermentation if the beer is stored at room temperature, and this can be modeled with the formula <em>IBU</em>(<em>age</em>) = <em>IBU</em><sub>0</sub> × (0.33 × e<sup>-0.076×<em>age</em></sup> + 0.67), where <em>age</em> is the age of the beer in weeks and <em>IBU</em><sub>0</sub> is the IBU value at time 0.  After 16 weeks, the IBU values seem to stabilize.  The alpha acid solubility limit at boiling appears to be approximately 270 ppm, under the assumption that alpha-acid concentrations above this limit do not contribute to isomerized alpha acids in the final beer.  This limit provides a simple explanation and model for a hopping-rate correction factor, with a better fit to the current data that the Garetz correction factor.  It also seems likely that oxidized alpha acids produced during the boil can make up a sizeable fraction of the total nonIAA contribution, and that nonIAA components can contribute significantly to the IBU.
+
+<p>
+None of these conclusions have been definitively proven, but they are plausible explanations based on the observed data.  The suggested solubility limit of 270 ppm is somewhat lower than the limit of 300 ppm estimated by Spetsig for boiling and at a pH of 5.2 <a href="#references_fourExp">[Spetsig, p. 1423]</a>.  However, Figure 5 indicates that at high initial alpha-acid concentrations (550 ppm and above), the solubility limit based on the current set of data is, in fact, right around 300 ppm.
+
+<p>
+
+<span id="heading1">7. Acknowledgements</span><br>
+Many thanks to Dana Garves at <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for her valuable feedback on this post!
+
+<p>
+<p>
+<span id="heading1"><span id="references_fourExp">References</span></span><br>
+<ul>
+<li>V. A. Algazzali, <em>The Bitterness Intensity of Oxidized Hop Acids: Humulinones and Hulupones</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>H. O. Askew, "Changes in Concentration of α and β Acids and of Iso-Compounds on Heating Extracts of Hops in Aqueous Solutions and Unhopped Wort," in <em>Journal of the Institute of Brewing</em>, vol. 71, pp. 10-20, 1965.</li>
+<li>R. Daniels, <em>Designing Great Beers: The Ultimate Guide to Brewing Classic Beer Styles</em>.  Brewers Publications, 2000.</li>
+<li>J. Dierckens and M. Verzele, “Oxidation Products of Humulone and Their Stereoisomerism,” in <em>Journal of the Institute of Brewing</em>, vol. 75, pp. 453-456, 1969.</li>
+<li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>M. L. Hall, “What’s Your IBU,” in <em>Zymurgy</em>.  Special Edition, 1997.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science.  Volume 2: Hopped Wort and Beer</em>.  Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>Y. Huang, J. Tippmann, and T. Becker, "Kinetic Modeling of Hop Acids During Wort Boiling," in <em>International Journal of Bioscience, Biochemistry, and Bioinformatics</em>, vol. 3, no. 1, January 2013.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>D. R. Maule, “The Fate of Humulone During Wort Boiling and Cooling”, in <em>Journal of the Institute of Brewing</em>, vol. 72, pp. 285-290, 1966.</li>
+<li>G. Oliver, <em>The Oxford Companion to Beer</em>, Oxford University Press, 2011.</li>
+<li>E. J. Parkin, <em>The Influence of Polyphenols and Humulinones on Bitterness in Dry-Hopped Beer</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>V. Peacock, “The International Bitterness Unit, its Creation and What it Measures,” in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>T. H. Shellhammer, “Hop Components and Their Impact on the Bitterness Quality of Beer,” in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>L. O. Spetsig, “Electrolytic Constants and Solubilities of Humulinic Acid, Humulone, and Lupulone,” in <em>Acta Chemica Scandinavica</em>, vol. 9, pp. 1421-1424, 1955.</li>
+<li>R. Stevens and D. Wright, "Evaluation of Hops [Part] X. Hulupones and the Significance of <em>β</em> Acids in Brewing," in Journal of the Institute of Brewing, vol. 67, 1961.</li>
+</ul>
+&nbsp;
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

@@ -7,6 +7,8 @@ Version 1.0.0 : January 30, 2017
 Version 1.0.1 : May  6, 2018 : add mIBU info
 Version 1.0.2 : Aug 28, 2021 : add information about other calculators
 Version 1.0.3 : Sep 26, 2021 : add cooling and evaporation calculator
+Version 1.0.4 : Nov 23, 2021 : small updates, add links
+Version 1.0.5 : Nov 25, 2021 : move calculator list to this page. minor updates
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -19,34 +21,29 @@ Version 1.0.3 : Sep 26, 2021 : add cooling and evaporation calculator
   <div id="content">
     <h3>Summary</h3>
     <p>
-    The link(s) on the left provide calculators for various beer-related
+    The buttons on the left provide calculators for various beer-related
     computations.  The list includes:
     <ul>
-    <li> an IBU calculator using the Tinseth formula
-    <li> an IBU calculator using the Rager formula
-    <li> an IBU calculator using the Garetz formula
-    <li> an IBU calculator for the mIBU method described on my blog
-    <li> an IBU calculator for the SMPH method described on my blog
-    <li> a page for estimating the hop freshness factor (or alpha-acid
-         decay over time) and hop storage index (HSI)
-    <li> a calculator for the relationship between specific gravity,
-         volume, and time
-    <li> a calculator for correcting specific gravity, pH, and volume
-         based on temperature (and a gravity &harr; &deg;Plato converter)
+    <li> an IBU calculator using the <a href="ibu_tinseth.html">Tinseth formula</a>
+    <li> an IBU calculator using the <a href="ibu_rager.html">Rager formula</a>
+    <li> an IBU calculator using the <a href="ibu_garetz.html">Garetz formula</a>
+    <li> an IBU calculator for the <a href="ibu_mIBU.html">mIBU method</a> described on my blog
+    <li> an IBU calculator for the <a href="ibu_SMPH.html">SMPH method</a> described on my blog
+    <li> a page for estimating the <a href="hop_freshness.html">hop freshness factor</a> (or alpha-acid decay over time) and hop storage index (HSI)
+    <li> a calculator for the relationship between <a href="sg_vol_time.html">specific gravity, volume, and time</a>
+    <li> a calculator for <a href="temp_correction.html">correcting specific gravity, pH, and volume based on temperature</a> (and a <a href="temp_correction.html">gravity &harr; &deg;Plato converter</a>)
     <li> a calculator for estimating the rate of post-boil natural
-         cooling and the rate of evaporation as a function of temperature
-    <li> a tutorial on perceptual difference testing using interactive
-        worksheets
-    <li> a web page for searching for optimal parameter values for the
-         SMPH model, and for evaluating the SMPH model on development or
-         test data
+         <a href="cool_evap.html">cooling and the rate of evaporation</a> 
+         as a function of temperature
+    <li> a tutorial on <a href="perceptualDiffTest.html">perceptual difference testing</a> using interactive worksheets
+    <li> a web page for <a href="ibu_SMPH_search.html">searching for optimal parameter values for the SMPH model</a>, and for evaluating the SMPH model on development or test data
     </ul>
     </p>
     <p>
     The source code (HTML, CSS, and JavaScript) for these calculators can
     be seen by clicking on the "source code" link above.  Of note,
     the file <code>js/trainingData.js</code> provides the specific conditions
-    used in brewing the 339 beers with measured IBU values (and assumed
+    used in brewing the 347 beers with measured IBU values (and assumed
     conditions for four beers reported by Val Peacock in "The International
     Bitterness Unit, Its Creation, and What it Measures" in <em>Hop Flavor
     and Aroma</em>) that were used to find parameter values for the SMPH model.
@@ -57,9 +54,18 @@ Version 1.0.3 : Sep 26, 2021 : add cooling and evaporation calculator
     used in testing the IBU models.
     </p>
     <p>
-    The "blog" link above will take you to my blog, which is all about
-    experimenting with the process of making beer.
+    The "Blog: Table of Contents" link above will take you to my blog, 
+    which is all about experimenting with the process of making beer.
     </p>
+
+    <span id="footnote">
+    <br>
+    <center>
+    Navigate to:<br>
+    <a href="index.html" target="_top">AlchemyOverlord home page</a>
+    </center>
+    </span>
+
   </div>
 
   </body>

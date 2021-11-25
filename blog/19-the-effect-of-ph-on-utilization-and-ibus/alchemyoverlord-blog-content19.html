@@ -1,0 +1,625 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>The Effect of pH on Utilization and IBUs</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+The Effect of pH on Utilization and IBUs
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+It is commonly believed that utilization, and therefore IBUs, will decrease as the wort pH decreases.  In this post, I describe an experiment designed to test and quantify this relationship.  There is a decrease of about 1 IBU per 0.15 unit decrease in pH for the conditions in this experiment.   This decrease in IBUs is most likely <em>not</em> due to a decrease in the amount or rate of isomerization, nor does it seem to be predominately from losses of isomerized alpha acids (IAA).  Instead, it appears to be mostly caused by losses of "auxiliary bitter compounds" (ABC, or nonIAA).  If the Tinseth formula is modified to (approximately) separate the contributions of IAA from ABC, the expected decrease in IBUs from pH 5.75 to 5.25 can be from about 15% to 35%, depending primarily on boil time.  This effect of pH on IBUs has been incorporated into two online calculators for estimating IBUs available at <a href="../../index.html" target="_top">GitHub</a>, the <a href="../15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">mIBU model</a> and the <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH model</a>.
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section1">1. Introduction</span></span><br>
+
+<span id="heading2">1.1 Mash and Wort pH</span><br>
+The pH of a mash made from low-alkalinity water and pale malt is about 5.8 <a href="#references_pH_IBUs">[deLange; Palmer and Kaminski, p. 58]</a>.  In a <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">previous blog post</a>, I measured a pH of 5.7 to 5.9, depending on the specific gravity of the wort, with a pH of 5.75 at a specific gravity of about 1.055.  The typical brewer should aim for a mash pH in the ballpark of 5.2 to 5.4 <a href="#references_pH_IBUs">[Palmer and Kaminski, p. 60; Noonan, p 144; Fix, p 49; Troester citing Kunze (2007) and Narziss (2005)]</a>, although a pH as high as 5.8 is still acceptable <a href="#references_pH_IBUs">[Troester]</a>.  It is often reported that the pH decreases during the boil by about 0.1 to 0.3 pH units <a href="#references_pH_IBUs">[MacWilliam, p. 68; deLange, Troester; Bamforth, p. 6]</a>.  The amount of this decrease depends on the duration of the boil, starting pH, and specific gravity.  In general, longer boils produce a greater decrease in pH <a href="#references_pH_IBUs">[MacWilliam, p. 68]</a> and a higher starting pH produces a greater decrease in pH <a href="#references_pH_IBUs">[deLange]</a>.  It has been reported that the decrease in pH is greater with lower specific gravities <a href="#references_pH_IBUs">[MacWilliam, p. 69; Bamforth, p. 6]</a>, but I found the <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">opposite effect</a>.
+
+<p>
+<p>
+<span id="heading2">1.2 pH and Alpha-Acid Utilization</span><br>
+It is said that a decrease in wort pH will decrease alpha-acid utilization because "isomerization is slower" <a href="#references_pH_IBUs">[e.g. Lewis and Young, p. 266]</a>.  (Utilization is the ratio of isomerized alpha acids in the finished beer to the total alpha acids added.)  Hough says that "the efficiency of the utilization increases at high pH values and falls with low ones, but only small variations are possible in conventional practice" <a href="#references_pH_IBUs">[Hough et al., p. 489]</a>.  Askew noted that "at about the pH value of wort (5.3-5.5) efficiency of utilization of acids will be very sensitive to pH; this is in keeping with the statement of van Cauwenberge that variation from pH 5.2 to 5.5 can cause an alteration of 20% in isohumulones content on boiling hops with wort" <a href="#references_pH_IBUs">[Askew 1964, p. 510]</a>.  Mark Malowicki looked at isomerized alpha acids (IAA) produced and degraded during boiling at pH values of 4.8, 5.2, 5.6, and 6.0, and found that "the level of iso-alpha concentrations ... was nearly identical for all pH levels" in a buffer solution <a href="#references_pH_IBUs">[Malowicki, p. 37]</a>, and that the use of maltose, glucose, or calcium in the solution had no impact on isomerization <a href="#references_pH_IBUs">[Malowicki, p. 39]</a>.  He speculated that "the losses to trub would better explain the differences in utilization that are attributed to pH..., since <em>rate of isomerization does not appear to be affected</em>" <a href="#references_pH_IBUs">[Malowicki, p. 41 (emphasis mine)]</a>.  Kappler et al. looked at the recovery rate of IAA, which is inversely related to the losses of IAA that occur during the boil.  They found that while there was a large change in IAA recovery rates between pH 4.0 (58% recovery) and pH 8.0 (95% recovery), the difference in recovery rates (and hence losses) between pH 5.0 and pH 6.0 was much smaller (80% and 86% recovery, respectively) <a href="#references_pH_IBUs">[Kappler et al., p. 334]</a>.
+
+<p>
+In short, while the conventional wisdom holds that a decrease in wort pH lowers utilization (e.g. <a href="#references_pH_IBUs">[Hall, p. 57; Hieronymus, p. 189; Garetz, p. 124]</a>), it is unclear exactly how this relationship might be characterized or quantified.  Malowicki did not find any relationship between wort pH and the production of IAA <a href="#references_pH_IBUs">[Malowicki, p. 41]</a>.  A significant decrease in utilization is not explained by losses of IAA, either, because Kappler found only a relative 6% change in losses of IAA between pH 6.0 and 5.0 <a href="#references_pH_IBUs">[Kappler et al., p. 334]</a>, which are both extreme pH levels for normal brewing.  Earlier reports address the relationship between pH and utilization or IAA; none (that I am aware of) look at the impact of pH on IBUs.
+
+<p>
+<p>
+<span id="heading2">1.3 IBUs, Isomerized Alpha Acids (IAA), and Auxiliary Bittering Compounds (nonIAA)</span><br>
+The International Bitterness Unit (IBU) estimates the concentration of bitter substances in beer, including (a) isomerized alpha acids (IAA) and (b) the other bitter substances that are referred to collectively as "nonIAA" <a href="#references_pH_IBUs">[Peacock, p. 161]</a> or "auxiliary bitter compounds" (ABC).  The nonIAA substances include oxidized alpha acids, oxidized beta acids, hop polyphenols, and malt polyphenols.  Depending on the hops AA rating (alpha-acid rating), concentration in the boil, boil time, steeping temperature, age and storage conditions, and other factors, a measured value of, say, 20 IBUs might be composed of anywhere from 10% to 90% IAA.  In typical (not hop-forward) beers, the IBU is very roughly 80% IAA and 20% nonIAA.  I have a somewhat lengthy summary of how IAA and nonIAA relate to the IBU in a separate blog post, <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.  If we want to model the impact of pH on IBUs, it will help to estimate the impact on IAA and nonIAA separately, because wort pH may impact these substances differently.
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section2">2. Approach</span></span><br>
+The approach used in this experiment was to create four conditions (i.e. four batches of beer) with pre-boil target pH levels from 5.26 to 5.73.  The wort from each condition was sampled after 10, 20, 30, and 40 minutes of hop steep time.  All sixteen samples were fermented into beer.  The resulting IBU values were then <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">fit to equations that provide a mapping between IBU values and concentrations of IAA and nonIAA</a>.  The changes in IAA and auxiliary bittering compounds as a function of pH were approximated by a linear fit to the data; these changes were then mapped to scaling factors based on pH.  Finally, the Tinseth formula was modified to (approximately) separate the contributions of IAA from nonIAA, so that these two scaling factors can be applied within the Tinseth formula in order to predict IBUs as a function of pH.
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section3">3. Experimental Methods</span></span><br>
+I brewed four batches of beer for this experiment.  The four batches were designed to be identical in all respects except for the pH of the wort.
+
+<p>
+I created one large pool of wort from which the four batches were created, with 14.73 lbs (6.68 kg) of Briess Pilsen DME in 7.957 G (30.12 l) of water, yielding 9.00 G (34.07 l) of wort with a specific gravity of 1.074.  I let this wort sit overnight <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">to let the pH fully stabilize</a>.  (Other than the time required for pH stabilization, I have <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">found no difference</a> in the characteristics of wort created from Briess Pilsen DME or wort created from two-row malt and low-alkalinity water, at least in terms of pH behavior.)  I then created each condition with 2.125 G (8.044 l) of this wort and an additional 2.125 G (8.044 l) of water, yielding wort with gravity 1.037 and pH 5.91.  I added phosphoric acid to lower the pH of each condition as closely as I could to a target pre-boil pH of 5.74, 5.58, 5.42, and 5.26, respectively.  The difference of 0.16 units per condition was expected to become a difference of 0.15 units after the boil.
+
+<p>
+I used hops from a 1 lb (0.45 kg) bag of Citra HBC394 from <a href="https://hopsdirect.com/" target="_blank">Hops Direct</a> that were purchased soon after harvest and stored in a vacuum-sealed bag in my freezer.  This bag had an alpha-acid rating on the package of 14.3%.  With a <a href="http://www.hopslist.com/hops/dual-purpose-hops/citra/" target="_blank">25% loss for Citra stored six months at room temperature</a>, a storage temperature of -5°F (-20°C), a storage factor of 0.6, and an age of 8 months, the <a href="../../index.html" target="_top">freshness factor predicted by Garetz</a> <a href="#references_pH_IBUs">[Garetz, pp. 110-118]</a> is 0.965, yielding an AA rating of 13.8% on brew day.  This AA rating does not have to be precisely estimated, however, because the estimate of IAA losses (<a href="#IBU_pH_Section5">Section 5</a>) will adjust to accommodate errors in the AA rating.  Each condition used 0.645 oz (18.28 g) of hops, targeting 170 ppm of alpha acids.  During the boil, I contained the hops in a large nylon coarse-mesh bag in order to not include large hop particles in my samples.  Previous experiments (from <a href="http://brulosophy.com/" target="_blank">Brülosophy</a> and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>) have not shown a significant impact of a mesh bag on measured IBU values.
+
+<p>
+I heated each condition to boiling (uncovered), and then boiled for 10 minutes to allow initial foam to dissipate.  After this 10 minutes of boiling, I added the hops and covered the kettle.  I boiled the wort with the cover on (except for taking samples) in order to minimize evaporation losses and changes to specific gravity.  At 10-minute intervals after adding the hops, I took 14-oz (0.41-liter) samples, quickly cooled them to room temperature in an ice bath, and stored them in sanitized containers.  After the boil, I measured the pH of the wort with a sanitized probe, aerated the sample by vigorous shaking for 1 minute, and pitched 0.009 oz (0.25 g) of Safale US-05 yeast (age 10 months) to target 750,000 viable cells per ml and degree Plato <a href="#references_pH_IBUs">[Fix and Fix, p. 68]</a>.  After all samples were taken, the containers were cracked open to vent <span class="LrzXr kno-fv">CO<sub>2</sub></span>, and they fermented for about a week.  After eight days of fermentation, I sent 4 oz (0.12 l) of each sample to <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for IBU and original-gravity measurements.  The final gravity of all samples was about 1.005 (minimum 1.00495; maximum 1.0055).
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section4">4. Experimental Results</span></span><br>
+Tables 1 and 2 provide data for each condition, including the measured pre-boil pH, pre-boil specific gravity, post-boil gravity and volume, and (for each sample) post-boil pH, beer pH, original gravity, and IBUs. (Original gravity and IBUs were measured by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.)  Figure 1 shows the measured IBU values for each condition and sample time.
+
+<p>
+The change in pH with boil time is <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">expected to be approximately linear</a>, and in fact the data from this experiment are modeled very well by a decrease of 0.0156 pH units every 10 minutes, independent of the starting pH.  Using the average pH slope over all conditions and the estimated initial pH per condition, the root-mean-square error between measured and estimated pH values during the boil is 0.004, with a maximum error of 0.009. Because of this regularity in the data and a mismatch between the measured pre-boil pH and the expected pre-boil pH in two conditions (<strong>A</strong> and <strong>D</strong>), I suspect that the measured pre-boil pH values of those two conditions are, for some unknown reason, less accurate.  In the analysis below, therefore, I use "corrected" pre-boil pH values (from the linear fit to the four post-boil pH values) of 5.73, 5.58, 5.42, and 5.30 for Conditions <strong>A</strong> through <strong>D</strong>, respectively.  (Only Condition <strong>D</strong> is noticeably affected, with a measured pre-boil pH of 5.26 and a corrected pH of 5.30.)
+
+<p>
+The specific gravity values change very little during the boil, as expected because the kettle was covered.  There is a discrepancy between my measured post-boil gravity and the gravity measured by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>; my post-boil gravity values are consistently higher by almost 0.003 points (from approximately 1.0392 to 1.042).  The pre-boil gravity values that I measured are also somewhat higher than would be expected from the original gravity value at 10 minutes as measured by Oregon BrewLab.  (I have since found that I had a bias in my hydrometer readings, and have now switched to a different hydrometer.)  In the analysis below, I used specific gravity values from Oregon BrewLab and extrapolated from those values to estimate the specific gravity at the start of the boil.  (Actually, Oregon BrewLab reported measurements in degrees Plato, and I converted those values to specific gravity using an equation from Spencer Thomas.)
+
+<p>
+The beer pH values are very consistent within each condition (despite the differences in pH values during the boil), and there is a consistent decrease in beer pH by about 0.04 units per condition, with values of 3.93, 3.88, 3.84, and 3.80 from Conditions <strong>A</strong> through <strong>D</strong>, respectively.  This overall small total difference of 0.13 pH units between the different conditions of finished beer is at odds with with a surprisingly large difference in taste, as described in the Conclusion (<a href="#IBU_pH_Section7">Section 7</a>).
+
+<p>
+Figure 1 plots the measured IBU values for each condition and time point.  It is clear that the IBU levels decrease as the pre-boil pH decreases, and that the amount of decrease is about the same at each sample time.
+<table class="table" >
+<tbody>
+<tr>
+<td><strong>Condition</strong></td>
+<td><strong>measuredpre-boil pH</strong>
+</td>
+<td><strong>pre-boil SG
+(hydrometer)
+</strong></td>
+<td><strong>post-boil SG
+(hydrometer)
+</strong></td>
+<td><strong>post-boil volume</strong></td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td>5.74</td>
+<td>1.0385</td>
+<td>1.042</td>
+<td>4.05 G / 15.33 l</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>5.58</td>
+<td>1.038</td>
+<td>1.042</td>
+<td>4.18 G / 15.82 l</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>5.42</td>
+<td>1.0385</td>
+<td>1.042</td>
+<td>4.14 G / 15.67 l</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>5.26</td>
+<td>1.038</td>
+<td>1.042</td>
+<td>4.15 G / 15.71 l</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.   Measured values for each condition, including pre-boil pH, pre-boil specific gravity (SG), post-boil specific gravity, and estimated post-boil volume.</span>
+<table class="table" >
+<tbody>
+<tr>
+<td colspan="6"><strong>Condition A:</strong></td>
+</tr>
+<tr>
+<td rowspan="5"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong>
+</td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>post-boil pH</strong></td>
+<td>5.70</td>
+<td>5.685</td>
+<td>5.67</td>
+<td>5.65</td>
+</tr>
+<tr>
+<td><strong>beer pH</strong></td>
+<td>3.93</td>
+<td>3.94</td>
+<td>3.93</td>
+<td>3.94</td>
+</tr>
+<tr>
+<td><strong>OG</strong>
+</td>
+<td>1.0380</td>
+<td>1.0380</td>
+<td>1.0384</td>
+<td>1.0392</td>
+</tr>
+<tr>
+<td><strong>IBUs</strong></td>
+<td>13.1</td>
+<td>17.5</td>
+<td>22.0</td>
+<td>24.6</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition B:</strong></td>
+</tr>
+<tr>
+<td rowspan="5"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>post-boil pH</strong></td>
+<td>5.55</td>
+<td>5.53</td>
+<td>5.52</td>
+<td>5.50</td>
+</tr>
+<tr>
+<td><strong>beer pH</strong></td>
+<td>3.88</td>
+<td>3.90</td>
+<td>3.88</td>
+<td>3.87</td>
+</tr>
+<tr>
+<td><strong>OG</strong></td>
+<td>1.0380</td>
+<td>1.0388</td>
+<td>1.0384</td>
+<td>1.0392</td>
+</tr>
+<tr>
+<td><strong>IBUs</strong></td>
+<td>12.1</td>
+<td>17.0</td>
+<td>20.6</td>
+<td>24.3</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition C:</strong></td>
+</tr>
+<tr>
+<td rowspan="5"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>post-boil pH</strong></td>
+<td>5.39</td>
+<td>5.38</td>
+<td>5.36</td>
+<td>5.35</td>
+</tr>
+<tr>
+<td><strong>beer pH</strong></td>
+<td>3.84</td>
+<td>3.84</td>
+<td>3.84</td>
+<td>3.86</td>
+</tr>
+<tr>
+<td><strong>OG</strong></td>
+<td>1.0384</td>
+<td>1.0388</td>
+<td>1.0384</td>
+<td>1.0392</td>
+</tr>
+<tr>
+<td><strong>IBUs</strong></td>
+<td>11.6</td>
+<td>15.5</td>
+<td>19.5</td>
+<td>23.0</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition D:</strong></td>
+</tr>
+<tr>
+<td rowspan="5"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>post-boil pH</strong></td>
+<td>5.27</td>
+<td>5.25</td>
+<td>5.24</td>
+<td>5.22</td>
+</tr>
+<tr>
+<td><strong>beer pH</strong></td>
+<td>3.80</td>
+<td>3.79</td>
+<td>3.80</td>
+<td>3.81</td>
+</tr>
+<tr>
+<td><strong>OG</strong></td>
+<td>1.0384</td>
+<td>1.0380</td>
+<td>1.0384</td>
+<td>1.0396</td>
+</tr>
+<tr>
+<td><strong>IBUs</strong></td>
+<td>10.7</td>
+<td>14.2</td>
+<td>17.8</td>
+<td>21.6</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.   Measured values within each condition, at each sample time.  Values include the post-boil pH (pH taken immediately after sampling), beer pH (after fermentation), original gravity (OG) (measured by Oregon BrewLab), and IBUs (from Oregon BrewLab).</span>
+
+<p>
+<img src="ibu_as_function_of_ph1.png" alt="Figure 1"/> <span id="caption"> Figure 1. IBUs from each condition (different wort pH) and sample time (time for which the hops steeped in the boiling wort). It can be seen that (a) IBUs decrease as the wort pH decreases, and (b) roughly the same amount of decrease in IBUs is observed at each sample time.</span>
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section5">5. Parameter Estimation and Results</span></span><br>
+
+<span id="heading2"> <span id="IBU_pH_Section5.1">5.1 Estimating Parameters to Map from IBU to IAA and nonIAA</span></span><br>
+In order to estimate IAA and nonIAA levels from IBUs, I used the technique described in <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.  This technique uses multiple IBU measurements from the same (or nearly identical) conditions to determine the most likely concentrations of IAA and nonIAA in the finished beer, assuming (a) the Peacock model of IBUs, in which <em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>) <a href="#references_pH_IBUs">[Peacock, p. 157]</a>, and (b) Malowicki's model of alpha acid isomerization <a href="#references_pH_IBUs">[Malowicki, pp. 25-27]</a>.  This technique includes both the production or dissolving of nonIAA components from the hops and losses of nonIAA to trub and fermentation.
+
+<p>
+Because <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">malt polyphenols are impacted by pH</a> potentially differently than other auxiliary bittering compounds, I estimated the impact of pH on each ABC component separately, as discussed in Section 5 of the blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.  I have <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">estimated</a> that of the auxiliary bittering compounds, oxidized alpha acids (oAA) produced during the boil have the greatest contribution when using well-preserved hops, followed by malt polyphenols, with only minor contributions from hop polyphenols and oxidized beta acids.  Therefore, the technique in this case estimates the impact of pH on oxidized alpha acids, uses the <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">previously-developed model for the impact of pH on malt polyphenols</a>, and assumes that the impact of pH on hop polyphenols and oxidized beta acids has a negligible impact on IBU values.
+
+<p>
+This estimation technique tells us not only what the estimated concentrations are, but also the loss factors that map from (a) the concentration of IAA produced during the boil to the concentration of IAA in the beer and (b) the concentration of alpha acids added to the kettle to the concentration of oxidized alpha acids in the beer.  In this experiment, we don't really care that much what the IAA and oAA levels are or how great the loss factors are within each condition, but we do care about the relative loss factors across conditions.  Because the beers are as similar as possible except for wort pH, these relative loss factors tell us how much the wort pH impacts IAA, oAA, and IBU values.  (The term "loss factor" means a multiplication factor that accounts for losses in the concentration of a substance; a loss of 10% corresponds to a loss factor of 0.90, and a loss of 80% corresponds to a loss factor of 0.20).
+
+<p>
+Because the pH changes during the boil and it is clear from Figure 1 that pH impacts IBU values, I modified the parameter estimation technique to account for the change in pH during the boil.  The change in pH during the boil is very regular, as noted above, with an average decrease of 0.0156 pH units every 10 minutes.  The decrease in IBUs with pH is also very regular across conditions; there is an average decrease of 1.075 IBUs across conditions with an average pH decrease per condition of 0.144.   Because of this regularity, we can estimate the IBU values that would have been observed if the pH had remained constant during the boil, by multiplying the change in pH (between the first sample in the condition and the current sample) by the average IBU change per pH decrease (1.075/0.144), and adding that offset to the observed IBU values.  I used these "normalized" IBU values in parameter estimation, although this normalization did not have a large impact on results (with a maximum correction (increase) of 0.35 IBUs at 40 minutes).
+
+<p>
+<p>
+<span id="heading2"> <span id="IBU_pH_Section5.2">5.2 Estimating IAA and oAA Loss Factors Independently for Each Condition</span></span><br>
+The estimation technique described in <a href="#IBU_pH_Section5.1">Section 5.1</a> was used to estimate IAA and oAA loss factors for each condition.  Table 3 shows the estimated values and <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation" target="_blank">root-mean-square</a> (RMS) error for each condition.  To illustrate what the loss factors mean, the IAA loss factor of 0.390 and the oAA loss factor of 0.064 in Condition A indicate that almost 40% of the IAA produced during the boil was lost during the boil and fermentation, and over 6% of the alpha acids added to the wort ended up as oxidized alpha acids in the finished beer.
+
+<p>
+The overall RMS error was 0.253 IBUs.  The low values of the RMS errors indicate that we were able to find a good fit between the model and the data.   The small number of data points per parameter almost certainly guarantees that there is <a href="https://en.wikipedia.org/wiki/Overfitting" target="_blank">overfitting</a>, but the relative consistency of the IAA loss factors across conditions and the clear trend in oAA loss factors is encouraging.
+<table class="table" >
+<tbody>
+<tr>
+<td><strong>Condition</strong></td>
+<td><strong>IAA loss factor</strong>
+</td>
+<td><strong>oAA loss factor</strong>
+</td>
+<td><strong>RMS error (IBUs)</strong>
+</td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td>0.390</td>
+<td>0.064</td>
+<td>0.287</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>0.408</td>
+<td>0.050</td>
+<td>0.150</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>0.391</td>
+<td>0.043</td>
+<td>0.191</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>0.377</td>
+<td>0.033</td>
+<td>0.337</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 3.   Estimated loss factors for IAA and oAA, treating each condition independently.</span>
+
+<p>
+The IAA loss factors range from 0.377 to 0.408, indicating that in all cases about 39% of the IAA produced during the boil remained in the finished beer (and the other 61% was lost to trub, fermentation, and other factors).   These values don't show any clear pattern of change by condition.  The oAA loss factors range from 0.033 (Condition <strong>D</strong>) to 0.064 (Condition <strong>A</strong>), indicating that only about 5% of the alpha acids oxidize during the boil and survive into the finished beer.  The oAA loss factors form a clear pattern with a decrease of approximately 0.01 per condition.
+
+<p>
+<p>
+<span id="heading2"> <span id="IBU_pH_Section5.3">5.3 Estimating IAA and oAA Loss Factors Over All Conditions</span></span><br>
+While no clear pattern emerged from the IAA loss factors in the previous section, Kappler et al. have found that IAA losses increase as the pH decreases.  At a pH of 5.0, they found a recovery rate of 80%, and at a pH of 6.0, the recovery rate was 86%.  These translate into losses of 20% at pH 5.0 and 14% at pH 6.0.  With linear interpolation, we expect the losses in Condition <strong>A</strong> (at initial pH of 5.73) to be 84.4% and the losses in Condition <strong>D</strong> (initial pH 5.30) to be 81.8%.  Such a (small) loss of IAA with pH would be consistent with the data from this experiment.  We can therefore assume that Kappler's loss values are correct (since they were able to measure IAA directly), translate this into a relative scale (with a value of 1.0 at pH 5.75 chosen semi-arbitrarily), and use Kappler's scaling factor with a constant (pH-independent) IAA loss factor.  This allows us to estimate 5 parameters (one IAA loss factor and four oAA loss factors) from 16 data points, which is (somewhat) better than estimating 8 parameters from 16 data points.
+
+<p>
+Translating Kappler's loss values into a scaling factor with a value of 1.0 at pH 5.75 yields
+<p style="padding-left: 30px;"><em>IAAscale</em> = 0.071 × <em>pH</em> + 0.592</p>
+where <em>IAAscale</em> is the scaling factor for IAA losses and <em>pH</em> is the wort pH at the beginning of the boil.  If we search for a single IAA loss factor across all four conditions but apply this scaling factor to account for a slight loss in IAA as a function of pH, we get an overall IAA loss factor of 0.391 and the results in Table 4.  The overall RMS error is 0.281 IBUs, which is higher than the RMS error in <a href="#IBU_pH_Section5.2">Section 5.2</a> (as it should be) but still fairly low, indicating a continued good fit between model and data.  (If we use the hops AA rating of 11.4% estimated below in <a href="#IBU_pH_Section6">Section 6</a>, the best overall IAA loss factor increases from 0.391 to 0.475 to compensate for the reduction in AA, and the estimated oAA loss factors are the same.)
+<table class="table" >
+<tbody>
+<tr>
+<td><strong>Condition</strong></td>
+<td><strong>IAA loss factor (scaled)</strong>
+</td>
+<td><strong>oAA loss factor</strong>
+</td>
+<td><strong>RMS error (IBUs)</strong>
+</td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td>0.391</td>
+<td>0.065</td>
+<td>0.288</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>0.386</td>
+<td>0.056</td>
+<td>0.239</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>0.382</td>
+<td>0.044</td>
+<td>0.191</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>0.379</td>
+<td>0.030</td>
+<td>0.373</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 4.   Estimated loss factors for IAA and oAA, using a single IAA loss factor and a pH-dependent IAA loss scaling factor estimated from Kapper et al.</span>
+
+<p>
+The IAA loss factors in Table 4 are the overall loss factor of 0.391 multiplied by the scaling factor estimated from Kappler's data.  The oAA loss factors shown in Table 4 have a clearly linear trend with pH.  We can represent the oAA loss factor as a function of pH with the equation:
+<p style="padding-left: 30px;"><em>oAAfactor</em> = 0.08029 × <em>pH</em> − 0.39352</p>
+which has a maximum difference of 0.002 from the estimated loss-factor values (at Conditions <strong>C</strong> and <strong>D</strong>).
+
+<p>
+<p>
+<span id="heading2"> <span id="IBU_pH_Section5.4">5.4 Estimating the oAA Scaling Factor</span></span><br>
+We now have an IAA scaling factor that estimates IAA losses as a function of pH, in a way that is independent of the specific conditions of this experiment.   (The conditions of this experiment are reflected in the overall IAA loss factor of 0.391.)  We can also determine an oAA scaling factor that estimates oAA losses.  The oAA factor at pH 5.75, according to the equation in <a href="#IBU_pH_Section5.3">Section 5.3</a>, is 0.06813.   To create a scaling factor of 1.0 at pH 5.75, we can scale the previous equation by 14.679 (1/0.06813) to have the same slope (as a function of pH) but a value of 1.0 at 5.75.  This yields
+<p style="padding-left: 30px;"><em>oAAscale</em> = 1.1785 × <em>pH</em> − 5.776</p>
+and now we can estimate IAA and oAA losses as a function of pH independently from the loss factors that are specific to this experiment.  If we use these scaling factors with the estimated IAA loss factor of 0.391 and oAA loss factor of 0.06813 at pH 5.75, re-analysis of the IBU data shows an RMS error of 0.497 IBUs, which still seems reasonable.
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section6">6. Modifying the Tinseth IBU Formula to Account for pH</span></span><br>
+With the scaling factors derived in <a href="#IBU_pH_Section5">Section 5</a>, we can now estimate the decrease in IBUs that are caused by losses of IAA and nonIAA as the pH decreases.  One problem with applying such an estimation to an existing IBU model such as the Tinseth formula <a href="#references_pH_IBUs">[Tinseth]</a> is that this formula doesn't account separately for the IAA and nonIAA contributions to the IBU.  Any modification to the Tinseth formula will therefore be a ballpark approximation of pH effects, but probably better than no modification at all.
+
+<p>
+In Section 5 of <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>, I estimate that the nonIAA components contribute to about 5.6% of the utilization in the Tinseth formula.  (In this case, if the utilization is <em>U</em>, I don't mean 0.056 × <em>U</em>, but that <em>U</em> = <em>U<sub>IAA</sub></em> + 0.056, where <em>U<sub>IAA</sub></em> is the utilization from IAA.  For example, if the total utilization after 40 minutes is 19.0% (0.190), this can be approximated as being 13.4% from IAA (0.134) and 5.6% from nonIAA (0.056).)   This 5.6% estimate corresponds very well with the Rager IBU formula <a href="#references_pH_IBUs">[Pyle]</a>, which has a non-zero and roughly constant utilization of 5% (0.05) from 0 to 5 minutes, presumably accounting for nonIAA components at short boil times.
+
+<p>
+We can then consider the boil-time factor specified by Tinseth,
+<p style="padding-left: 30px;"><em>f</em>(<em>t</em>) = (1 − e<sup>(-0.04<em>t</em>)</sup>) / 4.15</p>
+where <em>f</em>(<em>t</em>) is a factor that predicts the isomerization of alpha acids as a function of time (in minutes).  If this factor is greater than .056, we can separate it into IAA and nonIAA contributions.  If this factor is less than .056, then we can either (a) emulate the Rager approach and set it to 0.056 to always estimate some IBUs from very short boil times, or (b) set the IAA contribution to zero and the nonIAA contribution to the boil-time factor.  We can then multiply these separate utilization factors by the IAA and nonIAA scaling factors that are a function of pH, and sum them up to determine an overall utilization that accounts for changes in pH.
+
+<p>
+In applying this process to the data from this experiment, I found that the Tinseth estimates were overall too high.  Since the purpose of this post is not to evaluate the reason for discrepancies between my measured IBU values and the Tinseth formula, but to evaluate how well we can model a decrease in IBUs with pH using a formula like Tinseth's, I performed a search for the best AA rating to fit the data.  I also removed the factor from the Tinseth equation that accounts for wort gravity, because I think that utilization decreases with high-gravity worts, but that <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">utilization is not affected by low-gravity worts</a>.  The search yielded an AA rating of 11.4%, a fair bit less than the estimated 13.8% but within the possible 20% variation reported by Verzele and De Keukeleire <a href="#references_pH_IBUs">[Verzele and De Keukeleire, p. 331]</a>.  The modified Tinseth formula (to account for pH changes) yields the results shown in Table 5.  (I did not use the normalized IBU values that correct for a change in pH with boil time, in large part because the effect is minor.)
+<table class="table" >
+<tbody>
+<tr>
+<td colspan="6"><strong>Condition A:</strong></td>
+</tr>
+<tr>
+<td rowspan="4"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong>
+</td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>measured IBUs</strong>
+</td>
+<td>13.1</td>
+<td>17.5</td>
+<td>22.0</td>
+<td>24.6</td>
+</tr>
+<tr>
+<td><strong>modified Tinseth estimate</strong>
+</td>
+<td>10.12</td>
+<td>17.18</td>
+<td>22.06</td>
+<td>25.47</td>
+</tr>
+<tr>
+<td><strong>difference</strong></td>
+<td>2.98</td>
+<td>0.32</td>
+<td>−0.06</td>
+<td>−0.87</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition B:</strong></td>
+</tr>
+<tr>
+<td rowspan="4"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>measured IBUs</strong></td>
+<td>12.1</td>
+<td>17.0</td>
+<td>20.6</td>
+<td>24.3</td>
+</tr>
+<tr>
+<td><strong>modified Tinseth estimate</strong></td>
+<td>8.97</td>
+<td>15.94</td>
+<td>20.76</td>
+<td>24.13</td>
+</tr>
+<tr>
+<td><strong>difference</strong></td>
+<td>3.13</td>
+<td>1.06</td>
+<td>−0.16</td>
+<td>−0.17</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition C:</strong></td>
+</tr>
+<tr>
+<td rowspan="4"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>measured IBUs</strong></td>
+<td>11.6</td>
+<td>15.5</td>
+<td>19.5</td>
+<td>23.0</td>
+</tr>
+<tr>
+<td><strong>modified Tinseth estimate</strong></td>
+<td>7.79</td>
+<td>14.67</td>
+<td>19.43</td>
+<td>22.75</td>
+</tr>
+<tr>
+<td><strong>difference</strong></td>
+<td>3.81</td>
+<td>0.83</td>
+<td>0.07</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td colspan="6"><strong>Condition D:</strong></td>
+</tr>
+<tr>
+<td rowspan="4"></td>
+<td><strong>time</strong></td>
+<td><strong>10 min</strong></td>
+<td><strong>20 min</strong></td>
+<td><strong>30 min</strong></td>
+<td><strong>40 min</strong></td>
+</tr>
+<tr>
+<td><strong>measured IBUs</strong></td>
+<td>10.7</td>
+<td>14.2</td>
+<td>17.8</td>
+<td>21.6</td>
+</tr>
+<tr>
+<td><strong>modified Tinseth estimate</strong></td>
+<td>6.84</td>
+<td>13.65</td>
+<td>18.34</td>
+<td>21.63</td>
+</tr>
+<tr>
+<td><strong>difference</strong></td>
+<td>3.86</td>
+<td>0.55</td>
+<td>−0.55</td>
+<td>−0.03</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 5.  A comparison of measured IBUs and a modification to the Tinseth formula that accounts for wort pH.  The modified Tinseth estimate is too small at 10 minutes, but this same effect is observed regardless of the wort pH.  The values from the unmodified Tinseth formula are similar to the values in Condition <strong>A</strong>.</span>
+
+<p>
+It can be seen that the Tinseth estimates are all too large at 10 minutes, but that the <em>differences</em> are all nearly the same regardless of the pH level.  This indicates that we can modify the Tinseth formula to estimate the change in IBUs as a function of pH.
+
+<p>
+If we use this modified Tinseth formula to look at some examples, we can see how pH affects IBUs in this model.  Let's consider a scenario where we have a post-boil volume of 5.25 G (19.87 liters), hops weight of 2.0 oz (56.70 g), and an AA rating of 10%.  If the wort pH is 5.75 and we boil the hops for 10 minutes, the modified Tinseth model predicts 22.67 IBUs (the same as the non-modified model).  If we change the wort pH to 5.25, then the modified Tinseth model predicts 14.28 IBUs, or 63% of the value at the higher pH.  If the wort pH is 5.75 and we boil the hops for 60 minutes, the model predicts 62.52 IBUs.  Changing the pH to 5.25 yields 52.72 IBUs, or 84% of the value at the higher pH.  Because most of the effect of pH is seen in the oxidized alpha acids produced at the start of the boil, and because these oxidized alpha acids constitute a greater percentage of the IBU value at shorter boil times, the <em>relative</em> effect of pH is greater at shorter boil times, but the <em>absolute</em> difference in IBUs is about the same at different boil times.
+
+<p>
+<p>
+<span id="heading1"><span id="IBU_pH_Section7">7. Conclusion</span></span><br>
+This blog post presents an analysis of the impact of wort pH on utilization and IBUs.  Using multiple IBU measurements to estimate the contributions of IAA and nonIAA separately, it appears likely that most of the decrease in IBUs comes from a loss of nonIAA components, in particular oxidized alpha acids.  This finding is consistent with work by Malowicki that found no impact of pH on alpha acid isomerization <a href="#references_pH_IBUs">[Malowicki, p. 37, p. 41]</a>, and with work by Kappler et al. that found only a small impact of pH on losses of IAA <a href="#references_pH_IBUs">[Kappler, p. 334]</a>.
+
+<p>
+The conclusions reached in this post are based on data from the single set experiments described here.  This is a very small amount of data for parameter estimation, and additional data is needed to gain confidence in (or, more likely, revise) the results.  Furthermore, the evaluations in this post are based on the same data that was used for parameter estimation; test data that has not been used for parameter estimation is required to obtain error rates that reflect expected behavior.  This post is certainly not the last word on the topic, but it provides the first quantitative analysis (that I'm aware of) of the impact of pH on IBUs.
+
+<p>
+It has been said that wort pH affects the flavor of the finished beer <a href="#references_pH_IBUs">[Fix and Fix, p. 170]</a>.  In particular, "Increased wort and beer pH makes the beer’s bittering perception more ‘coarse’ and less pleasing" <a href="#references_pH_IBUs">[Brungard, Sec. 2.1]</a>.  Getting the wort pH in the right range generally yields beer pH levels in the range of 4.0 to 4.6, which is associated with beer that is neither too sharp nor too cloying <a href="#references_pH_IBUs">[Fix and Fix, p. 170]</a>.   The beer samples created for these experiments provided an ideal, if unscientific, opportunity to evaluate these claims.  I tasted each sample and found a distinct difference between the lower-pH samples and the higher-pH samples.  My tasting notes say that Condition <strong>D</strong> (lowest pH) was "crisp, bright, smooth", Condition <strong>C</strong> was "a little flat, still good", Condition <strong>B</strong> was "a harsher flavor", and Condition <strong>A</strong> (highest pH) had a "harsher bitterness and less smooth".  Because the pH of all finished beer samples was in a fairly narrow range (3.79 to 3.94), it seems unlikely that the final pH is much of a predictor of beer taste.  The difference of only a few IBUs is below my threshold of detection, and so it's very unlikely that the "harsher" flavor was simply greater bitterness.  Therefore, I suspect that some other factor, during the boil or (more likely) during fermentation, causes the lower-pH beers to have a more pleasing flavor.
+
+<p>
+I'd like to thank Dana Garves at <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for her analysis of the samples.  The consistency of the measured IBU values over time and at different pH levels (Figure 1) speaks to the high quality of her work.
+
+<p>
+<p>
+<span id="heading1"><span id="references_pH_IBUs">References</span></span><br>
+<ul>
+<li>H. O. Askew, “Changes in Concentration of α and β Acids and of Iso-Compounds on Heating Extracts of Hops in Aqueous Solutions and Unhopped Wort,” in <em>Journal of the Institute of Brewing</em>, vol. 71, pp. 10-20, 1965.</li>
+<li>C. W. Bamforth, "pH in Brewing: An Overview," in <em>MBAA Technical Quarterly</em>,
+<div>vol. 38, no. 1, pp. 1-9, 2001.</div></li>
+<li>M. Brungard,  <em>Water Knowledge</em>. URL: <a href="https://sites.google.com/site/brunwater/water-knowledge" target="_blank">https://sites.google.com/site/brunwater/water-knowledge</a>.  Accessed most recently Sep. 4, 2018.</li>
+<li>A. J. deLange, "Understanding pH and Its Application in Small-Scale Brewing − Part 1: Fundamentals and Relevance to Brewhouse Procedures," in <em>More Beer! Articles</em>, Jul. 18, 2013.  URL: <a href="https://www.morebeer.com/articles/understanding_ph_in_brewing" target="_blank">https://www.morebeer.com/articles/understanding_ph_in_brewing</a>.  Accessed most recently Sep. 4, 2018.</li>
+<li>G. Fix, <em>Principles of Brewing Science</em>. Brewers Publications, 2nd edition, 1999.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
+<li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>M. L. Hall, “What’s Your IBU,” in <em>Zymurgy</em>.  Special Edition, 1997.</li>
+<li>S. Hieronymus, <em>For the Love of Hops: The Practical Guide to Aroma, Bitterness, and the Culture of Hops</em>.  Brewers Publications, 2012.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science.  Volume 2: Hopped Wort and Beer</em>.  Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>S. Kappler, M. Krahl, C. Geissinger, T. Becker, M. Krottenthaler, "Degradation of Iso-alpha-Acids During Wort Boiling," in <em>Journal of the Institute of Brewing</em>, vol. 116, no. 4, pp. 332-338, 2010.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>I. C. MacWilliam, "pH in Malting and Brewing − A Review," in <em>Journal of the Institute of Brewing</em>, vol. 81, Jan-Feb. 1975, pp. 65-70.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>G. J. Noonan, <em>New Brewing Lager Beer</em>.  Brewers Publications, 1996.</li>
+<li>J. Palmer and C. Kaminski, <em>Water: A Comprehensive Guide for Brewers</em>. Brewers Publications, 2013.</li>
+<li>V. Peacock, “The International Bitterness Unit, its Creation and What it Measures,” in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>N. Pyle, "Norm Pyle's Hops FAQ".  Accessed most recently on Sep. 4, 2018.  <a href="http://realbeer.com/hops/FAQ.html" target="_blank">http://realbeer.com/hops/FAQ.html</a></li>
+<li>R. Stevens and D. Wright, "Evaluation of Hops [Part] X. Hulupones and the Significance of <em>β</em> Acids in Brewing," in Journal of the Institute of Brewing, vol. 67, 1961.</li>
+<li>G. Tinseth, "Glenn's Hop Utilization Numbers".  Accessed most recently on Sep. 4, 2018.  <a href="http://realbeer.com/hops/research.html" target="_blank">http://realbeer.com/hops/research.html</a></li>
+<li>K. Troester, <em>How pH Affects Brewing</em>.  URL:  <a href="http://braukaiser.com/wiki/index.php/How_pH_affects_brewing" target="_blank">http://braukaiser.com/wiki/index.php/How_pH_affects_brewing</a>.  Accessed most recently on Sep. 4, 2018.</li>
+<li>M. Verzele and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>, vol. 27, 1st edition, Elsevier,  ISBN 0-444-88165-4, eBook ISBN 9781483290867, 1991.</li>
+</ul>
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

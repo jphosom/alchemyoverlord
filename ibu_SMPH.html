@@ -9,6 +9,7 @@ Version 1.0.2 : Sep. 04, 2021 : Bug fix in AA concentration when dry hopping
 Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
                                 Don't take log of negative numbers.
                                 Add explanation of 'boil or steep time'
+Version 1.0.4 : Nov. 25, 2021 : Minor updates
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -22,9 +23,11 @@ Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
 <div id="content">
   <h2>IBU Calculator Using the SMPH Method</h2>
   <p>This page provides a calculator for predicting IBUs using the SMPH
-  method. The techniques used in this method are described in the blog post
-  <a href="https://alchemyoverlord.wordpress.com/2017/01/03/a-summary-of-factors-affecting-ibus/">
-  "A Summary of Factors Affecting IBUs"</a>.
+  method. The techniques used in this method are described in the blog posts
+  <a href="blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">
+  "A Summary of Factors Affecting IBUs"</a> and
+  <a href="blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">
+  "IBUs and the SMPH Model</a>.
   This method accounts separately for the contributions
   from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds"
   (ABC or nonIAA).  It is based in large part on work published by Val Peacock,
@@ -32,16 +35,16 @@ Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
   calculator takes into account utilization from any hop stand or whirlpool,
   as well as the time it takes to cool the wort using an immersion chiller,
   counterflow chiller, or ice bath.  Other optional adjustments include
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
   an alpha-acid solubility limit</a>,
-  <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
   adjustment of IBUs based on wort pH</a>,
   adjustment of IBUs based on
-  <a href="https://alchemyoverlord.wordpress.com/2020/10/21/how-lautering-and-wort-clarity-affect-ibus/">
+  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">
   wort clarity</a> and
-  <a href="https://alchemyoverlord.wordpress.com/2019/06/09/the-impact-of-krausen-loss-on-ibus">
+  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">
   krausen loss</a>,
-  <a href="https://alchemyoverlord.wordpress.com/2020/10/31/hop-cones-vs-pellets-ibu-differences/">
+  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
   adjustment based on the use of hop pellets instead of whole cones</a>, and
   IBUs from dry-hopping.
   </p>
@@ -171,13 +174,13 @@ Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
   <p style="margin-left:3em">
   <span id="solubilityLimitColor">
   <input type="checkbox" id="ibu.applySolubilityLimitCheckbox" onchange="common.set(ibu.applySolubilityLimitCheckbox,1)"> Apply
-  <a href="https://alchemyoverlord.wordpress.com/2018/01/28/hopping-rate-correction-based-on-alpha-acid-solubility/">
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
   alpha-acid solubility-limit correction</a>
   </span>
   <br>
   <span id="pHColor">
   <input type="checkbox" id="ibu.pHCheckbox" onchange="common.set(ibu.pHCheckbox,1)"> Apply
-  <a href="https://alchemyoverlord.wordpress.com/2018/09/08/the-effect-of-ph-on-utilization-and-ibus/">
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
   pH correction</a> with wort pH =
   <input type="text" autocomplete="off" STYLE="text-align:left; color:#b1b1cd" size=4 id="ibu.pH" onchange="common.set(ibu.pH, 1)">
     <input type="radio" value="preBoilpH" id="preBoilpH" name="ibu.preOrPostBoilpH" onclick="common.set(ibu.preOrPostBoilpH,1)" autocomplete="off">pre-boil or
@@ -231,7 +234,7 @@ Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>Volume in Fermentor (<span id="fermentorVolumeUnits">G</span>):</td>
+    <td>Volume at Pitching (<span id="fermentorVolumeUnits">G</span>):</td>
     <td><input type="text" autocomplete="off" STYLE="text-align:left" id="ibu.fermentorVolume" onchange="common.set(ibu.fermentorVolume, 1)"></td>
   </tr>
   <tr>
@@ -335,6 +338,7 @@ SMPH.initialize_SMPH();
 <b>1.0.1</b>: (2018-Nov-22 to 2021-Aug-28)  Initial version.<br>
 <b>1.0.2</b>: (2021-Sep-04)  Bug fix in AA concentration when dry hopping.<br>
 <b>1.0.3</b>: (2021-Oct-05)  Bug fix, and don't reduce solubility limit with temperature.<br>
+<b>1.0.4</b>: (2021-Nov-25)  Minor updates.<br>
 </small>
 
 <p>
@@ -342,9 +346,7 @@ SMPH.initialize_SMPH();
 Navigate to:<br>
 <a href="#top_SMPH">top of page</a>
 <br>
-<a href="index.html" target="_top">AlchemyOverlord github home page</a>
-<br>
-<a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+<a href="index.html" target="_top">AlchemyOverlord home page</a>
 <p>
 <p>
 <center>

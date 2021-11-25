@@ -1,0 +1,900 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>A Summary of Factors Affecting IBUs</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+A Summary of Factors Affecting IBUs
+</span>
+
+<p>
+This blog post is excessively long.  In order to make it somewhat more manageable, here are links to the various sections:<br>
+<strong><a href="#introduction">1. Introduction</a></strong><br>
+<strong><a href="#definitions_of_ibus">2. Definitions of IBUs</a></strong><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#ibu_definition_from_asbc">2.1 IBU Definition from the American Society of Brewing Chemists (ASBC)</a></em><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#ibu_definition_from_peacock">2.2 IBU Definition from Val Peacock</a></em><br>
+<strong><a href="#a_general_description">3. A General Description of Factors Affecting IBUs</a></strong><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#concentration_of_iaa">3.1 Concentration of Isomerized Alpha Acids (IAA)</a></em><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#accounting_for_post_boil">3.2 Accounting for Post-Boil Utilization</a></em><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#adjustments_to_the_concentration">3.3 Adjustments to the Concentration of Isomerized Alpha Acids</a></em><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#a_revised_ibu_formula">3.4 A Revised IBU Formula for nonIAA Components</a></em><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#hop_pellets">3.4.1 Hop Pellets</a></span><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#oxidized_alpha_acids">3.4.2 Oxidized Alpha Acids</a></span><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#oxidized_beta_acids">3.4.3 Oxidized Beta Acids</a></span><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#polyphenols">3.4.4 Polyphenols</a></span><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#solubility_of_noniaa">3.4.5 Solubility of nonIAA Components</a></span><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#dry_hopping">3.5 The Impact of Dry Hopping on IBUs</a></em><br>
+<strong><a href="#available_data">4. Available Data, Parameter Estimation, and Results</a></strong><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#overview">4.1 Overview</a></em><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#sources_of_ibu_data">4.2 Sources of IBU Data</a></em><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#peacock_hop_storage">4.2.1 Peacock Hop-Storage Conditions</a></span><br>
+<span style="visibility: hidden;">xxxxxxxxxx</span><span style="text-decoration: underline;"><a href="#personal_experiments">4.2.2 Personal Experiments</a></span><br>
+<span style="visibility: hidden;">xxxxx</span><em><a href="#parameter_estimation">4.3 Parameter Estimation and Results</a></em><br>
+<strong><a href="#discussion_of_results">5. Discussion of Results</a></strong><br>
+<strong><a href="#summary">6. Summary</a></strong><br>
+<strong><a href="#references">References</a></strong><br>
+
+<p>
+<p>
+<span id="heading1"><span id="introduction">1. Introduction</span></span><br>
+This blog post presents a summary of some of the factors that affect the measurement of International Bitterness Units (IBUs) (or simply "Bitterness Units" (BU) if you're already international).  In order to provide as cohesive a summary as possible, I provide both qualitative and quantitative descriptions of these factors.  If you want to get a better understanding of what components contribute to an IBU value, how the amount of hops used, wort pH, or krausen may impact IBUs, or how late hopping may decrease the relative proportion of isomerized alpha acids, then this might be the blog post for you.  I've implemented all of the formulas described here in a model of IBU prediction called <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH</a>; this model is available at my <a href="../../index.html" target="_top">GitHub page</a>.
+
+<p>
+The more I learn about hops, the more complex the topic becomes, with a seemingly never-ending level of detail. If you're familiar with <em><a href="https://www.gutenberg.org/files/11/11-h/11-h.htm" target="_blank">Alice In Wonderland</a></em>, then this blog post goes only one level down the IBU rabbit hole, and it looks briefly through a number of open doors at that level without going through them.  In other words, there's a lot of research, chemistry, opinions, known unknowns, unknown unknowns, and contradictions that I'm not going to touch on.  You can also think of this post as an <a href="https://en.wikipedia.org/wiki/Impressionism" target="_blank">impressionist painting</a>: if you stand back far enough, you should be able to see a complete picture.  If you look too closely and focus too much on the details, however, things that make sense in their relationship to other things may become, when isolated from the larger context, <a href="https://commons.wikimedia.org/wiki/File:Japanese_Footbridge(Detail)-Claude_Monet.jpg" target="_blank">meaningless splotches</a>.  The many details are not as important as the bigger picture; the details are there to provide support.  Feel free to focus on what interests you.
+
+<p>
+The IBU measurement itself is not always highly regarded. I've heard some people claim that the IBU is basically meaningless. However, the correlation between measured IBUs and perceived bitterness for 91 commercial beers with a trained sensory panel with 19 members has been measured at 0.86 <a href="#references">[Hahn, p. 50]</a>. A correlation of 0.86 is considered a "strong" correlation <a href="#references">[Taylor, p. 37]</a>, and so the IBU is actually meaningful and strongly correlated with perceived bitterness <a href="#references">[also, Priest and Stewart, p. 266]</a>. While the perception of bitterness is not linear at higher IBU values, a simple mapping can translate IBU values into a linear perceptual scale, and vice versa <a href="#references">[Hahn, pp. 48-50]</a>. Bitterness may have different qualities not captured by the IBU measurement <a href="#references">[Peacock, p. 163]</a>, and the correlation between IBU levels and bitterness may not hold up under every circumstance (e.g. with extremely high rates of dry-hopping <a href="#references">[Maye et al., p. 25]</a>). On the other hand, it is a universally-known and (sometimes grudgingly) accepted quantitative measurement, and there is no other measurement of beer that has a better correlation with perceived bitterness. This post doesn't touch on the pros and cons of the IBU, but, accepting it at face value, tries to break it down into various components and relationships.
+
+<p>
+This post provides a summary of a large number of sources, including Val Peacock's article "The International Bitterness Unit, its Creation and What it Measures" in <em>Hop Flavor and Aroma</em> (ed. Shellhammer); Mark G. Malowicki's Masters thesis, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>; Michael L. Hall's article "What's Your IBU" in <em>Zymurgy</em> (1997); Michael J. Lewis and Tom W. Young's chapter "Hop Chemistry and Wort Boiling" in <em>Brewing;</em> Mark Garetz' article "Hop Storage: How to Get - and Keep - Your Hops' Optimum Value" in <em>Brewing Techniques</em>, and his book <em>Using Hops</em>; Stan Hieronymus' book <em>For the Love of Hops</em>; J. S. Hough et al.'s <em>Malting and Brewing Science</em> (volume 2); and many other theses, articles, and internet sources.  If you look at the bibliography, you'll see many publications produced under the guidance of Thomas Shellhammer.  I've tried to cite appropriately, and I've put the <a href="#references">full bibliography</a> at the bottom of this post.  I've omitted a lot of interesting details from these sources, in order to maintain a more focused narrative.
+
+<p>
+<p>
+<span id="heading1"><span id="definitions_of_ibus">2. Definitions of IBUs</span></span><br>
+
+<span id="heading2"> <span id="ibu_definition_from_asbc">2.1 IBU Definition from the American Society of Brewing Chemists (ASBC)</span></span><br>
+Because of the complexity of hops and IBUs, it's probably a good idea to start at a high level of description, which is deceptively simple but not very informative: An IBU is a measurement of the amount of absorption of light at 275 nm (abbreviated as A<sub>275nm</sub>) in a liquid, multiplied by 50.  The liquid in this case is not just any liquid, but beer that has been combined with twice as much iso-octane (TMP), diluted in octyl alcohol and hydrochloric acid <a href="#references">[American Society of Brewing Chemists]</a>, and <a href="https://www.youtube.com/watch?v=3LeV7cHnyQY" target="_blank">emulsified</a>; i.e. "acidified beer."  In mathematical form, we can say:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU</em> = A<sub>275nm</sub>(<em>beer</em>) × 50</td>
+<td align="right" valign="bottom" width="30">[1]</td>
+</tr>
+</tbody>
+</table>
+where <em>IBU</em> is the resulting IBU value, "<em>beer</em>" indicates the substance being analyzed (after proper acidification), and A<sub>275nm</sub>(<em>beer</em>) is the amount of light absorbed at 275 nm from a sample of acidified beer <a href="#references">[Peacock, p. 158]</a>.
+
+<p>
+This measurement has been found to correlate well with the perception of bitterness in beer.  As Lewis and Young state, "the value for [the IBU] is a good representation of the sensory bitterness of beer" <a href="#references">[Lewis and Young, p. 266]</a>.  Why does this correlation exist?  There are three intertwining factors: (1) the absorption of light at a particular (ultraviolet) frequency (275 nm) through a sample, (2) the concentration of certain substances in this acidified beer that absorb light at this frequency, and (3) the perception of bitterness that is associated with these substances.  This blog post pretty much ignores the first and third factors, assuming that it is predominately those substances that absorb more light at this frequency that have a bitter taste in beer.  What this post focuses on, then, is the second factor: the concentration of substances in acidified beer that absorb light at 275 nm.  In the development of the IBU measurement, there was a deliberate decision to include not only the bitter isomerized alpha acids (abbreviated here as IAA) that are produced during the boiling of hops in wort, but also other "bittering substances" that contribute to the perception of bitterness <a href="#references">[Peacock, p. 159]</a>, and which happen (by happy circumstance) to absorb light at 275 nm (as isomerized alpha acids do).
+
+<p>
+The amount of absorption of light at 275 nm by a sample of acidified beer, multiplied by 50 (or, more precisely, 51.2), was found to provide a good approximation to the concentration of isomerized alpha acids in typical beer of the 1950s and 1960s (when the IBU measurement was developed) <a href="#references">[Peacock, p. 161]</a>.   So, we can say:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> = A<sub>275nm</sub>(<em>beer<sub>1960s</sub></em>) × 51.2</td>
+<td align="right" valign="bottom" width="30">[2]</td>
+</tr>
+</tbody>
+</table>
+where [<em>IAA</em>]<sub>beer1960s</sub> is the concentration of isomerized alpha acids in the 1960s beer (in mg of isomerized alpha acid per kg of beer, or parts per million (ppm)), and "<em>beer<sub>1960s</sub></em>" on the right-hand side of the equation indicates that we're measuring the absorption of a certain type of beer.  (Note that beer contains a number of types of substances that absorb light at 275 nm; IAA are the usually predominant, but not only, substance <a href="#references">[Peacock, p. 159]</a>.)  The IBU value <em>can</em> approximately equal the concentration of IAA (i.e. Equations [1] and [2] can be approximately equal), but generally only for hops and boiling times typical of the 1960s, because of the relative concentrations of the other bittering substances.
+
+<p>
+If one has a solution that contains only isomerized alpha acids and no other substances that absorb light at 275 nm, the concentration of IAA can be estimated with the following equation <a href="#references">[Peacock, p. 161]</a>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>IAAsolution</sub> = A<sub>275nm</sub>(<em>IAAsolution</em>) × 69.68</td>
+<td align="right" valign="bottom" width="30">[3]</td>
+</tr>
+</tbody>
+</table>
+where [<em>IAA</em>]<sub>IAAsolution</sub> is the concentration of isomerized alpha acids in this solution, and "<em>IAAsolution</em>" on the right-hand side of the equation indicates that the solution being analyzed contains only isomerized alpha acids as the relevant (light-absorbing) substance.
+
+<p>
+Figure 1(a) shows hypothetical (i.e. completely made up) data that represent absorption of light at 275 nm on the horizontal axis and the measured concentration of a substance <em>X</em> on the vertical axis.  (The data are fake, but the figure will hopefully be useful to illustrate some concepts.)  In this case, a line can be fit through the data to predict concentration given absorption: <em>concentration</em> = (69.68 × <em>absorption</em>) + 0.  The offset of this line is 0 (meaning that the predicted value for an absorption of 0 is a concentration of 0), and so we can ignore the offset, characterizing the relationship with a single multiplication factor (69.68).  We'll come to Figures 1(b), 1(c), and 1(d) shortly.
+
+<p>
+<img src="absorptionvsconcentrationall.png" alt="Figure 1"/> <span id="caption"> Figure 1. Concentration as a function of light absorption for various circumstances. (a) Concentration of <em>X</em> is approximated by light absorption multiplied by 69.68.  (b) Both <em>X</em> and <em>Y</em> can have their concentration predicted by multiplying absorption by 69.68.  (c) The concentration of substance <em>Z</em> is predicted by light absorption multiplied by 696.8 (10 × <em>X</em>).  We can model the concentration of <em>Z</em> multiplied by a scaling factor (0.10) as a function of absorption, which allows us to treat it like substances <em>X</em> and <em>Y</em> (with a multiplication factor of 69.68).</span>
+
+<p>
+<p>
+<span id="heading2"> <span id="ibu_definition_from_peacock">2.2 IBU Definition from Val Peacock</span></span><br>
+This background leads us to a second high-level description of IBUs:  an IBU is an estimation of the concentration of isomerized alpha acids in typical 1960s beer, based on the combined concentration of isomerized alpha acids and other bittering substances in beer, multiplied by 5/7 <a href="#references">[Peacock, p. 161]</a>.  In mathematical notation:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> ≈ <em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)</td>
+<td align="right" valign="bottom" width="30">[4]</td>
+</tr>
+</tbody>
+</table>
+where [<em>IAA</em>]<sub>beer1960s</sub> is the concentration of isomerized alpha acids in 1960s beer, [<em>IAA</em>]<sub>beer</sub> is the concentration of IAA in the beer being analyzed, "nonIAA" are "other bittering substances that aren't isomerized alpha acids" in beer (which is <em>not</em> the same as "non-isomerized alpha acids," despite the abbreviation), and [<em>nonIAA</em>]<sub>beer</sub> is the concentration of these substances in the beer being analyzed.
+
+<p>
+Why is there the multiplication by 5/7 in Equation [4]?  We can derive it from Equations [2] and [3] if we make three assumptions: (1) For substance <em>X</em> in an appropriate solution, if the absorption of light at 275 nm is zero (<em>A<sub>275nm</sub>(X</em>) = 0), then the concentration of <em>X</em> is zero ([<em>X</em>] = 0).  (2) There is a <em>linear</em> relationship between the absorption of light at 275 nm and the concentration of relevant bittering substances in beer, at least within the range of interest.  (3) The linear relationship between absorption and concentration is the same for <em>all</em> relevant substances in beer, namely 69.68.  The first two assumptions were made by the 1967 Analysis Committee of the European Brewery Convention that developed the unit that became the IBU <a href="#references">[Peacock, p. 160-161]</a>, so they seem reasonable.  The third assumption is not necessarily true, but we can modify it for those cases where it isn't true, so let's assume it's true for now.
+
+<p>
+Let's start by looking at two beers that have the same amount of light absorption at 275 nm (i.e. the same level of bitterness): one beer is a (cryogenically preserved) 1960s beer with this bitterness level, and the other beer is something you just brewed:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>A<sub>275nm</sub>(<em>beer<sub>1960s</sub></em>) = A<sub>275nm</sub>(<em>beer</em>)</td>
+<td align="right" valign="bottom" width="30">[5]</td>
+</tr>
+</tbody>
+</table>
+where <em>beer<sub>1960s</sub></em> is our 1960s beer, and <em>beer</em> is the one just brewed.
+
+<p>
+We can then multiply the numerator and denominator of the left-hand side by 51.2, and multiply the numerator and denominator of the right-hand side by 69.89, and the relationship still holds:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>(A<sub>275nm</sub>(<em>beer<sub>1960s</sub></em>) × 51.2) / 51.2 = (A<sub>275nm</sub>(<em>beer</em>) × 69.68) / 69.68</td>
+<td align="right" valign="bottom" width="30">[6]</td>
+</tr>
+</tbody>
+</table>
+The relevant bittering substances in beer are IAA and nonIAA (by definition), so we can replace <em>beer</em> in Equation [6] with (<em>IAA</em> + <em>nonIAA</em>):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>(A<sub>275nm</sub>(<em>beer<sub>1960s</sub></em>) × 51.2) / 51.2 = (A<sub>275nm</sub>(<em>IAA</em> + <em>nonIAA</em>) × 69.68) / 69.68</td>
+<td align="right" valign="bottom" width="30">[7]</td>
+</tr>
+</tbody>
+</table>
+From Equation [3], we can multiply absorption of light at 275 nm by 69.68 to predict the concentration of IAA in a solution that contains only IAA as the relevant substance.  From our third assumption, nonIAA substances have the same relationship between absorption and concentration, so we can also multiply the absorption of light at 275 nm by 69.68 to predict the concentration of nonIAA in a solution that contains only nonIAA as the relevant substance.  This is illustrated in Figure 1(b), showing two different substances that have the same mapping between absorption and concentration.  Since the relevant bittering substances in beer are IAA and nonIAA, we can predict the combined concentration of (<em>IAA</em> + <em>nonIAA</em>) from the absorption of light at 275 nm in a solution containing both substances.  (For example, if we have 30 mg of IAA in 1 kg of solution, we have 30 ppm and light absorption of 0.43.  Likewise, if we have 21 mg of IAA and 9 mg of nonIAA in 1 kg of solution, we have a total of 30 mg of (IAA + nonIAA), or 30 ppm.  That 30 ppm will also have a light absorption of 0.43.)  Now we can map from absorption to concentration, using Equation [2] for the left-hand side and the third assumption for the right-hand side:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> / 51.2 = [<em>IAA</em> + <em>nonIAA</em>]<sub>beer</sub> / 69.68</td>
+<td align="right" valign="bottom" width="30">[8]</td>
+</tr>
+</tbody>
+</table>
+We can then bring the 51.2 from the left to the right by multiplying both sides by 51.2, and note that the combined concentration of both IAA and nonIAA in beer ([<em>IAA</em> + <em>nonIAA</em>]<sub>beer</sub>) is equal to the sum of the concentrations of the individual substances ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>) :
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> = (51.2 / 69.68) × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)</td>
+<td align="right" valign="bottom" width="30">[9]</td>
+</tr>
+</tbody>
+</table>
+Next, we can simplify 51.2/69.68 to 5/7, and note that then the right-hand side equals Peacock's definition of an IBU, and the left-hand side indicates that this is approximately equal to the concentration of IAA in the 1960s beer:
+<table class="table" >
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> ≈ <em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)</td>
+<td align="right" valign="bottom" width="60">[4] = [10]</td>
+</tr>
+</tbody>
+</table>
+Let's look at a quick example... say we brew a beer with pure isomerized alpha acids, and we end up with [<em>IAA</em>]<sub>beer</sub> equal to 10 ppm.  In this case, [<em>nonIAA</em>]<sub>beer</sub> is zero, and the measured IBU value will be 7.  A beer with the same bitterness level brewed in the 1960s would have had, typically, 7 ppm of IAA and (the equivalent of) 3 ppm of nonIAA, with the same net concentration of bittering substances (10 ppm).  As another example, let's say we brew a beer with poorly-stored hops, and we end up with equal concentrations of IAA and nonIAA, at 10 ppm each.  Now our beer will have an IBU value of 14.  A typical beer with the same bitterness level brewed in the 1960s would have had an IAA level of 14 ppm and a nonIAA level of 6 ppm.
+
+<p>
+Now let's revisit the assumption that the concentration of nonIAA substances can be predicted from light absorption with a scaling factor of 69.68.  For the sake of explanation, let's consider a hypothetical case where nonIAA substances have a scaling factor of 696.8, ten times that of IAA, as illustrated in Figure 1(c).  We can then plot the concentration of nonIAA substances divided by 10 (i.e. [<em>nonIAA</em>]/10) as a function of light absorption (Figure 1(d)), and return to our desired IAA scaling factor of 69.68.  We then just need to note in our equation that we're no longer modeling the actual concentration of nonIAA, but the scaled concentration [<em>nonIAA</em>]<sub>beer</sub> × <em>scale<sub>nonIAA</sub></em>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> ≈ <em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + ([<em>nonIAA</em>]<sub>beer</sub> × <em>scale<sub>nonIAA</sub></em>))</td>
+<td align="right" valign="bottom" width="30">[11]</td>
+</tr>
+</tbody>
+</table>
+where <em>scale<sub>nonIAA</sub></em> is the scaling factor needed to convert the absorption-to-concentration relationship of nonIAA (696.8 in our example) to the absorption-to-concentration relationship of IAA (69.68).  In our example, <em>scale<sub>nonIAA</sub></em> is 0.10.  In a similar way, we can consider nonIAA as a group of substances, each with its own scaling factor.  If nonIAA consists of three different substances, <em>nonIAA1</em>, <em>nonIAA2</em>, and <em>nonIAA3</em>, we can write the relationship like this:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>beer1960s</sub> ≈ <em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + (([<em>nonIAA1</em>]<sub>beer</sub> × <em>scale<sub>nonIAA1</sub></em>) + ([<em>nonIAA2</em>]<sub>beer</sub> × <em>scale<sub>nonIAA2</sub></em>) + ([<em>nonIAA3</em>]<sub>beer</sub> × <em>scale<sub>nonIAA3</sub></em>)))</td>
+<td align="right" valign="bottom" width="30">[12]</td>
+</tr>
+</tbody>
+</table>
+where <em>scale<sub>nonIAA1</sub></em> is the scaling factor for the first nonIAA substance, <em>scale<sub>nonIAA2</sub></em> is the scaling factor for the second nonIAA substance, and <em>scale<sub>nonIAA3</sub></em> is the scaling factor for the third nonIAA substance.
+
+<p>
+The IBU value was designed to be approximately equal to the concentration of isomerized alpha acids (in ppm), given the boiling time, alpha acid levels, and storage conditions of 1960s beer and hops <a href="#references">[Peacock, p. 161]</a>.  At that time, hops seem to have been stored for long periods of time at cellar or room temperature without special packaging <a href="#references">[Peacock, p. 160 and 162]</a>.  As Peacock explains, for a typical beer made from typical hops with a typical age and duration of hop boiling, the relative concentration of IAA to all bittering substances (IAA + nonIAA) was about 5/7, or about 71%.  In more recent times, it is much more likely that hops are stored at freezing temperatures or with less oxygen for less time, which makes the relative concentration of IAA (with a typical 1960s hop boiling time) much higher.  So, an IAA concentration of 14 ppm from a 60-minute boil might yield an IBU value closer to 12.  On the other hand, it is also common now to add a lot more hops much closer to flameout, which increases the relative concentration of nonIAA components in the beer (compared with longer boiling times), as discussed below.
+
+<p>
+<p>
+<span id="heading1"><span id="a_general_description">3. A General Description of Factors Affecting IBUs</span></span><br>
+The preceding descriptions of IBUs actually helped us.  Now we know that there are only three things we need to worry about when modeling IBUs: the concentration of isomerized alpha acids (IAA), the concentrations of other bittering substances (nonIAA), and the scaling factors for the nonIAA substances.  Thanks to Peacock's formulation, we've moved from the absorption of light at 275 nm (which is very difficult for a homebrewer to measure or predict) to the concentrations of different substances (which we can approximate).  This section looks at these three items in more detail.
+
+<p>
+Before getting too far into this section, this might be a good place to define some terms related to alpha acids and beta acids.  Alpha acids are part of the soft resins in the hop lupulin gland, and the alpha acids contain humulone, cohumulone, and adhumulone  <a href="#references">[Oliver, p. 34]</a>.   Older work may refer to <em>all</em> alpha acids as humulones <a href="#references">[Oliver, p. 462]</a>.  Humulone is the most prevalent of the alpha acids, and the "chemistry of the other iso-alpha acids is practically identical to that of the isohumulones" <a href="#references">[Verzele and De Keukeleire, p. 88]</a>, so the terms "humulone" and "iso-humulone" can usually be considered generally equivalent to the terms "alpha acid" and "isomerized alpha acid," respectively (to the chagrin of Verzele and De Keukeleire <a href="#references">[p. 89]</a>).  The oxidized alpha acids contain humulinone as their most important component <a href="#references">[Algazzali, p. 13]</a>.  The soft resins also contain beta acids, which are also called lupulones <a href="#references">[Oliver, p. 462]</a>.  The beta acids are composed of colupulone, adlupulone, lupulone, and prelupulone <a href="#references">[Oliver, p. 260]</a>.  The oxidized beta acids contain mostly hulupones <a href="#references">[Algazzali, p. 15]</a>.  The oxidized form of colupulone is called cohulupone <a href="#references">[Stevens and Wright, p. 496]</a>.
+
+<p>
+<p>
+<span id="heading2"> <span id="concentration_of_iaa">3.1 Concentration of Isomerized Alpha Acids (IAA)</span></span><br>
+Mark Malowicki <a href="#references">[Malowicki]</a> provides a model for both the conversion of alpha acids into isomerized alpha acids and the subsequent conversion of isomerized alpha acids into other "uncharacterized degradation products", as functions of time and temperature (with pH 5.2 and an alpha-acid concentration of 80 ppm).  (These degradation products include humulinic acid, isobutyraldehyde, and iso-hexenoic acid <a href="#references">[Hough et al., p. 480]</a>.)  Malowicki describes the conversion of alpha acids into isomerized alpha acids as a first-order reaction following an <a href="https://en.wikipedia.org/wiki/Arrhenius_equation" target="_blank">Arrhenius equation</a> with a temperature-dependent rate constant <em>k</em><sub>1</sub>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup></td>
+<td align="right" valign="bottom" width="30">[13]</td>
+</tr>
+</tbody>
+</table>
+where <em>k</em><sub>1</sub>(<em>T</em>) is the rate constant for the conversion of alpha acids into isomerized alpha acids and <em>T</em> is the temperature in degrees Kelvin.  A first-order reaction is of the form [<em>X</em>] = [<em>X</em>]<sub>0</sub>e<sup>-<em>kt</em></sup> (where [<em>X</em>] is the concentration of substance <em>X</em> at time <em>t</em>, [<em>X</em>]<sub>0</sub> is the initial concentration of <em>X</em> (at time 0), <em>k</em> is a rate constant, and e is the constant 2.71828...), so we can describe the reduction of alpha acids (due to their conversion into isomerized alpha acids) as:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>AA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> e<sup>-<em>k</em><sub>1</sub>(<em>T</em>)<em>t</em></sup></td>
+<td align="right" valign="bottom" width="30">[14]</td>
+</tr>
+</tbody>
+</table>
+where [<em>AA</em>]<sub>wort</sub> is the resulting concentration of alpha acids in the wort at time <em>t </em>(in minutes), [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids (when the hops are added to the kettle), and <em>k</em><sub>1</sub>(<em>T</em>) is the rate constant from Equation [13].  We can assume that the reduction in alpha acids is mirrored by a corresponding increase in isomerized alpha acids (see <a href="#references">[Malowicki p. 6]</a>).  Second, Malowicki describes the subsequent conversion of isomerized alpha acids into degradation products, also as a first-order reaction with a temperature-dependent rate constant:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup></td>
+<td align="right" valign="bottom" width="30">[15]</td>
+</tr>
+</tbody>
+</table>
+where <em>k</em><sub>2</sub>(<em>T</em>) is the rate constant for the conversion of isomerized alpha acids into other products (and <em>T</em> is still in degrees Kelvin).
+
+<p>
+Both Malowicki <a href="#references">[Malowicki, p. 27]</a> and Yarong Huang et al. <a href="#references">[Huang 2013]</a> show how to combine these equations into a single model of the cumulative concentration of isomerized alpha acids as a function of time and temperature:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) (e<sup>-<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>-<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</td>
+<td align="right" valign="bottom" width="30">[16]</td>
+</tr>
+</tbody>
+</table>
+where [<em>IAA</em>]<sub>wort</sub> is the concentration of isomerized alpha acids in the wort at time <em>t</em> and temperature <em>T</em>.  We can plot this equation in Figure 2, with time on the horizontal axis, relative concentration of isomerized alpha acids (compared with the initial concentration of alpha acids) on the vertical axis, and a few different steeping temperatures represented with different colors:
+
+<p>
+<img src="isoalphaacidconcentraion.jpg" alt="Figure 2"/> <span id="caption"> Figure 2.  Theoretical relative concentration of isomerized alpha acids in water, as a function of time and temperature.</span>
+
+<p>
+This plot at 100°C (212°F) looks reassuringly similar to the utilization of alpha acids in the Tinseth equation for predicting IBUs <a href="#references">[Tinseth]</a>; the scale is different, and the shape is somewhat different, but the general trend at boiling is similar.
+
+<p>
+Equation [16] relies on the initial concentration of alpha acids when hops are added to the boil, which we can determine from the volume of wort (in liters), the weight of hops added (in grams), and either (a) the measured percentage of alpha acids at the time of the boil or (b) the measured percentage of alpha acids at the time of harvest and the degradation of alpha acids over time.  These values will give us the initial concentration of alpha acids in wort (in ppm):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>AA</em>]<sub>0</sub> = <em>AA<sub>%</sub></em> × <em>W</em> × 1000 / <em>V</em></td>
+<td align="right" valign="bottom" width="30">[17]</td>
+</tr>
+</tbody>
+</table>
+where <em>AA<sub>%</sub></em> is the alpha-acid rating of our hops, scaled to the range 0 to 1 (i.e. <em>AA</em> is the proportion of the hop (cone, pellet, or extract) that is alpha acids, from 0 to 1; e.g. an alpha acid rating of 7% becomes 0.07), <em>W</em> is the weight of the hops in grams, the factor of 1000 converts from grams to milligrams, and <em>V</em> is the volume of the wort in liters.  These units combine to give us milligrams of alpha acids per kilogram of wort (since 1 liter of water equals 1 kg; we'll ignore the extra weight of the extract), or approximately parts per million.
+
+<p>
+Is <em>V</em> the volume at the beginning, middle, or end of the boil?  While [<em>AA</em>]<sub>0</sub> indicates the initial level of alpha acids (when hops are added to the boil), we don't have a factor that adjusts for volume changes between that time and the end of the boil.  If we did have such a factor, it would account for the difference between these two volumes, since the <em>final</em> concentration of isomerized alpha acids is determined by the post-boil volume (before racking losses that reduce the volume but don't change the concentration).  Instead of having a separate factor and applying it explicitly, we can specify that <em>V</em> is the post-boil volume, and the numbers will come out the same as if we started with some other volume and then accounted for evaporation.  In short: <em>V</em> should be post-boil, room-temperature wort volume (ideally not including the volume of hops in the wort).
+
+<p>
+If we don't know the alpha acid rating of the hops when we brew our beer, we can use the initial (harvest) estimate with a <a href="../../index.html" target="_top">model of how alpha acids degrade over time</a>, developed by Mark Garetz <a href="#references">[Garetz article]</a> to estimate the alpha-acid rating for hop cones:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>AA<sub>%</sub></em> = <em>AA<sub>harvest</sub></em> × <em>AA<sub>decayfactor</sub></em> =<em> AA<sub>harvest</sub></em> × 1/e<sup><em>k</em>×<em>TF</em>×<em>SF</em>×<em>D</em></sup></td>
+<td align="right" valign="bottom" width="30">[18]</td>
+</tr>
+</tbody>
+</table>
+where <em>AA<sub>harvest</sub></em> is the alpha-acid rating of the hops after harvest and drying (in the range 0 to 1), <em>AA<sub>decayfactor</sub></em> is a multiplication factor for how much the AA level has decayed over time (1.0 for fresh hops), <em>k</em> is a value that depends on the percent of alpha acids lost after 6 months at room temperature (which in turn depends on the variety of hops), <em>TF</em> is a temperature factor that describes how degradation is affected by temperature, <em>SF</em> is a storage factor that describes how degradation is affected by storage conditions, and <em>D</em> is the age of the hops, in days.  The full definition of all terms is provided in Garetz's article <a href="#references">[Garetz article]</a>.  For hop pellets, the rate of deterioration is much slower.  Hieronymus says that while whole hops can lose up to 100% of their alpha acids when stored at 68°F (20°C) for one year, pellets lose only 10% to 20% under the same conditions <a href="#references">[Hieronymus, p. 230]</a>.  If you use pellets that were made soon after harvest, and they've been stored in the refrigerator or freezer and in nitrogen-flushed packaging, it's probably safe to assume that losses are somewhere between 5% and negligible, yielding a correction factor between 0.95 and 1.0.  If you don't know how long the hops in your pellets were in whole-cone form, or what the storage conditions were, predicting the losses becomes quite difficult.
+
+<p>
+One complicating factor in getting a reliable estimate of <em>AA<sub>%</sub></em> is that the alpha acids are not evenly distributed throughout the hop cone, and some cones contain more alpha acids than others.  As Verzele and De Keukeleire state, "there are easily differences up to 15 − 20% in alpha acids content between and within bales of a single hop delivery. ... Since inhomogeneity is to be expected, a reasonable estimate for the average content of the hops lot can only be obtained by sampling at various positions" <a href="#references">[Verzele and DeKeukeleire, p. 331]</a>.  Therefore, if you only use an ounce or two of well-preserved hops in your boil, the actual concentration of alpha acids in the wort can be up to 20% different from the expected concentration based on the alpha-acid rating on the package.
+
+<p>
+<p>
+<span id="heading2"> <span id="accounting_for_post_boil">3.2 Accounting for Post-Boil Utilization</span></span><br>
+It's clear that at flameout, the wort (unfortunately) does not instantaneously cool to pitching temperature.  According to Equation [16], there can still be measurable isomerization even at 158°F (70°C).  Therefore, as the wort cools after flameout, there can be a significant increase in the concentration of isomerized alpha acids.  I've suggested in a <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">previous blog post</a> that we can model this post-flameout increase in IBUs by multiplying the <em>change</em> in IAA concentration at time <em>t</em> by a temperature-dependent factor at <em>t</em> (with a factor of 1.0 for boiling), and then integrating the instantaneous values over time to arrive at a cumulative IAA concentration that reflects post-flameout temperature changes. In the current framework, we have a function (Equation [16]) that is already dependent on temperature, so we can take the derivative with respect to time, compute the instantaneous change in concentration at time <em>t</em> and temperature <em>T</em>, and then integrate over time <em>t</em> to arrive back at total concentration of IAA.  While the temperature is boiling, we will arrive at the same answer as if we didn't take the derivative and then integrate.  As the kettle cools after flameout, we change the rate constants to reflect the lower rate of isomerization.  This can be implemented in less than 20 lines of programming code, and I've since noticed that Malowicki suggests this very approach, saying "for conditions in which the rate constants change with a changing temperature profile, the concentrations of iso-humulones formed during kettle boiling can be calculated using [equations] which define the differential change in alpha-acid, iso-alpha-acid, and degradation product concentrations with respect to time" <a href="#references">[Malowicki, p. 27]</a>.
+
+<p>
+We  can take the derivative of Equation [16] in order to compute the change in IAA concentration at time <em>t</em>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>d</em>([<em>IAA</em>]<sub>wort</sub>)/<em>dt</em> = [<em>AA</em>]<sub>0</sub> (<em>k</em><sub>1</sub>/(<em>k</em><sub>2</sub>–<em>k</em><sub>1</sub>)) (<em>k<sub>2</sub></em>e<sup><em>-k<sub>2</sub>t</em></sup>-<em>k<sub>1</sub></em>e<sup><em>-k<sub>1</sub>t</em></sup>)</td>
+<td align="right" valign="bottom" width="30">[19]</td>
+</tr>
+</tbody>
+</table>
+where <em>d</em>([<em>IAA</em>]<sub>wort</sub>)/<em>dt</em> is the rate at which the IAA concentration changes, in ppm per minute.  However, instead of using [<em>AA</em>]<sub>0</sub> to compute the change at any time <em>t</em>, we can use equations defined by Malowicki <a href="#references">[p. 27]</a> to compute the change in concentration at time <em>t</em> using current concentration levels:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>d</em>([<em>AA</em>]<sub>wort</sub>)/<em>dt</em> = -<em>k</em><sub>1</sub> [<em>AA</em>]<sub>wort</sub></td>
+<td align="right" valign="bottom" width="30">[20]</td>
+</tr>
+<tr>
+<td><em>d</em>([<em>IAA</em>]<sub>wort</sub>)/<em>dt = k</em><sub>1</sub> [<em>AA</em>]<sub>wort</sub> - <em>k</em><sub>2</sub> [<em>IAA</em>]<sub>wort</sub></td>
+<td align="right" valign="bottom" width="30">[21]</td>
+</tr>
+</tbody>
+</table>
+By using these equations, we only need to know the total concentration of these substances at the previous time step in order to compute the concentrations at time <em>t</em>.  Only at <em>t</em>=0 do we need to know the initial concentration of alpha acids.  Since we're integrating the instantaneous values anyway, Malowicki's formulation of the derivatives ends up being just as easy to program and incredibly more efficient at dealing with multiple hop additions.
+
+<p>
+A model of how temperature decreases after flameout is presented in a blog post "<a href="../16-predicting-wort-temperature-after-flameout/alchemyoverlord-blog-content16.html">Predicting Wort Temperature After Flameout</a>".  This model is described by Equations [22a], [22b], and [22c].  In these equations, the parameter <em>T</em> is temperature (in degrees Kelvin), <em>t</em> is time after flameout (in minutes), <em>b</em> is the rate constant that describes how quickly the temperature decreases, <em>effectiveArea</em> is the "effective" area through which steam ventilates, <em>surfaceArea</em> is the surface area of wort exposed to air (in square centimeters), <em>openingArea</em> is the area of the opening in the kettle (in square centimeters), and <em>volume</em> is the wort volume (in litres).  This rate of natural cooling is primarily influenced by (a) the release of steam, which is in turn influenced by the wort volume, surface area of wort exposed to air, and size of the opening in the kettle through which steam can escape, and (b) radiation of heat from the kettle.  Other factors, such as ambient temperature and kettle material, are of much lesser significance and can be ignored.
+<table class="table" >
+<tbody>
+<tr>
+<td><em>T</em> = 53.70 × exp(-<em>b</em> × <em>t</em>) + 319.55</td>
+<td align="right" valign="bottom" width="35">[22a]</td>
+</tr>
+<tr>
+<td><em>b</em> = (0.0002925 × <em>effectiveArea </em>/ <em>volume</em>) + .00538</td>
+<td align="right" valign="bottom" width="35">[22b]</td>
+</tr>
+<tr>
+<td><em>effectiveArea</em> = (<em>surfaceArea</em> × <em>openingArea</em>)<sup>0.5</sup></td>
+<td align="right" valign="bottom" width="35">[22c]</td>
+</tr>
+</tbody>
+</table>
+We can model total concentration of IAA by integrating the change in [IAA] at each instant, where this amount of change is dependent on the steep time and temperature of the wort.  Rather than expressing this as a formula, I think a short amount of pseudo-code will be easier to understand (referred to as Code [1]), even if you're not a programmer:
+<pre>integrationTime = 0.001;
+effectiveArea = sqrt(surfaceArea * openingArea)<em>;</em>b = (0.0002925 * effectiveArea / volume) + .00538;
+AA = AA0;
+IAA = 0.0;
+time = 0.0;
+while (time &lt;= totalTime) {
+    if (time &lt;= boilTime) 
+        temp = 373.15; 
+    else 
+        temp = 53.70 × exp(-b * (time-boilTime)) + 319.55;
+    k1 = 7.9 * pow(10,11) * exp(-11858.0/temp);
+    k2 = 4.1 * pow(10,12) * exp(-12994.0/temp);
+    dAA = -1.0 * k1 * AA;
+    AA = AA + (dAA * integrationTime);
+    dIAA = (k1 * AA) - (k2 * IAA);
+    IAA = IAA + (dIAA * integrationTime);
+    time = time + integrationTime;
+}</pre>
+where the integration time of 0.001 (called <code>integrationTime</code>) is sufficient for accuracy to at least two places past the decimal point; a larger value like 0.01 will speed things up and still have very good accuracy.  The variable <code>effectiveArea</code> is the square root of the surface area of the wort and the area of the kettle opening.  The variable <code>b</code> is the rate constant for temperature decay.  The variable <code>AA0</code> is the initial concentration of alpha acids, in ppm (see Equation [17]).  Here, <code>AA</code> is the total concentration of AA, or [AA], after time <code>time</code> (in minutes).  Likewise, <code>IAA</code> is the total concentration of IAA, or [IAA], after time <code>time</code>.  The value of <code>totalTime</code> is the length of the boil in minutes (<code>boilTime</code>) plus any time after the boil when isomerization might be happening.  A loop is set up to evaluate (and integrate) all time points from 0.0 to <code>totalTime</code> in increments of 0.001 minutes, with <code>time</code> representing the current time instant.  (The '{' and '}' symbols define the beginning and end of what is evaluated during each time point.)  The <code>temp</code> variable is temperature at the current time, in Kelvin.  The <code>k1</code> and <code>k2</code> variables are the rate constants from Equations [13] and [15].  The variable <code>dAA</code> is the derivative of [AA], or change in [AA] per minute, as defined in Equation [<span style="color: #666699;">20</span>].  Likewise, the variable <code>dIAA</code> is the derivative of [IAA], or change in [IAA] per minute, as defined in Equation [<span style="color: #666699;">21</span>].  The <code>pow()</code> function raises the first argument to the power of the second argument; the <code>exp()</code> function computes the constant <em><span class="texhtml mvar">e</span></em> (2.718...) to the power of its argument.  After finishing the loop, <code>IAA</code> will equal the total concentration of isomerized alpha acids, accounting for both time and (post-flameout) temperature.
+
+<p>
+<p>
+<span id="heading2"> <span id="adjustments_to_the_concentration">3.3 Adjustments to the Concentration of Isomerized Alpha Acids</span></span><br>
+Now we know how to measure the concentration of IAA in wort during the boil under ideal conditions.  We can use this as the basis for a quantitative model of IBUs.  What we need next is a way to describe the differences between ideal laboratory conditions and (home) brewery conditions.  One difference is a loss of available alpha acids when the amount of alpha acids added to the wort exceeds its solubility limit, as described below ("losses as a function of hopping rate").  Other differences can usually be described as losses of IAA that are produced in the boiling wort but never make it into the pint glass: losses that are correlated with high wort gravity, other losses during the boil, and losses due to wort turbidity, wort pH, fermentation, flocculation, krausen deposits, filtration, finings, and aging.  We'll look at each of these briefly in this section.  In general, if we have a loss of <em>x</em>%, the loss <em>factor</em> will be (1 - (<em>x</em>%/100)); for example, a loss of 10% becomes a loss factor of 0.90.  If condition <em>A</em> is <em>x</em>% <em>more efficient</em> than condition <em>B</em>, then the loss factor for condition <em>B</em> is (100/(100+<em>x</em>%)).  For example, if <em>A</em> is 10% more efficient than <em>B</em>, then <em>B</em> has a loss factor of 0.91 compared with <em>A</em>.
+
+<p>
+Before getting into too much detail, this is a good place to define a high-level term, "utilization."  Hop utilization, <em>U</em>, is the amount of isomerized alpha acids in the finished beer divided by the amount of alpha acids added to the kettle, and then multiplied by 100 to convert to percent <a href="#references">[e.g. Lewis and Young, p. 266]</a>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>U </em>= 100 × (isomerized alpha acids in beer) / (alpha acids added to kettle)</td>
+<td align="right" valign="bottom" width="30">[23]</td>
+</tr>
+</tbody>
+</table>
+It should be noted that utilization refers only to the creation and loss of iAA, not to IBUs.
+
+<p>
+<span style="text-decoration: underline;"><em>Isomerization as a Function of Temperature</em></span>: According to Malowicki's equations (above), a decrease in temperature (e.g. below 100°C) will decrease utilization.  If you live at a high enough altitude, your wort will boil at less than 100°C, in which case you might want to adjust <em>k</em><sub>1</sub> and <em>k</em><sub>2</sub> in Equations [13] and [15].  Post-flameout temperature dependencies are discussed above in Section 3.2.  (Lewis and Young, Palmer, Hieronymus, and others note that the intensity of the boil affects utilization <a href="#references">[Lewis and Young, p. 266; Palmer p. 55; Hieronymus, p. 188]</a>, which is presumably related to wort temperature.)
+
+<p>
+<span style="text-decoration: underline;"><em>Isomerization Differences Based on Form of the Hops</em></span>: The impact of hop pellets on IBUs, compared with hop cones, is discussed more in Section 3.4.1.  Hop cones can be added to the boil either loose or in a coarse mesh bag.  Garetz says that hops kept in a mesh bag during the boil have lower utilization than loose hops, with a correction factor of 0.91 for loosely-stuffed hops and 0.83 for a full bag <a href="#references">[Gartez book, p. 141]</a>.  I looked at the <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">effect of a mesh bag vs. loose hops</a> on measured IBUs, and found no significant difference.  Marshall Schott at <a href="http://brulosophy.com/" target="_blank">Brülosophy</a> also looked at bagged vs. loose hops, and found 25 IBUs for the bagged hops and 27 IBUs for the loose hops <a href="#references">[Schott]</a>.  While this difference is not significant, the ratio of 0.926 (25/27) is close to Garetz's correction factor of 0.91.  In short, it's not clear if hop cones in a mesh bag really do have lower utilization.  For the model being developed, I'll assume that bagged hops have the same utilization as loose hops.
+
+<p>
+<span style="text-decoration: underline;"><em>Isomerization as a Function of Kettle Size and/or Geometry</em></span>: The kettle size and/or kettle geometry may also impact utilization <a href="#references">[Daniels, p. 78; Fix, p. 47]</a>.  As Hieronymus says, "larger kettles are more efficient, and the difference between a five-gallon homebrew system and even a 10-barrel (310-gallon) commercial brewery is startling" <a href="#references">[Hieronymus, p. 188]</a>.  There are other claims, however, that recipes should scale linearly with kettle size, indicating no impact on utilization <a href="#references">[e.g. Spencer]</a>.  If there is an impact, the reason for the change in utilization is not clear to me, especially since Malowicki used only tiny volumes of wort (12 ml) <a href="#references">[Malowicki, p. 19]</a> and obtained high utilization rates at boiling (see Figure 2).  The only quantitative description I've seen of this impact on utilization is in an article on BeerSmith, which says that "Hop utilization is much higher at craft brewing scales, because large boils simply extract more bitterness. ... The Hop Utilization Factor ... can easily be 125%, 150% or possibly more for a multi-barrel brewing system" <a href="#references">[Smith]</a>.  I think that the observed increase in utilization with kettle size is actually a reflection of longer times between flameout and cooled wort, which is already accounted for in the current model with post-boil utilization.  In short, kettle size (or wort volume) may (or may not) have an impact on utilization, with a scaling factor ranging from 1.0 (no impact) to 1.5 (large impact).  Because of the difficulty of reconciling Malowicki's use of tiny volumes and resulting high utilization, and because in numerous experiments I've conducted with different volumes of wort (see Section 4.2.3) that show no impact of volume or boil-kettle size on IBUs, I believe that the size of the wort volume or boil kettle has no impact on utilization.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses as a Function of Hopping Rate</em></span>: The relative amount of hops (and therefore also the relative amount of alpha acids) in the wort affects utilization.  As Lewis and Young say, "a high hopping rate reduces extraction efficiency" <a href="#references">[Lewis and Young, p. 267]</a>.  Daniels phrases this as "simply adding more and more hops does not produce a linear increase in the amount of bitterness produced" <a href="#references">[Daniels, p. 85]</a>.  Fix also notes that the utilization rate is affected by hop concentration <a href="#references">[Fix, p. 47]</a>.  Hough et al. say that "hops are utilized more efficiently at low rates" <a href="#references">[Hough et al., p. 489]</a>.  Maule determined that reduced utilization at higher hop rates can only be accounted for by the "difficulty with which [isomerized alpha acid] enter[s] solution when wort [is] boiled with large amounts of [alpha acid]" <a href="#references">[Maule, p. 290]</a>, and that "only a small portion of the resin present on the hot break ... can be claimed to be truly adsorbed" <a href="#references">[Maule, p. 289]</a>.
+
+<p>
+Garetz provides a quantitative model of the relationship between amount of hops and utilization.  He proposes a hopping-rate correction factor (also described by Hall and Daniels) that depends on volume and "desired IBU" to determine the weight of hops needed <a href="#references">[Garetz book, p. 137; Hall, p. 63; Daniels, p. 86]</a>.  I used this equation when I was initially developing this blog post.  However, after some difficulty fitting the IBU model developed here with available data, and after further <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">experimentation</a>, I concluded that Garetz's correction factor underestimates the effect of alpha acid concentration on utilization.
+
+<p>
+A better fit to the data available to me can be obtained by using a <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">"soft" limit on alpha-acid solubility</a>.  In this model, the solubility of alpha acids rises gradually above 240 ppm with increasing [<em>AA</em>]<sub>0</sub>, according to the equations
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>slope</em> = log(1 − ([<em>AA</em>]<sub>limitMin</sub> / [<em>AA</em>]<sub>limitMax</sub>)) / [<em>AA</em>]<sub>limitMin</sub></td>
+<td align="right" valign="bottom" width="30">[24]</td>
+</tr>
+<tr>
+<td>[<em>AA</em>]<sub>limit</sub> = [<em>AA</em>]<sub>limitMax</sub> × (1 − exp(<em>slope</em> × [<em>AA</em>]<sub>0</sub>))</td>
+<td align="right" valign="bottom" width="30">[25]</td>
+</tr>
+</tbody>
+</table>
+where [<em>AA</em>]<sub>limitMin</sub> equals 240 and [<em>AA</em>]<sub>limitMax</sub> equals 490.  Any alpha acids above [<em>AA</em>]<sub>limit</sub> are quickly degraded and don't contribute to the production of isomerized alpha acids (or oxidized alpha acids).  This "soft" limit is generally consistent with (a) the observations of Maule indicating undissolved alpha acids at concentrations as low as about 200 ppm <a href="#references">[Maule, p. 289]</a> and (b) a solubility limit of 300 ppm at boiling and pH 5.2 determined by Spetsig <a href="#references">[Spetsig, 1955, p. 1423]</a> for higher concentrations.  (Another <a href="../20-alpha-acid-solubility-and-ph/alchemyoverlord-blog-content20.html">preliminary study</a> indicates surprisingly little impact of pH on alpha-acid solubility at boiling.)  Using this approach, utilization increases linearly with alpha-acid concentration until the lowest solubility limit is reached (240 ppm); at higher concentrations, solubility and utilization increase more slowly.  For the model of IBUs developed in this blog post, equations [24] and [25] describe the reduction in utilization as a function of the hopping rate.  This reduction in the available alpha acids can be expressed, if needed, as a loss factor that is a function of [<em>AA</em>]<sub>0</sub>, <em>LF<sub>hoppingRate</sub></em>([<em>AA</em>]<sub>0</sub>).
+
+<p>
+<span style="text-decoration: underline;"><em>Losses Due to Wort Gravity</em></span>: Utilization decreases with increasing wort gravity, at least at higher gravities <a href="#references">[e.g. Lewis and Young, p. 266; Hieronymus, p. 188; Hall, p. 62; Daniels, p. 78; Palmer, p. 55; Malowicki, p. 44; Garetz book, p. 130; Hough et al., p. 489; Kappler, p. 334]</a>.  As Lewis and Young state, "iso alpha acids react with proteins of wort whence they are partially removed as trub or hot break" <a href="#references">[Lewis and Young, p. 266]</a>.  As the gravity increases, the concentration of wort proteins increases, implying a greater loss of isomerized alpha acids with increasing gravity.  Kappler found greater losses of isomerized alpha acids at higher gravities when adding (already) isomerized alpha acids to the boil <a href="#references">[Kappler, p. 335]</a>, indicating that higher gravity causes more isomerized alpha acids to bind with trub and settle out of solution (as opposed to slowing the rate of conversion from alpha acids to isomerized alpha acids).  Malowicki did not find a significant change in utilization at specific gravities of 1.000 and 1.040 <a href="#references">[Malowicki, p. 39]</a>, and Garetz indicates that the lower limit for this effect is a specific gravity of 1.050 <a href="#references">[Garetz book, p. 130]</a>.  Greg Noonan <a href="#references">[Noonan, p. 215]</a> provides a table of utilization as a function of boil time, original gravity, and form of the hops.  (His table simply lists "wort density" and "specific gravity", but he defines wort density as original gravity <a href="#references">[Noonan, p. 204]</a>). Glenn Tinseth models the  gravity correction factor as LF<sub>OG</sub>(<em>WG</em>) = 1.65 × 0.000125<sup>(<em>WG</em> − 1)</sup>, with a scaling factor of 1.0 at around a (typical) wort gravity (<em>WG</em>) of 1.055.  (Tinseth uses the term "wort gravity" and suggests using the average of the (initial) boil gravity and original gravity for wort gravity <a href="#references">[Tinseth]</a>.)
+
+<p>
+I looked at the <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">impact of specific gravity on IBUs</a>, and while I found the same general trend described by others, the trend was only visible for boil times greater than 40 minutes; at less than 40 minutes boil time, no impact of gravity was seen.  The following function describes a gravity-correction factor as a function of original gravity and boil time:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>LF<sub>OG</sub></em>(<em>OG</em>, <em>t</em>) = 1 − 2×exp(−1 / (<em>S</em>(<em>t</em>) × (<em>OG </em>− 1)))</td>
+<td align="right" valign="bottom" width="30">[26]</td>
+</tr>
+</tbody>
+</table>
+where LF<sub>OG</sub>(<em>OG</em>, <em>t</em>) is a gravity loss-correction factor, <em>OG</em> is the original gravity, <em>t</em> is the time for which the hops are in contact with boiling wort, and <em>S</em>(<em>t</em>) takes on different values depending on the hop steep time.  For steep times 30 minutes and less, <em>S(t)</em> = 1; for steep times 40 minutes and greater, <em>S(t)</em> = 4.9, and for steep times between 30 and 40 minutes, <em>S(t)</em> = 0.39 × (<em>t </em>− 30) + 1.  At steep times 40 minutes and greater, <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">this function provides a compromise</a> between the correction factors proposed by Tinseth, Rager, Mosher, and Noonan <a href="#references">[Hall, p. 61]</a>.
+
+<p>
+<span style="text-decoration: underline;"><em>Other Losses During the Boil</em></span>:  Isomerized alpha acids are lost during the boil in ways that are not dependent on the wort gravity.  Malowicki says that "trub, and specifically <em>the formation of trub</em>, leads to greatly increased losses of bitter acids" <a href="#references">[Malowicki, p. 8; emphasis mine]</a>.  He cites work by Askew in which the use of pre-formed trub produced losses of only 5% to 9%, but the <em>formation</em> of trub created losses of 35% <a href="#references">[Malowicki, p. 7-8]</a>.  Malowicki also cites Laufer and Brenner who found a 38% loss of bitter acids to trub <em>and</em> a 35% loss to spent hops.  Spetsig reports that about 25-30% of the bitter substances are found in the spent hops and 25-40% are found in the trub <a href="#references">[Spetsig, 1968, p. 346]</a>.  Hall cites Hough et al., who cite Maule (1966), saying that "about 7% of the iso-alpha acids are removed with the breaks" <a href="#references">[Hall, p. 57; Hough et al., p. 489]</a>.  Garetz says that "8-10% of the iso-alpha acids are adsorbed (meaning they cling to the surface of) the hot and cold breaks." <a href="#references">[Garetz book, p. 126]</a>.  In short, the estimated loss of isomerized alpha acids during the boil ranges from 7% to 73%, yielding a correction factor from 0.27 to 0.93, which is a bit too large of a range to be of practical value.  While we don't have a good value for this loss factor yet, we can refer to it as LF<em><sub>boil</sub></em>.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses Due to pH</em></span>: It is generally accepted that a lower wort pH will reduce utilization <a href="#references">[e.g. Lewis and Young, p. 266]</a>.   Malowicki looked at isomerized alpha acids produced and degraded during boiling at pH values of 4.8, 5.2, 5.6, and 6.0, and found that "the dataset did not show a significant effect of pH on rate of iso-alpha-acids produced" <a href="#references">[Malowicki, p. 38]</a>.   He speculated that "the losses to trub would better explain the differences in utilization that are attributed to pH..., since <em>rate of isomerization does not appear to be affected</em>" <a href="#references">[Malowicki, p. 41 (emphasis mine)]</a>.  Kappler found a significant loss of isomerized alpha acids during the boil corresponding with a decrease in pH (at pH levels of 4.0, 5.0, 6.0, and 8.0); Huang found similar results <a href="#references">[Kappler, p. 334; Huang, p. 50]</a>.  However, the difference in recovered IAA between pH 5.0 and 6.0 found by Kappler was only a relative 7%, and this pH range is beyond that found in typical brewing.  In another blog post, "<a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">The Effect of pH on Utilization and IBUs</a>", I measured IBUs as a function of wort pH and concluded that the decrease in IBUs with pH can be modeled as primarily a loss of nonIAA components and secondarily as a loss of IAA.  The loss factor for IAA can be modeled as LF<sub>pH_IAA</sub>(<em>pH) </em> = 0.071 × <em>pH</em> + 0.592, where LF<sub>pH_IAA</sub> is the scaling factor to model IAA losses as a function of pH and the variable <em>pH</em> is the post-boil wort pH.  This scaling factors has a value of 1.0 at pH 5.75, and smaller values as the pH decreases.  This loss factor for IAA was based on the data published by Kappler et al. <a href="#references">[Kappler, p. 334]</a>.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses Associated with the Use of Salts</em></span>:  Kappler et al. (2010) looked at the impact of calcium chloride, magnesium chloride, and calcium sulfate on the recovery of isomerized alpha acids <a href="#references">[Kappler et al., p. 335]</a>.  They added each salt at various concentrations to pure water with 100 ppm of isomerized alpha acids, and evaluated the recovery rate of IAA after a 60-minute boil.  For calcium chloride and magnesium chloride, they found a very large reduction in the recovery rate of IAA with salt concentrations of 200 and 500 ppm.  They found a smaller effect for calcium sulfate.  This implies that there may be significant losses of isomerized alpha acids with the use of such salts.  I did a <a href="../21-the-effect-of-calcium-chloride-on-ibus/alchemyoverlord-blog-content21.html">similar experiment</a>, but looked at the change in IBU values in finished beer associated with different concentrations of calcium chloride.  I found very little effect of calcium chloride concentration on IBU values (and, by implication, on IAA losses).  Because Kappler's results were obtained using water instead of wort, it seems for now that there is probably little impact associated with the use of these salts when they are boiled with hops in wort.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses Associated with Wort Clarity</em></span>:  To my surprise, I have measured very <a href="../27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">significant differences in IBUs when beers differ only in the clarity of the wort</a>.  In this experiment, wort clarity was changed by using different lautering techniques.  (I originally suspected a relationship between the concentration of protein in wort and loss of IAA, but the different conditions in this experiment all had the same protein levels.)  While nonIAA concentrations do not appear to be affected by wort clarity, IAA concentrations can be 30% higher than average in very clear wort and 30% lower in very cloudy wort.  We can then define a loss factor for the loss (or relative gain) of IAA associated with wort clarity, LF<sub>wortClarity</sub>(<em>clarity</em>), with <em>clarity</em> a somewhat poorly-defined parameter using qualitative descriptions.  For example, LF<sub>wortClarity</sub>(very clear)=1.30, LF<sub>wortClarity</sub>(clear)=1.20, LF<sub>wortClarity</sub>(somewhat clear)=1.10, LF<sub>wortClarity</sub>(average)=1.00, LF<sub>wortClarity</sub>(somewhat cloudy)=0.90, LF<sub>wortClarity</sub>(cloudy)=0.80, and LF<sub>wortClarity</sub>(very cloudy)=0.70.  The losses (or relative gains) in IAA appear to occur during fermentation.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses During Fermentation</em></span>: Isomerized alpha acids are also lost during fermentation <a href="#references">[e.g. Hieronymus, p. 190]</a>. Lewis and Young say that "during fermentation, iso-alpha-acids associate with the surface of the yeast cells present... Iso-alpha-acids, being surfactants, react with inert surfaces of all sorts and for example separate on gas bubbles to be deposited on the fermenter walls" <a href="#references">[Lewis and Young, p. 267]</a>.  Hall describes the same process, saying that "during the fermentation process, iso-alpha acids are scrubbed by the rising CO<sub>2</sub> and collect in the foam of the kraeusen.  This sticky foam can be blown off, skimmed off or stuck on the sides of the fermenter ... Iso-alpha acids also are bound up by the yeast cells and removed when the yeast flocculates out" <a href="#references">[Hall, p. 57]</a>.  Daniels says that the amount of loss is dependent on the amount of yeast pitched and the "extent of yeast growth during fermentation" <a href="#references">[Daniels, p. 78]</a>.  Garetz says that there are two factors, "the total growth of the yeast crop and the amount of time the yeast stays in suspension", and that there is a 5% variation depending on the flocculation characteristics of the yeast <a href="#references">[Garetz book, p. 126]</a>.  He also says that if the alpha acids are mixed back into the beer at the right time, utilization is increased by 18% <a href="#references">[Garetz book, p. 126]</a>, implying typical losses of 18%.  Fix (citing Garetz) estimates loss to yeast sediment at 10% to 20% <a href="#references">[Fix, p. 49]</a>. Malowicki (citing Laws et al.) reports losses during fermentation from 5% to 17% <a href="#references">[Malowicki, p. 8]</a> and also (citing Laufer and Brenner) losses to yeast of 10% <a href="#references">[Malowicki, p. 7]</a>.  Spetsig reports losses of 10% to 15% <a href="#references">[Spetsig, 1968, p.346]</a>.  Hieronymus reports losses during fermentation and packaging of 20% <a href="#references">[Hieronymus, p. 191]</a>.  Tom Nielsen (from Sierra Nevada Brewing Co.) measured the IBUs of wort and finished beer made from 10 types of hops (9 aroma hops and 1 bittering hop) and found a fairly consistent fermentation loss of about 18% (standard deviation approximately 1.6%) <a href="#references">[Nielsen, p. 65]</a>.  To summarize, there is IAA loss during fermentation ranging from 5% to 20%, yielding a correction factor between 0.80 and 0.95.  A factor of around 0.85 is probably the best compromise between all reported values, and so the model being developed here uses 0.85 (<em>LF<sub>ferment</sub></em>=0.85).  The flocculation factor suggested by Garetz is 0.95 for high-flocculant yeast and 1.05 for low-flocculant yeast <a href="#references">[Garetz book, pp. 140-141]</a>, so we have LF<sub>flocculation</sub>(high)=0.95, LF<sub>flocculation</sub>(medium)=1.00, and LF<sub>flocculation</sub>(low)=1.05.
+
+<p>
+As noted by Hall, the concentration of IAA in beer is reduced not only by binding with the yeast that flocculates out, but also by binding with the foam of the krausen.  It is often recommended to remove the krausen during fermentation for a "smooth bitterness."  Some brewers accomplish this through the use of a blow-off tube and a small headspace in the fermentation vessel. Many brewers do nothing about krausen, allowing most of it to fall back into the beer.  I conducted <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">an experiment</a> which showed that losses of krausen to deposits on the walls of the fermentation vessel can have a small (5% to 10%) impact on IBUs, and that the loss of krausen through a blow-off tube can result in more than a 25% reduction in IBUs.  (The aforementioned "smooth" bitterness might simply be less bitterness.)  The results indicate that both IAA and nonIAA are lost with the removal of krausen, but that the loss of nonIAA is about three times greater than the loss of IAA.  While it is difficult to quantify how much krausen is deposited or lost, mixing the krausen back into the fermenting beer can yield a 13% increase in IAA, and the use of a blow-off tube can yield a 27% loss of IAA. This requires another loss-factor parameter for the loss of IAA due to krausen, LF<sub>krausen_IAA</sub>(<em>krausenLoss</em>), with <em>krausenLoss</em> another somewhat poorly-defined parameter with qualitative descriptions.  For example, LF<sub>krausen_IAA</sub>(no loss)=1.126, LF<sub>krausen_IAA</sub>(minor deposits)=1.05, LF<sub>krausen_IAA</sub>(medium deposits)=1.00, LF<sub>krausen_IAA</sub>(heavy deposits)=0.95, LF<sub>krausen_IAA</sub>(very heavy deposits)=0.90, LF<sub>krausen_IAA</sub>(blow-off, slow fermentation)=0.938, LF<sub>krausen_IAA</sub>(blow-off, normal fermentation)=0.833, and LF<sub>krausen_IAA</sub>(blow-off-vigorous fermentation)=0.729.
+
+<p>
+The earlier estimate of a typical fermentation loss factor of 0.85 corresponds well with a 12.68% increase in IAA when mixing the krausen back into the fermenter and a 5% increase when using low-flocculant yeast.  Combining these three factors results in an overall loss factor of 1.0 (0.85 × 1.126 × 1.05 = 1.00), suggesting that all of the typical IAA fermentation losses in the factor of 0.85 are accounted for by only krausen and flocculation.
+
+<p>
+<span style="text-decoration: underline;"><em>Losses Due to Filtration, Finings, and Aging</em></span>:  According to Daniels, "any filtration will remove some bitterness ... The addition of clarifying agents such as gelatin or PVPP may have a similar effect." <a href="#references">[Daniels, p. 79]</a>.  Garetz says that filtering will reduce utilization by 1.25% to 2.5%, for a filtration loss factor of about 0.98 <a href="#references">[Garetz book, p. 141]</a>.   George and Laurie Fix provide a table of the reduction in IBUs with filter size <a href="#references">[Fix and Fix, p. 129]</a>.  The IBU loss factors are 0.942, 0.953, and 0.985 at 0.5, 1, and 3 microns, respectively.  If we assume (due to a lack of data) that filtering affects IAA and nonIAA components equally, we can estimate the loss factor for filtering:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>LF<sub>filtering</sub>(<em>MR</em>) = (0.017 × <em>MR</em>) + 0.934 for <em>MR</em>=0 to 3.83, otherwise 1.0</td>
+<td align="right" valign="bottom" width="30">[27]</td>
+</tr>
+</tbody>
+</table>
+where LF<sub>filtering</sub>(<em>MR</em>) is the loss factor due to filtering, if any, and <em>MR</em> is the micron rating of the filter.  At micron ratings greater than 3.83, there is no loss of IBUs or IAA due to filtering.  If the beer is unfiltered, then any large value of <em>MR</em> can be used.
+
+<p>
+Hall says that "there are oxidation reactions that can reduce the bitterness of beer over extended storage periods" <a href="#references">[Hall, p. 58]</a>.  According to Kaltner and Mitter, "over a storage time of 12 months, a degradation of bitter substances in various beers in a range of 10% to 15% could be analyzed" <a href="#references">[Kaltner and Mitter, p. 37]</a>.  According to Peacock, citing results from Forster et al. (2004), beer loses 18% of  isomerized alpha acids and 14% of measured IBUs after 8 months at room temperature <a href="#references">[Oliver, pp. 132-133, Peacock p. 164]</a>.  I am unaware of an existing model of how IBUs decrease with age for home-brewed beer stored in bottles at room temperature (which may have greater oxidation, less filtering, and other differences with commercially-bottled beer).  I therefore measured the decrease in IBUs for two home-brewed beers after 1, 2, 3, 6, 7, 13, and 52 weeks from the start of fermentation, and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">fit the measured hop-derived IBU decrease over time with an exponential-decay function</a>.   If we assume that isomerized alpha acids and hop-based non-IAA components are affected by age at the same rate (which may be an incorrect assumption <a href="#references">[Peacock, p. 163]</a>, but not unreasonable as a first approximation), we can model the loss factor for isomerized alpha acids using the same age formula determined for hop-derived IBUs:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>LF<sub>age</sub>(<em>age<sub>weeks</sub></em>) = 0.35 × e<sup>-0.073×<em>age<sub>weeks</sub></em></sup> + 0.65    with maximum <em>age<sub>weeks</sub></em> of 16</td>
+<td align="right" valign="bottom" width="30">[28]</td>
+</tr>
+</tbody>
+</table>
+where LF<sub>age</sub>(<em>age<sub>weeks</sub></em>) is the loss factor due to age of the beer (in weeks, stored at room temperature).  After about 16 weeks, the losses seem to stabilize, and so even if the age is greater than 16 weeks, a maximum value of 16 is used.
+
+<p>
+<span style="text-decoration: underline;"><em>Summary of IAA Adjustments</em></span>: We can now express the concentration of IAA in the beer as a function of the concentration of IAA in the wort, multiplied by the various IAA rate factors and loss factors discussed above:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>RF<sub>IAA</sub> = 1.0</td>
+<td align="right" valign="bottom" width="30">[29]</td>
+</tr>
+<tr>
+<td>LF<sub>IAA</sub>([<em>AA</em>]<sub>0</sub>,<em> OG</em>, <em>t</em>, <em>pH</em>, <em>clarity</em>, <em>flocculation</em>, <em>krausen</em>, <em>MR</em>, <em>age<sub>weeks</sub></em>) = <em>LF<sub>hoppingRate</sub></em>([<em>AA</em>]<sub>0</sub>) × LF<em><sub>boil</sub></em> × LF<sub>OG</sub>(<em>OG</em>, <em>t</em>) × LF<sub>pH_IAA</sub>(<em>pH) × LF<sub>wortClarity</sub>(clarity) × LF<sub>ferment</sub> × </em>LF<sub>flocculation</sub>(<em>flocculation</em>) × LF<sub>krausen_IAA</sub>(<em>krausen</em>) × LF<sub>filtering</sub>(<em>MR</em>) × LF<sub>age</sub>(<em>age<sub>weeks</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[30]</td>
+</tr>
+<tr>
+<td>[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × RF<sub>IAA</sub> × LF<sub>IAA</sub>(<em>OG</em>, <em>t</em>, <em>pH</em>, <em>clarity</em>, <em>flocculation</em>, <em>krausenLoss</em>, <em>MR</em>, <em>age<sub>weeks</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[31]</td>
+</tr>
+</tbody>
+</table>
+In these equations, RF<sub>IAA</sub> describes how the rate of isomerization is affected.  Because (a) the effect of temperature is included in the computation of [<em>IAA</em>]<sub>wort</sub> (Equations [13] and [15]), (b) the form of the hops is estimated to have no impact on the rate of isomerization (see above and Section 3.4.1), and (c) the kettle size (or geometry) also has no observed impact, the isomerization rate factor is always 1.  The parameter LF<sub>IAA</sub> is the <em>loss</em> factor for isomerized alpha acids, including any losses from the boil, the <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">hopping rate</a>, <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">gravity</a>, <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">pH</a>, <a href="../27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">wort clarity</a>, fermentation, flocculation, <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">krausen</a>, filtering, finings, and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">age</a>, as discussed above.  The concentration of IAA in the wort, [<em>IAA</em>]<sub>wort</sub>, can be computed using Code [1].  The final concentration of IAA in beer, [<em>IAA</em>]<sub>beer</sub>, is simply the product of the concentration of IAA in the wort and the various loss factors.
+
+<p>
+The only problem remaining for modeling [<em>IAA</em>]<sub>beer</sub> is that while we have a reasonable approximation of most loss factors, we have very little basis for determining LF<sub>boil</sub>.  But we can come back to that problem later.
+
+<p>
+<p>
+<span id="heading2"> <span id="a_revised_ibu_formula">3.4 A Revised IBU Formula for nonIAA Components</span></span><br>
+At this point, we have as complete a description as we're going to get of the concentration of isomerized alpha acids in beer.  The other factor in the IBU formula (Equation [12]) is the concentration of "auxiliary bittering compounds" (ABC), which we call nonIAA.
+
+<p>
+Alpha acids (which did not isomerize during the boil) "do not survive to any significant extent into beer" <a href="#references">[e.g. Lewis and Young, p. 259]</a> and are not bitter <a href="#references">[Shellhammer, p. 169]</a>, but as they age and become oxidized, the resulting oxidized alpha acids (oAA) are both soluble in wort and bitter <a href="#references">[Algazzali, pp. 14-15, p. 19, p.45; Maye et al, p. 23; Hough et al., pp. 435-436; Hough et al., p. 439; Lewis and Young, p. 265]</a>.  Oxidized alpha acids are also produced during the boil <a href="#references">[Parkin, p. 11, Algazzali, p. 17; Dierckens and Verzele, p. 454; Oliver p. 471]</a>.  Oxidized beta acids (oBA) are also soluble <a href="#references">[Algazzali, p. 16]</a> and may be produced during storage with exposure to oxygen <a href="#references">[Peacock, p. 157; Fix and Fix, p. 36; Lewis and Young, p. 265; Hall, p. 55; Oliver, p. 132; Oliver, p. 470; Parker, p. 11; Algazzali, p. 17; Hough et al., p. 489]</a>.  The formulation of the Hop Storage Index (HSI) implies that oxidized alpha and beta acids have optical density at 275 nm <a href="#references">[Algazzali, p. 19]</a>.  Finally, polyphenols are a contributing factor to the nonIAA compounds <a href="#references">[e.g. Krogerus]</a>; as Shellhammer states, "the contribution of polyphenols to beer bitterness can not be overlooked" <a href="#references">[Shellhammer, p. 177]</a>.
+
+<p>
+I haven't been able to find definitive (e.g. more than one source) claims on the bitterness or A<sub>275nm</sub> properties of other substances that might be considered nonIAA.  That leaves us with oxidized alpha acids, oxidized beta acids, and polyphenols as the only nonIAA components that influence the measurement of IBUs.  We can then re-write Equation [12] to be more specific, replacing the generic <em>nonIAA1</em>, <em>nonIAA2</em>, and <em>nonIAA3</em> with oxidized alpha acids (<em>oAA</em>), oxidized beta acids (<em>oBA</em>) and polyphenols (<em>PP</em>):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + (([<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em>) + ([<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em>) + ([<em>PP</em>]<sub>beer</sub> × <em>scale<sub>PP</sub></em>)))</td>
+<td align="right" valign="bottom" width="30">[32]</td>
+</tr>
+</tbody>
+</table>
+where [<em>oAA</em>]<sub>beer</sub> is the concentration of oxidized alpha acids in the beer (in ppm), <em>scale<sub>oAA</sub></em> is the non-IAA scaling factor specific to oxidized alpha acids,  [<em>oBA</em>]<sub>beer</sub> is the concentration of oxidized beta acids in the beer (in ppm), <em>scale<sub>oBA</sub></em> is the non-IAA scaling factor specific to oxidized beta acids, [<em>PP</em>]<sub>beer</sub> is the concentration of polyphenols in the beer (in ppm), and <em>scale<sub>PP</sub></em> is the non-IAA scaling factor specific to polyphenols.  (Note that we can compute [<em>IAA</em>]<sub>beer</sub> using Code [1] and Equation [31].)
+
+<p>
+<p>
+<span id="heading3"> <span id="hop_pellets">3.4.1 Hop Pellets</span></span><br>
+Before we get to details of oxidized alpha acids, oxidized beta acids, and polyphenols, the topic of hop pellets and extracts should be discussed. It is often said that hop pellets yield higher utilization than hop cones <a href="#references">[e.g. Daniels p. 78]</a>.  According to Lewis and Young, "the alpha acids dissolve most easily from extracts, less easily from pellets ..., and least with whole hops" <a href="#references">[Lewis and Young, p. 266]</a>.  The higher rate at which alpha acids from pellets dissolve, compared with whole cones, is said to be because "the pelletization process ruptures the lupulin glands and spreads the resins over the hop particles, giving a larger surface area for isomerization" <a href="#references">[Hall, p. 58]</a>.  Noonan says that "with pelletized hops, ruptured and better-exposed lupulin glands give greater utilization" <a href="#references">[Noonan, p. 154]</a>.
+
+<p>
+Expressing pellets as more efficient than whole hops, Noonan provides a pellet correction factor (in table form) that varies from 1.0 to 1.5, based on boil time and gravity <a href="#references">[Noonan, p. 215]</a>.  Garetz recommends a pellet correction factor of 1.10 for boil times up to 30 minutes, otherwise a correction factor of 1.0 <a href="#references">[Garetz book, p. 131, 141]</a>.  Hieronymus says that hop pellets are 10% to 15% more efficient than cones <a href="#references">[Hieronymus, p. 188]</a>.  According to Michael Hall, Mosher specifies a correction factor of 1.33 <a href="#references">[Hall, p. 62]</a>.  This leaves a wide range of possible correction factors for the use of pellets compared with whole hops (from 1.0 to 1.5), with a median factor of 1.15.
+
+<p>
+In two posts looking at the <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">impact of hop pellets on IBUs</a> and <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">the reason for the increase in IBUs when using pellets</a>, I concluded that while <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">pellets do yield more IBUs than hop cones</a>, the reason is not because of greater utilization.  Instead, the <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">increase appears to be caused by greater production of oxidized alpha acids during the boil</a>.  It seems plausible that the greater surface area of lupulin glands in pellet hops does not increase the production of IAA or rate of isomerization, but it does increase the production of oAA.  (The surface area being a limiting factor in general may explain why all of the alpha acids do not oxidize immediately when put in boiling wort.)  The amount of oAA produced during the boil is estimated to be approximately twice as much with pellets as it is with cones, but the amount of increase appears to be dependent on the variety of hops.  With Willamette hops the increase is only about 20%, with Citra the increase is about 80%, and with Comet the increase may be as large as 220%.  The wide range of pellet-correction factors reported in the literature may be due to the incorrect assumption that the increase in IBUs from pellets changes with boil time, the influence of different varieties of hops, or some combination of both reasons.
+
+<p>
+Hough et al. say that alpha-acid extracts are much <em>less</em> efficient than whole hops: "In trials using pure humulone, only 50-60% of the resin added was isomerized during [the] 1.5 h boil.  In contrast, 65-75% of the alpha acids present in hops are isomerized in the same period, which supports the view that the isomerization of humulone is catalyzed by the presence of hop cones, break, or even an inert surface such as Celite." <a href="#references">[Hough et al., p. 489, citing Maule, p. 288]</a>.   Maule says that "the extent of this effect may however be exaggerated by solution of oxidation products of alpha and beta acids from hops, since these would be measured as iso acids" <a href="#references">[Maule, p. 288]</a> using the Rigby method <a href="#references">[Peacock, p. 158-159]</a>.   Companies that produce hop extract, such as <a href="https://bsgcraftbrewing.com/" target="_blank">BSG</a>, claim <a href="https://bsgcraftbrewing.com/hop-extract" target="_blank"><em>increased</em> utilization with extracts</a>.  Verzele and De Keukeleire note that "the alpha acids utilization yield may be comparable for hops and for hop extracts" <a href="#references">[Verzele and De Keukeleire, p. 102]</a>.  Given the conflicting claims about the utilization of hop extracts, I will assume that hop extract has the same alpha-acid utilization as whole and pellet hops.
+
+<p>
+<p>
+<span id="heading3"> <span id="oxidized_alpha_acids">3.4.2 Oxidized Alpha Acids</span></span><br>
+As hops age, the alpha and beta acids become oxidized.  The "most important group of oxidized alpha acids formed during hop aging is the humulinones" <a href="#references">[Algazzali, p. 13]</a>.  The rate at which alpha acids oxidize during storage is determined by the form of the hops (e.g. cones or pellets), hop variety, age, temperature, and amount of exposure to oxygen <a href="#references">[Garetz article]</a>.  Garetz has a <a href="../../index.html" target="_top">model that predicts the amount of alpha acids remaining</a> in hops, given these factors <a href="#references">[Garetz article]</a>.  (As long as they are properly stored, pellets undergo oxidation at a much slower rate <a href="#references">[Hieronymus, p. 230]</a>.  A professional inert-gas flush and vacuum packaging results in very little oxidation for whole cones or pellets.)  A decrease in the amount of alpha acids is mirrored by a corresponding increase in the amount of oxidized alpha acids.  The alpha acids also undergo some amount of oxidation while still on the bine <a href="#references">[Hieronymus, p. 233]</a> and further during the warm and highly oxygenated conditions of hop drying <a href="#references">[e.g. Hieronymus, p. 126</a><a href="#references">]</a>, and so the level of oxidized alpha acids when we get our newly-dried hops soon after harvest can be greater than zero <a href="#references">[Maye, p. 23]</a>.  Finally, oxidized alpha acids are created during the boil <a href="#references">[Algazzali, p. 17; </a><a href="#references">Dierckens and Verzele, p. 454</a><a href="#references">]</a>.
+
+<p>
+If it's correct that oAA production during the boil is limited by the surface area of the lupulin glands (Section 3.4.1), this suggests that the total oxidation of alpha acids is not simply a sum of the oxidation of freshly-dried, stored, and boiled hops.  Instead, with oxidized alpha acids produced during the boil (<em>oAA<sub>boil</sub></em>) limited by surface area, there is the implication that <em>oAA<sub>boil</sub></em> represents oxidized alpha acids on the lupulin-gland surface that have <em>not yet</em> been oxidized during drying and storage. If storage has oxidized alpha acids below the surface of the lupulin glands, then the boil will not produce any new oxidized alpha acids. So, if X% of the alpha acids oxidize during drying and storage, and Y% of the alpha acids oxidize during the boil, then the total amount of oxidized alpha acids will be the greater of X% or Y%, not their sum.
+
+<p>
+We can then model the level of oxidized alpha acids (oAA) in the wort as a combination of three contributions: (1) the oAA present in the freshly-dried hops as a result of oxidation on the bine and during drying, (2) the oAA that accumulate as the hops age and deteriorate, and (3) oAA that are produced during the boil:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>oAA</em> = max(<em>oAA<sub>fresh</sub></em> + <em>oAA<sub>storage</sub></em> , <em>oAA<sub>boil</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[33]</td>
+</tr>
+</tbody>
+</table>
+where <em>oAA</em> is the total level of oxidized alpha acids in the wort, <em>oAA<sub>fresh</sub></em> is the level of oxidized alpha acids in freshly-dried hops, <em>oAA<sub>storage</sub></em> is the level of oxidized alpha acids produced during storage, and <em><em>oAA<sub>boil</sub></em></em> is the level of oxidized alpha acids produced during the boil; all components are expressed as percent of the weight of the hops.  (The result of the max() function is the maximum of the two values.)
+
+<p>
+Based on data from Maye et al. <a href="#references">[Maye, p. 24]</a>, I fit the level of oAA for fresh hops (with a Hop Storage Index (HSI) of 0.25 <a href="#references">[Hough et al., p. 434]</a>) to the model of alpha-acid decay proposed by Garetz <a href="#references">[Garetz article]</a>, and determined that <em>oAA<sub>fresh</sub></em> can be modeled reasonably well for the available data with a storage factor of 1 (loose hops), a temperature factor of 1 (20°C or 68°F), and a duration of 3.5 days.  I then fit the data in the Maye paper for higher HSI values to the loss predicted from the Garetz formula multiplied by a scaling factor of 0.22.  This leaves <em>oAA<sub>boil</sub></em> as the only parameter without any estimated value.  How quickly are oxidized alpha acids produced during the boil?  Dierckens and Verzele say that "humulinone formation on wort boiling can be one of the first things to happen in the complex chemistry of humulone isomerization oxidation" <a href="#references">[Dierckens and Verzele, p. 454]</a>, so I'll assume that <em>oAA<sub>boil</sub></em> reaches its maximum quickly and does not need to be a function of boil time.  (This assumption is consistent with the data presented in the post <a href="../26-the-production-of-oxidized-alpha-acids-at-hop-stand-temperatures/alchemyoverlord-blog-content26.html">The Production of Oxidized Alpha Acids at Hop-Stand Temperatures</a>.)  We can then re-write <em>oAA</em> using different functions to replace <em>oAA<sub>fresh</sub></em>, <em>oAA<sub>storage</sub></em>, and <em>oAA<sub>boil</sub></em>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>oAAage<sub>scale</sub> </em>= 0.22</td>
+<td align="right" valign="bottom" width="30">[34]</td>
+</tr>
+<tr>
+<td><em>oAA</em> = max(<em>AA<sub>harvest</sub></em> × ((1 - 1/e<sup><em>k</em>×<em>1</em>×<em>1</em>×3<em>.5</em></sup>) + (<em>oAAage<sub>scale</sub></em> × (1 - <em>AA<sub>decayfactor</sub></em>))), <em>AA<sub>harvest</sub></em> × <em>AA<sub>decayfactor</sub></em> × F(<em>form</em>) × LF<sub>hoppingRate</sub>([<em>AA</em>]<sub>0</sub>) × <em>oAA<sub>boilFactor</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[35]</td>
+</tr>
+</tbody>
+</table>
+where <em>oAAage<sub>scale</sub></em> is the age-related scaling factor for the oxidized alpha acids in stored hops, <em>oAA</em> is the same level of oxidized alpha acids in Equation [33], <em>AA<sub>harvest</sub></em> is the percent of alpha acids in the hops at harvest, <em>k</em> is the variety-specific hop decay factor from the Garetz model, <em>AA<sub>decayfactor</sub></em> is the alpha-acid decay factor from Equation [18], F(<em>form</em>) is the adjustment factor depending on form of the hops (1.0 for cones and approximately 2.0 for pellets, as described in Section 3.4.1), LF<sub>hoppingRate</sub>([<em>AA</em>]<sub>0</sub>) is the loss factor at high hopping rates (because alpha acids above the solubility limit are quickly degraded and do not produce oxidized alpha acids) as a function of initial alpha-acid concentration [<em>AA</em>]<sub>0</sub>, and <em>oAA<sub>boilFactor</sub></em> is the relative amount of oAA produced during the boil.  Since oxidized alpha acids are very soluble <a href="#references">[e.g. Maye, p. 23]</a>, all of the oxidized alpha acids already in the hops and produced during the boil are in the wort shortly after being added to the kettle.
+
+<p>
+That leaves us with two other oAA factors that we still need to account for: losses and a scaling factor.  I have not yet been able to find any description of the losses of oxidized alpha acids during the boil and fermentation, so this is an unknown factor.  It seems reasonable to assume that oxidized alpha acids are lost to trub, yeast, and in other ways, just as isomerized alpha acids are lost in the process of turning wort into beer, and so the loss factors for boiling, gravity, fermentation, flocculation, filtering, and age are approximately the same for oAA and IAA.  I have estimated loss factors specific to nonIAA (different from IAA loss factors) for the effects of <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">pH</a> and <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">krausen</a>.  For pH, I've estimated the loss factor as LF<em><sub>pH_nonIAA</sub></em>(<em>pH</em>) = 0.8948 × <em>pH</em> − 4.145, where <em>pH</em> is the post-boil wort pH.  For krausen, the loss factor for nonIAA components, LF<sub>krausen_nonIAA</sub>(<em>krausenLoss</em>), is estimated as 3.0 × LF<sub>krausen_IAA</sub>(<em>krausenLoss</em>).  I've also estimated that <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">oAA accounts for the majority of nonIAA</a> (80% in a "typical" beer), and so these two nonIAA loss factors are mostly oAA loss factors.  We can therefore approximate the concentration of oAA in beer as the concentration in wort multiplied by the product of these various loss factors:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>oAA</em>]<sub>wort</sub> = <em>oAA</em> × <em>W</em> × 1000 / <em>V</em></td>
+<td align="right" valign="bottom" width="30">[36]</td>
+</tr>
+<tr>
+<td>[<em>oAA</em>]<sub>beer</sub> = [<em>oAA</em>]<sub>wort</sub> × (LF<em><sub>boil</sub></em> × LF<sub>OG</sub>(<em>OG</em>, <em>t</em>) × LF<em><sub>pH_nonIAA</sub></em>(<em>pH</em>) × LF<sub>ferment</sub> × LF<sub>flocculation</sub>(<em>flocculation</em>) × LF<sub>krausen_nonIAA</sub>(<em>krausenLoss</em>) × LF<sub>filtering</sub>(<em>MR</em>) × LF<sub>age</sub>(<em>age<sub>weeks</sub></em>))</td>
+<td align="right" valign="bottom" width="30">[37]</td>
+</tr>
+</tbody>
+</table>
+where [<em>oAA</em>]<sub>wort</sub> is the concentration of oxidized alpha acids in the wort, [<em>oAA</em>]<sub>beer</sub> is the concentration of oxidized alpha acids in the finished beer, <em>W</em> is (still) the weight of the hops in grams, <em>V</em> is (still) the post-boil volume of the wort in liters, LF<em><sub>boil</sub></em> is the loss factor during the boil, LF<sub>OG</sub> is the <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">loss factor for specific gravity</a>, LF<em><sub>pH_nonIAA</sub></em> is the <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">nonIAA-specific loss factor for wort pH</a>, LF<sub>ferment</sub> is the loss factor for fermentation, LF<sub>flocculation</sub> is the loss factor associated with flocculation characteristics, LF<sub>krausen_nonIAA</sub> is the <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">nonIAA-specific loss factor for krausen</a>, LF<sub>filtering</sub> is the loss factor for filtering, and LF<sub>age</sub> is the loss factor for age of the beer at room temperature.
+
+<p>
+We also need a scaling factor in Equation [32] that scales the factor for absorption of light at 275 nm of oxidized alpha acids (unknown) to the factor for absorption of light at 275 nm of isomerized alpha acids (69.68).  Fortunately, Maye et al. provide this data; based on their Figure 7 <a href="#references">[Maye, p. 25]</a>, the scaling factor is 0.0130/0.0142, or 0.9155:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>scale<sub>oAA</sub></em> = 0.9155</td>
+<td align="right" valign="bottom" width="30">[38]</td>
+</tr>
+</tbody>
+</table>
+Despite the large number of parameters for modeling oAA, we end up having no estimate of only one: <em>oAA<sub>boilFactor</sub></em>.  We may also want to improve upon the initial estimate of <em>oAAage<sub>scale</sub></em>.
+
+<p>
+<p>
+<span id="heading3"> <span id="oxidized_beta_acids">3.4.3 Oxidized Beta Acids</span></span><br>
+As with alpha acids, the beta acids oxidize as the hops age.  The most bitter and most prevalent components of the oxidized beta acids are called hulupones <a href="#references">[Algazzali, p. 15-16]</a>.  The oxidized beta acids produced during storage potentially contribute as much or more to beer bitterness than the oxidized alpha acids; as Peacock notes, the "nonIAA bitterness is mostly from oxidation products of the alpha <em>and especially the beta acids</em> of the hops formed during hop storage". <a href="#references">[Peacock, p. 157; emphasis mine]</a>.  While oxidized beta acids are further oxidized into non-bitter hulupinic acid <a href="#references">[Almaguer, p. 295]</a>, oxidized beta acids can still contribute significantly to the IBUs of finished beer, and so this second oxidation process must occur over a period of weeks or months. Two experiments that looked at the <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">impact of oxidized beta acids on the IBU</a> found practically no oxidized beta acids produced during the boil, but that oxidized beta acids produced during storage have roughly the same contribution as oxidized alpha acids produced during the boil.  We can model the impact of oxidized beta acids in a way similar to oxidized alpha acids: there are oxidized beta acids occurring in fresh hops, created during storage, and (potentially) produced during the boil <a href="#references">[Algazzali, p. 17; Stevens and Wright p. 496; Hough et al., p. 490]</a>:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>oBA</em> = max(<em>oBA<sub>fresh</sub></em> + <em>oBA<sub>storage</sub></em> , <em>oBA<sub>boil</sub></em>)</td>
+<td align="right" valign="bottom" width="30">[39]</td>
+</tr>
+</tbody>
+</table>
+where <em>oBA</em> is the level of oxidized beta acids, <em>oBA<sub>fresh</sub></em> is the level of oxidized beta acids in freshly-dried hops, <em>oBA<sub>storage</sub></em> is the level of oxidized beta acids produced during storage, and <em>oBA<sub>boil</sub></em> is the level of oxidized beta acids produced during the boil; all components are expressed as percent of weight of the hops.  This model assumes that oxidization of beta acids during the boil is limited by the surface area of the lupulin glands, as with alpha acids.
+
+<p>
+Stevens and Wright say that oxidized beta acids are present at not more than 0.5% of the weight of the cone <a href="#references">[Stevens and Wright, p. 500]</a>, Spetsig and Steninger note up to 3% <a href="#references">[Spetsig and Steninger, p. 413]</a>, and Mussche found oxidized beta acids up to 1% of the weight <a href="#references">[Mussche, p. 13]</a>.  Peacock implies that the beta acids undergo oxidation losses at approximately the same rate as the alpha acids <a href="#references">[Peacock, p. 162]</a>.  Given the wide range of reported values of (<em>oBA<sub>fresh</sub></em> + <em>oBA<sub>storage</sub></em>), I'll assume that oxidized beta acids are produced at the same rate as oxidized alpha acids both in fresh hops and during aging; this sum should be in the ballpark of 0.5% to 3% of the weight of the cone.  Oxidized beta acids may be produced during the boil, but only to a <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">very limited extent, if at all</a>.  All of this gives formulas similar to Equations [34] and [35]:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>oBA<sub>boilFactor</sub></em> = 0.071</td>
+<td align="right" valign="bottom" width="30">[40]</td>
+</tr>
+<tr>
+<td><em>oBA</em> = <em>oBA<sub>boilFactor</sub></em> × <em>BA<sub>harvest</sub></em> × ((1 - 1/e<sup><em>k</em>×<em>1</em>×<em>1</em>×3<em>.5</em></sup>) + (<em>oBAage<sub>scale</sub></em> × (1 - <em>BA<sub>decayfactor</sub></em>)))</td>
+<td align="right" valign="bottom" width="30">[41]</td>
+</tr>
+</tbody>
+</table>
+where <em>oBA<sub>boilFactor</sub></em> is the amount of oxidized beta acids that survive the boil, which has been <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">estimated at 0.071</a>; <em>oBA</em> is the same level of oxidized beta acids in Equation [39], <em>BA<sub>harvest</sub></em> is the percent of beta acids in the hops at harvest (which can be estimated from the alpha-acid rating (<em>AA</em>) divided by the ratio of alpha acids to beta acids (see, for example, Tables 2.1 through 2.3 in <em>Principles of Brewing Science</em> <a href="#references">[Fix, pp. 60-62]</a>)), <em>k</em> is the variety-specific hop decay factor from the Garetz model, <em>oBAage<sub>scale</sub></em> is the age-related scaling factor (assumed to be the same as <em>oAAage<sub>scale</sub></em>), and <em>BA<sub>decayfactor</sub></em> is the beta-acid decay factor for the freshness of the hops (assumed to be the same as <em>AA<sub>decayfactor</sub></em>).
+
+<p>
+That (again) leaves us with two other oxidized beta-acid factors that we still need to model: losses and a scaling factor.  It seems reasonable to assume that oxidized beta acids are lost to trub, yeast, and in other ways, just as isomerized alpha acids and (presumably) oxidized alpha acids are lost.  We can then model the oxidized beta-acid losses similar to the way losses of oxidized alpha acids are modeled.  In other words,
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>oBA</em>]<sub>wort</sub> = <em>oBA</em> × <em>W</em> × 1000 / <em>V</em></td>
+<td align="right" valign="bottom" width="30">[42]</td>
+</tr>
+<tr>
+<td>[<em>oBA</em>]<sub>beer</sub> = [<em>oBA</em>]<sub>wort</sub> × (LF<em><sub>oBA_boil</sub></em> × LF<sub>OG</sub>(<em>OG</em>, <em>t</em>) × LF<em><sub>pH_nonIAA</sub></em>(<em>pH</em>) × LF<sub>ferment</sub> × LF<sub>flocculation</sub>(<em>flocculation</em>) × LF<sub>krausen_nonIAA</sub>(<em>krausenLoss</em>) × LF<sub>filtering</sub>(<em>MR</em>) × LF<sub>age</sub>(<em>age<sub>weeks</sub></em>))</td>
+<td align="right" valign="bottom" width="30">[43]</td>
+</tr>
+</tbody>
+</table>
+where [<em>oBA</em>]<sub>wort</sub> is the concentration of oxidized beta acids in the wort, [<em>oBA</em>]<sub>beer</sub> is the concentration of oxidized beta acids in the finished beer, <em>W</em> is (still) the weight of the hops in grams, <em>V</em> is (still) the post-boil volume of the wort in liters, LF<em><sub>oBA_boil</sub></em> is the loss factor for oxidized beta acids during the boil, LF<sub>OG</sub> is the <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">loss factor for specific gravity</a>, LF<em><sub>pH_nonIAA</sub></em> is the <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">nonIAA-specific loss factor for wort pH</a>, LF<sub>ferment</sub> is the loss factor for fermentation, LF<sub>flocculation</sub> is the loss factor associated with flocculation characteristics, LF<sub>krausen_nonIAA</sub> is the <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">nonIAA-specific loss factor for krausen</a>, LF<sub>filtering</sub> is the loss factor for filtering, and LF<sub>age</sub> is the loss factor for age of the beer at room temperature.
+
+<p>
+We also need a scaling factor in Equation [32] that scales the factor for absorption of light at 275 nm of oxidized beta acids (unknown) to the factor for absorption of light at 275 nm of isomerized alpha acids (69.68).  According to Hough et al., "hulupones exhibit 80-90% of the absorption of the iso-alpha-acids at [275nm in acid solution]" <a href="#references">[Hough et al., p. 491]</a>.  In order to convert this absorption to be the equivalent for IAA, a scaling factor of about 0.85 is implied:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>scale<sub>oBA</sub></em> = 0.85</td>
+<td align="right" valign="bottom" width="30">[44]</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span id="heading3"> <span id="polyphenols">3.4.4 Polyphenols</span></span><br>
+Polyphenols are the final nonIAA component we need to consider.  They are "an extraordinarily diverse group of compounds" and the majority of those in brewing are flavonoids <a href="#references">[McLaughlin, p. 1]</a>.  Polyphenols can come from both malted barley and hops <a href="#references">[Hough et al., p. 471]</a>, so we should separate the <em>PP</em> component into <em>PP<sub>hops</sub></em> and <em>PP<sub>malt</sub></em>, where <em>PP<sub>hops</sub></em> is the amount of polyphenols contributed by the hops and <em>PP<sub>malt</sub></em> is the amount of polyphenols contributed by the malt.
+
+<p>
+According to Shellhammer, IBUs are in the range of 1 to 3 for unhopped beer <a href="#references">[Shellhammer, p. 177]</a>.  In <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">one experiment</a>, I brewed three beers with no hops (OG 1.050, 1.070, and 1.090) and sent them out for IBU analysis at 1, 3, and 5 weeks after the start of fermentation.  From these nine values, I constructed a formula for predicting IBUs from malt polyphenols.  Because the measured values didn't change much over the 4 weeks, this formula (<em>IBU</em> = (<em>OG</em> − 1.0) × 25) is dependent on original gravity but not time.  In <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">another experiment</a>, I created six samples that varied in original gravity, wort pH, fermentation, and boil time.  I measured the polyphenol concentration and IBU values of each.  I found that malt-derived IBUs (but not polyphenol concentrations) increase as the wort pH decreases, that the process of fermentation decreases both polyphenol levels and IBUs by about 30%, and that the polyphenol concentrations (but not IBUs) increase during the boil.  There is therefore a non-linear relationship between malt polyphenols and malt-derived IBUs, and this relationship depends on both boil time and pH.  If we are more interested in IBUs than actual polyphenol concentrations, we can map from original gravity to malt-derived IBUs as a function of pH.  We can convert this from a prediction of IBUs to a prediction of (scaled) malt polyphenol concentrations if we multiply by 69.68/51.2:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>PP<sub>malt</sub></em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em> = (69.68 / 51.2) × ((<em>OG</em> − 1.0) × 19.0 × ((2.477 × (<em>pH<sub>1</sub></em> − <em>pH<sub>2</sub></em>)) + 1.0)</td>
+<td align="right" valign="bottom" width="30">[45]</td>
+</tr>
+</tbody>
+</table>
+where [<em>PP<sub>malt</sub></em>]<sub>beer</sub> is the estimated concentration of malt polyphenols in the finished beer, <em>scale<sub>PPmalt</sub></em> is the scaling factor for light absorption at 275 nm, <em>OG</em> is the original gravity of the beer, <em>pH<sub>1</sub></em> is the pH of the wort before any pH adjustment, and <em>pH<sub>2</sub></em> is the post-boil pH.  This estimated concentration of malt polyphenols will not be accurate, because it does not depend on the boil time (and it does depend on pH), but for modeling IBUs this inaccuracy doesn't matter.  Furthermore, we don't need to determine the separate values of [<em>PP<sub>malt</sub></em>]<sub>beer</sub> and <em>scale<sub>PPmalt</sub></em>; knowing their product is sufficient.
+
+<p>
+We can then update our estimate of IBUs in beer to separate out the contributions from hops and malt polyphenols:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + (([<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em>) + ([<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em>) + ([<em>PP<sub>hops</sub></em>]<sub>beer</sub> × <em>scale<sub>PPhops</sub></em>) + ([<em>PP<sub>malt</sub></em>]<sub>beer</sub> × <em>scale<sub>PPmalt</sub></em>)))</td>
+<td align="right" valign="bottom" width="30">[46]</td>
+</tr>
+</tbody>
+</table>
+Hop polyphenol levels are often reported in the range from 2% to 6% of the weight of the hops <a href="#references">[Shellhammer, p. 169; Hough et al., p. 422; Algazzali, p. 5; Verzele and De Keukeleire, p. 9]</a>, although McLaughlin reports a higher range, from 4% to 14% <a href="#references">[McLaughlin, p. 3]</a>.  After having been added to the wort, polyphenols are removed "extensively by precipitation with proteins during wort boiling"; 80% of hop flavanols are removed in the trub when boiling hopped wort <a href="#references">[McLaughlin, p. 7]</a>.  As Noonan phrases it, "the rolling motion of the boil causes the malt proteins to collide with and adhere to the sticky hop polyphenols" <a href="#references">[Noonan, p. 158]</a>.  (It may be that the polyphenols are not so much removed as largely insoluble in wort.  The largest polyphenol group in hops (prenylflavonoids) are not soluble in water; all other hop polyphenol components are "soluble in water, preferably in hot water" <a href="#references">[Forster, p. 124]</a>.  The prenylflavonoids make up about 75% to 85% of all hop polyphenols <a href="#references">[Forster, p. 124]</a>, so only about 20% of the hop polyphenols are soluble, corresponding to 80% removal.)  Then, polyphenols are removed during fermentation, and "it seems possible that this could occur in much the same way as it does with the iso-alpha-acids" <a href="#references">[McLaughlin, p. 7]</a>.
+
+<p>
+From this, we can construct a rough model of the concentration of hop polyphenols in wort and in beer, with an initial level of polyphenols at about 4% of the weight of the hops, a precipitation-loss factor (or solubility factor) for polyphenols in the wort during the boil (<em>LF<sub>PP</sub></em>) estimated at 0.20, and loss factors for fermentation, flocculation, krausen, and filtering:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>PP<sub>hops</sub></em>]<sub>wort</sub> = <em>PPrating</em> × <em>W</em> × 1000 / <em>V</em></td>
+<td align="right" valign="bottom" width="30">[47]</td>
+</tr>
+<tr>
+<td><em>LF<sub>PP_precipitate</sub></em> = 0.20</td>
+<td align="right" valign="bottom" width="30">[48]</td>
+</tr>
+<tr>
+<td>[<em>PP<sub>hops</sub></em>]<sub>beer</sub> = [<em>PP<sub>hops</sub></em>]<sub>wort</sub> × <em>LF<sub>PP_precipitate</sub></em> × LF<sub>PP_ferment</sub> × LF<sub>flocculation</sub>(<em>flocculation</em>) × LF<sub>krausen_nonIAA</sub>(<em>krausenLoss</em>) × LF<sub>filtering</sub>(<em>MR</em>)</td>
+<td align="right" valign="bottom" width="30">[49]</td>
+</tr>
+</tbody>
+</table>
+where [<em>PP<sub>hops</sub></em>]<sub>wort</sub> is the concentration of hop polyphenols in the wort, <em>PPrating</em> is the percent of the hop weight that consists of polyphenols (similar to the AA rating for alpha acids, on the scale from 0 to 1; a value of 0.04 is a reasonable estimate), <em>LF<sub>PP_precipitate</sub></em> is the loss factor for polyphenols precipitated out of the wort (estimated at 0.20), [<em>PP<sub>hops</sub></em>]<sub>beer</sub> is the concentration of hop polyphenols in the finished beer, and LF<sub>hop_ferment</sub>, LF<sub>flocculation</sub>, LF<sub>krausen_nonIAA</sub>, and LF<sub>filtering</sub> are the loss factors for polyphenols associated with fermentation, flocculation, krausen, and filtering, respectively.  Assuming that malt and hop polyphenols share some characteristics, we set the loss factor for hop polyphenols during fermentation (LF<sub>PP_ferment</sub>) to be the same as malt polyphenols, which has been <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">estimated at 0.70</a>, and assume that <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">polyphenols aren't lost as the beer ages</a>.  Other loss factors (flocculation, krausen, and filtering) are assumed to be the same as for other nonIAA.
+
+<p>
+Finally, we need a scaling factor to use with the concentration of hop polyphenols in Equation [46].  According to Ellen Parkin, "an increase of 100 mg/L of polyphenols was predicted to increase the BU value by 2.2" <a href="#references">[Parkin, p. 28]</a>, so that 1 ppm of hop polyphenols should increase the IBU by 0.022 (Equation [50]). We can consider Equation [46] in terms of hop polyphenols only, with an <em>IAA</em> component of zero, an <em>oAA</em> component of zero, an <em>oBA</em> component of zero, a non-zero hop polyphenol (<em>PP<sub>hops</sub></em>) component, and a <em>PP<sub>malt</sub></em> component of zero (Equation [51]).  Since Equations [50] and [51] both measure IBUs from the contribution of only hop polyphenols, we can determine the value of the scaling factor for hop polyphenols (Equation [52]):
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>IBU = [<em>PP<sub>hops</sub></em>]<sub>beer</sub> × 0.022</td>
+<td align="right" valign="bottom" width="30">[50]</td>
+</tr>
+<tr>
+<td>IBU = 5/7 × (0 + 0 + 0 + ([<em>PP<sub>hops</sub></em>]<sub>beer</sub> × <em>scale<sub>PPhops</sub></em>) + 0)</td>
+<td align="right" valign="bottom" width="30">[51]</td>
+</tr>
+<tr>
+<td><em>scale<sub>PPhops</sub></em> = 7/5 × 0.022 = 0.03</td>
+<td align="right" valign="bottom" width="30">[52]</td>
+</tr>
+</tbody>
+</table>
+here [<em>PP<sub>hops</sub></em>]<sub>beer</sub> is the concentration of hop polyphenols in the finished beer (in ppm) and <em>scale<sub>PPhops</sub></em> is the scaling factor for hop polyphenols relative to the scaling factor for IAA.
+
+<p>
+<p>
+<span id="heading3"> <span id="solubility_of_noniaa">3.4.5 Solubility of nonIAA Components </span></span><br>
+The nonIAA components (specifically, oxidized alpha and beta acids, and soluble hop and malt polyphenols) are soluble in water <a href="#references">[e.g. </a><a href="#references">Lewis and Young, p. 265;</a><a href="#references"> Forster, p. 124]</a>.  They do not require isomerization, which (for alpha acids) takes a significant amount of time.  Therefore, they appear to contribute quickly to the measured IBU value.  This is of particular significance for hops that are added late in the boil (or at flameout, or after flameout), since they will have a significant amount of their nonIAA components quickly dissolved and contributing to IBUs, whereas the IAA level will be low due to insufficient time for isomerization.  As a result, the ratio of IAA to all bittering substances can be much lower for hops added close to flameout, <em>even for very fresh hops</em>.  In short, the 1960s finding that the concentration of IAA is 5/7 of the total concentration of all bittering substances reflects not only the age and storage conditions of 1960s hops, but also the typical time(s) at which hops were added to the boil in the 1960s.  Depending on the initial concentration of alpha acids, well-preserved hops added at flameout (with 10 minutes of cooling after flameout) may produce 20 IBUs, but less than half of that value may come from isomerized alpha acids.
+
+<p>
+<p>
+<span id="heading2"> <span id="dry_hopping">3.5 The Impact of Dry Hopping on IBUs</span></span><br>
+Dry-hopping adds another layer of complexity to the IBU picture. On the one hand, no isomerized alpha acids are produced during dry hopping, and so there is no IAA contribution to the IBU from hops added on the cold side. On the other hand, alpha acids, oxidized alpha- and beta acids, and polyphenols can contribute to an increase in IBUs, while the use of dry hopping has been shown to reduce the concentration of IAA created from kettle hop additions. We will look at each factor in turn.
+
+<p>
+Alpha acids do not normally survive the boil and fermentation process to end up in finished beer <a href="#references">[e.g. Lewis and Young, p. 259]</a>. However, alpha acids added when dry hopping can be present in the final beer <a href="#references">[e.g. Maye, p. 26; Lafontaine, p. 56]</a>.  Scott Lafontaine measured the concentration of alpha acids in beer as a function of dry hopping rate, and found that about 1% of available alpha acids end up in beer <a href="#references">[Lafontaine, p. 56]</a>. A reasonable fit to his data is:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td>[<em>AA</em>]<sub>beer</sub> = 14.7 × (1.0 − e<sup>(-0.00102 × [<em>AA</em>]<sub>added</sub>)</sup>)</td>
+<td align="right" valign="bottom" width="30">[55]</td>
+</tr>
+</tbody>
+</table>
+where [<em>AA</em>]<sub>added</sub> is the concentration of alpha acids added to the beer in the dry hop addition and [<em>AA</em>]<sub>beer</sub> is the concentration of alpha acids ending up in the finished beer. The solubility limit of alpha acids at the pH of beer (around 4.25 to 4.5) is about 14 ppm <a href="#references">[Spetsig (1955) p. 1423; Shellhammer, p. 170]</a>. Alpha acids absorb light at 275 nm and therefore contribute to the IBU measurement, but are not bitter <a href="#references">[Shellhammer, p. 169]</a>. This creates a discrepancy between the IBU measurement and perception of bitterness. This discrepancy can be up to 10 IBUs at the solubility limit, which corresponds to a hopping rate of about 2800 g/hL of hops with an AA rating of 10%, or 22 oz in a 5-gallon batch. At less extreme but still very high dosing rates (e.g. 1000 g/hL of 10% AA hops, or 8 oz in 5 gallons) the non-bitter alpha acids will add about 6.3 IBUs.
+
+<p>
+Oxidized alpha acids increase in hops during storage, with a slower increase when using better preservation techniques (lower temperature, vacuum packaging, and nitrogen flushing) <a href="#references">[Garetz article]</a>. These oAA can dissolve into the beer when dry hopping. While the rate of oxidation is variety-specific <a href="#references">[Maye, p. 24]</a>, fresh hops with a low hop storage index (HSI) have oAA concentrations of about 2% of the alpha-acid concentration <a href="#references">[Lafontaine p. 56; Maye p. 24 Fig. 4 and 5]</a>. Over time and with a rate dependent on storage conditions, the HSI and the concentration of oxidized alpha acids increase. For example, with an increase in HSI from 0.27 (corresponding to a "<a href="../../index.html" target="_top">freshness factor</a>" of 0.96) to 0.34 (or a freshness factor of 0.85), oAA concentrations increased from about 2% to over 3% of alpha acids in Galena hops <a href="#references">[Maye, p. 24]</a>. While 2% of the alpha acids is a small amount, high rates of dry hopping can yield a significant increase in the IBU. For example, 4 oz (113.4 g) of hops with AA rating 10% added to 5 G (18.93 L) of beer corresponds to 600 ppm of alpha acids. If 2% of those are oxidized, that's 12 ppm of oAA. With an oAA scaling factor of 0.9155 and multiplying by 51.2/69.68 to convert from IAA-equivalent concentration to IBUs, there will be an increase of 8 IBUs from this addition of oxidized alpha acids. If the oxidized alpha acids are 3% of the alpha acids, then there will be an increase of 12 IBUs from oAA. However, there is a saturation of oAA <a href="#references">[Maye, p. 25; Lafontaine p. 56; Hauser, p. 113]</a>, and so when the concentration of hops is greater than about 2200 ppm the concentration of oAA may be reduced. A rough model for this saturation, based on data from Maye <a href="#references">[p. 25]</a> and Lafontaine <a href="#references">[pp. 55-56]</a> is:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>saturationFactor</em><sub>oAA</sub> = 1.1181 × e<sup>(-0.0000506 × [<em>hops</em>])</sup></td>
+<td align="right" valign="bottom" width="30">[56]</td>
+</tr>
+</tbody>
+</table>
+where [<em>hops</em>] is the concentration of dry hops added to the beer (in ppm) and <em>saturationFactor</em><sub>oAA</sub> is the factor for reducing the concentration of oAA when [<em>hops</em>] is greater than 2200 ppm.
+
+<p>
+Oxidized beta acids behave similarly to oxidized alpha acids, being produced during storage and dissolving into beer. I have <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">found</a> that about 7% of the available oxidized beta acids end up in beer when added to boiling wort. Assuming that temperature is not a significant factor, we can infer that the same percentage of available oxidized beta acids are added to beer when dry hopping. Very fresh hops may have almost no oxidized beta acids, but with a beta-acid level of 5% at harvest, a freshness factor of 0.75, and a scaling factor of 0.85, 4 oz (113.4 g) of hops added to 5 G (18.93 L) of beer may yield an increase of 4 IBUs.
+
+<p>
+Polyphenols from dry hopping may also contribute to the IBU. Assuming that polyphenols dissolve into beer in the same way that they dissolve into boiling wort (although perhaps over a longer time period due to the lower temperature), we can use the equations in Section 3.4.3 to model the polyphenol contribution when dry hopping. One modification to this model is that polyphenols may reach saturation when added at very high dosing rates <a href="#references">[Maye, p. 25; Hauser, p. 113]</a>. We can use Hauser's data to construct a quadratic model of the saturation factor:
+<table class="table"  class="formula">
+<tbody>
+<tr>
+<td><em>saturationFactor</em><sub>PP</sub> = -7.47×10<sup>-10</sup> × [<em>hops</em>]<sup>2</sup> + 0.00000542 × [<em>hops</em>] + 0.99733</td>
+<td align="right" valign="bottom" width="30">[57]</td>
+</tr>
+</tbody>
+</table>
+where <em>saturationFactor</em><sub>PP</sub> is the factor for reducing the concentration of polyphenols. If <em>saturationFactor</em><sub>PP</sub> is greater than or equal to 1, then there is no reduction in polyphenol concentration.
+
+<p>
+Finally, it has been noted that dry hopping may lower the concentration of isomerized alpha acids in beer <a href="#references">[Parkin, p. 34; Maye pp. 25-26; Hauser p. 113]</a>, thereby reducing the IBU.  The reports are generally consistent that only higher-IBU beers show a reduction in IAA <a href="#references">[Maye, p. 25; Lafontaine, p. 55]</a>, but the published data are too inconsistent to formulate a reasonable model for IAA reduction.
+
+<p>
+<p>
+<span id="heading1"><span id="available_data">4. Available Data, Parameter Estimation, and Results</span></span><br>
+
+<span id="heading2"> <span id="overview">4.1 Overview</span></span><br>
+The quantitative description we now have of IBUs is still incomplete, because we don't have useful estimates for a number of the factors.  We do, however, have results from a study by Val Peacock that looks at IBUs and IAA concentration as a function of hop storage conditions <a href="#references">[Peacock, p. 162]</a>, results from 46 experiments where I've measured IBUs with varying hop steeping times, amounts, and temperatures, and measured IBUs from several late-hopped IPAs.  We can use this set of data and the model assumptions described previously, along with common techniques for searching a parameter space, to obtain an estimate of the unknown parameter values.
+
+<p>
+<p>
+<span id="heading2"> <span id="sources_of_ibu_data">4.2 Sources of IBU Data</span></span><br>
+
+<span id="heading3"> <span id="peacock_hop_storage">4.2.1 Peacock Hop-Storage Conditions</span></span><br>
+In an article describing IBUs, Peacock provides results of a study that looked at how the storage conditions of hops affected IBU levels <a href="#references">[Peacock, p. 162]</a>.  He lists four storage conditions (ranging from -20°F (-29°C) to 70°F (21°C)), the relative percent of alpha and beta acids lost (based on the Hop Storage Index), the IAA levels in the finished beer, and the IBUs of the finished beer. He also provides the alpha/beta ratio of the hops used, but not the amount of hops, wort volume, or original gravity.  I assume (without evidence) that he used a 2-barrel pilot system with a 5% evaporation rate and a counterflow wort chiller that takes 20 minutes to completely transfer all wort.  From these assumptions, I searched for a weight of hops that fits his observed IBU and IAA values.
+
+<p>
+<p>
+<span id="heading3"> <span id="personal_experiments">4.2.2 Personal Experiments</span></span><br>
+I conducted a series of 46 experiments that evaluated IBUs as a function of hop steeping time, hopping rate, wort temperature, wort pH, krausen, hop form (cones or pellets), original gravity, and other factors.  These experiments yielded over 330 measured IBU values.  In addition, I measured IBUs from three IPAs that used a fairly large amount of late-addition hops with a 10-minute hop stand.  The amount of raw data is too large to post here, but a <a href="https://en.wikipedia.org/wiki/JSON" target="_blank">JSON-format</a> text file with all parameter values and measured IBUs can be found at <a href="../../index.html" target="_top">https://jphosom.github.io/alchemyoverlord/js/trainingData.js</a>.  Most of the experiments are described in detail on this blog.
+
+<p>
+One of the biggest difficulties in these experiments was obtaining accurate alpha-acid levels of the hops at harvest and good estimates of how storage impacted alpha-acid levels.  Part of this difficulty was caused by the use of improperly-stored hops for several of the earlier experiments, but (as mentioned in Section 3.1) Verzele and De Keukeleire note that "there are easily differences up to 15 − 20% in alpha acids content between and within bales of a single hop delivery" <a href="#references">[Verzele and DeKeukeleire, p. 331]</a>, which makes precise measurement of the alpha acids in a small amount of hops a nearly futile task.  As a result, for most experiments I allowed the IBU model parameter search (Section 4.3) to evaluate <span class="_Tgc">±</span>10% percent around the best estimate of alpha-acid levels at harvest.  I also allowed some flexibility in the hop degradation factor (<em>AA<sub>decayfactor</sub></em> in Equation [18]).
+
+<p>
+It is worth noting that the volume of wort used in these experiments varied from about 1 to 8 gallons (4 to 31 liters) (e.g. <a href="../10-an-analysis-of-sub-boiling-hop-utilization/alchemyoverlord-blog-content10.html">An Analysis of Sub-Boiling Hop Utilization</a> and <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Hop Cones vs. Pellets: IBU Differences</a>).  Despite a nearly order-of-magnitude variation in volume between the experiments, the model does not show a significant difference in error as a function of volume.  This supports the claim made in Section 3.3 that the size of the volume or boil kettle has no impact on utilization.
+
+<p>
+<p>
+<span id="heading2"> <span id="parameter_estimation">4.3 Parameter Estimation and Results</span></span><br>
+Using 4 IAA values from Peacock (assuming values for original gravity, volume, boil time, and post-boil time, and fitting the weight of the hops to the data), 327 measured IBU values from my experiments, and 3 IBU values from the IPAs, there are 347 data points with which to estimate the unknown parameter values, as well as a number of experiment-specific parameter values (e.g. weight of the hops in Peacock's study or alpha-acid rating in most other experiments).
+
+<p>
+The three parameters with the most uncertain estimates are LF<em><sub>boil</sub></em>, <em>oAA<sub>boilFactor</sub></em>, and <em>oAAage<sub>scale</sub></em>.  In addition to searching for suitable values for these parameters, I searched for values for [<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub> in order to use all available data to improve the estimates of these two parameters.
+
+<p>
+I used an iterative brute-force search over the parameter space to minimize the squared error, starting with the approximate range of each parameter and a coarse search interval.   After each iteration, I used the best estimates of each parameter to specify a smaller range, along with a smaller search interval.  The search process was stopped when best estimates were obtained with a search interval of 0.01 for the first three factors and 10.0 for the solubility-limit factors.  A nested recursion was used to constrain the five unknown model parameters in an iteration to be the same for all sets of data, while the unknown parameters from each experiment (i.e. specific alpha-acid rating and hop degradation factor) were searched for individually.
+
+<p>
+The result of this parameter search is not guaranteed to be the correct solution.  Instead, the model and parameter settings provide a "most likely" set of values.  The correctness of the values depends on the quality of the model and on the amount and quality of the data.  We have a very large number of assumptions and a fairly large number of estimated parameters.  My hope, however, is that a slight overestimate of one factor will be balanced by a small underestimate of another factor, and on average the model will provide a cohesive, general description of the factors that contribute to IBUs.
+
+<p>
+The results from the parameter search are: LF<sub>boil</sub> = 0.51, <em>oAA<sub>boilFactor</sub></em> = 0.11, <em>oAAage<sub>scale</sub></em> = 0.33, [<em>AA</em>]<sub>limitMin</sub> = 200 ppm, and [<em>AA</em>]<sub>limitMax</sub> = 580 ppm.  The root-mean-square (RMS) error over all 347 values is 1.57 IBUs, with a maximum difference of 7.14 IBUs for one condition in an experiment looking at the use of <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">pellets with a high hopping rate</a>.  This experiment had an initial alpha-acid concentration of about 675 ppm and measured IBU values of 67, 72, 81, and 102, and so the modeled IBU values are still within 10% of the measured values.  The second-largest difference between modeled and measured IBUs was 4.94 in an experiment with a fairly high initial concentration of alpha acids (~485 ppm).
+
+<p>
+<p>
+<span id="heading1"><span id="discussion_of_results">5. Discussion of Results</span></span><br>
+With a human detection threshold of 5 IBU <a href="#references">[Daniels, p. 76]</a>, only one of the 347 values is different enough from the measured value to be detectable by a human palate.  Note that these results are on the data used to estimate the model parameters, not on unseen test data.  Results on test data will necessarily be worse.
+
+<p>
+To the extent that parameter estimation has been reasonable, we can use this model to look at how various factors affect IBUs.  If we assume some typical brew parameters (OG 1.055, post-boil volume 5.25 G or 19.87 liters, a typical AA rating of 8.8%, exceptionally well-preserved hop cones with <em>AA<sub>decayfactor</sub></em> of 1.0, post-flameout natural cooling for 10 minutes, and taking IBU measurements one week after the start of fermentation), we can vary the amount and timing of hops additions in the model to look at the impact on IBU and IAA.  For example, 2 oz (56.7 g) added at flameout will create 14.65 IBUs with a concentration of 8.35 ppm of IAA (41% of the IBU total) that creates 5.99 IBUs.  The oAA contribute 7.27 IBUs, the oBA contribute 0.0 IBUs, the hop polyphenols contribute 0.35 IBUs, and the malt polyphenols contribute 1.04 IBUs.  The same 2 oz added at 60 minutes will create 44.6 IBUs with a concentration of 50.24 ppm of IAA (81% of the IBU total).  If we <em>triple</em> the amount of hops, from 2 oz (56.7 g) to 6 oz (170.1 g), the IBUs only increase from 44.6 to 90.90 (103.2 ppm of IAA, representing 81% of the total).  If we add those 6 oz (170.1 g) at flameout, we'll get 27.8 IBUs, with only 16.2 ppm of IAA (42% of the IBU total).
+
+<p>
+Another interesting thing we can do is estimate the contribution of nonIAA components to the Tinseth formula.  While the Tinseth formula uses only the weight and alpha-acid rating of the hops to compute IBUs <a href="#references">[Tinseth]</a>, the utilization function was fit to observed data <a href="#references">[Pyle]</a>, which includes nonIAA components.  We can use the current detailed model to separate out the actual IAA contribution to utilization from the (implicit) nonIAA contribution.  For example, in the detailed model, if we have 150 ppm of alpha acids (from 2.0 oz (56.7 g) of 5.26% AA hops in 5.25 G (19.9 L) of wort) and boil them for 0 minutes with instant cooling (creating no IAA), we get 5.98 IBUs (with 4.58 IBUs from oAA, 1.04 IBUs from malt, 0.35 IBUs from hop polyphenols, and 0.0 IBUs from oBA).  This is 8.33 ppm of (scaled) nonIAA (scaled to be equivalent to IAA ppm).  This 8.33 ppm of nonIAA in 150 ppm of alpha acids yields the equivalent of 5.6% utilization (8.33/150.0=0.056).  So, nonIAA in this example contribute to about 6% of the apparent utilization (and this value does not vary with boil time).  In general, then, one can think of the nonIAA components as contributing about 5% or 6% of the utilization in the Tinseth formula.  (In other words, if the Tinseth utilization is 0.22 (22%), then 0.06 (6%) of that can be thought of as coming from nonIAA components, and the remaining 0.16 (16%) from IAA.)  This corresponds very well with the Rager IBU formula <a href="#references">[Pyle]</a>, which has a non-zero and roughly constant utilization of 5% (0.05) from 0 to 5 minutes, presumably implicitly accounting for nonIAA components at short boil times.
+
+<p>
+<p>
+<span id="heading1"><span id="summary">6. Summary</span></span><br>
+This post has described the various factors that contribute to the IBU, and quantified each factor as much as possible. Estimates of parameter values that could not be determined from the literature or from experimentation were obtained by fitting a model to the available data.
+
+<p>
+What's the take-away message of this post?  If you're adding hops late in the boil (or at flameout), you will probably not get a lot of bitterness from alpha acid isomerization.  You can, however, get a significant number of IBUs (and bitterness) from this hop addition, with most of the IBU value coming from nonIAA components.  Likewise, if you're using a large amount of hops, the IBU value may be smaller than you're expecting (due to what appears to be a solubility limit of alpha acids in boiling wort), but much of that IBU value may come from nonIAA components.  To the extent that the model development and parameter estimation has been correct, most of the contribution to nonIAA components is from oxidized alpha acids produced during the boil (or during post-boil steeping).  Hopefully this post and model will help in understanding the relative contributions of isomerized alpha acids and nonIAA components to the IBU.
+
+<p>
+The topics discussed here have been implemented in an IBU calculator called <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH</a>.
+<p>
+<span id="heading1"><span id="references">References</span></span><br>
+
+<p>
+<ul>
+<li>V. A. Algazzali, <em>The Bitterness Intensity of Oxidized Hop Acids: Humulinones and Hulupones</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>American Society of Brewing Chemists (ASBC), <i>ASBC Methods of Analysis,</i> 8th edition, 1992. <a href="http://realbeer.com/spencer/hop-analysis.html" target="_blank">Transcription by Dan McConnell</a>.</li>
+<li>H. O. Askew, “Changes in Concentration of α and β Acids and of Iso-Compounds on Heating Extracts of Hops in Aqueous Solutions and Unhopped Wort,” in <em>Journal of the Institute of Brewing</em>, vol. 71, pp. 10-20, 1965.</li>
+<li>R. Daniels, <em>Designing Great Beers: The Ultimate Guide to Brewing Classic Beer Styles</em>.  Brewers Publications, 2000.</li>
+<li>J. Dierckens and M. Verzele, "Oxidation Products of Humulone and Their Stereoisomerism," in <em>Journal of the Institute of Brewing</em>, vol. 75, pp. 453-456, 1969.</li>
+<li>G. Fix, <em>Principles of Brewing Science</em>. Brewers Publications, 2nd edition, 1999.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>.  Brewers Publications, 1997.</li>
+<li>A. Forster, "Influence of Hop Polyphenols on Beer Flavor," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>M. Garetz, "Hop Storage: How to Get - and Keep - Your Hops' Optimum Value" in <em>Brewing Techniques</em>, January/February 1994, <a href="https://www.morebeer.com/articles/storing_hops_properly" target="_blank">hosted on morebeer.com</a>.</li>
+<li>C. D. Hahn, <em>A Comprehensive Evaluation of the Nonvolatile Chemistry Affecting the Sensory Bitterness Intensity of Highly Hopped Beers</em>.  Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2017.</li>
+<li>M. L. Hall, "What's Your IBU," in <em>Zymurgy</em>.  Special Edition, 1997.</li>
+<li>D. G. Hauser, <em>The Efficiency of Dry-Hopping and Strategies for the Better Utilization of Dry-Hops</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2019.</li>
+<li>S. Hieronymus, <em>For the Love of Hops: The Practical Guide to Aroma, Bitterness, and the Culture of Hops</em>.  Brewers Publications, 2012.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science.  Volume 2: Hopped Wort and Beer</em>.  Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>Y. Huang, J. Tippmann, and T. Becker, "Kinetic Modeling of Hop Acids During Wort Boiling," in <em>International Journal of Bioscience, Biochemistry, and Bioinformatics</em>, vol. 3, no. 1, January 2013.</li>
+<li>D. Kaltner and W. Mitter, "Changed in Hop Derived Compounds During Beer Production and Aging," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>S. Kappler, M. Krahl, C. Geissinger, T. Becker, M. Krottenthaler, "Degradation of Iso-alpha-Acids During Wort Boiling," in <em>Journal of the Institute of Brewing</em>, vol. 116, no. 4, pp. 332-338, 2010.</li>
+<li>K. Krogerus, "Hop Science III: Bitterness", in <em>SureGork Loves Beer</em>.  July 31, 2012.  Accessed most recently on Aug. 16, 2017.  <a href="http://beer.suregork.com/?p=2377" target="_blank">http://beer.suregork.com/?p=2377</a></li>
+<li>S. R. Lafontaine, <em>Investigating the Quality Dynamics of American Aroma Hops Intended for Dry-Hopping Beer</em>, Doctor of Philosophy thesis (advisor: T. H. Shellhammer), Oregon State University, 2018.</li>
+<li>A. Lewis, "Brewing For Flavor: Hops", in <em>Brew Your Own </em>(<em>BYO</em>), August 1995.  http://byo.com/malt/item/285-brewing-for-flavor-hops</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>D. R. Maule, "The Fate of Humulone During Wort Boiling and Cooling", in <em>Journal of the Institute of Brewing</em>, vol. 72, pp. 285-290, 1966.</li>
+<li>J. P. Maye, R. Smith, and J. Leker, "Humulinone Formation in Hops and Hop Pellets and Its Implications for Dry Hopped Beers", in <em>MBAA Technical Quarterly</em>, vol. 51, no. 1, pp. 23-27, 2016.</li>
+<li>I. R. McLaughlin, <em>Bitterness Modifying Properties of Hop Polyphenols</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>R. Mussche, "Quantitative Determination of Bitter Substances in Hops by Thin Layer Chromatography", in <em>Journal of the Institute of Brewing</em>, vol. 81, January-February 1975.</li>
+<li>T. P. Neilsen, "Character-Impact Hop Aroma Compounds in Ale," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>G. J. Noonan, <em>New Brewing Lager Beer</em>. Brewers Publications, 1996.</li>
+<li>G. Oliver, <em>The Oxford Companion to Beer</em>, Oxford University Press, 2011.</li>
+<li>J. J. Palmer, <em>How to Brew: Everything You Need to Know to Brew Beer Right the First Time</em>. 3rd edition, Brewers Publications, 2006.</li>
+<li>J. Palmer and C. Kaminski, <em>Water: A Comprehensive Guide for Brewers</em>. Brewers Publications, 2013.</li>
+<li>E. J. Parkin, <em>The Influence of Polyphenols and Humulinones on Bitterness in Dry-Hopped Beer</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>N. Pyle, "Norm Pyle's Hops FAQ".  Accessed most recently on Aug. 16, 2017.  <a href="http://realbeer.com/hops/FAQ.html" target="_blank">http://realbeer.com/hops/FAQ.html</a></li>
+<li>V. Peacock, "The International Bitterness Unit, its Creation and What it Measures," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>F. G. Priest and G. G. Stewart (eds), <em>Handbook of Brewing</em>. 2nd edition, CRC Press Taylor &amp; Francis Group, 2006.</li>
+<li>M. Schott, "Loose vs. Bagged Kettle Hops | ExBEERiment Results!" at <a href="http://brulosophy.com" target="_blank">http://brulosophy.com</a>.  Accessed most recently on Aug. 16, 2017.  <a href="http://brulosophy.com/2016/03/21/kettle-hops-loose-vs-bagged-exbeeriment-results/" target="_blank">http://brulosophy.com/2016/03/21/kettle-hops-loose-vs-bagged-exbeeriment-results/</a></li>
+<li>T. H. Shellhammer, "Hop Components and Their Impact on the Bitterness Quality of Beer," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>B. Smith, "Scaling Beer Recipes for Commercial Use with BeerSmith", in <em>BeerSmith Home Brewing Blog</em>, June 11, 2014.  Accessed most recently on Aug. 16, 2017. <a href="http://beersmith.com/blog/2014/06/11/scaling-beer-recipes-for-commercial-use-with-beersmith/" target="_blank">http://beersmith.com/blog/2014/06/11/scaling-beer-recipes-for-commercial-use-with-beersmith/</a></li>
+<li>J. Spencer, "Small Scale Brewing", in BYO, Jul/Aug 2007. Accessed most recently on Aug. 16, 2017.  <a href="https://byo.com/mead/item/1378-small-scale-brewing" target="_blank">https://byo.com/mead/item/1378-small-scale-brewing</a></li>
+<li>L. O. Spetsig, "Electrolytic Constants and Solubilities of Humulinic Acid, Humulone, and Lupulone," in <em>Acta Chemica Scandinavica</em>, vol. 9, pp. 1421-1424, 1955.</li>
+<li>L. O. Spetsig, "The Bitter Substances of Spent Hops, Trub, and Yeast Cover: A Chromatographic Study," in <em>Journal of the Institute of Brewing</em>, vol. 74, pp. 346-351, 1967.</li>
+<li>L. O. Spetsig and M. Steninger, "Hulupones, A New Group of Hop Bitter Substances", in <em>Journal of the Institute of Brewing</em>, vol. 66, 1960.</li>
+<li>R. Stevens and D. Wright, "Evaluation of Hops [Part] X. Hulupones and the Significance of <em>β</em> Acids in Brewing," in Journal of the Institute of Brewing, vol. 67, 1961.</li>
+<li>R. Taylor, "Interpreting the Correlation Coefficient: A Basic Review", in <em>Journal of Diagnostic Medical Sonography</em>, no. 1, pp. 35-39, January/February 1990.</li>
+<li>G. Tinseth, "Glenn's Hop Utilization Numbers".  Accessed most recently on Aug. 16, 2017.  <a href="http://realbeer.com/hops/research.html" target="_blank">http://realbeer.com/hops/research.html</a></li>
+<li>Tinseth emails: personal e-mail communications with Glenn Tinseth on March 16, 2016 and July 5, 2016.  (Many thanks to Prof. Tinseth for his fast and helpful responses to my out-of-the-blue queries.)</li>
+<li><span class="st">K. Troester</span>, "How pH Affects Brewing", at <a href="http://braukaiser.com/wiki/index.php/Braukaiser.com" target="_blank">braukaiser.com</a>.  Accessed most recently on Aug. 16, 2017.  <a href="http://braukaiser.com/wiki/index.php?title=How_pH_affects_brewing" target="_blank">http://braukaiser.com/wiki/index.php?title=How_pH_affects_brewing</a></li>
+<li>M. Verzele and D. De Keukeleire, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>.  Developments in Food Science 27.  Elsevier, 1991.</li>
+</ul>
+&nbsp;
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

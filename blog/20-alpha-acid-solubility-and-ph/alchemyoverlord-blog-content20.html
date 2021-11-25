@@ -1,0 +1,391 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>Alpha-Acid Solubility and pH</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+Alpha-Acid Solubility and pH
+</span>
+
+<p>
+<p>
+<span id="heading1">Abstract</span><br>
+In a previous blog post, <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">Hopping-Rate Correction Based on Alpha Acid Solubility</a>, I describe a model of hopping-rate correction (for predicting IBUs) based on estimated alpha-acid solubility at boiling.  In this model, solubility is not a limiting factor up to 240 ppm, after which solubility increases much more slowly than the concentration of alpha acids.  Any alpha acids that are above this solubility limit are quickly degraded and do not contribute to the isomerized alpha acids in the finished beer.  This model demonstrated a good fit to the available IBU data at a variety of hopping rates and boil times, but was only evaluated at a relatively high wort pH of about 5.75.  According to Spetsig, alpha-acid solubility is greatly influenced by pH.  In this post, I estimate alpha-acid solubility at boiling and a wort pH of 5.2, and show that the alpha-acid solubility limit at boiling does not seem to vary greatly with pH.
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section1">1. Introduction</span></span><br>
+The questions that this blog post attempts to answer are, "Does the solubility limit of alpha acids at boiling change significantly with pH, and if so, how?"  This section presents some background on pH in brewing and alpha-acid solubility.<em id="sol_pH_Section1.1"></em>
+
+<p>
+<p>
+<span id="heading2">1.1 Mash and Wort pH</span><br>
+Wort made from two-row malt and low-alkalinity water has a pH of about 5.8 <a href="#references_sol_pH5.2">[deLange; Palmer and Kaminski, p. 58]</a>, <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">depending in part on the specific gravity</a>.  <a href="http://www.briess.com/" target="_blank">Briess</a> Pilsen Light DME, which I usually use for these experiments as an easy-to-use and consistent source of wort, shows <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">the same pH characteristics</a> as two-row malt mashed with low-alkalinity water.  The typical brewer should aim for a mash pH in the ballpark of 5.2 to 5.4 <a href="#references_sol_pH5.2">[Palmer and Kaminski, p. 60; Noonan, p 144; Fix, p 49; Troester citing Kunze (2007) and Narziss (2005)]</a>, although a pH as high as 5.8 is still acceptable <a href="#references_sol_pH5.2">[Troester]</a>.  The pH of room-temperature wort can therefore vary from about 5.2 to about 5.8.
+
+<p>
+<p>
+<span id="heading2"> <span id="sol_pH_Section1.2">1.2 pH and Wort Temperature</span></span><br>
+Palmer and Kaminski note that wort temperature affects pH in two ways: (a) the response of the pH probe changes as a function of temperature, and (b) the chemical activity of a solution (e.g. wort) also changes with temperature.  A pH meter with ATC will adjust for the first case, but not the second.  They say that "the pH of the wort at mash temperature (~65°C, 150°F) is known to be about 0.3 lower than the same wort when it is cooled to room temperature (~20°C, 68°F).  That is why brewers always refer to pH measurements at room temperature" <a href="#references_sol_pH5.2">[Palmer and Kaminski, p. 86]</a>.
+
+<p>
+In a <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">previous blog post</a>, I looked at how the pH of wort varies as a function of both temperature and room-temperature pH (i.e. a baseline pH).  I found that while the pH does decrease with temperature, the <em>amount</em> of decrease is less at lower room-temperature pH values.  If we extrapolate to boiling, a room-temperature pH of 5.75 will have a boiling pH of 5.33, and a room-temperature pH of 5.20 will have a boiling pH of 4.94.  This difference of 0.39 pH units, while less than the original difference of 0.55, suggests that there may still be pH-related differences in wort at boiling, although less than would be expected from the room-temperature pH difference.
+
+<p>
+<p>
+<span id="heading2"> <span id="sol_pH_Section1.3">1.3 pH and Utilization</span></span><br>
+It is generally thought that a lower wort pH will decrease utilization <a href="#references_sol_pH5.2">[e.g. Lewis and Young, p. 266; Askew 1964, p. 510]</a>.  (Utilization is the ratio of isomerized alpha acids (IAA) in the finished beer to the total alpha acids added.)  However, Mark Malowicki looked at IAA produced and degraded during boiling at pH values of 4.8, 5.2, 5.6, and 6.0, and found that "the level of iso-alpha concentrations ... was nearly identical for all pH levels" in a buffer solution <a href="#references_sol_pH5.2">[Malowicki, p. 37]</a>, and that the use of maltose, glucose, or calcium in the solution had no impact on isomerization <a href="#references_sol_pH5.2">[Malowicki, p. 39]</a>.  He speculated that "the <em>losses</em> to trub would better explain the differences in utilization that are attributed to pH..., since <em>rate</em> of isomerization does not appear to be affected" <a href="#references_sol_pH5.2">[Malowicki, p. 41, emphasis mine]</a>.  Kappler et al. looked at the recovery rate of IAA, which is inversely related to the losses of IAA that occur during the boil.  They found that while there was a large change in IAA recovery rates between pH 4.0 (58% recovery) and pH 8.0 (95% recovery), the difference in recovery rates (and hence losses) between pH 5.0 and pH 6.0 were much smaller (80% and 86% recovery, respectively) <a href="#references_sol_pH5.2">[Kappler et al., p. 334]</a>.
+
+<p>
+In <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">another blog post</a>, I looked at utilization and IBUs as a function of pH in the range of 5.30 to 5.73, and found that the observed reduction in IBUs with lower pH could be modeled primarily by a loss of "auxiliary bitter compounds" ("ABC" or "nonIAA"), which are the <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">bitter components other than IAA contributing to the IBU</a>.
+
+<p>
+<p>
+<span id="heading2"> <span id="sol_pH_Section1.4">1.4 pH and Alpha-Acid Solubility</span></span><br>
+There is little previous work looking at pH and alpha-acid solubility.  In 1955, Lars-Olov Spetsig published estimates of alpha-acid solubility as a function of pH and temperature <a href="#references_sol_pH5.2">[Spetsig]</a>.  He used two temperatures in his measurements, 77°F (25°C) and 104°F (40°C), and from those temperatures he extrapolated to conditions at boiling.  He found that at room temperature and pH 5.2 the alpha-acid solubility is about 70 parts per million (ppm), and that this increases to about 200 ppm at pH 5.75 <a href="#references_sol_pH5.2">[Spetsig, p. 1423]</a>.   At boiling and pH 5.2, he estimates the solubility at 350 ppm, which increases to about 1000 ppm at pH 5.75 <a href="#references_sol_pH5.2">[Spetsig, p. 1423]</a>.
+
+<p>
+D. R. Maule noted that "when humulone was used at rates greater than 200 [ppm] the amount appearing as [alpha acids] and [iso-alpha-acids] on break increased at the expense of the amounts remaining in the wort" <a href="#references_sol_pH5.2">[Maule, p. 289]</a>.  He concluded that what is not actually adsorbed to the break "represents the difference between the amount of resin present and its solubility in wort under the conditions employed"  <a href="#references_sol_pH5.2">[Maule, p. 289]</a>.  This suggests an alpha-acid solubility limit close to 200 ppm at boiling with wort pH 5.7 <a href="#references_sol_pH5.2">[Maule, p. 287]</a>.
+
+<p>
+Malowicki studied alpha-acid solubility at room temperature and found, in general agreement with Spetsig, a limit of 90 ppm at pH 5.2 <a href="#references_sol_pH5.2">[Malowicki, pp. 54]</a>.  He also noted that the solubility "curve did not completely plateau, there was a distinct knee in the curve and break from linearity" <a href="#references_sol_pH5.2">[Malowicki, p. 53]</a>.   In a <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">previous blog post</a>, I noted the same trend with solubility estimates at boiling and pH 5.75, and estimated the solubility limit under these conditions as starting at approximately 240 ppm.
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section2">2. Approach</span></span><br>
+
+<span id="heading2">2.1 General Approach</span><br>
+I <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">previously</a> modeled alpha-acid solubility at boiling and a (room-temperature) wort pH of about 5.75 as gradually increasing with initial alpha-acid concentration according to the formulas
+<p style="padding-left: 30px;">[AA]<sub>limit</sub> = [AA]<sub>limitMax</sub> × (1 − exp(<em>slope</em> × [AA]<sub>0</sub>))
+<em>slope</em> = log(1 − ([AA]<sub>limitMin</sub> / [AA]<sub>limitMax</sub>)) / [AA]<sub>limitMin</sub><em>
+</em>[<em>AA</em>]<sub>limitMin </sub>= 240<em>
+</em>[AA]<sub>limitMax </sub>= 490<em>
+</em></p>
+where [<em>AA</em>]<sub>limit</sub> is the solubility limit (in ppm), [<em>AA</em>]<sub>0</sub> is the concentration of alpha acids when hops are added to the wort (in ppm), <em>slope</em> is a parameter describing the slope of the function above the minimum solubility limit, [<em>AA</em>]<sub>limitMin</sub> is the smallest concentration at which some of the alpha acids do not dissolve (in ppm), and [<em>AA</em>]<sub>limitMax</sub> is the maximum concentration of dissolved alpha acids (also in ppm).  (Note: if [<em>AA</em>]<sub>0</sub> is less than or equal to [<em>AA</em>]<sub>limitMin</sub>, then all alpha acids dissolve in the wort.)  In order to extend this model to be dependent on pH, the experiment described here estimates solubility as a function of initial alpha-acid concentration at pH 5.2, using the same general formula but different values for [<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub>.  This general structure of the formula can be used regardless of the pH value, and the two parameters can be made dependent on pH by interpolating between the parameter values at pH 5.2 and 5.75.  The result can then be a set of formulas for alpha-acid solubility that is dependent on both pH and initial alpha-acid concentration.
+
+<p>
+<p>
+<span id="heading2">2.2 Estimating Solubility at pH 5.2</span><br>The approach used in this experiment was to create five conditions (i.e. five batches of beer) with different hop concentrations, all at a target pH of 5.2, with one condition having an alpha-acid concentration well below the expected solubility limit.  The wort from each condition was sampled after both 10 and 20 minutes of steep time.  All ten samples were fermented into beer.  The resulting IBU values were then fit to an equation that maps from initial alpha-acid concentration to IAA levels and another set of equations that map between IAA levels and IBU values.   This second of equations has two free parameters, as described below in Section 4.1.  Fitting was done by varying the two parameters of the solubility model ([<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub>) and the two free parameters of the IBU model to minimize the root-mean-square error between modeled and measured IBU values.   The general parameter-estimation technique for the IBU model is described in <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section3">3. Experimental Methods and Data</span></span><br>
+I brewed five batches of beer for this experiment.  These five conditions were designed to be identical in all respects except for the concentration of alpha acids.
+
+<p>
+I created one large pool of wort from which all five conditions were brewed.  Targeting a boil gravity of 1.040, I used 7.0 lbs (3.175 kg) of Briess Pilsen DME in 8.0 G (30.28 l) of water, yielding about 8.52 G (32.25 l) of wort with a specific gravity of 1.0385.  I boiled this wort (uncovered) for about 5 minutes, and then cooled it with a wort chiller to less than 75°F (24°C), yielding 8.28 G (31.34 l) with specific gravity 1.040.  The pH of this wort was 5.75.  I then added phosphoric acid (a total of 6.75 tsp (33.27 ml)) in order to reach a target pH of 5.20 at 70°F (21°C).  Each condition started with 1.50 G (5.68 l) from this larger pool of wort.  Except for taking samples after 10 and 20 minutes of boiling, the wort was boiled with the cover on the kettle in order to minimize evaporation losses.
+
+<p>
+I used hops from a 1 lb (0.45 kg) bag of Citra HBC394 from <a href="https://hopsdirect.com/" target="_blank">Hops Direct</a> that were purchased soon after harvest and stored in a vacuum-sealed bag in my freezer.  This bag had an alpha-acid rating on the package of 14.3%.  I had samples from this bag sent to two laboratories two months before the current experiment, which was conducted in February 2018.   Within three weeks following the current experiment, I had another two samples analyzed, with one laboratory the same and another one different.  Analysis results are shown in Table 1.  Because of the small number of samples, and because of the difficulty of a reliable alpha-acid estimate under the best of circumstances <a href="#references_sol_pH5.2">[Hough et al., p. 432; Verzele and De Keukeleire, p. 331]</a>, it is <a href="https://en.wikipedia.org/wiki/Median" target="_blank">more appropriate to take the median than the mean for a representative value</a> of the alpha acid rating.  It can be seen that the median alpha-acid rating is 14.2%, and the median beta-acid rating is 3.35%.  (The mean AA value of 14.3% is quite close to the median, fortunately.  I went a bit overboard with testing this time, which was probably an over-reaction to difficulties I encountered in the blog post <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">Hopping Rate Correction Based on Alpha-Acid Solubility</a>.)
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>Package Rating</b></td>
+<td><strong><a href="http://blogs.ifas.ufl.edu/hernandoco/2018/02/09/836/" target="_blank">Alpha Analytics</a>, within 8 weeks</strong>
+</td>
+<td><strong><a href="http://www.brewlaboratory.com/" target="_blank">Brew Laboratory</a> #1, within 8 weeks</strong>
+</td>
+<td><strong><a href="https://www.aarlab.com/" target="_blank">AAR Lab</a>, within 3 weeks</strong></td>
+<td><strong><a href="http://www.brewlaboratory.com/" target="_blank">Brew Laboratory</a> #2, within 3 weeks</strong></td>
+</tr>
+<tr>
+<td><b>alpha acids
+</b></td>
+<td>14.3%</td>
+<td>14.2%</td>
+<td>14.1%</td>
+<td>13.5%</td>
+<td>15.5%</td>
+</tr>
+<tr>
+<td><b>beta acids
+</b></td>
+<td><span style="color: #999999;"><small>N/A</small></span></td>
+<td>3.6%</td>
+<td>3.4%</td>
+<td>3.3%</td>
+<td>3.7%</td>
+</tr>
+<tr>
+<td><b>HSI</b></td>
+<td><small><span style="color: #999999;">N/A</span></small></td>
+<td>0.265</td>
+<td><small><span style="color: #999999;">N/A</span></small></td>
+<td>0.29</td>
+<td><small><span style="color: #999999;">N/A</span></small></td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 1.  Results of hops analysis, including alpha acids, beta acids, and (where available) the Hop Storage Index (HSI).</span>
+
+<p>
+During the boil, I contained the hops in a large nylon coarse-mesh bag in order to not include large hop particles in my samples.  Previous experiments (from <a href="http://brulosophy.com/" target="_blank">Brülosophy</a>: 25 IBUs (bagged) vs. 27 IBUs (loose), and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">Four Experiments on Alpha-Acid Utilization and IBUs</a>: 36 IBUs (bagged) vs. 37 IBUs (loose) and 34 IBUs (bagged) vs. 34 IBUs (loose)) have not shown a significant impact of a mesh bag on measured IBU values.  In order to maximize contact of the hops with the wort, I added brass weights (a total of 3.2 oz (90.7 g)) to the mesh bag so that the hops would be quickly submerged and hydrated.
+
+<p>
+For all conditions, I took samples of wort after 10 and 20 minutes of steep time.  Each sample (about 14 oz (0.41 l)) was taken from the boil and immediately transferred to an aluminum cup.  The sample was then placed in an ice bath and stirred to cool quickly.  Once cooled to 75°F (24°C), the sample was transferred to a sanitized, sealed, and labeled quart (liter) container.  I aerated each sample by vigorous shaking for 60 seconds, then added .01 oz (0.28 g) of Safale US-05 yeast (age 10 months) to target 750,000 viable cells per ml and degree Plato <a href="#references_sol_pH5.2">[Fix and Fix, p. 68]</a>.  After all samples were taken, the containers were cracked open to vent and they fermented.  After ten days of fermentation, I sent 4 oz (0.12 l) of each sample to <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for IBU and original-gravity measurement.  The final gravity of all samples was about 1.0055 (minimum 1.0050; maximum 1.0060).
+
+<p>
+Table 2 provides data for each condition, including initial wort volume, weight of hops added, estimated initial alpha-acid concentration, and post-boil pH.  Tables 3 and 4 show the original gravity, post-boil volume, and measured IBUs from each condition at 10 minutes and 20 minutes, respectively.  Original gravity values were measured by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> in degrees Plato, and I converted those values to specific gravity using an equation from Spencer Thomas.  The post-boil volume was estimated from the pre-boil volume, pre-boil gravity, and original gravity.  IBU values were measured by <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.  Figure 1 shows the measured IBU values for the five conditions at 10 and 20 minutes of hop boiling time.
+<table class="table" >
+<tbody>
+<tr>
+<td></td>
+<td><b>Condition A</b></td>
+<td><b>Condition B</b></td>
+<td><b>Condition C</b></td>
+<td><b>Condition D</b></td>
+<td><b>Condition E</b></td>
+</tr>
+<tr>
+<td><b>initial wort volume</b><b>
+</b></td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+</tr>
+<tr>
+<td><b>weight of hops added
+</b></td>
+<td>0.142 oz /<br>
+4.027 g</td>
+<td>0.284 oz /<br>
+8.054 g</td>
+<td>0.426 oz /<br>
+12.081 g</td>
+<td>0.710 oz /<br>
+20.135 g</td>
+<td>1.136 oz /<br>
+32.216 g</td>
+</tr>
+<tr>
+<td><b>estimated initial alpha-acid concentration
+</b></td>
+<td>100 ppm</td>
+<td>200 ppm</td>
+<td>300 ppm</td>
+<td>500 ppm</td>
+<td>800 ppm</td>
+</tr>
+<tr>
+<td><b>post-boil pH
+</b></td>
+<td>5.19 @ 67.5°F (19.7°C)</td>
+<td>5.17 @ 57.3°F (14.1°C)</td>
+<td>5.20 @ 70.5°F (21.4°C)</td>
+<td>5.18 @ 61.6°F (16.4°C)</td>
+<td>5.19 @ 57.3°F (14.1°C)</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 2.  Measured values for all five conditions.  Measurements include initial wort volume, weight of hops added, initial alpha-acid concentration, and post-boil pH (and temperature at which pH was measured).</span>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>Condition:</b></td>
+<td><b>A
+</b></td>
+<td><b>B</b></td>
+<td><b>C</b></td>
+<td><b>D</b></td>
+<td><b>E</b></td>
+</tr>
+<tr>
+<td><b>OG
+</b></td>
+<td>1.0388</td>
+<td>1.0380</td>
+<td>1.0380</td>
+<td>1.0380</td>
+<td>1.0396</td>
+</tr>
+<tr>
+<td><b>volume</b></td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>5.6</td>
+<td>11.7</td>
+<td>13.6</td>
+<td>19.3</td>
+<td>25.6</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 3.  Values for each condition after <strong>10 minutes</strong> steep time.  OG is the original gravity determined by Oregon BrewLab.  </span>
+</em>
+<table class="table" >
+<tbody>
+<tr>
+<td><b>Condition:</b></td>
+<td><b>A
+</b></td>
+<td><b>B</b></td>
+<td><b>C</b></td>
+<td><b>D</b></td>
+<td><b>E</b></td>
+</tr>
+<tr>
+<td><b>OG
+</b></td>
+<td>1.0388</td>
+<td>1.0396</td>
+<td>1.0396</td>
+<td>1.0388</td>
+<td>1.0396</td>
+</tr>
+<tr>
+<td><b>volume</b></td>
+<td>1.50 G /<br>
+5.678 l</td>
+<td>1.50 G /<br>
+5.669 l</td>
+<td>1.50 G /<br>
+5.669 l</td>
+<td>1.50 G /<br>
+5.674 l</td>
+<td>1.50 G /<br>
+5.678 l</td>
+</tr>
+<tr>
+<td><b>IBUs</b></td>
+<td>8.4</td>
+<td>16.3</td>
+<td>19.0</td>
+<td>27.4</td>
+<td>36.3</td>
+</tr>
+</tbody>
+</table>
+<span id="caption">Table 4.  Values for each condition after <strong>20 minutes</strong> steep time.  OG is the original gravity determined by Oregon BrewLab.  Volumes are based on the initial volume, pre-boil specific gravity, and OG.  IBU values were measured by Oregon BrewLab.</span>
+
+<p>
+<img src="solexp-fig1-measuredibus.png" alt="Figure 1"/> <span id="caption"> Figure 1.  Measured IBU values for the five conditions (different initial concentrations of alpha acids) at 10 and 20 minutes of hop boiling time.  The pre-boil pH in all conditions is 5.2.</span>
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section4">4. Parameter Estimation Methodology</span></span><br>
+
+<span id="heading2"> <span id="sol_pH_Section4.1">4.1 Estimating Parameters to Map between IBU and IAA </span></span><br>
+In order to estimate the alpha-acid solubility limit as a function of initial alpha-acid concentration, we need some way to translate between measured IBU values and estimated IAA concentrations.  Peacock <a href="#references_sol_pH5.2">[p. 157]</a> provides just such a formulation in a general form:
+<p style="padding-left: 30px;"><em>IBU</em> = 5/7 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)</p>
+where <em>IBU</em> is the measured IBU value, [<em>IAA</em>]<sub>beer</sub> is the concentration of isomerized alpha acids in the finished beer, and [<em>nonIAA</em>]<sub>beer</sub> is the concentration of other bittering substances that aren’t isomerized alpha acids (also in the finished beer).
+
+<p>
+The non-IAA compounds (also called "auxiliary bittering compounds" or "ABC") include oxidized alpha acids (abbreviated as "oAA"; produced during hop storage and during the boil), oxidized beta acids (produced during hop storage), hop polyphenols, and malt polyphenols.  The oxidized alpha acids produced during the boil should be limited to the same extent that isomerization is limited.  To accomplish this, I used estimates of the concentrations of each of these substances based on <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">malt</a> and <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">hop</a> concentrations, and limited the amount of alpha acids available for oxidization using the solubility-limit model.  I left the percent of alpha acids that oxidize during the boil and remain after fermentation as a free parameter called <em>scaling<sub>oAA</sub></em>.
+
+<p>
+We also need some way to translate between estimated IAA concentrations and the concentration of alpha-acids added to the wort.  Malowicki provides a way to estimate IAA in the wort from alpha acids:
+<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup>
+<em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup>
+[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</p>
+where <em>k</em><sub>1</sub>(<em>T</em>) and <em>k</em><sub>2</sub>(<em>T</em>) are empirically-derived rate constants, <em>T</em> is the temperature in Kelvin (i.e. 373.15K for boiling), e is the exponential function, and [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids in the wort.
+
+<p>
+That leaves us with needing to find a factor called <em>scaling<sub>IAA</sub></em>, which maps between [<em>IAA</em>]<sub>wort</sub> and [<em>IAA</em>]<sub>beer</sub>, and the factor <em>scaling<sub>oAA</sub></em>, which maps from the concentration of alpha acids in the wort to [<em>oAA</em>]<sub>beer</sub>.  A method for estimating these two factors is described in a blog post <a href="../17-estimating-isomerized-alpha-acids-and-noniaa-from-multiple-ibu-measurements/alchemyoverlord-blog-content17.html">Estimating Isomerized Alpha Acids and nonIAA from Multiple IBU Measurements</a>.
+
+<p>
+<p>
+<span id="heading2"> <span id="sol_pH_Section4.2">4.2 Estimating Solubility and the Impact of pH</span></span><br>
+The initial concentration of alpha acids, [<em>AA</em>]<sub>0</sub>, was reduced to the concentration of dissolved alpha acids using the two parameters of the solubility limit model and the concentration of alpha acids added to the wort.  The concentration of dissolved alpha acids was then used to estimate [<em>IAA</em>]<sub>beer</sub> and [<em>nonIAA</em>]<sub>beer</sub>, which was then used to estimate an IBU value.  The four parameters, <em>scaling<sub>IAA</sub></em>, <em>scaling<sub>oAA</sub></em>, [<em>AA</em>]<sub>limitMin</sub>, and [<em>AA</em>]<sub>limitMax</sub> were varied to minimize the error between estimated and measured IBU values.
+
+<p>
+If the function generated by [<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub> for wort pH 5.2 is not dramatically different from the function estimated at pH 5.75, then we can conclude that pH does not have a clear impact on alpha-acid solubility.  If the functions are quite different, then we can use linear interpolation of these two values between the two pH extremes to estimate the solubility limit at any pH.
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section5">5. Results</span></span><br>
+
+<span id="heading2">5.1 Caveat</span><br>
+Before looking at the results in detail, I will note that there were only two measured IBU values per condition in this experiment.  This is the minimum number for IBU parameter estimation, and the cost of a small number of data points per condition is greater uncertainty in the results.  If I were to re-do this experiment with the benefit of hindsight, I would take (at least) four samples per condition, for a total of 20 samples to fit to four parameters.  With more time and energy, I would repeat this experiment at a variety of wort pH levels, with a variety of AA ratings, and at a greater number of [<em>AA</em>]<sub>0</sub> values.  Because of the small number of data points currently available, we can expect significant variability in the results and therefore only detect a relatively large effect of pH on alpha-acid solubility.
+
+<p>
+<p>
+<span id="heading2">5.2 Results #1</span><br>
+The search for the four parameters yielded the following values: <em>scaling<sub>IAA</sub></em> = 0.21, <em>scaling<sub>oAA</sub></em> = 0.040, [<em>AA</em>]<sub>limitMin</sub> = 180, and [<em>AA</em>]<sub>limitMax</sub> = 660.  The root-mean-square (RMS) error was 0.67 IBUs.  These values for the solubility limit model result in solubility at pH 5.2 that is <em>greater</em> than the solubility  at pH 5.75.  We expect, from Spetsig's analysis, that solubility should decrease as the pH decreases, and so these results contradict our expectations.  The solubility-limit model resulting from these parameters is shown with a solid blue line in Figure 2.  The solubility-limit model for pH 5.75 is shown with a dashed gray line.
+
+<p>
+<p>
+<span id="heading2">5.3 Results #2</span><br>
+Because the initial results were unexpected, it is possible that the model has too many parameters (4) for the given number of data points used in analysis (10).  I therefore assumed that the alpha-acid concentration of Condition <strong>A</strong> is below the solubility limit, and used the technique in Section 4.1 to estimate <em>scaling<sub>IAA</sub></em> and <em>scaling<sub>oAA</sub></em> for this condition without a solubility-limit model.  This analysis yielded <em>scaling<sub>IAA</sub></em> = 0.33 and <em>scaling<sub>oAA</sub></em> = 0.015.  Searching for the solubility-limit parameters yielded similar results as in the first analysis, [<em>AA</em>]<sub>limitMin</sub> = 200 and [<em>AA</em>]<sub>limitMin</sub> = 680, but with RMS error 1.61.
+
+<p>
+<p>
+<span id="heading2">5.4 Results #3</span><br>
+In an attempt to find a solubility limit that decreases as the pH decreases, I used the value of <em>scaling<sub>IAA</sub></em> from Results #2 (0.33) but allowed <em>scaling<sub>oAA</sub></em> to be a free parameter.  This parameter search yielded <em>scaling<sub>oAA</sub></em> = 0.030, [<em>AA</em>]<sub>limitMin</sub> = 100, and [<em>AA</em>]<sub>limitMax</sub> = 520, with RMS error 1.25.  The solubility-limit model resulting from these parameters is shown with a solid green line in Figure 2.
+
+<p>
+Given the expectation that solubility should decrease as pH decreases, it can be seen that there is not an exceptionally large difference between the estimates at pH 5.2 (green line) and the estimate at 5.75 (dashed-gray line), and so there is no clear effect of pH on alpha-acid solubility.
+
+<p>
+<img src="solexp-fig2-aasolubilitynew-1.png" alt="Figure 2"/> <span id="caption"> Figure 2. Estimated alpha-acid solubility at pH 5.2 from Results #1 and Results #2 (blue line), at pH 5.2 from Results #3 (green line), and at pH 5.75 (dashed gray line).</span>
+
+<p>
+<p>
+<span id="heading1"><span id="sol_pH_Section6">6. Conclusion</span></span><br>
+The results from this experiment do not show a clear effect of wort pH on alpha-acid solubility at boiling.  This was surprising to me, because Spetsig estimated large differences in alpha-acid solubility at boiling as a function of pH <a href="#references_sol_pH5.2">[Spetsig, p. 1423]</a>.
+
+<p>
+Spetsig obtained his estimates by extrapolating from measurements at 77°F (25°C) and 104°F (40°C), so it's possible that the extrapolation of alpha-acid solubility with temperature missed some non-linear changes of solubility with temperature.   As I noted in <a href="#sol_pH_Section1.2">Section 1.2</a>, the rate of change in pH as a function of temperature is different depending on the room-temperature pH.  Extrapolating these results to boiling results in the difference between room-temperature pH values of 5.20 and 5.75 being 0.39 pH units instead of 0.55 pH units.  Again, it is possible that this extrapolation of pH with temperature is missing some non-linearity as the temperature approaches boiling, and that the pH of boiling wort is similar regardless of whether the room-temperature wort is 5.75 or 5.20.
+
+<p>
+In the end, I don't have a good explanation for <em>why</em> the data don't show an effect of pH.  It is also quite probable that there were too few data points to robustly estimate the necessary model parameters.  Until there is more data on the topic, though, the most plausible explanation seems to be that wort pH does not significantly affect alpha-acid solubility at boiling.
+
+<p>
+I would like to thank Dana Garves at <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for her analysis of the samples.  The consistency of the measured IBU values in Figure 1 demonstrates the high quality of her analysis.
+
+<p>
+<p>
+<span id="heading1"><span id="references_sol_pH5.2">References</span></span><br>
+<ul>
+<li>H. O. Askew, “Changes in Concentration of α and β Acids and of Iso-Compounds on Heating Extracts of Hops in Aqueous Solutions and Unhopped Wort,” in <em>Journal of the Institute of Brewing</em>, vol. 71, pp. 10-20, 1965.</li>
+<li>A. J. deLange, "Understanding pH and Its Application in Small-Scale Brewing − Part 1: Fundamentals and Relevance to Brewhouse Procedures," in <em>More Beer! Articles</em>, Jul. 18, 2013.  URL: <a href="https://www.morebeer.com/articles/understanding_ph_in_brewing" target="_blank">https://www.morebeer.com/articles/understanding_ph_in_brewing</a>.  Accessed most recently Sep. 12, 2018.</li>
+<li>G. Fix, <em>Principles of Brewing Science</em>. Brewers Publications, 2nd edition, 1999.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science.  Volume 2: Hopped Wort and Beer</em>.  Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>S. Kappler, M. Krahl, C. Geissinger, T. Becker, M. Krottenthaler, "Degradation of Iso-alpha-Acids During Wort Boiling," in <em>Journal of the Institute of Brewing</em>, vol. 116, no. 4, pp. 332-338, 2010.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
+<li>M. G. Malowicki, <em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>D. R. Maule, “The Fate of Humulone During Wort Boiling and Cooling”, in <em>Journal of the Institute of Brewing</em>, vol. 72, pp. 285-290, 1966.</li>
+<li>G. J. Noonan, <em>New Brewing Lager Beer</em>.  Brewers Publications, 1996.</li>
+<li>J. Palmer and C. Kaminski, <em>Water: A Comprehensive Guide for Brewers</em>. Brewers Publications, 2013.</li>
+<li>V. Peacock, “The International Bitterness Unit, its Creation and What it Measures,” in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>L. O. Spetsig, “Electrolytic Constants and Solubilities of Humulinic Acid, Humulone, and Lupulone,” in <em>Acta Chemica Scandinavica</em>, vol. 9, pp. 1421-1424, 1955.</li>
+<li>K. Troester, <em>How pH Affects Brewing</em>.  URL:  <a href="http://braukaiser.com/wiki/index.php/How_pH_affects_brewing" target="_blank">http://braukaiser.com/wiki/index.php/How_pH_affects_brewing</a>.  Accessed most recently on Sep. 12, 2018.</li>
+<li>M. Verzele and D. De Keukeleir, <em>Chemistry and Analysis of Hop and Beer Bitter Acids</em>, vol. 27, 1st edition, Elsevier,  ISBN 0-444-88165-4, eBook ISBN 9781483290867, 1991.</li>
+</ul>
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

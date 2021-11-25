@@ -1,0 +1,243 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>IBUs and the SMPH Model</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+IBUs and the SMPH Model
+</span>
+
+<p>
+
+<span id="heading1">1. Introduction</span><br>
+When I first started brewing, the software I used had three options for predicting IBUs: Tinseth, Rager, and Garetz. The word "Tinseth" had a nice sound to it, so I chose that one. I was quite happy with that option until I got interested in flameout additions and hop stands, where the Tinseth formula predicts zero IBUs. Then I found out that I could get IBUs professionally measured at a very reasonable cost. So I did one small experiment to measure IBUs in finished beer with and without a hop stand. And then another experiment, and then another. Just when I thought I could predict IBUs reasonably well, I'd get results that challenged my assumptions. I wrote detailed blog posts about almost all of my experiments, so that anyone can (hopefully) replicate my findings. More than seven years and well over 300 measured IBU values after my first experiment, I put the finishing touches on a new model for predicting IBUs. The purpose of this post is not to go into the gory details, but to give an overview of the model's higher-level concepts and to address some common misconceptions about the IBU. I also give results that compare this model with four other IBU models on 14 different beers ranging from 20 to 70 IBUs.
+
+<p>
+This new model, called SMPH, is available at <a href="../../index.html" target="_top"> https://jphosom.github.io/alchemyoverlord/</a>. Even if you don't use it for recipe planning, I encourage you to play around with it to see how different brewing conditions can yield very different (or sometimes not so different) IBU predictions.
+
+<p>
+It's important to note that I've been pretty obsessive about measuring or estimating volumes, alpha-acid ratings, weights of hops, hop steep times, wort cooling times, pH, and any other factor that seems relevant. While I'm not saying that you need to be this obsessive in your brewing (it's supposed to be fun, right?), realize that small measurement or estimation errors might have a large impact on predicted IBUs. If your post-boil volume measurement is off by 10%, then your IBU prediction will also be off by 10%. There is also 10% to 15% variation in alpha-acid content within the same bale of hops <a href="#references_SMPH">[Verzele and De Keukeleire, p. 331]</a>, and so the AA rating on your package may not be an accurate indicator of the amount of alpha acids that are in your hops. If your predicted IBU value is off by 20%, that might reduce your prediction from 40 to 32 IBUs. If you're unlucky, all of these measurement errors can add up and make the prediction meaningless... or, if you're lucky, they can cancel each other out. Your mileage may vary.
+
+<p>
+If predicting IBUs is such an imprecise and difficult art form, why bother? Obviously, you don't need to care about predicting IBUs if you're happy with the bitterness levels of the beers that you make. Or, if you find that a beer turns out more (or less) bitter than you'd like and you don't mind brewing it again with a different amount of hops (or adding iso-alpha acid extract, or blending several beers), then you don't need to worry about it. But, if you find that your first attempt at a beer can sometimes yield a bitterness that isn't quite right, you may want to get the best prediction of bitterness that you can before brewing. That prediction might still be a bit off, but an in-the-ballpark estimate is still better than no estimate at all. By way of analogy, even though pH test strips aren't as accurate as a digital pH meter, if you don't have a pH meter it's still better to use test strips than to pretend that pH doesn't matter and ignore it.
+
+<p>
+
+<span id="heading1">2. IBUs: IAAs and ABCs</span><br>
+The IBU is a measurement of the amount of infrared light absorbed by a sample of processed beer <a href="#references_SMPH">[Thermoscientific; Anon.]</a>. It is often (and incorrectly) reported that one IBU equals one part per million (ppm) of isomerized alpha acids (IAAs). However, as Val Peacock explains, the IBU was developed in the 1950s and 1960s to measure the combination of both IAAs and "auxiliary bittering compounds" (ABCs) <a href="#references_SMPH">[Peacock, pp. 158-161]</a>. The researchers at that time knew that there are bitter substances in beer other than IAAs, and they deliberately included them in the IBU measurement. The IBU combines the concentration of IAAs and ABCs in beer into a single measure of approximate bitterness. The confusion about one IBU equaling one ppm of IAAs has come up because they scaled the IBU measurement so that the two numbers would often be close to each other. However, this rough correspondence only holds under specific brewing circumstances that were common in the 1960s and are less common today. When the IBU was developed, IAAs contributed to about 70% of the IBU value, and ABCs contributed the remaining 30%. The proportion of IAAs contributing to the IBU can change greatly depending on brewing techniques and how well the hops have been stored. In the fourteen beers used in testing the SMPH model (described in more detail below), I estimate that IAAs contribute to between 50% and 75% of the IBU. (A West-Coast IPA with lots of late-hop and dry-hop additions has an IAA contribution of 50%, and a more traditional beer with one early and one late addition has an IAA contribution of 75%.) In the data used for finding SMPH parameter values, the estimated IAA contribution ranges from 0% to over 80% of the IBU.
+
+<p>
+I have found that the largest fraction of ABCs are oxidized alpha acids (oAAs) that are produced when hops are added to hot wort. I estimate that <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">about 10% of the available alpha acids oxidize quickly in boiling wort</a>, producing oAAs. In most beers, the <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">second-largest contributors to ABCs are malt and hop polyphenols, followed by oxidized beta acids</a>. In her Master's thesis, Christina Hahn (advisor: Tom Shellhammer) notes that "individually, iso-alpha acids and [oxidized alpha acid] concentrations are relatively poor predictors of sensory bitterness, while the sum of iso-alpha acids and [oxidized alpha acids] is almost as good a predictor of sensory bitterness as [the IBU]" <a href="#references_SMPH">[Hahn, p. 48]</a>. She found a strong correlation (<em>R</em><sup>2</sup> = 0.86) between sensory bitterness and the IBU, and a strong correlation (<em>R</em><sup>2</sup> = 0.80) between sensory bitterness and the combination of IAAs, oAAs, and alcohol (ABV) <a href="#references_SMPH">[Hahn, p. 50]</a>. In short, the concentrations of IAAs and oAAs are, together, very good predictors for both sensory bitterness and the IBU. These findings support the claim that oAAs are the largest component of the auxiliary bittering compounds.
+
+<p>
+
+<span id="heading1">3. SMPH Model: The Big Picture</span><br>
+The SMPH model was developed to have one key advantage over other IBU models: it separates out the contribution of isomerized alpha acids (IAAs) from auxiliary bittering compounds (ABCs). The conversion of alpha acids to IAAs takes place relatively slowly (e.g. over the course of an hour-long boil), but ABCs are produced or dissolved in the wort quickly. These different time scales mean that IAAs and ABCs should be modeled separately. (The <a href="../15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">mIBU calculator</a> includes some approximations in this regard, but it is inherently limited in its ability to accurately separate the two.) While IAAs contribute the most to the IBU in "typical" beers (if there is such a thing as a typical beer anymore), ABCs can contribute a significant amount, especially when using hops late in the boil, when using a hop stand, and/or when dry hopping (techniques commonly used in brewing IPAs).
+
+<p>
+For estimating IAA concentrations, SMPH uses the model of alpha-acid isomerization developed by Mark Malowicki for his master's thesis (advisor: Tom Shellhammer) <a href="#references_SMPH">[Malowicki, p. 27]</a>. His work enables computation of the (temperature- and time-dependent) production and degradation of IAAs, and is the foundation on which the SMPH model has been built.
+
+<p>
+The SMPH model makes a prediction of the concentration of IAAs and ABCs in wort using Malowicki's model of alpha-acid isomerization and estimates of the concentration of each auxiliary bittering compound in wort. The concentrations of IAAs and ABCs are then modified by various factors (described below) occurring during the boil, fermentation, and conditioning. It then uses an equation proposed by Val Peacock <a href="#references_SMPH">[Peacock, p. 161]</a> to convert from these estimated concentrations in beer to a final IBU value.
+
+<p>
+Like the Garetz model, the SMPH model can account for a large number of factors that influence IBUs. In the SMPH model, that means accounting for the boiling point of water, wort gravity, wort pH, wort clarity (e.g. a careful vorlauf vs. brew-in-a-bag wort collection), form of the hops (whole cones or pellets), hopping rate, hop freshness, krausen loss, flocculation, finings, filtering, and age of the beer. Basically every step in the brewing process seems to have some influence on IBUs.
+
+<p>
+The SMPH model uses approximations of all of the known factors that might influence IBUs. (Unknown factors are probably still waiting to be discovered.) The goal has not been to precisely quantify each of the myriad factors (I only have one life to live), but to put all of the approximations together into one imperfect but reasonable model. Where even approximations have been difficult to come by, I used over 300 measured IBU values to find the parameter values that give the best fit to the data.
+
+<p>
+A much more detailed explanation of the concepts and factors used in the SMPH model is described in a separate blog post, <a href="../11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">A Summary of Factors Affecting IBUs</a>.
+
+<p>
+
+<span id="heading1">4. Factors Influencing IBUs</span><br>
+The SMPH model accounts for a number of factors that influence IBUs. These factors can be put into one of three groups for the purposes of discussion: "large-impact", "medium-impact", and "small-impact" factors.
+
+<p>
+<p>
+<span id="heading2">4.1 Large-Impact Factors</span><br>
+The factors that can have a large impact on IBUs are (a) hops added to hot wort (kettle hops) vs. ambient-temperature or "cold-side" wort (dry hops), (b) form of the hops (whole cones or pellets), (c) hopping rate, (d) wort pH, and (e) wort clarity.
+
+<p>
+<u><em>Kettle vs. Dry Hops:</em></u> Hops added to hot wort in the kettle undergo alpha-acid isomerization, which produces the majority of bitterness in most beers. Dry hopping will produce no IAAs, but in large amounts it can produce significant bitterness from ABCs <a href="#references_SMPH">[Parkin, pp. 33-34; Maye and Smith, p. 135]</a>, especially from oxidized alpha acids created during hop storage. Oddly enough, at higher IBUs the use of dry hopping also reduces the concentration of IAAs from kettle additions <a href="#references_SMPH">[Parkin, p. 34; Maye and Smith, p. 135]</a>. The IBUs from a dry-hop addition are difficult to estimate, but the difference between adding hops to the boil kettle or to the fermentation or conditioning vessel will have the largest impact on the IBU value.
+
+<p>
+<u><em>Form of Hops:</em></u> <a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Hop pellets produce more IBUs than whole cones</a>. With pellets, the production of oxidized alpha acids when hops are added to the boiling wort is about double that of whole cones. This factor seems to be variety specific, with some varieties producing very little increase from pellets, and other varieties producing a large increase. <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">The rate of alpha-acid isomerization appears to be the same when using pellets or whole cones</a>.
+
+<p>
+<u><em>Hopping Rate:</em></u> It is well known that doubling or tripling the amount of hops generally won't produce a doubling or tripling of the IBU. As the concentration of hops increases, the resulting IBU value increases more slowly. An <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">alpha-acid solubility limit</a> is a reasonable explanation for this effect, with all alpha acids dissolving up to about 200 ppm and a reduction in the percent that dissolves as the alpha-acid concentration increases. Mark Garetz incorporated a hopping-rate factor into his model, but I suspect that he underestimated the effect.
+
+<p>
+<u><em>Wort pH:</em></u> I've found that lowering the pH from 5.75 (the <a href="../18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">approximate pH of a mash made from untreated low-alkalinity water and two-row malt</a>) to 5.25 (within the recommended range of 5.2 to 5.4) can <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">reduce IBUs by 15% to 35%</a>. Most of the decrease in IBUs appears to come from a loss of ABCs, with only a small loss of IAAs.
+
+<p>
+<u><em>Wort Clarity:</em></u> Much to my surprise, I've found that the <a href="../27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">clarity of the wort can have a significant impact on IBUs</a>. In this case, "clarity" refers to how visually clear or cloudy the wort is when it is transferred to the fermentation vessel (FV), ignoring the effect of hop matter. Cloudy wort yields relatively fewer IBUs. In other words, wort produced using the brew-in-a-bag technique with no filtering of the grain bed can yield a much lower IBU value than clear wort produced with a careful vorlauf and good grain-bed filter. (This is not to say that one method is better than the other, just that they may yield different IBUs.) Likewise, stirring the wort just before transferring into the FV can produce a lower IBU value than letting the wort settle and racking only the clear wort into the FV. I've observed very clear wort producing 30% more IAAs than typical wort, and very cloudy wort producing 30% fewer IAAs than typical wort. The reason for IBUs being affected by wort clarity is unknown, but wort protein levels do <em>not</em> seem to be a factor.
+
+<p>
+<p>
+<span id="heading2">4.2 Medium-Impact Factors</span><br>
+Factors that often have only a medium impact on IBUs are: (a) how well the hops have been stored (hop freshness), (b) wort gravity, (c) the use of a hop stand, (d) krausen losses, and (e) the age of the beer.
+
+<p>
+<u><em>Hop Storage Conditions:</em></u> The <a href="../../index.html" target="_top">storage conditions of hops can have a large impact on the amount of alpha acids</a> remaining in those hops. As the amount of alpha acids decreases due to poor storage conditions and/or longer storage duration, the amount of oxidized alpha and beta acids increases, somewhat mitigating the reduction in IBU values <a href="#references_SMPH">[Peacock, p. 162]</a>. (Nitrogen-flushed packaging and cold storage are the best ways to preserve hops.) While differences in storage conditions may not have a large effect on the IBU, I think storage conditions do have a large impact on overall beer quality.
+
+<p>
+<u><em>Wort Gravity:</em></u> <a href="../24-specific-gravity-and-ibus/alchemyoverlord-blog-content24.html">Wort gravity is one of the factors common to all IBU prediction models</a>. On average, the difference in IBUs between a 1.030 wort and a 1.080 wort is about 15%. The difference between a 1.040 wort and a 1.070 wort is about 10%.
+
+<p>
+<u><em>Hop Stands:</em></u> During a hop stand, alpha acids continue to isomerize in the hot wort, increasing the IBU. <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">The amount of impact from a hop stand depends a lot on the duration of the stand and when hops are added to the wort</a>, so I've classified this as a medium-impact factor.
+
+<p>
+<u><em>Krausen:</em></u> Most brewers let krausen deposits accumulate on the sides of the fermentation vessel. If you skim off the krausen as it is produced (which is sometimes recommended to produce a "smoother" beer <a href="#references_SMPH">[e.g. Troester; Hough et al., pp. 652-653]</a>), <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">the resulting IBU value can be about 5% to 10% lower</a>. If you use a blow-off tube and remove a lot of the krausen, the IBU value may be 25% lower. If you mix the krausen back into the beer (or use an anti-foaming agent) during fermentation then the IBU may be about 10% higher. I've classified krausen as a medium-impact factor because the loss of lots of krausen through a blow-off tube is quite possible but perhaps not so common.
+
+<p>
+<u><em>Age of the Beer:</em></u> After primary fermentation, IBUs will decrease as the beer conditions. <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">I have noticed a 20% decrease in IBUs as a beer ages from 1 week to 13 weeks at about 60°F (16°C)</a>. While a lot of the decrease seems to happen in the first several weeks, most beers aren't conditioned for months at cellar or room temperature, and if a beer is conditioned or stored at cold temperatures, IBUs are probably much better preserved. Therefore, I've put this factor in the "medium-impact" category, but it's probably a small impact for cold-conditioned lagers.
+
+<p>
+<p>
+<span id="heading2">4.3 Small-Impact Factors</span><br>
+The factors that usually have a minor impact on IBUs are (a) the boiling point of water, (b) the rate at which wort is force-cooled after flameout or a hop stand, and (c) flocculation, finings, and filtering.
+
+<p>
+<u><em>Boiling Point of Water:</em></u>
+The difference in IBUs when brewing at sea level compared with Boulder, Colorado or Johannesburg, South Africa is about 20% for typical beers. This would be a large-impact factor, but most cities are at 1000 feet (300 meters) or less, in which case the impact is 4% or less. (In a typical beer, the majority of IBUs come from alpha-acid isomerization, and we can use the Malowicki model of temperature-dependent isomerization to estimate the impact of altitude.)
+
+<p>
+<u><em>Rate of Wort Cooling:</em></u> After flameout or a hop stand, alpha acids continue to isomerize in the hot wort while it is force-cooled, down to about 140°F (60°C). <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">These post-boil IAAs increase the IBU</a>. While there may be a large difference in IBUs when going (for example) from an ice bath to a Hydra<sup>™</sup> wort chiller, smaller differences in cooling technique may have only a small impact on IBUs.
+
+<p>
+<u><em>Flocculation, Filtering, and Finings:</em></u> These factors are each estimated to influence the IBU by about 5% or less <a href="#references_SMPH">[Garetz, pp. 140-140; Fix and Fix, p. 129]</a>.
+
+<p>
+<p>
+<span id="heading2">4.4 No-Impact Factors</span><br>
+There is one more group of factors that aren't in the SMPH model because I don't believe that they have any meaningful impact on IBUs. Such factors include the kettle size, containing hops in a mesh bag, and the use of malt extract instead of wort from all-grain brewing. Kettle size is sometimes claimed to have an impact on IBUs, but I believe that the real reason for the correlation between kettle size and IBUs is how much longer it takes to cool a large volume of wort and the isomerization that happens while the wort is being cooled. My experiments have used a wide range of volumes, and I've seen no effect of volume or kettle size on IBUs. Putting hops in a mesh bag is sometimes claimed to reduce IBUs, but experiments conducted by both <a href="https://brulosophy.com/2016/03/21/kettle-hops-loose-vs-bagged-exbeeriment-results/" target="_blank">Brülosophy</a> and <a href="../13-four-experiments-on-alpha-acid-utilization-and-ibus/alchemyoverlord-blog-content13.html">me</a> have shown no meaningful difference in measured IBUs. I've also heard that brewing with malt extract can yield different IBUs than with all-grain brewing, but my direct comparison of beers brewed with Briess<sup>™</sup> Pilsen Dried Malt Extract and Great Western<sup>™</sup> Premium two-row malt showed no meaningful difference in measured IBU values. (Also, I can think of no plausible mechanism through which the concentration of wort into dried malt extract could affect alpha-acid isomerization or the concentration of ABCs.) Future experiments may show some relationship for some of these factors under different conditions, for example with hops in a fine-mesh bag or specific brands of malt extract, but for now there is no known difference worth modeling.
+
+<p>
+
+<span id="heading1">5. SMPH Parameter Estimation</span><br>
+For most parameters in the SMPH model, estimated values could be obtained from the literature, direct experimentation, or reasonable assumptions. For a few parameters, though, there was no good estimate: (a) the loss of IAAs to trub during the boil, (b) what percent of the available alpha acids transform into oxidized alpha acids when added to hot wort, and (c) what percent of the alpha acids that oxidize during storage are dissolved when added to wort. In addition, I wanted to use all available data to get better estimates of the two parameters used in a hopping-rate correction model. A set of 347 measured IBU and IAA values were used to estimate values for these five parameters. (Four IBU and four IAA values were taken from Val Peacock's reported numbers <a href="#references_SMPH">[Peacock, p. 162]</a>. The other values came from my experiments.)
+
+<p>
+While this may seem like a lot of data for estimating five parameters, the estimation was complicated by the fact that I often didn't have precise estimates of the alpha-acid content on brew day and/or how the hops had degraded during storage. Each measured value was therefore associated with a small parameter search for these experiment-specific values as well as the five common values.
+
+<p>
+Optimizing the parameter values to fit the data resulted in a root-mean-square (RMS) error of 1.6 IBUs and a maximum difference of 7.1 IBUs (for a condition that had 81 measured IBUs). The estimated loss factor for IAAs during the boil is 0.51. The percent of available alpha acids that quickly oxidize when added to hot wort is estimated at 11%. The percent of storage-generated oxidized alpha acids that dissolve in the wort is estimated at 33%. The solubility of alpha acids (for hopping-rate correction) is estimated to have a minimum limit of 200 ppm (below which all alpha acids are dissolved) and a maximum of 580 ppm.
+
+<p>
+
+<span id="heading1">6. Test Results</span><br>
+In order to perform an evaluation of different IBU models, I collected an additional set of 14 IBU values that were not used in parameter estimation or for development of the SMPH model. These values ranged from 20.2 to 70.0 IBUs, including a variety of ale styles (two stouts, one ESB, one Kölsch, an English IPA, a West-Coast IPA, and eight single-malt-and-single-hops (SMASH) beers with different timings of the late-addition hops).
+
+<p>
+The table below shows, for five IBU models, the RMS error and maximum difference between a measured and modeled IBU value on this set of 14 data points. The Tinseth, Rager, and Garetz models all have very large predicted IBUs for a West-Coast IPA because they do not (sufficiently) account for pH or hopping rate correction. The <a href="../15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">mIBU model</a> also has its largest difference on this West-Coast IPA, because even with pH and alpha-acid solubility limit corrections, it still over-estimates utilization of the early-hop additions.
+<table class="table"  style="margin-left: 3em;">
+<tbody>
+<tr>
+<td><strong>Model</strong></td>
+<td><strong>RMS Error (IBUs)</strong>
+</td>
+<td><strong>Max. Error (IBUs)</strong>
+</td>
+</tr>
+<tr>
+<td>SMPH</td>
+<td>2.4</td>
+<td>5.2</td>
+</tr>
+<tr>
+<td>Tinseth</td>
+<td>20.4</td>
+<td>70.5</td>
+</tr>
+<tr>
+<td>Rager</td>
+<td>39.6</td>
+<td>137.9</td>
+</tr>
+<tr>
+<td>Garetz</td>
+<td>33.2</td>
+<td>109.5</td>
+</tr>
+<tr>
+<td><a href="../15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">mIBU</a></td>
+<td>11.4</td>
+<td>33.2</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+
+<span id="heading1">7. Other Considerations</span><br>
+Some people are more sensitive to bitterness than others <a href="#references_SMPH">[Reed et al., p. 215]</a>. From what I've observed, people who are very sensitive to bitterness find it unpleasant, and therefore they don't tend to drink high-IBU beers. Also, the perception of bitterness changes with each sip. Therefore, I wouldn't worry much about minor IBU differences; getting somewhere in the ballpark is probably just fine.
+
+<p>
+The IBU scales linearly with the concentrations of IAAs and ABCs. Bitterness, like most perceptual phenomena, does not increase linearly with the strength of the stimulus (e.g. <a href="https://en.wikipedia.org/wiki/Weber%E2%80%93Fechner_law" target="_blank">Fechner's law</a>). Therefore, there is a divergence from the linear relationship between IBU values and the perception of bitterness, starting at about 60 IBUs <a href="#references_SMPH">[Hahn, p. 50]</a>. However, as noted earlier, there is a strong correlation between IBUs and perceived bitterness, even at high IBUs. Hahn has developed a quadratic equation to map between IBUs and perceived bitterness, accounting for this non-linearity <a href="#references_SMPH">[Hahn, p. 50]</a>. The SMPH calculator includes Hahn's perceived bitterness value (or "bitterness intensity") as an additional output.
+
+<p>
+Oxidized alpha acids are perceived as being about 16% less bitter than isomerized alpha acids <a href="#references_SMPH">[Algazzali, p. 45]</a>. They absorb about 8.5% less infrared light than IAAs when measuring the IBU <a href="#references_SMPH">[Maye et al., p. 25, Figure 7]</a>, and so their perceptual bitterness is about 8% less than their measured contribution to the IBU (0.84/0.915 = 0.92). Because the difference between perceived and measured bitterness of oAAs is only about 8%, this discrepancy is not usually of concern. As an extreme example, if a beer made only with oxidized alpha acids (no IAAs) has 40 measured IBUs, it might be perceived as having the bitterness of a high-IAA beer with 37 IBUs; this difference of 3 IBUs is less than the perceptual threshold of 5 IBUs <a href="#references_SMPH">[Daniels, p. 76]</a>.
+
+<p>
+If the concentration of residual sugars in a beer is low and the IBU is large, the resulting beer may be perceived as overly bitter. Likewise, if there are a lot of residual sugars and a low IBU, the beer may be considered too sweet. Hahn's perceptual study did not control for residual sugars, and yet panelists were able to fairly consistently judge a beer's bitterness. The perception of bitterness and sweetness are different, but we prefer some relationship between them in our beers. The ratio of IBU to original-gravity points can be a useful (if imprecise) way to estimate this bitter/sweet balance and design a pleasing beer. Personally, I find that an IBU/OG ratio of about 0.5 creates a "balanced" beer a bit on the sweeter side, and an IBU/OG ratio of about 1.0 creates a pleasantly bitter (e.g. West-Coast) IPA.
+
+<p>
+One of the advantages of the Tinseth, Rager, and Garetz models is that no computer is needed to estimate IBUs. All you need to do is look up a few values in some tables and do basic math. These models are also easy to program, which has contributed to their popularity in brewing software. The <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">mIBU model</a> is a bit more complex, both in terms of the amount of computation and the various adjustment factors, but it is possible to <a href="https://sites.google.com/site/alchemyoverlord/mibu-in-excel-visual-basic" target="_blank">implement the mIBU model in an Excel spreadsheet</a> using the Visual Basic programming language. Unfortunately, the SMPH model is very complex. It would be quite a challenge to write the thousands of lines of Javascript code in the Visual Basic language used by Excel. The SMPH calculator is, however, available online to anyone who wants to use it.
+
+<p>
+
+<span id="heading1">8. Summary</span><br>
+An IBU value is determined by measurement of the amount of infrared light absorbed by (acidified) beer. The IBU deliberately includes the effects of both isomerized alpha acids and auxiliary bittering compounds. Even at higher IBUs, there is a strong correlation between IBUs and the perception of bitterness. IBU prediction usually doesn't need to be very precise, because many people aren't really all that good at detecting minor (or sometimes even moderate) differences in bitterness.
+
+<p>
+The SMPH model is a new method for estimating IBUs, which may be useful when trying to predict a beer's bitterness before brewing. A key difference between the SMPH model and other IBU models is that it accounts separately for the contribution of IAAs and ABCs. Predicting IBUs is a bit of a "black art", because there are so many variables and there is so much variability. The only way to really know the IBU level of a beer is to have it professionally tested, which is something I highly recommend.
+
+<p>
+
+<span id="heading1">9. Acknowledgments</span><br>
+I'd like to give a big shout-out to Dana Garves at <a href="https://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a> for the IBU measurements (as well as protein, polyphenol, and other measurements) used in developing the SMPH model.  I can always rely on the accuracy of the measured values and Dana's cheerfulness. Scott Bruslind at <a href="http://www.analysislaboratory.com/" target="_blank">Analysis Laboratory</a> was also hugely supportive, helpful, and encouraging with my initial experiments. Zach Lilla at <a href="https://www.aarlab.com" target="_blank">AAR Lab</a> has been a friendly and reliable source for measuring alpha and beta acids (and the hop storage index) in my hops. I'd also like to thank Glenn Tinseth and Randy Mosher for prompt and encouraging answers to my out-of-the-blue questions. I greatly appreciate the spirit of cooperation and support that is a critical part of the homebrewing culture.
+
+<p>
+The SMPH model would not have been possible without the excellent research and publications by Tom Shellhammer (and his graduate students), Mark Malowicki (in particular), and Val Peacock.
+
+<p>
+<span id="references_SMPH">
+<b><span style="font-size: 14pt;">References</span></b></span>
+<ul>
+<li>V. A. Algazzali, <a href="https://ir.library.oregonstate.edu/downloads/6q182n560" target="_blank"><em>The Bitterness Intensity of Oxidized Hop Acids: Humulinones and Hulupones</em></a>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>Anon., "The IBU Assay" in <em>Beer Sensory Science</em>. <a href="https://beersensoryscience.wordpress.com/2011/04/05/the-ibu-assay/" target="_blank">https://beersensoryscience.wordpress.com/2011/04/05/the-ibu-assay/</a>. Accessed Oct. 2, 2021.</li>
+<li>R. Daniels, <em>Designing Great Beers: The Ultimate Guide to Brewing Classic Beer Styles</em>. Brewers Publications, 2000.</li>
+<li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
+<li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
+<li>C. D. Hahn, <a href="https://ir.library.oregonstate.edu/downloads/7p88cn389" target="_blank"><em>A Comprehensive Evaluation of the Nonvolatile Chemistry Affecting the Sensory BItterness Intensity of Highly Hopped Beers</em></a>.  Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2017.</li>
+<li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science. Volume 2: Hopped Wort and Beer</em>. Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>M. G. Malowicki, <a href="https://ir.library.oregonstate.edu/downloads/bz60d000z" target="_blank">Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</a>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
+<li>J. P. Maye, R. Smith, and J. Leker, "Humulinone Formation in Hops and Hop Pellets and Its Implications for Dry Hopped Beers", in <em>MBAA Technical Quarterly</em>, vol. 51, no. 1, pp. 23-27, 2016.</li>
+<li>J. P. Maye and R. Smith, "Dry Hopping and Its Effects on the International Bitterness Unit Test and Beer Bitterness", in <em>MBAA Technical Quarterly</em> vol. 53, no. 3, pp. 134-136, 2016.</li>
+<li>E. J. Parkin, <a href="https://ir.library.oregonstate.edu/downloads/ht24wn23n" target="_blank"><em>The Influence of Polyphenols and Humulinones on Bitterness in Dry-Hopped Beer</em></a>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
+<li>V. Peacock, "The International Bitterness Unit, its Creation and What it Measures", in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
+<li>D. R. Reed, T. Tanaka, and A. H. McDaniel. "Diverse Tastes: Genetics of Sweet and Bitter Perception", in <em>Physiology &amp; Behavior</em>, vol. 88, no. 3, pp. 215-226, 2006.</li>
+<li>Thermoscientific, "Beer Analysis -- Bitterness". <a href="https://assets.thermofisher.com/TFS-Assets/MSD/Application-Notes/SN53084-analyze-beer-bitterness.pdf" target="_blank">https://assets.thermofisher.com/TFS-Assets/MSD/Application-Notes/SN53084-analyze-beer-bitterness.pdf</a>. Accessed Oct. 2, 2021.</li>
+<li>K. Troester, "Should the Kraeusen fall back into the beer?". <a href="http://braukaiser.com/blog/blog/2010/02/14/should-the-kraeusen-fall-back-into-the-beer/" target="_blank">http://braukaiser.com/blog/blog/2010/02/14/should-the-kraeusen-fall-back-into-the-beer/</a>. Accessed Oct. 2, 2021.</li>
+</ul>
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

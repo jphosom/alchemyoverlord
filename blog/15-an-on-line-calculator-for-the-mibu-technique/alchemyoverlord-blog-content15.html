@@ -1,0 +1,129 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859">
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+    <title>An On-Line Calculator for the mIBU Technique</title>
+    <meta name="author" content="John-Paul Hosom">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>
+
+<span id="title">
+An On-Line Calculator for the mIBU Technique
+</span>
+
+<p>
+
+<span id="heading1">1. Overview</span><br>
+In a <a href="../06-a-modified-ibu-measurement-especially-for-late-hopping-and-whirlpool-hops/alchemyoverlord-blog-content06.html">previous post</a>, I described a method for predicting IBUs, called mIBU, that modifies the Tinseth formula in order to account for utilization from late hopping and whirlpool hops.  After many distractions, I've finally implemented this method in an online calculator available here:
+<pre>     <a href="../../index.html" target="_top">https://jphosom.github.io/alchemyoverlord/</a>
+</pre>
+so you don't need to program it yourself in order to try it out.   From this page, select "IBUs: mIBU". This blog post describes this mIBU calculator in more detail.
+
+<p>
+(I've since developed another model, called <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH</a>, which is also available at the same site.)
+
+<p>
+
+<span id="heading1">2. Information Needed for mIBU</span><br>
+The mIBU method uses the Tinseth formula as a baseline, and modifies it to account for utilization after flameout.  According to the Tinseth formula, the utilization after flameout is zero.  In this modified method, utilization continues after flameout but at a slower rate because of the decrease in wort temperature.  In order to model this post-flameout utilization, we need to know (a) how utilization is affected by temperature, (b) how the wort temperature decreases over time after flameout (before you "force" cooling with an immersion chiller, wort chiller, or ice bath), and (c) how the wort temperature changes during forced cooling.
+
+<p>
+<span style="text-decoration: underline;"><em>Sub-Boiling Utilization</em></span>: A <a href="../10-an-analysis-of-sub-boiling-hop-utilization/alchemyoverlord-blog-content10.html">previous blog post</a> looked at sub-boiling utilization and found that <a href="https://ir.library.oregonstate.edu/downloads/bz60d000z" target="_blank">Mark Malowicki</a> provides just the information needed for how utilization is affected by temperature.
+
+<p>
+<span style="text-decoration: underline;"><em>Wort Temperature Decrease</em></span>: I've collected a fair amount of data on the natural decrease in wort temperature, and found that this decrease can be modeled accurately enough for our purposes using the wort volume, the surface area of wort exposed to air (for how much steam is produced), and the area of the kettle opening (for how quickly the steam can escape).  Other factors, such as ambient temperature or relative humidity, have only a very small impact on predicted IBU values.  <a href="../16-predicting-wort-temperature-after-flameout/alchemyoverlord-blog-content16.html">Another blog post</a> describes a formula that can be used to predict temperature from the wort volume, wort surface area, and kettle opening area.  The online mIBU calculator has input fields for the kettle diameter and the kettle opening diameter; it uses these to compute the areas and then the function of how temperature decreases over time.  (For most homebrewers with an uncovered kettle, the diameter of the kettle is equal to the diameter of the kettle opening.)   The decrease over time can be modeled with either a linear function or an exponential decay function.  The linear function is easier to understand, but may not be as accurate as the exponential decay function, especially for small volumes.  If you find that your temperature decrease is not predicted well by the default values in either the linear or exponential decay functions, you can change the function parameters to better model your system.  If you enter your own temperature-decay function, the kettle diameter and kettle opening diameter are ignored.
+
+<p>
+<em><span style="text-decoration: underline;">Forced Cooling</span></em>: After the natural decrease in temperature of a hop stand or whirlpool, there's a faster decrease in temperature once you start the forced cooling with an immersion chiller, counterflow chiller, or ice bath.  This function doesn't need to be as accurate, because in most cases the wort is cooled quickly and during this time the overall contribution to the IBU is small.  I've collected a small amount of data on forced cooling, and developed default values based on this smaller dataset.  For the immersion chiller, the exponential decay function has a minimum temperature of 106<span class="st">°</span>F / 41<span class="st">°</span>C.  For the icebath method, the exponential decay function has a minimum temperature of 68<span class="st">°</span>F / 20<span class="st">°</span>C.  The counterflow chiller operates differently, quickly cooling the wort well below isomerization temperatures as it leaves the kettle, and so only the rate at which the wort leaves the kettle needs to be specified.  (The code does <em>not</em> model other ways in which a counterflow chiller can be used, e.g. recirculating the wort back into the kettle for some period of time before diverting it into the fermentation vessel.)
+
+<p>
+<span style="text-decoration: underline;"><em>Determining Your Own Temperature-Decay Parameter Values</em></span>: If you'd like to determine your own parameter values for modeling the decrease in temperature, I recommend (a) measuring the temperature of wort (or, lacking that, the same volume of water) in your kettle from flameout (time = 0) for 20 minutes (time = 20) at one- or two-minute intervals, and then (b) entering this data into an online curve-fitting calculator to obtain an equation.  I recommend the <a href="https://www.colby.edu/" target="_blank">Colby College</a> <a href="http://www.colby.edu/chemistry/PChem/scripts/lsfitpl.html" target="_blank">Nonlinear Least Squares Curve Fitting</a> page.  If you use this page, just enter the times and temperatures like this:
+<pre style="padding-left: 30px;">0 212.1
+1 210.9
+2 209.2
+3 207.9
+4 206.0
+5 204.4
+...
+18 186.2
+19 184.3
+20 184.0
+</pre>
+with one pair of values per line and spaces in between the values.  Then select either "<code>a exp(-bx) + c</code>" or "<code>ax + b</code>" (down at the bottom of the list) as the function, and click "Fit &amp; Plot".  It works best if you have initial guesses for the parameters.  If you're working in Fahrenheit, then good guesses for the exponential function are <code>a=95, b=0.02, c=120</code>, and good guesses for the linear function are <code>a=-1.3, b=212</code>. If you're working in Celsius, then good guesses for the exponential function are <code>a=50, b=0.02, c=50</code>, and good guesses for the linear function are <code>a=-1, b=100</code>.  The results are somewhat buried in a window of text, for example:
+<pre style="padding-left: 30px;">a= 137.8 +- 65.3
+b= 0.01173 +- 0.0063
+c= 74.6 +- 65</pre>
+and in this case, you can ignore the values after <code>+-</code>.   The accompanying plot is always interesting, and it should decrease smoothly over time.  These values can be used in the mIBU calculator in the section "Post-Boil Temperature Decrease".
+
+<p>
+
+<span id="heading1">3. Default Parameter Values</span><br>
+The online calculator is set up with default values that target a "typical" homebrewer.  If you enter a new value and then want to go back to the default, type <code>d</code> (for "default") in that field.
+
+<p>
+The default values for the temperature decay functions are in <span style="color: #94476b;">red</span>, so that it's clear that they are defaults.  If you specify a value, the value in the field will turn black.  I've found that in most cases on a homebrewing scale, these defaults yield reasonable estimates.
+
+<p>
+
+<span id="heading1">4. Bells and Whistles: Partial Boils, Pre- or Post-Boil Volume, Specific Gravity, Constant Hop-Stand Temperature, and Global Scaling</span><br>
+In order to make this calculator as useful as possible to as many brewers as possible, I've included a few bells and whistles.
+
+<p>
+For one, there are input values for (a) the amount of wort and trub left in the kettle after racking and (b) the amount of topoff water added if you're doing a partial boil.  If you're doing a full boil (not adding water after the boil), then neither of these fields are necessary.  The IBU value, as a measure of the concentration of bittering substances, depends on volume; if you have two beers, <strong>A</strong> and <strong>B</strong>, and <strong>B</strong> has the same amount of isomerized alpha acids (and other bittering compounds) but double the volume of <strong>A</strong>, then <strong>B</strong> will have half of the IBUs of <strong>A</strong>.  One important question is what volume to use in the IBU calculation: pre-boil (larger volume), post-boil (smaller volume), or something else?  During the boil, the volume will decrease and the concentration will increase.  The IBUs depend on the concentration of bittering compounds at the end of the boil, and so the post-boil volume should be used in IBU calculations.  If you top off this hopped wort with water, the IBUs will decrease as you add more water.
+
+<p>
+The wort volume can be specified as either pre-boil or post-boil volume using the associated checkbox.  The post-boil volume is required in order to estimate IBUs from the concentration of isomerized alpha acids, but it may be difficult to estimate this volume before racking.  If you select "pre-boil" for the volume, the calculator will compute the post-boil volume from the pre-boil volume, evaporation rate, and length of the boil.
+
+<p>
+Glenn Tinseth has a "bigness factor" in his equation that modifies the IBU value based on the wort gravity.  He says to "<a href="http://realbeer.com/hops/research.html" target="_blank">use an average gravity value for the entire boil</a>".  Rather than ask for an initial and final gravity, this calculator asks you to specify the (post-boil) original gravity and the evaporation rate.  From these two values it computes the average gravity over the entire boil.  If you don't care that much about such details, you can set the evaporation rate to zero and the calculator will use the original gravity.
+
+<p>
+There's a checkbox that allows you to hold a hop stand at a constant temperature.  If this box is <em>not</em> checked (and the text in this field is gray), then the wort cools naturally after flameout during the duration of the whirlpool and/or hop stand.  After the whirlpool/hop stand, the wort is quickly cooled.  If this box <em>is</em> checked (and the text in this field is black), then the wort is quickly cooled to the target temperature using the exponential decay factor of the immersion chiller (regardless of what actual cooling method you use).  The hop stand is then held at this temperature for the specified hop-stand time.  When this time is up, the wort is again quickly cooled with forced cooling, this time using whichever cooling method you have specified.
+
+<p>
+Finally, Prof. Tinseth recommends "<a href="http://realbeer.com/hops/research.html" target="_blank">fiddling with 4.15 if necessary to match your system</a>", because IBUs can depend a lot on a brewer's setup and brewing techniques.  Rather than making this value a variable, I introduce a "global scaling factor" that has the same effect.  The default scaling factor is 1.0, which yields the same results as the standard Tinseth formula or mIBU technique.  If you find that you're consistently getting more or fewer measured IBUs than predicted, you can adjust this scaling factor.  (I highly recommend getting measurements of the IBUs in your beer; it's quick, inexpensive, and the only way to really know the IBU value.  There are a number of good laboratories available for testing; I've been very happy with <a href="http://www.oregonbrewlab.com/" target="_blank">Oregon BrewLab</a>.  I send in samples of all of my beers for testing.)
+
+<p>
+
+<span id="heading1">5. Optional Alpha-Acid Solubility Limit</span><br>
+It has been noted that doubling the amount of hops in the boil can yield less than double the IBUs in the finished beer.  With hop-forward beers, I've found that the Tinseth formula can greatly overestimate IBU values because it treats each hop addition independently.  At this point, my best understanding is that IBUs are not linear with hop concentration because of a limit on the solubility of alpha acids.  I describe this in much greater detail in <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">another blog post</a>.  If you want to try this model of the solubility limit, select "<code>yes</code>" for the field "Apply alpha-acid solubility-limit correction"; otherwise, select "<code>no</code>".
+
+<p>
+
+<span id="heading1">6. Optional pH Correction Factor</span><br>
+The pH of the wort can also affect IBU levels.  I developed a model for this effect in <a href="../19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">another blog post</a>, and modified the Tinseth formula to incorporate this model.  For low pH levels (e.g. around 5.25), the reduction in IBUs can be between around 10% and 30%, depending on boil time.  You can enter either the pre- or post-boil wort pH; the calculator assumes a drop of about 0.1 pH units per hour, which is a rough approximation.
+
+<p>
+
+<span id="heading1">7. Optional Krausen Loss Factor</span><br>
+The krausen, or foam produced during fermentation, contains lots of isomerized alpha acids and other components that contribute to the IBU.  When the krausen is removed, by sticking to the sides of the fermentation vessel, by skimming, or through a blow-off tube, the IBU levels are decreased.  I've modeled the impact of krausen loss on IBUs in a <a href="../22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">blog post</a>, and modified the Tinseth formula to incorporate this loss.  I've found that skimming off the krausen or the use of a blow-off tube can have a remarkable impact on IBUs.
+
+<p>
+
+<span id="heading1">8. Form of the Hops</span><br>
+<a href="../28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">Hop pellets produce more IBUs than hop cones</a>, although the amount of increase is variety-specific.  The <a href="../29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">higher IBU values are produced not through greater alpha-acid isomerization, but from an increase in the oxidized alpha acids</a> produced when hops are added to boiling wort.  The concentration of oxidized alpha acids roughly doubles when using pellets.  You can select the default hop form for all additions, and/or the hop form for each specific addition.
+
+<p>
+
+<span id="heading1">9. Wort Clarity</span><br>
+Much  to my surprise, I've found that <a href="../27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">wort clarity affects IBU values</a>, with clear wort producing more IBUs.  You can select wort clarity from a drop-down menu, which will approximate the effect of the specified clarity on IBUs.  The default value ("average") produces results without modification of the Tinseth scaling factor.
+
+<p>
+
+<span id="heading1">10. Summary</span><br>
+I hope you find this calculator useful!  If something doesn't work the way you expect it to, or if you have any questions, feel free to let me know.  You can contact me at the name of this blog (no spaces) at yah<span lang="el" title="Greek language text">ο</span><span lang="el" title="Greek language text">ο</span>.  If you're interested in the details of the programming, the source code is available as a link on the github website.
+
+<p>
+
+<p>
+<br>
+<span id="footnote">
+Navigate to:
+</span>
+<span id="footnote">
+<a href="../../index.html" target="_top">AlchemyOverlord home page</a>
+</span>
+
+</body>
+</html>

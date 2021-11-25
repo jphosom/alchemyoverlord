@@ -4,7 +4,8 @@
 hops_freshness.html : HTML for AlchemyOverlord web page, hops freshness sub-page
 Written by John-Paul Hosom
 Copyright © 2021 by John-Paul Hosom, all rights reserved.
-Version 1.0.0 : August 8, 2021
+Version 1.0.0 : Aug.  8, 2021.  Initial version.
+Version 1.0.1 : Nov. 25, 2021.  Minor updates.
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -20,9 +21,9 @@ Version 1.0.0 : August 8, 2021
   <p>This page provides a calculator for estimating the hop freshness factor,
   which is the opposite of alpha-acid decay.
   The formula for alpha-acid decay comes from
-  <a href="https://www.morebeer.com/articles/storing_hops_properly" target="_parent">Mark Garetz</a>.
-  The mapping between the <a href="https://www.canr.msu.edu/news/understanding-the-importance-of-the-hop-storage-index" target="_parent">Hop Storage Index (HSI)</a>
-  and freshness comes from <a href="https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-37-0184" target="_parent">Gail Nickerson and Sam Likens (1979)</a>.  Note that some
+  <a href="https://www.morebeer.com/articles/storing_hops_properly" target="_blank">Mark Garetz</a>.
+  The mapping between the <a href="https://www.canr.msu.edu/news/understanding-the-importance-of-the-hop-storage-index" target="_blank">Hop Storage Index (HSI)</a>
+  and freshness comes from <a href="https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-37-0184" target="_blank">Gail Nickerson and Sam Likens (1979)</a>.  Note that some
   sources confuse the HSI with the loss of alpha acids after six months
   at room temperature; the HSI is a measure of the current freshness of
   a sample of hops.
@@ -139,7 +140,7 @@ Version 1.0.0 : August 8, 2021
   For packaging, I have taken Garetz's terms and corresponding storage-factor
   values. I have added a "professionally nitrogen flushed" category because I
   have found that such packaging produces far less hop deterioration than
-  the (<a href="https://en.wikipedia.org/wiki/Do_it_yourself" target="_parent">DIY</a>)
+  the (<a href="https://en.wikipedia.org/wiki/Do_it_yourself" target="_blank">DIY</a>)
   inert-gas and vacuum-sealing values specified by Garetz in the 1990's.
   <p>I would like to stress the importance of knowing the packaging and
   storage conditions of your hops!  Just because hops at the store come
@@ -149,22 +150,24 @@ Version 1.0.0 : August 8, 2021
   been kept at refrigeration temperatures. In some cases I have bought
   hops under the impression that they were flushed with nitrogen, only
   to find that the alpha acids had degraded far below the value written on
-  the package.  I currently prefer to buy hops direct soon
-  after harvest in one-pound bags and store them in my freezer.
+  the package.  I currently prefer to buy 
+  <a href="https://hopsdirect.com/" target="_blank">hops direct</a>
+  soon after harvest in one-pound bags and store them in my freezer.
   </p>
   <p>
   While beta acids do not usually survive into finished beer, oxidized
   beta acids produced during storage can be present when using both kettle
   hops and dry hops.  I've found a distinctly
-  <a href="https://www.ricola.com" target="_parent">herbal</a> quality in beer made with hops
+  <a href="https://www.ricola.com" target="_blank">herbal</a> quality in beer made with hops
   high in oxidized beta acids, and so I try to limit their presence in my beer.
   </p>
   <p>
   The best way to really know the freshness factor is to have a sample of
-  the hops analyzed for the HSI and then use the Nickerson formula.
+  the hops analyzed for the HSI and then use the Nickerson formula:
+  <em>freshnessFactor</em> = 1.0 &minus; (1.10 &times; log<sub>10</sub>(<em>HSI</em> &times; 4.0)).
   The freshness factor value and the default estimate of the HSI on this page
   are approximations only, and the real values will probably be at least
-  somewhate different.
+  somewhat different.
   </p>
   </div>
 
@@ -182,6 +185,7 @@ Version 1.0.0 : August 8, 2021
   <a name="versions"></a>
   <h4>Versions:</h4>
   <b>1.0.0</b>: (2021-Aug-08)  Initial version.<br>
+  <b>1.0.1</b>: (2021-Nov-25)  Minor updates.<br>
   </small>
 
   <p>
@@ -189,9 +193,7 @@ Version 1.0.0 : August 8, 2021
   Navigate to:<br>
   <a href="#top_freshness">top of page</a>
   <br>
-  <a href="index.html" target="_top">AlchemyOverlord github home page</a>
-  <br>
-  <a href="https://alchemyoverlord.wordpress.com/table-of-contents/" target="_top">AlchemyOverlord blog</a>
+  <a href="index.html" target="_top">AlchemyOverlord home page</a>
   <p>
   <p>
   <center>
