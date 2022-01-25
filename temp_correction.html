@@ -28,7 +28,7 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   <h3>Units:</h3>
   <p style="margin-left:3em">Input Units:
   <input type="radio" value="metric" id="metric" name="tempCorrect.units" onclick="common.set(tempCorrect.units,1)" autocomplete="off">metric or
-  <input type="radio" value="imperial" id="imperial" name="tempCorrect.units" onclick="common.set(tempCorrect.units,1)" autocomplete="off" checked>imperial (e.g. Fahrenheit, gallons)
+  <input type="radio" value="imperial" id="imperial" name="tempCorrect.units" onclick="common.set(tempCorrect.units,1)" autocomplete="off" checked>U.S. customary (e.g. Fahrenheit, gallons)
   </p>
 
   <h3>Corrections:</h3>
@@ -84,6 +84,21 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   </table>
 
   <br>
+  <h4>For Debugging, or "Not Yet Ready For Prime Time":</h4>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>calibration: measured</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug1" onchange="common.set(tempCorrect.debug1,1)">%</td>
+  <td>&nbsp; at temperature </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debugT" onchange="common.set(tempCorrect.debugT,1)">&deg;C</td>
+  <td>, actual = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug2" onchange="common.set(tempCorrect.debug2,1)">%</td>
+  </tr>
+  </tbody>
+  </table>
+
+  <br>
   <p>The specific-gravity correction comes from <a href="https://www.homebrewersassociation.org/attachments/0000/2497/Math_in_Mash_SummerZym95.pdf" target="_blank">an article by M. L. Hall in the Summer 1995 edition of <em>Zymurgy</em></a>.<br>
   The pH correction comes from my blog post <a href="blog/18-some-observations-of-mash-and-wort-ph/alchemyoverlord-blog-content18.html">Some Observations of Mash and Wort pH</a>.<br>
   The volume conversion comes from a 
@@ -108,6 +123,7 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   <h4>Versions:</h4>
   <b>1.0.0</b>: (2021-Aug-21)  Initial version.<br>
   <b>1.0.1</b>: (2021-Nov-25)  Minor updates.<br>
+  <b>1.0.2</b>: (2022-Jan-02)  Add debugging section for internal use only.<br>
   </small>
 
   <p>

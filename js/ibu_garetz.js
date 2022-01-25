@@ -5,6 +5,7 @@
 //
 // Version 1.0.0 : Aug. 21, 2021
 //         Initial version.
+// Version 1.0.1 : Jan. 25, 2022: bug fix in pellet factor, affects all results
 //
 // -----------------------------------------------------------------------------
 
@@ -178,7 +179,11 @@ this.computeIBU_Garetz = function() {
     }
 
     // Garetz' factors are for amount of hops, not IBU, so need 1/PF
-    PF = 1.0 / ibu.add[hopIdx].pelletFactor.value;
+    PF = 1.0;
+    if (ibu.add[hopIdx].hopForm.value == "pellets" &&
+        steepTime > 10.0 && steepTime < 30.0) {
+      PF = 1.10;
+    }
 
     addIBU = computeIBUsingleAddition_Garetz(postBoilVolume,
                 ibu.wortLossVolume.value, ibu.topoffVolume.value, SG, PF,

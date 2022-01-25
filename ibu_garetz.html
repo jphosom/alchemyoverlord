@@ -6,6 +6,7 @@ Written by John-Paul Hosom
 Copyright © 2021 by John-Paul Hosom, all rights reserved.
 Version 1.0.0 : Aug. 21, 2021
 Version 1.0.1 : Nov. 25, 2021
+Version 1.0.2 : Jan. 25, 2022
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -46,7 +47,7 @@ Version 1.0.1 : Nov. 25, 2021
   <tr>
     <td colspan="2">Input Units:
     <input type="radio" value="metric" id="metric" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off">metric or
-    <input type="radio" value="imperial" id="imperial" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off" checked>imperial (e.g. gallons, ounces)
+    <input type="radio" value="imperial" id="imperial" name="ibu.units" onclick="common.set(ibu.units,1)" autocomplete="off" checked>U.S. customary (e.g. gallons, ounces)
     </td>
   </tr>
   <tr>
@@ -193,6 +194,7 @@ Tinseth or Rager, and zero for boil times less than 10 minutes:
 <h4>Versions:</h4>
 <b>1.0.0</b>: (2021-Aug-21)  Initial version.<br>
 <b>1.0.1</b>: (2021-Nov-25)  Minor updates.<br>
+<b>1.0.2</b>: (2022-Jan-25)  Bug fix in pellet factor; affects all results.<br>
 </small>
 
 <p>
@@ -207,7 +209,7 @@ Navigate to:<br>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 <p>
-<small>Copyright &copy; 2021 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2021-2022 John-Paul Hosom, all rights reserved.
 All product and company names are trademarks&trade; or registered&reg;
 trademarks of their respective holders. Use of these names does not imply
 any affiliation with, endorsement of, or endorsement by them.

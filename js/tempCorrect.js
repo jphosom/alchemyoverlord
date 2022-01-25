@@ -222,6 +222,48 @@ this.initialize_tempCorrect = function() {
   this.Plato.updateFunction = tempCorrect.compute_tempCorrect;
   this.Plato.updateFunctionArgs = this.Plato.id;
 
+  this.debug1 = new Object;
+  this.debug1.id = "tempCorrect.debug1";
+  this.debug1.inputType = "float";
+  this.debug1.userSet = 0;
+  this.debug1.precision = 3;
+  this.debug1.minPrecision = 1;
+  this.debug1.display = "0.0";
+  this.debug1.min = 0.0;
+  this.debug1.max = 80.0;
+  this.debug1.description = "debug value 1";
+  this.debug1.defaultValue = 0.0;
+  this.debug1.updateFunction = tempCorrect.compute_tempCorrect;
+  this.debug1.updateFunctionArgs = this.debug1.id;
+
+  this.debugT = new Object;
+  this.debugT.id = "tempCorrect.debugT";
+  this.debugT.inputType = "float";
+  this.debugT.userSet = 0;
+  this.debugT.precision = 1;
+  this.debugT.minPrecision = 0;
+  this.debugT.display = "0.0";
+  this.debugT.min = 10.0;
+  this.debugT.max = 27.0;
+  this.debugT.description = "debug value 1";
+  this.debugT.defaultValue = 21.66;
+  this.debugT.updateFunction = tempCorrect.compute_tempCorrect;
+  this.debugT.updateFunctionArgs = this.debugT.id;
+
+  this.debug2 = new Object;
+  this.debug2.id = "tempCorrect.debug2";
+  this.debug2.inputType = "float";
+  this.debug2.userSet = 0;
+  this.debug2.precision = 2;
+  this.debug2.minPrecision = 1;
+  this.debug2.display = "0.0";
+  this.debug2.min = 0.0;
+  this.debug2.max = 100.0;
+  this.debug2.description = "debug value 2";
+  this.debug2.defaultValue = 0.0;
+  this.debug2.updateFunction = tempCorrect.compute_tempCorrect;
+  this.debug2.updateFunctionArgs = this.debug2.id;
+
   //----------------------------------------------------------------------------
   // add name of parent to all variables, so we can access 'units' as needed
   keys = Object.keys(this);
@@ -250,6 +292,10 @@ this.initialize_tempCorrect = function() {
 
   common.set(tempCorrect.SG,  0);
   common.set(tempCorrect.Plato,  0);
+
+  common.set(tempCorrect.debug1,  0);
+  common.set(tempCorrect.debugT,  0);
+  common.set(tempCorrect.debug2,  0);
 
   this.verbose = 1;
   this.compute_tempCorrect();
@@ -390,6 +436,9 @@ function waterVolumeFactorAtTemp (T) {
 // compute correction(s) based on temperature
 
 this.compute_tempCorrect = function(changeID) {
+  var debug1 = 0.0;
+  var debugT = 0.0;
+  var debug2 = 0.0;
   var factor1 = 0.0;
   var factor2 = 0.0;
   var intercept = 0.0;
@@ -408,6 +457,9 @@ this.compute_tempCorrect = function(changeID) {
   var vol2 = 0.0;
   var volFactor1 = 0.0;
   var volFactor2 = 0.0;
+  var thresh = 0.0;
+  var a = 0.0;
+  var b = 0.0;
 
 
   if (tempCorrect.verbose > 0) {
@@ -498,6 +550,37 @@ this.compute_tempCorrect = function(changeID) {
       common.set(tempCorrect.SG,  0);
     }
   }
+
+  if (!changeID || changeID == "tempCorrect.debug1" ||
+      changeID == "tempCorrect.debugT" || changeID == "tempCorrect.debug2") {
+    if (!changeID || changeID == "tempCorrect.debug1" ||
+                     changeID == "tempCorrect.debugT") {
+      debug1 = Number(tempCorrect.debug1.value);
+      debugT = Number(tempCorrect.debugT.value); // in 'C
+      thresh = 0.0 + ((debugT-15.55)/(21.66-15.55)) * (47.36 - 0.0);
+      a =  -0.00241 + ((debugT-15.55)/(21.66-15.55)) * (-0.003372 + 0.00241);
+      b =   1.00891 + ((debugT-15.55)/(21.66-15.55)) * (1.1597 - 1.00891);
+      if (debug1 > thresh) {
+        debug2 = a * debug1 * debug1 + b * debug1;
+      } else {
+        debug2 = debug1;
+      }
+      tempCorrect.debug2.defaultValue = debug2;
+      tempCorrect.debug2.precision = tempCorrect.debug1.precision;
+      tempCorrect.debug2.userSet = 0;
+      common.unsetSavedValue(tempCorrect.debug2,  0);
+      common.set(tempCorrect.debug2,  0);
+    }
+    if (changeID == "tempCorrect.debug2") {
+      // no inverse function, for now
+      tempCorrect.debug1.defaultValue = 0.0;
+      tempCorrect.debug1.precision = tempCorrect.debug2.precision;
+      tempCorrect.debug1.userSet = 0;
+      common.unsetSavedValue(tempCorrect.debug1,  0);
+      common.set(tempCorrect.debug1,  0);
+    }
+  }
+
   return;
 }
 
