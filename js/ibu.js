@@ -39,6 +39,7 @@
 // Version 1.2.12: Oct  5, 2021 : change "steep time" to "boil or steep time"
 //                                or just "boil time" depending on method
 // Version 1.2.13: Nov 25, 2021 : change href targets from _parent to _blank
+// Version 1.2.14: May 18, 2022 : storage duration of 0 months is valid
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -1588,7 +1589,7 @@ function get_freshnessFactor_default(arrayIdx) {
   var value = 0.0;
 
   // if we have all the information needed for a decent estimate, use it.
-  if (loss && hopPackaging && storageDuration_months && storageTemp) {
+  if (loss && hopPackaging && storageDuration_months >= 0 && storageTemp) {
     lossFactor = loss / 100.0;
     if (lossFactor >= 1.0) lossFactor = 0.99; // prevent divide by zero, ln(neg)
     k = Math.log(1.0/(1.0-lossFactor)) / 182.5;
