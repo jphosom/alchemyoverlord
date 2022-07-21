@@ -88,12 +88,20 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   <table style="margin-left:3em">
   <tbody>
   <tr>
-    <td>calibration: measured</td>
+    <td>R.corr: measured</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug1" onchange="common.set(tempCorrect.debug1,1)">%</td>
   <td>&nbsp; at temperature </td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debugT" onchange="common.set(tempCorrect.debugT,1)">&deg;C</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debugT" onchange="common.set(tempCorrect.debugT,1)"><span id="tempCorrectDebugUnits">X</span></td>
   <td>, actual = &nbsp;</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug2" onchange="common.set(tempCorrect.debug2,1)">%</td>
+  </tr>
+  <tr>
+    <td>A.corr: measured</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorr1" onchange="common.set(tempCorrect.acorr1,1)">%</td>
+  <td>&nbsp; at temperature </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorrT" onchange="common.set(tempCorrect.acorrT,1)"><span id="tempCorrectAcorrUnits">X</span></td>
+  <td>, actual = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorr2" onchange="common.set(tempCorrect.acorr2,1)">%</td>
   </tr>
   </tbody>
   </table>

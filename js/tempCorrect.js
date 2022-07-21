@@ -240,12 +240,14 @@ this.initialize_tempCorrect = function() {
   this.debugT.id = "tempCorrect.debugT";
   this.debugT.inputType = "float";
   this.debugT.userSet = 0;
+  this.debugT.convertToMetric = common.convertFahrenheitToCelsius;
+  this.debugT.convertToImperial = common.convertCelsiusToFahrenheit;
   this.debugT.precision = 1;
   this.debugT.minPrecision = 0;
   this.debugT.display = "0.0";
   this.debugT.min = 10.0;
-  this.debugT.max = 27.0;
-  this.debugT.description = "debug value 1";
+  this.debugT.max = 81.0;
+  this.debugT.description = "debug temperature";
   this.debugT.defaultValue = 21.66;
   this.debugT.updateFunction = tempCorrect.compute_tempCorrect;
   this.debugT.updateFunctionArgs = this.debugT.id;
@@ -263,6 +265,50 @@ this.initialize_tempCorrect = function() {
   this.debug2.defaultValue = 0.0;
   this.debug2.updateFunction = tempCorrect.compute_tempCorrect;
   this.debug2.updateFunctionArgs = this.debug2.id;
+
+  this.acorr1 = new Object;
+  this.acorr1.id = "tempCorrect.acorr1";
+  this.acorr1.inputType = "float";
+  this.acorr1.userSet = 0;
+  this.acorr1.precision = 2;
+  this.acorr1.minPrecision = 1;
+  this.acorr1.display = "0.0";
+  this.acorr1.min = 0.0;
+  this.acorr1.max = 100.0;
+  this.acorr1.description = "acorr value 1";
+  this.acorr1.defaultValue = 0.0;
+  this.acorr1.updateFunction = tempCorrect.compute_tempCorrect;
+  this.acorr1.updateFunctionArgs = this.acorr1.id;
+
+  this.acorrT = new Object;
+  this.acorrT.id = "tempCorrect.acorrT";
+  this.acorrT.inputType = "float";
+  this.acorrT.userSet = 0;
+  this.acorrT.convertToMetric = common.convertFahrenheitToCelsius;
+  this.acorrT.convertToImperial = common.convertCelsiusToFahrenheit;
+  this.acorrT.precision = 1;
+  this.acorrT.minPrecision = 0;
+  this.acorrT.display = "0.0";
+  this.acorrT.min = 0.0;
+  this.acorrT.max = 122.0;
+  this.acorrT.description = "acorr temperature";
+  this.acorrT.defaultValue = 21.66;
+  this.acorrT.updateFunction = tempCorrect.compute_tempCorrect;
+  this.acorrT.updateFunctionArgs = this.acorrT.id;
+
+  this.acorr2 = new Object;
+  this.acorr2.id = "tempCorrect.acorr2";
+  this.acorr2.inputType = "float";
+  this.acorr2.userSet = 0;
+  this.acorr2.precision = 2;
+  this.acorr2.minPrecision = 1;
+  this.acorr2.display = "0.0";
+  this.acorr2.min = 0.0;
+  this.acorr2.max = 100.0;
+  this.acorr2.description = "acorr value 2";
+  this.acorr2.defaultValue = 0.0;
+  this.acorr2.updateFunction = tempCorrect.compute_tempCorrect;
+  this.acorr2.updateFunctionArgs = this.acorr2.id;
 
   //----------------------------------------------------------------------------
   // add name of parent to all variables, so we can access 'units' as needed
@@ -296,6 +342,10 @@ this.initialize_tempCorrect = function() {
   common.set(tempCorrect.debug1,  0);
   common.set(tempCorrect.debugT,  0);
   common.set(tempCorrect.debug2,  0);
+
+  common.set(tempCorrect.acorr1,  0);
+  common.set(tempCorrect.acorrT,  0);
+  common.set(tempCorrect.acorr2,  0);
 
   this.verbose = 1;
   this.compute_tempCorrect();
@@ -345,6 +395,13 @@ function setUnits() {
                tempCorrect.vol2.toFixed(tempCorrect.vol1.precision);
     }
 
+    if (document.getElementById('tempCorrectDebugUnits')) {
+      document.getElementById('tempCorrectDebugUnits').innerHTML = "&deg;C";
+    }
+    if (document.getElementById('tempCorrectAcorrUnits')) {
+      document.getElementById('tempCorrectAcorrUnits').innerHTML = "&deg;C";
+    }
+
     // update variables
     common.set(tempCorrect.SGtemp1, 0);
     common.set(tempCorrect.SGtemp2, 0);
@@ -355,6 +412,9 @@ function setUnits() {
     common.set(tempCorrect.vol1, 0);
     common.set(tempCorrect.voltemp1, 0);
     common.set(tempCorrect.voltemp2, 0);
+
+    common.set(tempCorrect.debugT, 0);
+    common.set(tempCorrect.acorrT, 0);
   } else {
     // update displayed units
     if (document.getElementById('tempCorrectSGtemp1Units')) {
@@ -390,6 +450,13 @@ function setUnits() {
                vol2G.toFixed(tempCorrect.vol1.precision);
     }
 
+    if (document.getElementById('tempCorrectDebugUnits')) {
+      document.getElementById('tempCorrectDebugUnits').innerHTML = "&deg;F";
+    }
+    if (document.getElementById('tempCorrectAcorrUnits')) {
+      document.getElementById('tempCorrectAcorrUnits').innerHTML = "&deg;F";
+    }
+
     // update variables
     common.set(tempCorrect.SGtemp1, 0);
     common.set(tempCorrect.SGtemp2, 0);
@@ -400,6 +467,9 @@ function setUnits() {
     common.set(tempCorrect.vol1, 0);
     common.set(tempCorrect.voltemp1, 0);
     common.set(tempCorrect.voltemp2, 0);
+
+    common.set(tempCorrect.debugT, 0);
+    common.set(tempCorrect.acorrT, 0);
   }
 
   return true;
@@ -433,12 +503,168 @@ function waterVolumeFactorAtTemp (T) {
 }
 
 //------------------------------------------------------------------------------
+// compute temperature-corrected value from temp T ('C) and measured value
+
+function compute_aCorrect(T, meas) {
+  var corr = 0.0;
+  var polyALL = [ [ 2.2898790449838389e+000, 4.7901781490878914e-001,
+                 8.5041701720208224e-002, -3.4159557164397574e-003,
+                 6.0093347951163266e-005, -4.9244148889173647e-007,
+                 1.5350272879348652e-009 ],
+               [ 2.0205455025954935e+000, 6.9071565857303185e-001,
+                 5.1469993475049845e-002, -2.0167296397151113e-003,
+                 3.4469351856051143e-005, -2.7456240768881766e-007,
+                 8.3260695803837042e-010 ],
+               [ 1.5488018353328461e+000, 8.2134200560082671e-001,
+                 2.9000004520381178e-002, -1.0949526669905517e-003,
+                 1.8024018293063491e-005, -1.3841926245289662e-007,
+                 4.0501590456036609e-010 ],
+               [ 7.8215211452394739e-001, 9.3399120158149485e-001,
+                 1.2428447681107225e-002, -4.8665189317513243e-004,
+                 8.2614704846608514e-006, -6.5551007917573045e-008,
+                 1.9866370105311469e-010 ],
+               [ 0.0000000000000000e+000, 1.0000000000000000e+000,
+                 0.0000000000000000e+000, 0.0000000000000000e+000,
+                 0.0000000000000000e+000, 0.0000000000000000e+000,
+                 0.0000000000000000e+000 ],
+               [-1.0740927096381276e+000, 1.0959436057505094e+000,
+                -1.3768693814440036e-002, 5.1148890403127404e-004,
+                -8.3556694709740293e-006, 6.3633976406685524e-008,
+                -1.8401492840525762e-010 ],
+               [-2.4767050974076490e+000, 1.1789159602658663e+000,
+                -2.2598634667213090e-002, 7.7823062114111509e-004,
+                -1.1852155974004187e-005, 8.4195587097995272e-008,
+                -2.2622486432326253e-010 ],
+               [-3.9656872827779406e+000, 1.2302619425927157e+000,
+                -2.6527714785895926e-002, 8.3186445039798592e-004,
+                -1.1302686795673814e-005, 6.9299163620133586e-008,
+                -1.5098596463432612e-010 ],
+               [-5.9027495205963456e+000, 1.3329801947827864e+000,
+                -3.3186631159433391e-002, 9.6495151262021421e-004,
+                -1.1996220452776387e-005, 6.4036332457246482e-008,
+                -1.0467767748980046e-010 ],
+               [-8.2801613223968662e+000, 1.4837918611636356e+000,
+                -4.2975902505821964e-002, 1.2083053141571090e-003,
+                -1.4715489555276580e-005, 7.7001278474165555e-008,
+                -1.2165957619363151e-010 ],
+               [-1.0836528871596656e+001, 1.6371033059974291e+000,
+                -5.1002383035491275e-002, 1.3638499614272263e-003,
+                -1.5781758512294187e-005, 7.6109592888140661e-008,
+                -9.5279230657140223e-011 ]
+               ];
+  var polySM = [ [ 7.8215211452394739e-001, 9.3399120158149485e-001,
+                 1.2428447681107225e-002, -4.8665189317513243e-004,
+                 8.2614704846608514e-006, -6.5551007917573045e-008,
+                 1.9866370105311469e-010 ],
+               [ 5.3691773838633061e-001, 9.6685531477189746e-001,
+                 8.3466772898707978e-003, -3.3479735948513048e-004,
+                 5.7075179508002412e-006, -4.5291855458360553e-008,
+                 1.3718825574859533e-010 ],
+               [ 4.5762594798830458e-001, 9.6029635505741939e-001,
+                 7.4015974513446815e-003, -2.9061184155667480e-004,
+                 4.9714715901794154e-006, -3.9865245757813559e-008,
+                 1.2232785588472642e-010 ],
+               [ 3.7519903651468933e-001, 9.5609797097510396e-001,
+                 6.1866119518355859e-003, -2.3408837070908723e-004,
+                 3.9770232280331056e-006, -3.1937744457257464e-008,
+                 9.8371113908450069e-011 ],
+               [ 9.0261148152671666e-002, 9.9956110475209348e-001,
+                 1.5216842533805463e-003, -6.5291214113643870e-005,
+                 1.1329610129827586e-006, -9.1012505411149349e-009,
+                 2.7987592648098874e-011 ],
+               [ 0.0000000000000000e+000, 1.0000000000000000e+000,
+                 0.0000000000000000e+000, 0.0000000000000000e+000,
+                 0.0000000000000000e+000, 0.0000000000000000e+000,
+                 0.0000000000000000e+000 ],
+               [-2.4756913321610149e-001, 1.0299370125310181e+000,
+                -3.8546796571682033e-003, 1.4482311531260753e-004,
+                -2.4229605405009022e-006, 1.8961434721059547e-008,
+                -5.6547405454327603e-011 ],
+               [-4.3719610626541516e-001, 1.0386518542176084e+000,
+                -5.8535650499889416e-003, 2.2887742015500215e-004,
+                -3.9481453986860214e-006, 3.1813472025788540e-008,
+                -9.7505919688601388e-011 ],
+               [-6.4134028340849558e-001, 1.0609488437760317e+000,
+                -9.0006500489732810e-003, 3.4501868881726895e-004,
+                -5.8247609905119635e-006, 4.5921381290829249e-008,
+                -1.3782354140279838e-010 ],
+               [-8.8312038688028804e-001, 1.0819980064696877e+000,
+                -1.1711514686977899e-002, 4.4511232399713490e-004,
+                -7.4852632935657535e-006, 5.8831387691547199e-008,
+                -1.7587242596232893e-010 ],
+               [-1.0740927096381276e+000, 1.0959436057505094e+000,
+                -1.3768693814440036e-002, 5.1148890403127404e-004,
+                -8.3556694709740293e-006, 6.3633976406685524e-008,
+                -1.8401492840525762e-010 ]
+                ] ;
+  var coeff1 = [];
+  var coeff2 = [];
+  var idx = 0;
+  var y1 = 0.0;
+  var y2 = 0.0;
+  var x1 = 0.0;
+  var x2 = 0.0;
+  var Tint = 0;
+  var multiple = 0.0;
+  var offset = 0.0;
+
+  if (T < 0.0)  T = 0.0;
+  if (T > 50.0) T = 50.0;
+
+  // select which set of coefficients to use, get index into lower temperature,
+  // and set multiple and offset
+  console.log("T = " + T);
+  if (T >= 15.0 && T <= 25.0) {
+    multiple = 1.0;
+    offset = 15.0;
+    Tint = parseInt((T-offset)/multiple);
+    if (Tint > polySM.length - 2) {
+      Tint = polySM.length - 2;
+    }
+    coeff1 = polySM[Tint];
+    coeff2 = polySM[Tint+1];
+  } else {
+    multiple = 5.0;
+    offset = 0.0;
+    Tint = parseInt((T-offset)/multiple);
+    if (Tint > polyALL.length - 2) {
+      Tint = polyALL.length - 2;
+    }
+    coeff1 = polyALL[Tint];
+    coeff2 = polyALL[Tint+1];
+  }
+
+  // get two values, one at lower temp and one at higher temp
+  y1 = 0.0;
+  for (idx = 0; idx < coeff1.length; idx++) {
+    y1 += Math.pow(meas, idx) * coeff1[idx];
+  }
+
+  y2 = 0.0;
+  for (idx = 0; idx < coeff2.length; idx++) {
+    y2 += Math.pow(meas, idx) * coeff2[idx];
+  }
+
+  // interpolate between the two values
+  x1 = (Tint + offset) * multiple;
+  x2 = (Tint + offset + 1.0) * multiple;
+  corr = y1 + (T - x1) * (y2 - y1) / (x2 - x1);
+  if (corr < 0.0) corr = 0.0;
+  if (corr > 100.0) corr = 100.0;
+
+  return corr;
+}
+
+//------------------------------------------------------------------------------
 // compute correction(s) based on temperature
 
 this.compute_tempCorrect = function(changeID) {
   var debug1 = 0.0;
   var debugT = 0.0;
   var debug2 = 0.0;
+  var acorr1 = 0.0;
+  var acorrT = 0.0;
+  var acorr2 = 0.0;
   var factor1 = 0.0;
   var factor2 = 0.0;
   var intercept = 0.0;
@@ -580,6 +806,30 @@ this.compute_tempCorrect = function(changeID) {
       common.set(tempCorrect.debug1,  0);
     }
   }
+
+  if (!changeID || changeID == "tempCorrect.acorr1" ||
+      changeID == "tempCorrect.acorrT" || changeID == "tempCorrect.acorr2") {
+    if (!changeID || changeID == "tempCorrect.acorr1" ||
+                     changeID == "tempCorrect.acorrT") {
+      acorr1 = Number(tempCorrect.acorr1.value);
+      acorrT = Number(tempCorrect.acorrT.value); // in 'C
+      acorr2 = compute_aCorrect(acorrT, acorr1);
+      tempCorrect.acorr2.defaultValue = acorr2;
+      tempCorrect.acorr2.precision = tempCorrect.acorr1.precision;
+      tempCorrect.acorr2.userSet = 0;
+      common.unsetSavedValue(tempCorrect.acorr2,  0);
+      common.set(tempCorrect.acorr2,  0);
+    }
+    if (changeID == "tempCorrect.acorr2") {
+      // no inverse function, for now
+      tempCorrect.acorr1.defaultValue = 0.0;
+      tempCorrect.acorr1.precision = tempCorrect.acorr2.precision;
+      tempCorrect.acorr1.userSet = 0;
+      common.unsetSavedValue(tempCorrect.acorr1,  0);
+      common.set(tempCorrect.acorr1,  0);
+    }
+  }
+
 
   return;
 }
