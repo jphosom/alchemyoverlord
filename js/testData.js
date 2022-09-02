@@ -242,6 +242,30 @@ var testData = {
         "forcedDecayType":       "forcedDecayImmersion",
     },
 
+    "More Test Data": {
+        "conditions":            [ "A",    "B",    "C",    "D"   ],
+        "IBU_list":              [ 46.8,   50.5,   61.8,   68.5  ],
+        "time_list":             [ 30.0,   36.0,   51.0,   60.0  ],
+        "volume_list":           [ 12.403, 12.308, 12.072, 11.930 ],
+        "OG_list":               [ 1.0329, 1.0331, 1.0338, 1.0342 ],
+        "timeToFirstAddition":   5,
+        "evaporationRate":       0.9434,
+        "whirlpoolTime":         0,
+        "immersionDecayFactor":  2.5,
+        "forcedDecayType":       "forcedDecayImmersion",
+        "pH":                    5.75,
+        "preOrPostBoilpH":       "preBoilpH",
+        "preBoilSG":             1.0315,
+        "krausen":               "medium krausen deposits on FV (default)",
+        "beerAge_days":          7,
+        "kettleDiameter":        27.622,  // 4G SS kettle
+        "kettleOpening":         27.622,
+
+        // 2021 Amarillo hops, package AA 9.9%. Unopened, stored for 4.5 months at -15'F with SF 0.75 -> FF 1.0
+        //                AA%   BA%   form    freshF  %loss  weight(g),  steep time
+        "add1":        [  8.9,   6.5, "cones", 1.00,   14.0,    61.86,      60 ],
+    },
+
 
 };
 

@@ -60,9 +60,9 @@ Malowicki studied alpha-acid solubility at room temperature and found, in genera
 
 <span id="heading2">2.1 General Approach</span><br>
 I <a href="../14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">previously</a> modeled alpha-acid solubility at boiling and a (room-temperature) wort pH of about 5.75 as gradually increasing with initial alpha-acid concentration according to the formulas
-<p style="padding-left: 30px;">[AA]<sub>limit</sub> = [AA]<sub>limitMax</sub> × (1 − exp(<em>slope</em> × [AA]<sub>0</sub>))
-<em>slope</em> = log(1 − ([AA]<sub>limitMin</sub> / [AA]<sub>limitMax</sub>)) / [AA]<sub>limitMin</sub><em>
-</em>[<em>AA</em>]<sub>limitMin </sub>= 240<em>
+<p style="padding-left: 30px;">[AA]<sub>limit</sub> = [AA]<sub>limitMax</sub> × (1 − exp(<em>slope</em> × [AA]<sub>0</sub>))<br>
+<em>slope</em> = log(1 − ([AA]<sub>limitMin</sub> / [AA]<sub>limitMax</sub>)) / [AA]<sub>limitMin</sub><em><br>
+</em>[<em>AA</em>]<sub>limitMin </sub>= 240<em><br>
 </em>[AA]<sub>limitMax </sub>= 490<em>
 </em></p>
 where [<em>AA</em>]<sub>limit</sub> is the solubility limit (in ppm), [<em>AA</em>]<sub>0</sub> is the concentration of alpha acids when hops are added to the wort (in ppm), <em>slope</em> is a parameter describing the slope of the function above the minimum solubility limit, [<em>AA</em>]<sub>limitMin</sub> is the smallest concentration at which some of the alpha acids do not dissolve (in ppm), and [<em>AA</em>]<sub>limitMax</sub> is the maximum concentration of dissolved alpha acids (also in ppm).  (Note: if [<em>AA</em>]<sub>0</sub> is less than or equal to [<em>AA</em>]<sub>limitMin</sub>, then all alpha acids dissolve in the wort.)  In order to extend this model to be dependent on pH, the experiment described here estimates solubility as a function of initial alpha-acid concentration at pH 5.2, using the same general formula but different values for [<em>AA</em>]<sub>limitMin</sub> and [<em>AA</em>]<sub>limitMax</sub>.  This general structure of the formula can be used regardless of the pH value, and the two parameters can be made dependent on pH by interpolating between the parameter values at pH 5.2 and 5.75.  The result can then be a set of formulas for alpha-acid solubility that is dependent on both pH and initial alpha-acid concentration.
@@ -297,8 +297,8 @@ The non-IAA compounds (also called "auxiliary bittering compounds" or "ABC") inc
 
 <p>
 We also need some way to translate between estimated IAA concentrations and the concentration of alpha-acids added to the wort.  Malowicki provides a way to estimate IAA in the wort from alpha acids:
-<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup>
-<em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup>
+<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup><br>
+<em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup><br>
 [<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</p>
 where <em>k</em><sub>1</sub>(<em>T</em>) and <em>k</em><sub>2</sub>(<em>T</em>) are empirically-derived rate constants, <em>T</em> is the temperature in Kelvin (i.e. 373.15K for boiling), e is the exponential function, and [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids in the wort.
 

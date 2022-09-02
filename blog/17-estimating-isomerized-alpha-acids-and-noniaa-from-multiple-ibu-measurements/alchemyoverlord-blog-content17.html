@@ -39,8 +39,8 @@ where <em>IBU</em> is the measured IBU value, [<em>IAA</em>]<sub>beer</sub> is t
 In particular, we can define [<em>IAA</em>]<sub>wort</sub> as the concentration of IAA in the wort during the boil and define a scaling factor, <em>scaling<sub>IAA</sub></em>, that relates [<em>IAA</em>]<sub>wort</sub> to [<em>IAA</em>]<sub>beer</sub>. We can also define another scaling factor, <em>scaling<sub>nonIAAhops</sub></em>, that relates the concentration of hops in the wort (in ppm) to the concentration of hop-related nonIAA in the finished beer.  (Both of these factors may vary from batch to batch, depending on the various losses and the concentrations of (oxidized) alpha- and beta-acids in the hops.  However, as long as we focus on batches of beer in which these conditions should be the same, then the scaling factors should also be the same for these batches.)  The contribution of malt polyphenols to the IBU, expressed as IAA-equivalent units, can be modeled as
 <p style="padding-left: 30px;">[<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub> = ((<em>OG</em> − 1.0) × 19.0) × ((2.477 × (5.75 − <em>pH</em>)) + 1.0) × (69.68/51.2)</p>
 where <em>OG </em>is the original gravity and <em>pH</em> is the post-boil pH, as described in the blog post <a href="../25-the-contribution-of-malt-polyphenols-to-the-ibu/alchemyoverlord-blog-content25.html">The Contribution of Malt Polyphenols to the IBU</a>.   The scaling by 69.68/51.2 converts from IBU units to IAA-equivalent parts per million.  These adjustments give us the following formulas as a modification to Peacock's original formula:
-<p style="padding-left: 30px;">[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em>
-[<em>nonIAA<sub>hops</sub></em>]<sub>beer</sub> = [<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>
+<p style="padding-left: 30px;">[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em><br>
+[<em>nonIAA<sub>hops</sub></em>]<sub>beer</sub> = [<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em><br>
 <em>IBU</em> = 51.2/69.68 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA<sub>hops</sub></em>]<sub>beer</sub> + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>)</p>
 where [<em>IAA</em>]<sub>wort</sub> is the total concentration of IAA produced during the boil, and <em>scaling<sub>IAA</sub></em> is the scaling factor that accounts for losses of IAA during the boil, fermentation, and aging.  Also, [<em>nonIAA<sub>hops</sub></em>]<sub>beer</sub> is the hop-related contribution to nonIAA in the finished beer, [<em>hops</em>]<sub>wort</sub> is the concentration of hops in the wort (in ppm), and <em>scaling<sub>nonIAAhops</sub></em> is the scaling factor from concentration of total hop particles to the concentration of hop-related nonIAA in the beer.  The Peacock formula is mostly unchanged, except for the revised ratio, the specification of [<em>nonIAA<sub>hops</sub></em>]<sub>beer</sub> that is specific to hops, and the addition of [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub> as a separate nonIAA component.
 
@@ -48,8 +48,8 @@ where [<em>IAA</em>]<sub>wort</sub> is the total concentration of IAA produced d
 <p>
 <span id="heading2">1.4 Conversion of Alpha Acids to Isomerized Alpha Acids</span><br>
 Mark Malowicki wrote his thesis on the conversion of alpha acids into isomerized alpha acids <a href="#references_estimatingIAA">[Malowicki]</a>.  In this work, he developed a formula to predict the concentration of IAA from temperature, time, and the initial concentration of alpha acids:<em></em>
-<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup>
-<em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup>
+<p style="padding-left: 30px;"><em>k</em><sub>1</sub>(<em>T</em>) = 7.9×10<sup>11</sup> e<sup>-11858/<em>T</em></sup><br>
+<em>k</em><sub>2</sub>(<em>T</em>) = 4.1×10<sup>12</sup> e<sup>-12994/<em>T</em></sup><br>
 [<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)</p>
 where <em>k</em><sub>1</sub>(<em>T</em>) is a rate constant for the conversion of alpha acids into isomerized alpha acids, <em>k</em><sub>2</sub>(<em>T</em>) is a rate constant for the conversion of isomerized alpha acids into degradation products, <em>T</em> is the temperature (in degrees Kelvin), [<em>AA</em>]<sub>0</sub> is the initial concentration of alpha acids (in ppm), and <em>t</em> is time (in minutes) <a href="#references_estimatingIAA">[Malowicki, pp. 25-27]</a>.
 
@@ -86,7 +86,7 @@ Because we have only two parameters to solve for, the easiest way to find the mi
 
 <p>
 Once we have an estimate for <em>scaling<sub>nonIAAhops</sub></em>, we can map from measured IBU to estimated nonIAA and IAA concentrations in beer with the formulas:
-<p style="padding-left: 30px;">[<em>nonIAA</em>]<sub>beer</sub> = ([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>
+<p style="padding-left: 30px;">[<em>nonIAA</em>]<sub>beer</sub> = ([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub><br>
 [<em>IAA</em>]<sub>beer</sub> =  ((69.68/51.2) × <em>IBU</em>) − ([<em>nonIAA</em>]<sub>beer</sub> + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>)</p>
 where [<em>nonIAA</em>]<sub>beer</sub> is the total concentration of nonIAA in the finished beer, including contributions from both hops and malt.  (We don't need <em>scaling<sub>IAA</sub></em> unless we want to estimate the IAA concentration in the wort.)
 
@@ -143,21 +143,21 @@ From the arrays of <em>M</em> values, this code will compute the values of <em>s
 
 <span id="heading1">4. Example of Mapping IBU to IAA (and Vice Versa)</span><br>
 As one example of how this mapping works, let's say we brew several batches of beer with different amounts of hops and steep times, using 14.1% AA hops.  From these batches (including measured IBU values) and the above code, we estimate <em>scaling<sub>IAA</sub></em> as 0.310 and <em>scaling<sub>nonIAAhops</sub></em> as 0.00379.  In one batch, we added 8.054 grams of hops to 5.678 liters of wort, from which we can compute the initial alpha-acid concentration and total hop concentration:
-<p style="padding-left: 30px;">[<em>AA</em>]<sub>0</sub> = <em>AArating</em> × <em>weight</em> × 1000 / <em>volume</em>
+<p style="padding-left: 30px;">[<em>AA</em>]<sub>0</sub> = <em>AArating</em> × <em>weight</em> × 1000 / <em>volume</em><br>
 [<em>AA</em>]<sub>0</sub> = 0.141 × 8.054 × 1000 / 5.678 = 200.00 ppm</p>
-<p style="padding-left: 30px;">[<em>hops</em>]<sub>wort </sub>= <em>weight</em> × 1000 / <em>volume</em>
+<p style="padding-left: 30px;">[<em>hops</em>]<sub>wort </sub>= <em>weight</em> × 1000 / <em>volume</em><br>
 [<em>hops</em>]<sub>wort </sub>= 8.054 × 1000 / 5.678 = 1418.457 ppm</p>
 (I'm using only metric units here to simplify the presentation.  If you're using <a href="https://en.wikipedia.org/wiki/Imperial_units" target="_blank">British Imperial units</a> (ounces, gallons, etc.), it's convenient to convert those to metric first.)  The original gravity after a 20-minute steep time is 1.038 and pH 5.23, and we can use that to estimate the IBUs derived from malt polyphenols:
-<p style="padding-left: 30px;">[<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub> = ((<em>OG</em> − 1.0) × 19.0) × ((2.477 × (5.75 − <em>pH</em>)) + 1.0) × (69.68/51.2)
+<p style="padding-left: 30px;">[<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub> = ((<em>OG</em> − 1.0) × 19.0) × ((2.477 × (5.75 − <em>pH</em>)) + 1.0) × (69.68/51.2)<br>
 [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub> = 0.722 × 2.288 × 1.361 = 2.248 ppm</p>
 Let's say that this batch has a measured IBU value of 15.0 after a 20-minute steep time.  From this information, we can compute the nonIAA concentration,
-<p style="padding-left: 30px;">[<em>nonIAA</em>]<sub>beer</sub> = ([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>
+<p style="padding-left: 30px;">[<em>nonIAA</em>]<sub>beer</sub> = ([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub><br>
 [<em>nonIAA</em>]<sub>beer </sub>= (1418.457 × 0.00379) + 2.248) = 7.624 ppm</p>
 and the IAA concentration:
-<p style="padding-left: 30px;">[<em>IAA</em>]<sub>beer</sub> =  ((69.68/51.2) × <em>IBU</em>) − (([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>)
+<p style="padding-left: 30px;">[<em>IAA</em>]<sub>beer</sub> =  ((69.68/51.2) × <em>IBU</em>) − (([<em>hops</em>]<sub>wort</sub> × <em>scaling<sub>nonIAAhops</sub></em>) + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub>)<br>
 [<em>IAA</em>]<sub>beer </sub>= ((69.68/51.2) × 15.0) − ((1418.457 × 0.00379) + 2.248) = 12.790 ppm</p>
 The hop-derived nonIAA concentration is 5.376 ppm, and the nonIAA concentration from malt is 2.248 ppm; their sum is [<em>nonIAA</em>]<sub>beer</sub>, or 7.624 ppm.  We can check the accuracy of our math by computing the IBU from the IAA and nonIAA concentrations.  By definition, the IBUs will be equal to the sum of the IAA and nonIAA concentrations, multiplied by about 5/7:
-<p style="padding-left: 30px;"><em>IBU</em> = 51.2/69.68 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)
+<p style="padding-left: 30px;"><em>IBU</em> = 51.2/69.68 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)<br>
 <em>IBU</em> = 51.2/69.68 × (12.790 + 7.624) = 15.0</p>
 In this case, the isomerized alpha acids make up 62.7% of the IBU (because 12.790 / (12.790 + 7.624) = 0.6265).  Even though the hops have been well preserved, the steep time of only 20 minutes reduces the IAA contribution to less than that of a 1960's beer with more oxidized hops and a 90-minute boil <a href="#references_estimatingIAA">[Peacock, p. 161]</a>.
 
@@ -165,17 +165,17 @@ In this case, the isomerized alpha acids make up 62.7% of the IBU (because 12.79
 If we don't know the measured IBU value but we do know the scaling factors, we can estimate the IBU using <em>scaling<sub>IAA</sub></em>.  In this case, instead of computing [<em>IAA</em>]<sub>wort</sub> from <em>IBU</em>, we can estimate it using Malowicki's equations (with <em>T</em> = 373.15 degrees Kelvin (boiling) and <em>t</em> = 20 minutes) to determine [<em>IAA</em>]<sub>wort</sub>, and then apply the scaling factor to determine [<em>IAA</em>]<sub>beer</sub>:
 
 <p>
-[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)
-[<em>IAA</em>]<sub>wort</sub> = 200.0 × (0.0125/(0.0031 − 0.0125)) × (e<sup>–0.0125×20.0 </sup>− e<sup>–0.0031×20.0</sup>)
-[<em>IAA</em>]<sub>wort</sub> = 200.0 × −1.328 × (e<sup>–0.250</sup>− e<sup>–0.062</sup>)
+[<em>IAA</em>]<sub>wort</sub> = [<em>AA</em>]<sub>0</sub> × (<em>k</em><sub>1</sub>(<em>T</em>)/(<em>k</em><sub>2</sub>(<em>T</em>) − <em>k</em><sub>1</sub>(<em>T</em>))) × (e<sup>–<em>k</em><sub>1</sub>(<em>T</em>)<em>t </em></sup>− e<sup>–<em>k</em><sub>2</sub>(<em>T</em>)<em>t</em></sup>)<br>
+[<em>IAA</em>]<sub>wort</sub> = 200.0 × (0.0125/(0.0031 − 0.0125)) × (e<sup>–0.0125×20.0 </sup>− e<sup>–0.0031×20.0</sup>)<br>
+[<em>IAA</em>]<sub>wort</sub> = 200.0 × −1.328 × (e<sup>–0.250</sup>− e<sup>–0.062</sup>)<br>
 [<em>IAA</em>]<sub>wort</sub> = 200.0 × −1.328 × (0.779 − 0.940) = 42.842
 
 <p>
-[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em>
+[<em>IAA</em>]<sub>beer</sub> = [<em>IAA</em>]<sub>wort</sub> × <em>scaling<sub>IAA</sub></em><br>
 [<em>IAA</em>]<sub>beer</sub> = 42.842 × 0.310 = 13.281
 
 <p>
-<em>IBU</em> = 51.2/69.68 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)
+<em>IBU</em> = 51.2/69.68 × ([<em>IAA</em>]<sub>beer</sub> + [<em>nonIAA</em>]<sub>beer</sub>)<br>
 <em>IBU</em> = 51.2/69.68 × (13.281 + 7.624) = 15.36
 
 <p>
@@ -187,11 +187,11 @@ In this particular example, the estimated IBU value (15.36) is very close to the
 We have considered the hop-derived fraction of [<em>nonIAA</em>]<sub>beer</sub> as a single source of bitterness.  In fact, the hop-derived auxiliary bittering compounds are composed of oxidized alpha acids, oxidized beta acids, and hop polyphenols.  If we use available models of the concentration of hop polyphenols and oxidized beta acids when using well-preserved hops, we can search for the fraction of alpha acids that oxidize during the boil and survive fermentation, instead of the more general <em>scaling<sub>nonIAAhops</sub></em>.   In this case, we have:
 <p style="padding-left: 40px;">[<em>nonIAA</em>]<sub>beer</sub> = [<em>PPhops</em>]<sub>beer</sub> × <em>scale<sub>PPhops</sub></em> + [<em>oAA</em>]<sub>beer</sub> × <em>scale<sub>oAA</sub></em> + [<em>oBA</em>]<sub>beer</sub> × <em>scale<sub>oBA</sub></em> + [<em>nonIAA<sub>maltPP</sub></em>]<sub>beer</sub></p>
 where, as described in the blog post <a href="../23-the-relative-contribution-of-oxidized-alpha-and-beta-acids-to-the-ibu/alchemyoverlord-blog-content23.html">The Relative Contribution of Oxidized Alpha- and Beta-Acids to the IBU</a>,
-<p style="padding-left: 40px;">[<em>PP<sub>hops</sub></em>]<sub>beer</sub> = 0.04 × 0.20 × 0.70 × <em>W</em> × 1000 / <em>V
-</em><em>scale<sub>PPhops</sub></em> = 7/5 × 0.022 = 0.0308
-[<em>oAA</em>]<sub>beer</sub> = <em>lossFactor<sub>oAA</sub></em> × <em>AA</em> × <em>W</em> × 1000 / <em>V</em>
-<em>scale<sub>oAA</sub></em> = 0.0130/0.0142 = 0.9155
-[<em>oBA</em>]<sub>beer</sub> = 0.00195 × <em>BA</em> × <em>W</em> × 1000 / <em>V</em>
+<p style="padding-left: 40px;">[<em>PP<sub>hops</sub></em>]<sub>beer</sub> = 0.04 × 0.20 × 0.70 × <em>W</em> × 1000 / <em>V<br>
+</em><em>scale<sub>PPhops</sub></em> = 7/5 × 0.022 = 0.0308<br>
+[<em>oAA</em>]<sub>beer</sub> = <em>lossFactor<sub>oAA</sub></em> × <em>AA</em> × <em>W</em> × 1000 / <em>V</em><br>
+<em>scale<sub>oAA</sub></em> = 0.0130/0.0142 = 0.9155<br>
+[<em>oBA</em>]<sub>beer</sub> = 0.00195 × <em>BA</em> × <em>W</em> × 1000 / <em>V</em><br>
 <em>scale<sub>oBA</sub></em> = 0.85</p>
 where <em>W</em> is the weight of the hops (in grams), <em>V</em> is the post-boil volume of wort (in liters), <em>AA</em> is the alpha-acid rating of the hops (from 0 to 1), and <em>BA</em> is the beta-acid rating of the hops (from 0 to 1).  The parameter <em>lossFactor<sub>oAA</sub></em> is the only unknown parameter, and represents the fraction of alpha acids that oxidize during the boil and survive into the finished beer.  Generally, I've found that <em>lossFactor<sub>oAA</sub></em> is between around 0.02 and 0.06, or 2% to 6% of the available alpha acids.  In the <a href="../31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">SMPH model of IBUs</a>, the percent of alpha acids that oxidize during the boil is estimated at 11%, and the loss factor of oAA during the boil is estimated at 0.51, for an overall estimate of <em>lossFactor<sub>oAA</sub></em> of 0.056.  This estimate doesn't include other factors such as losses caused by pH, krausen, etc.
 
