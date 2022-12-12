@@ -324,6 +324,214 @@ this.bootstrapCI_binomial = function(corr, N, CI, seed=0, reps=5000) {
 
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+// put a matrix in row-echelon form, modify the matrix in place
+
+this.rowEchelonForm = function(matrix, verbose) {
+  var col = 0;
+  var maxIdx = 0;
+  var maxVal = 0.0;
+  var mIdx = 0;
+  var numCols = 0;
+  var numRows = 0;
+  var pivotCol = 0;
+  var pivotRow = 0;
+  var ratio = 0.0;
+  var row = 0;
+  var tmp = [];
+
+  // error checking
+  if (!matrix) {
+    return [];
+  }
+  numRows = matrix.length;
+  numCols = matrix[0].length;
+  if (numRows == 0 || numCols == 0) {
+    return;
+  }
+
+  // JPH CHECK THIS IN NUMERICAL REC.
+  pivotRow = 0;
+  pivotCol = 0;
+  while (pivotRow < numRows && pivotCol < numCols) {
+    maxIdx = pivotRow;
+    maxVal = matrix[pivotRow][pivotCol];
+    for (mIdx = pivotRow; mIdx < numRows; mIdx++) {
+      if (matrix[mIdx][pivotCol] > maxVal || mIdx == pivotRow) {
+        maxVal = matrix[mIdx][pivotCol];
+        maxIdx = mIdx;
+      }
+    }
+    if (matrix[maxIdx][pivotCol] == 0.0) {
+      pivotCol += 1;
+    } else {
+      for (col = 0; col < numCols; col++) {
+        tmp[col] = matrix[pivotRow][col];
+      }
+      for (col = 0; col < numCols; col++) {
+        matrix[pivotRow][col] = matrix[maxIdx][col];
+      }
+      for (col = 0; col < numCols; col++) {
+        matrix[maxIdx][col] = tmp[col];
+      }
+
+      for (row = pivotRow + 1; row < numRows; row++) {
+        ratio = matrix[row][pivotCol] / matrix[pivotRow][pivotCol];
+        matrix[row][pivotCol] = 0.0;
+        for (col = pivotCol + 1; col < numCols; col++) {
+          matrix[row][col] -= matrix[pivotRow][col] * ratio;
+        }
+      }
+
+      pivotRow += 1;
+      pivotCol += 1;
+    }
+  }
+
+  if (verbose) {
+    console.log("--------------------------------");
+    console.log("ROW ECHELON FORM:");
+    for (row = 0; row < numRows; row++) {
+      for (col = 0; col < numCols; col++) {
+        console.log("matrix[" + row + "][" + col + "] = " + matrix[row][col]);
+      }
+      console.log(".");
+    }
+  }
+
+  return;
+}
+
+//------------------------------------------------------------------------------
+// perform backward substitution on a matrix that's in row-echelon form
+// and where the form is Ax = b, A is in the first columns, b (ans) is 
+// in the last column
+
+
+this.backwardSubstitution = function(matrix) {
+  var ans = 0.0;
+  var col = 0;
+  var len = 0;
+  var res = [];
+  var row = 0;
+  var sum = 0.0;
+  var val = 0.0;
+
+  // create empty array
+  for (row = 0; row < matrix.length; row++) {
+    res.push(0.0);
+  }
+
+  // do backward substitution
+  row = Number(matrix.length - 1);
+  len = matrix[row].length;
+  res[row] = matrix[row][len-1] / matrix[row][len-2];
+  for (row = row - 1; row >= 0; row--) {
+    len = matrix[row].length;
+    ans = matrix[row][len-1];
+    sum = 0.0;
+    for (col = row + 1; col < len - 1; col++) {
+      sum += matrix[row][col] * res[col];
+    }
+    val = (ans - sum) / matrix[row][row];
+    res[row] = val;
+  }
+
+  return res;
+}
+
+//------------------------------------------------------------------------------
+// polynomial regression algorithm based on explanation from P. Lutus at
+//    https://arachnoid.com/sage/polynomial.html
+
+this.polynomialRegression = function(data, order, verbose = false) {
+  var col = 0;
+  var idx = 0;
+  var matrix = [];
+  var newRow = [];
+  var power = 0;
+  var res = [];
+  var row = 0;
+  var rows = 0;
+  var sumX = 0.0;
+  var sumY = 0.0;
+  var val = 0.0;
+
+  rows = data.length;
+  if (!data || data.length == 0) {
+    return res;
+  }
+  if (order < 0) {
+    window.alert("in mathLibrary.polynomialRegression, order must be >= 0");
+    return res;
+  }
+  if (order >= data.length) {
+    window.alert("in mathLibrary.polynomialRegression, order must be < data");
+    return res;
+  }
+  for (row = 0; row < data.length; row++) {
+    if (data[row].length != 2) {
+      window.alert("in mathLibrary.polynomialRegression, data must be Nx2");
+      return res;
+    }
+  }
+
+  // create empty matrix with correct dimensions (rows=order+1 cols=order+2)
+  for (row = 0; row <= order; row++) {
+    newRow = [];
+    for (col = 0; col <= order; col++) {
+      newRow.push(0.0);
+    }
+    newRow.push(0.0);
+    matrix.push(newRow);
+  }
+
+  // now populate the matrix
+  for (power = 0; power <= rows; power++) {
+    sumX = 0.0;
+    sumY = 0.0;
+    for (idx = 0; idx < rows; idx++) {
+      val = Math.pow(data[idx][0], power);
+      sumX += val;
+      sumY += val * data[idx][1];
+    }
+    for (row = 0; row <= order; row++) {
+      if (power - row >= 0 && power - row <= order) {
+        matrix[row][Number(power-row)] = sumX;
+      }
+    }
+    if (power <= order) {
+      matrix[power][Number(order+1)] = sumY;
+    }
+  }
+
+  if (verbose) {
+    for (row = 0; row < matrix.length; row++) {
+      for (col = 0; col < matrix[0].length; col++) {
+        console.log("matrix[" + row + "][" + col + "] = " + matrix[row][col]);
+      }
+      console.log(".");
+    }
+  }
+
+  mathLibrary.rowEchelonForm(matrix, false);
+  res = mathLibrary.backwardSubstitution(matrix);
+  if (verbose) {
+    console.log("polynomial coefficients: " + res);
+  }
+  return res;
+}
+
+this.evaluatePolynomial = function(coefficients, x) {
+  var cIdx = 0;
+  var y = 0.0;
+
+  for (cIdx = 0; cIdx < coefficients.length; cIdx++) {
+    y += coefficients[cIdx] * Math.pow(x, cIdx);
+  }
+
+  return y;
+}
 
 } // close the "namespace" and call the function to construct it
 mathLibrary._construct();

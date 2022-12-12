@@ -11,6 +11,7 @@ Version 1.0.3 : Oct. 05, 2021 : Don't reduce AA sol. limit with temperature.
                                 Add explanation of 'boil or steep time'
 Version 1.0.4 : Nov. 25, 2021 : Minor updates
 Version 1.0.5 : May  18, 2022 : Storage duration of 0 months is valid
+Version 1.0.6 : Dec. 10, 2022 : Put introductory text into FAQ document
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -23,61 +24,7 @@ Version 1.0.5 : May  18, 2022 : Storage duration of 0 months is valid
  <a name="top_SMPH"></a>
 <div id="content">
   <h2>IBU Calculator Using the SMPH Method</h2>
-  <p>This page provides a calculator for predicting IBUs using the SMPH
-  method. The techniques used in this method are described in the blog posts
-  <a href="blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">
-  "A Summary of Factors Affecting IBUs"</a> and
-  <a href="blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">
-  "IBUs and the SMPH Model"</a>.
-  This method accounts separately for the contributions
-  from isomerized alpha acids (IAA) and "Auxiliary Bitter Compounds"
-  (ABC or nonIAA).  It is based in large part on work published by Val Peacock,
-  Tom Shellhammer, and Mark Malowicki, as well as my own experiments.  This
-  calculator takes into account utilization from any hop stand or whirlpool,
-  as well as the time it takes to cool the wort using an immersion chiller,
-  counterflow chiller, or ice bath.  Other optional adjustments include
-  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
-  an alpha-acid solubility limit</a>,
-  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
-  adjustment of IBUs based on wort pH</a>,
-  adjustment of IBUs based on
-  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">
-  wort clarity</a> and
-  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">
-  krausen loss</a>,
-  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
-  adjustment based on the use of hop pellets instead of whole cones</a>, and
-  IBUs from dry-hopping.
-  </p>
-
-  <p>
-  For "boil or steep time" with kettle additions, specify the number of
-  minutes before flameout.  A negative value indicates time after flameout.
-  For example, a value of 10 means that the hops are added at 10 minutes
-  before flameout (during the boil).
-  A value of 0 indicates a flameout addition.
-  A value of -10 means that the hops are added to the hot wort at 10 minutes
-  after flameout.
-  Post-flameout kettle additions can be made during a whirlpool or hop stand,
-  or while the wort is being force cooled.
-  For dry-hop additions, specify the number of days of dry hopping.
-  </p>
-
-  <p>
-  Default values are shown in <font color="#94476b">grayish-red</font>.
-  The defaults should yield reasonable results for most homebrewing scenarios.
-  The temperature-decay defaults are based on the wort volume, kettle diameter, and kettle
-  opening diameter.  For most homebrewers, the kettle diameter and the
-  opening diameter are the same (with an uncovered kettle).
-  The "exponential decay" function is probably somewhat more accurate than
-  the "linear" function, but the linear function is easier to conceptualize
-  (e.g. a decrease of 1.74&deg;F per minute).
-  </p>
-  <p>
-  To get back to a default value, enter 'd'.  To save settings to a text file
-  or load them from a file, use the "Save" and "Load" buttons near the bottom
-  of this page.  To clear all settings, use the "clear" button at the
-  bottom of this page.
+  <a href="ibu_SMPH_FAQ.html">Frequently Asked Questions (FAQ) and documentation.</a>
   </p>
 
   <h3>Inputs:</h3>
@@ -341,6 +288,7 @@ SMPH.initialize_SMPH();
 <b>1.0.3</b>: (2021-Oct-05)  Bug fix, and don't reduce solubility limit with temperature.<br>
 <b>1.0.4</b>: (2021-Nov-25)  Minor updates.<br>
 <b>1.0.5</b>: (2022-May-18)  Storage duration of 0 months is valid.<br>
+<b>1.0.6</b>: (2022-Dec-10)  Put introductory text into FAQ.<br>
 </small>
 
 <p>
@@ -351,9 +299,9 @@ Navigate to:<br>
 <a href="index.html" target="_top">AlchemyOverlord home page</a>
 <p>
 <p>
-<center>
 Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
+</center>
 <p>
 <small>Copyright &copy; 2018-2022 John-Paul Hosom, all rights reserved.
 All product and company names are trademarks&trade; or registered&reg;

@@ -1,0 +1,362 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+ibu_FAQ.html : HTML for AlchemyOverlord web page, SMPH sub-page, FAQ page.
+Written by John-Paul Hosom
+Copyright © 2022 by John-Paul Hosom, all rights reserved.
+Version 1.0.1 : Dec. 10, 2022 : initial version.
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+  <a name="top_SMPH_FAQ"></a>
+  <h2>FAQ and Documentation for the SMPH IBU Calculator</h2>
+
+  <h3>Background:</h3>
+  <ul>
+  <li>
+  <b>What is the SMPH model?</b><br>
+  The SMPH model is a method for estimating IBUs. This method accounts for
+  the contributions to the IBU from both isomerized alpha acids (IAAs) and
+  auxiliary bittering compounds (ABCs).
+  The techniques used in this method are described in the blog posts
+  <a href="blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">
+  "A Summary of Factors Affecting IBUs"</a> and
+  <a href="blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">
+  "IBUs and the SMPH Model"</a>.
+  This calculator takes into account utilization from any hop stand or
+  whirlpool, as well as the time it takes to cool the wort using an immersion
+  chiller, counterflow chiller, or ice bath.  Other optional adjustments include
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
+  an alpha-acid solubility limit</a>,
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
+  adjustment of IBUs based on wort pH</a>,
+  adjustment of IBUs based on
+  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">
+  wort clarity</a> and
+  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">
+  krausen loss</a>,
+  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
+  adjustment based on the use of hop pellets instead of whole cones</a>, and
+  IBUs from dry-hopping.
+  This model is based on my own experiments (including more than 300 measured
+  IBU values) and work previously published by Val Peacock, Tom Shellhammer,
+  and Mark Malowicki.  While this model would not have been possible without
+  their previous work, they had no knowledge of, or input on, its development,
+  and so the name SMPH is not an acronym but simply a sequence of four letters.
+  </li>
+  <br>
+  <li>
+  <b>How accurate is this model?</b><br>
+  On a test set of 18 measured IBU values from finished beer, the SMPH
+  model had a root-mean-square error of 2.5 IBUs.  Other models (Tinseth,
+  Rager, Garetz, and mIBU) had error more than 4 times higher on the same
+  data.  More detail can be found in the blog post
+  <a href="blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">
+  "IBUs and the SMPH Model"</a>.
+  </li>
+  <br>
+  <li>
+  <b>Is this calculator free? Are you tracking any data?</b><br>
+  The calculators on this site are (and always will be) completely free to use.
+  No data (e.g. IP address or other identifying information, usage, history,
+  or clicks) is tracked.  There is no advertising, thanks to no-cost hosting by
+  <a href="https://github.com" target="_top">GitHub</a>.  I earn no money
+  from this website.
+  </li>
+  <br>
+  <li>
+  <b>How can I save or load a recipe?</b><br>
+  To save settings to a text file or load them from a file, use the "Save"
+  and "Load" buttons near the bottom of the page.
+  Saved recipes are only stored on your local computer or device.
+  </li>
+  <br>
+  </ul>
+
+  <h3>Inputs:</h3>
+  <ul>
+  <li>
+  <b>Wow, why are there so many inputs?</b><br>
+  In the course of many experiments looking at measured IBU values, I've
+  found that pretty much every step of the brewing process seems to have some
+  effect on IBUs.  A model that uses only information about the hops, wort
+  volume, and the specific gravity often won't be able to give a good
+  prediction.  However, the default values should be reasonable for most
+  homebrewing situations.  You should only need to change values if they
+  don't look correct to you.
+  </li>
+  <br>
+  <li>
+  <b>Why are some values in a greyish-red font?</b><br>
+  Some default values are shown in <font color="#94476b">grayish-red</font>.
+  These values depend on other inputs, and are shown in this color in
+  order to indicate that they may change if other input values change.
+  For example, the temperature-decay defaults are based on the wort volume,
+  kettle diameter, and kettle opening diameter.
+  The defaults should yield reasonable results for most homebrewing scenarios.
+  If you set a value that is currently grayish-red, the color will change to
+  black and it will no longer change depending on the other input values.
+  </li>
+  <br>
+  <li>
+  <b>How do I get back to a default value?</b><br>
+  To get back to a default value, enter 'd'.
+  To clear all inputs and reset the page to default values,
+  use the "clear" button at the bottom of the page.
+  </li>
+  <br>
+  <li>
+  <b>Why does it ask for kettle diameter and kettle opening diameter?</b><br>
+  The kettle diameter, the opening diameter, and the volume are used to
+  <a href="blog/16-predicting-wort-temperature-after-flameout/alchemyoverlord-blog-content16.html">predict how quickly the wort will cool after flameout</a>.
+  The rate at which the wort cools will affect the final IBU prediction.
+  For many homebrewers, the kettle diameter and the opening diameter are
+  the same (with an uncovered kettle).
+  </li>
+  <br>
+  <li>
+  <b>What is "(Partial Boil) Added Water"?</b><br>
+  The field for "(Partial Boil) Added Water" is for the scenario where
+  you add water to the wort after the boil, which is called a
+  <a href="https://www.morebeer.com/questions/237" target="_top">partial boil</a>.
+  This can have a large impact on IBUs if the
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
+  alpha-acid solubility limit</a>
+  is exceeded.
+  </li>
+  <br>
+  <li>
+  <b>What is the "Global IBU Scaling Factor"?</b><br>
+  The global IBU scaling factor is a "catch all" scaling factor. If you
+  use this model on a regular basis and find that the predicted IBUs
+  are always consistently too high or too low compared with measured IBUs,
+  you can change the global scaling factor to account for this.  In this
+  case, <a href="about.html">let me know</a> so that I can better understand
+  (and maybe fix) why the predictions are consistently off for your setup.
+  </li>
+  <br>
+  <li>
+  <b>What is "Default Hop Form"?</b><br>
+  The calculator will predict different IBUs for whole cones or for
+  pellets.  While each addition can be individually assigned to one
+  of these two hop forms, the Default Hop Form selection will
+  set the form of hops for every hop addition that is not individually
+  assigned.
+  </li>
+  <br>
+  <li>
+  <b>Does this calculator support hop extract (CO2 extract)?</b><br>
+  No; currently only whole cones and pellets are supported.
+  </li>
+  <br>
+  <li>
+  <b>What is the "freshness factor" for hops?</b><br>
+  As hops sit in packaging after harvest, the alpha acids and beta acids
+  become oxidized, which impacts IBUs.  The rate at which this oxidation
+  takes place depends on the storage conditions.  The "freshness factor"
+  represents how much oxidation has happened during hop storage.  A value
+  of 1.0 represents well-preserved hops that have not undergone any
+  oxidation.  The smaller the value, the less well-preserved or fresh
+  the hops are.  If you have a specific estimate of the freshness factor
+  (or want to use the default), use this field to specify hop alpha-acid
+  degradation.  If you have details of the hop storage conditions, from
+  which the freshness factor can be estimated, then use the "storage conditions"
+  radio button to specify these conditions and see the estimated
+  freshness factor.
+  </li>
+  <br>
+  <li>
+  <b>What is the "pellet factor" for hops?</b><br>
+  Hop pellets produce more IBUs than whole cones.  This is not due to
+  an increase in the rate of alpha-acid isomerization, but to an
+  <a href="blog/29-why-do-hop-pellets-produce-more-ibus-than-hop-cones/alchemyoverlord-blog-content29.html">
+  increase in the oxidation of alpha acids when hops are added to the
+  boiling wort</a>.  It has been estimated that with pellets,
+  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
+  the oxidation of alpha acids (when added to the boil) is
+  double that of whole cones</a>.
+  This is why the default pellet factor is 2.0. (The default value is
+  set to 1.0 for cones, because this factor is not relevant when using cones.)
+  This effect on IBUs appears to be variety-specific.  If you have a
+  different estimate for the increase in alpha-acid oxidization with pellets,
+  you can specify that with the pellet factor input box.
+  </li>
+  <br>
+  <li>
+  <b>How can I specify flameout or post-flameout hop additions?</b><br>
+  For "boil or steep time" with kettle additions, specify the number of
+  minutes before flameout.  A negative value indicates time after flameout.
+  For example, a value of 10 means that the hops are added at 10 minutes
+  before flameout (during the boil).
+  A value of 0 indicates a flameout addition.
+  A value of -10 means that the hops are added to the hot wort at 10 minutes
+  after flameout.
+  Post-flameout kettle additions can be made during a whirlpool or hop stand,
+  or while the wort is being force cooled.
+  For dry-hop additions, specify the number of days of dry hopping.
+  </li>
+  <br>
+  <li>
+  <b>Does this calculator support first-wort hopping?</b><br>
+  Unfortunately not.
+  </li>
+  <br>
+  <li>
+  <b>How do I know what values to use for post-boil temperature decrease?</b><br>
+  The defaults should work well in most cases.  If you want to determine a
+  value specific to your system, then follow the instructions in the blog post
+  <a href="blog/15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">"An On-Line Calculator for the mIBU Technique"</a>
+  for using the Colby College website for curve fitting.
+  The exponential decay function is probably somewhat more accurate than
+  the linear function, but the linear function is easier to conceptualize
+  (e.g. a decrease of 1.74&deg;F per minute).
+  </li>
+  <br>
+  <li>
+  <b>How does the whirlpool and/or hop stand work?</b><br>
+  Specify the duration of the whirlpool and/or hop stand in the input box.
+  If you check the box to "quickly cool, then hold at this temperature",
+  the model will use the cooling rate parameter specified by the
+  immersion chiller (whether or not you're really using an immersion chiller)
+  to cool the wort to the specified temperature before starting the whirlpool
+  or hop stand.  If this box is not checked, then the starting temperature
+  at the beginning of the whirlpool and/or hop stand is boiling.
+  The temperature of the wort will then decrease (according to the post-boil
+  wort temperature decay function) for the specified duration.  During this
+  time, IBUs will increase (with the amount of increase dependent on the
+  wort temperature).  When the whirlpool and/or hop stand is done, forced
+  cooling will proceed with the specified method and rate of cooling.
+  </li>
+  <br>
+  <li>
+  <b>How do I know what value to use for forced cooling?</b><br>
+  The defaults should work well in most cases.  If you want to determine a
+  value specific to your system and you're using an immersion chiller or
+  ice bath, then follow the instructions in the blog post
+  <a href="blog/15-an-on-line-calculator-for-the-mibu-technique/alchemyoverlord-blog-content15.html">"An On-Line Calculator for the mIBU Technique"</a>
+  for using the Colby College website for curve fitting.
+  In this case, use an exponential function (i.e. <code>a exp(-bx) + c</code>)
+  and fix parameter <code>c</code> at 68&deg;F (20&deg;C) for an
+  immersion chiller or 105.53&deg;F (40.85&deg;C) for an ice bath.  The
+  absolute value of <code>b</code> is the exponential decay factor for the
+  SMPH model.  This parameter is the same when using metric or US customary
+  units.  If you're using a counterflow chiller, then the model
+  assumes that once the wort has entered the chiller, it is quickly
+  cooled.  You only need to specify how quickly wort enters this chiller
+  (in gallons or litres per minute).
+  </li>
+  <br>
+  </ul>
+
+  <h3>Outputs:</h3>
+  <ul>
+  <li>
+  <b>What is the Utilization output?</b><br>
+  Utilization is the amount of isomerized alpha acids (IAAs) in the beer
+  divided by the amount of alpha acids added to the wort. (Losses
+  along the way are often ignored; in this case, utilization can also be
+  described as the relative <em>concentration</em> of IAAs to alpha acids.)
+  This number is multiplied by 100 to convert from a ratio to a percent.
+  Older IBU models relied primarily on utilization to estimate IBUs,
+  but it is important to also consider the effect of auxiliary bittering
+  compounds.
+  </li>
+  <br>
+  <li>
+  <b>What is the IAA output?</b><br>
+  This is the estimated concentration of isomerized alpha acids in the
+  beer, in part-per-million (ppm) or mg/L.
+  </li>
+  <br>
+  <li>
+  <b>What does IAA<sub>eq</sub> mean?</b><br>
+  The auxiliary bittering compounds (ABCs) can be measured in ppm, but this
+  concentration is not as useful as the contribution of the compound to
+  the IBU.  Because ABCs absorb light differently than IAAs at 275 nm when
+  measuring IBUs, the contribution of a compound to the IBU will be different
+  from its concentration.  On this page, an output noted with
+  (IAA<sub>eq</sub>) is the concentration of that compound in ppm multiplied
+  by a scaling factor that reflects the light absorption of that compound
+  relative to IAAs.  (In other words, the concentration is in "IAA equivalent"
+  units.)  Then, according to the formula from
+  <a href="blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">Val Peacock</a>,
+  the IBU value from a hop addition is the sum of the IAA concentration
+  and the ABC concentrations (expressed in IAA equivalent units), multiplied
+  by 50/69.68.
+  </li>
+  <br>
+  <li>
+  <b>If I don't model dry-hop additions, I get 38.6 IAAs from one
+  kettle addition.  If I model dry-hop additions, I get 31.1 IAAs from
+  the same kettle addition, even though nothing else has changed.  Why?</b><br>
+  Dry hopping can sometimes reduce the concentration of IAAs in the beer.
+  This effect is more pronounced with high-IBU beers.
+  </li>
+  <br>
+  <li>
+  <b>Why is the value of Total IBUs greater than zero even with no hop
+  additions?</b><br>
+  Malt polyphenols are one of the auxiliary bittering compounds.
+  Even with no hop additions, the malt polyphenols can contribute
+  several IBUs.
+  </li>
+  <br>
+  <li>
+  <b>What is "Bitterness Intensity"?</b><br>
+  The IBU scales linearly with the concentrations of IAAs and ABCs. Bitterness,
+  like most perceptual phenomena, does not increase linearly with the strength
+  of the stimulus (as noted by Fechner's law). Therefore, there is a divergence
+  from the linear relationship between IBU values and the perception of
+  bitterness,
+  <a href="https://ir.library.oregonstate.edu/downloads/7p88cn389?locale=en">starting at about 60 IBUs</a>.
+  There is still a strong correlation between IBUs and perceived bitterness,
+  even at high IBUs. Christina Hahn has developed a
+  <a href="https://ir.library.oregonstate.edu/downloads/7p88cn389?locale=en">quadratic equation to map between IBUs and perceived bitterness</a>,
+  accounting for this non-linearity.
+  The SMPH calculator includes Hahn's perceived bitterness value
+  (or "bitterness intensity") as an additional output.
+  </li>
+  <br>
+  <li>
+  <b>What is "Wort Forced-Cooling Time"?</b><br>
+  For immersion and ice-bath forced cooling, the approximate time to cool
+  the wort to 140&deg;F (60&deg;C) is shown at the bottom of the output.
+  This is not the time required to cool the wort to pitching temperature,
+  but an approximation of how long it takes until alpha-acid utilization stops.
+  This value is provided because it's a metric for how effective your
+  forced-cooling system is.
+  </li>
+  <br>
+  </ul>
+
+  Have a question that's not answered here?
+  <a href="about.html">Contact me!</a><br>
+  Thanks to Tony Martinez for suggesting that I create a FAQ page.
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_SMPH_FAQ">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord home page</a>
+  <p>
+  </center>
+  <p>
+  <small>Copyright &copy; 2018-2022 John-Paul Hosom, all rights reserved.
+  All product and company names are trademarks&trade; or registered&reg;
+  trademarks of their respective holders. Use of these names does not imply
+  any affiliation with, endorsement of, or endorsement by them.
+  <p>
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Predicting IBUs is a bit
+  of a "black art", because there are so many variables and there is so much
+  variability.  The only way to really know the IBU level of a beer is
+  to have it professionally tested, which is something I highly recommend.
+  Cheers!</small>
+  </p>
+  </body>
+</html>

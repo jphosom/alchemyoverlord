@@ -865,7 +865,7 @@ function plotAlpha(ctx, plot, label, thresholdN_H0, yMax) {
   ctx.stroke();
   ctx.fillStyle = "darkorange";
   plotTextMiddleTop(ctx, plot, "\u03B1<sub>"+label+"</sub>",
-                    thresholdN_H0-0.5, yMax*0.96);
+                    thresholdN_H0-0.5, yMax*0.96, "italic");
   ctx.fillStyle = plot.defaultColor;
   ctx.strokeStyle = plot.defaultColor;
   return;
@@ -895,7 +895,8 @@ function plotRegion(ctx, plot, range, label, yMax, thresholdN_H1 = -1) {
   plot.fontHeightPx = 13;
 
   ctx.fillStyle = "darkorange";
-  plotLabelRes = plotTextMiddleTop(ctx, plot, label, (min+max)*0.5, yMax*0.97);
+  plotLabelRes = plotTextMiddleTop(ctx, plot, label, (min+max)*0.5, 
+                                   yMax*0.97, "italic");
   labelXMin = plotLabelRes[0];
   labelXMax = plotLabelRes[1];
 

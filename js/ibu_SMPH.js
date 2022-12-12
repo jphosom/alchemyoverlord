@@ -591,6 +591,10 @@ function compute_concent_wort(ibu) {
   AA_limit_func_B = -1.0*Math.log(1.0 - (AA_limit_minLimit/AA_limit_maxLimit)) /
                     AA_limit_minLimit;
   if (SMPH.verbose > 3) {
+    console.log("    AA_minLimit = " + AA_limit_minLimit +
+                   " AA_maxLimit = " + AA_limit_maxLimit);
+    console.log("1-min/max = " + (1.0 - (AA_limit_minLimit/AA_limit_maxLimit)).toFixed(6));
+    console.log("log(x) = " + Math.log(1.0-(AA_limit_minLimit/AA_limit_maxLimit)));
     console.log("    AA_limit_func_A = " + AA_limit_func_A.toFixed(4) +
               ", AA_limit_func_B = " + AA_limit_func_B.toFixed(6));
   }
@@ -1078,11 +1082,12 @@ function compute_concent_wort(ibu) {
 function compute_postBoil_pH(preBoilpH) {
   var pH = preBoilpH;
   // see pH_function_of_temp/fitTimeData_ORIG.tcl
-  var slopeSlope = -0.002800223086542374;
-  var slopeIntercept = 0.013184013161963867;
+  // var slopeSlope = -0.002800223086542374;
+  // var slopeIntercept = 0.013184013161963867;
 
-  pH = (preBoilpH * ((slopeSlope * ibu.boilTime.value) + 1.0)) +
-       (slopeIntercept * ibu.boilTime.value);
+  // this function based on data but doesn't generalize as well
+  // pH = (preBoilpH * ((slopeSlope * ibu.boilTime.value) + 1.0)) +
+       // (slopeIntercept * ibu.boilTime.value);
   pH = preBoilpH - (ibu.boilTime.value * 0.10 / 60.0);
   if (SMPH.verbose > 5) {
     console.log("pre-boil pH: " + preBoilpH.toFixed(4) + " becomes " +

@@ -349,6 +349,9 @@ function plotLinearData(ctx, plot, name, data, lineStyle = "solid",
   var lineStyleIdx = 0;
 
   lineStyleIdx = getLineStyleIndex(lineStyle);
+  if (symbol == "") {
+    symbol = "none";
+  }
 
   // find (and replace) existing data, or create new data for this plot
   dataIdx = -1;
@@ -784,7 +787,7 @@ function plotTextLeftMiddle(ctx, plot, text, x, y) {
 
 //------------------------------------------------------------------------------
 
-function plotTextMiddleTop(ctx, plot, text, x, y) {
+function plotTextMiddleTop(ctx, plot, text, x, y, style, size="normal") {
   var valueXpx = 0.0;
   var textWidthPx = 0.0;
   var posXpx = 0.0;
@@ -820,10 +823,11 @@ function plotTextMiddleTop(ctx, plot, text, x, y) {
   posXpx = valueXpx - textWidthPx/2;
   posYpx = mapY(plot, y);
   smallHeight = (plot.fontHeightPx * 0.85).toFixed(1);
-  smallFont = "italic " + plot.font.replace(plot.fontHeightPx, smallHeight);
+  if (style.length > 0) style = style + " ";
+  smallFont = style + plot.font.replace(plot.fontHeightPx, smallHeight);
   for (cIdx = 0; cIdx < realText.length; cIdx++) {
-    if (height[cIdx] == 0) {
-      ctx.font = "italic " + plot.font;
+    if (height[cIdx] == 0 && size != "small") {
+      ctx.font = style + plot.font;
     } else {
       ctx.font = smallFont;
     }
