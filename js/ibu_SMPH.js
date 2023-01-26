@@ -10,10 +10,12 @@
 //         project.  The code was then modified to implement the SMPH method as
 //         described in the blog post "A Summary of Factors Affecting IBUs".
 //
-// Version 1.0.2 : Sep. 4, 2021: bug fix in AA concentration when dry hopping
-// Version 1.0.3 : Oct. 5, 2021: don't reduce AA sol. limit with temperature;
-//                               make sure solubility limit is never exceeded;
-//                               pass in "SMPH" when building hops table
+// Version 1.0.2 : Sep.  4, 2021: bug fix in AA concentration when dry hopping
+// Version 1.0.3 : Oct.  5, 2021: don't reduce AA sol. limit with temperature;
+//                                make sure solubility limit is never exceeded;
+//                                pass in "SMPH" when building hops table
+// Version 1.0.4 : Jan. 25, 2023: print out how long it takes to reach whirlpool
+//                                "hold" temperature
 //
 // -----------------------------------------------------------------------------
 
@@ -387,6 +389,18 @@ this.computeIBU_SMPH = function() {
     document.getElementById('BIvalue').innerHTML = BI.toFixed(2);
   }
 
+  if (ibu.holdTempCheckbox.value) {
+    if (document.getElementById("forcedCoolingTimeHT")) {
+      document.getElementById("forcedCoolingTimeHT").innerHTML =
+         "Wort Forced-Cooling Time: " + ibu.FCT_HT.toFixed(1) +
+         " minutes to reach hold temperature"
+    }
+  } else {
+    if (document.getElementById("forcedCoolingTimeHT")) {
+      document.getElementById("forcedCoolingTimeHT").innerHTML = ""
+    }
+  }
+
   if (ibu.forcedDecayType.value != "forcedDecayCounterflow") {
     if (document.getElementById("forcedCoolingTime")) {
       if (ibu.units.value == "metric") {
@@ -478,6 +492,7 @@ function compute_concent_wort(ibu) {
   var expParamC_Kelvin = 0.0;   // exponential decay parameter C, in Kelvin
   var FCT = 0.0;                // total amount of time spent in forced cooling
   var FCT60 = 0.0;              // amount of time to reach 60'C
+  var FCT_HT = 0.0;             // amount of time to reach hopstand "hold" temp
   var finalVolume = 0.0;        // final volume after wort loss and added water
   var finished = false;         // are we finished with modeling IAA over time?
   var holdTemp = ibu.holdTemp.value;  // the temperature at which to hold wort
@@ -619,6 +634,7 @@ function compute_concent_wort(ibu) {
     ibu.maltPP = 0.0;
     ibu.FCT = 0.0;
     ibu.FCT60 = 0.0;
+    ibu.FCT_HT = 0.0;
     ibu.IBU = 0.0;
     return 0.0;
   }
@@ -666,6 +682,7 @@ function compute_concent_wort(ibu) {
   AA_xfer_mg  = 0.0; // mg of AA transferred (and cooled) via counterflow
   IAA_xfer_mg = 0.0; // mg of IAA transferred via counterflow
   FCT60 = -1.0;    // use negative number to indicate not yet post-whirlpool
+  FCT_HT = -1.0;   // use negative number to indicate not yet post-whirlpool
 
   if (SMPH.verbose > 1) {
     console.log("\nStarting processing of each time point:");
@@ -736,6 +753,7 @@ function compute_concent_wort(ibu) {
                     // (holdTempK-273.15).toFixed(2) +
                     // ", current temp = " + (tempK-273.15).toFixed(2) +
                     // ", WP time now " + whirlpoolTime.toFixed(2));
+        FCT_HT = t;
       }
 
       // if hold temperature during hop stand, and reached target temp, hold it
@@ -1000,6 +1018,8 @@ function compute_concent_wort(ibu) {
 
   // compute total forced cooling time (FCT)
   FCT = (-1.0 * t) - ibu.whirlpoolTime.value;
+  // forced cooling time to reach hold temp is negative; make it positive
+  FCT_HT = (-1.0 * FCT_HT);
 
   // adjust amount of dissolved material based on wort/trub loss and
   // topoff volume added
@@ -1054,6 +1074,7 @@ function compute_concent_wort(ibu) {
   }
 
   // set the cooling time to reach 60'C
+  ibu.FCT_HT = FCT_HT;
   ibu.FCT60 = FCT60;
 
   // print out summary information to console when done
