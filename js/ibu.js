@@ -40,6 +40,7 @@
 //                                or just "boil time" depending on method
 // Version 1.2.13: Nov 25, 2021 : change href targets from _parent to _blank
 // Version 1.2.14: May 18, 2022 : storage duration of 0 months is valid
+// Version 1.2.15: Jan 29, 2023 : limit default immersion decay factor
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -530,8 +531,8 @@ ibu._construct = function() {
   this.immersionDecayFactor.inputType = "float";
   this.immersionDecayFactor.value = "";
   this.immersionDecayFactor.userSet = 0;
-  this.immersionDecayFactor.precision = -3;
-  this.immersionDecayFactor.minPrecision = -3;
+  this.immersionDecayFactor.precision = -4;
+  this.immersionDecayFactor.minPrecision = -4;
   this.immersionDecayFactor.display = "";
   this.immersionDecayFactor.min = 0.00001;
   this.immersionDecayFactor.max = 200.0;
@@ -1062,6 +1063,9 @@ function checkHoldTemp(forcedDecayType) {
       document.getElementById("ibu.holdTemp").style.color = "#b1b1cd";
     }
   }
+
+  // if using default immersion decay factor, set the default for new hold temp.
+  common.set(ibu.immersionDecayFactor, 0);
 
   return;
 }
@@ -2658,14 +2662,44 @@ function hopAdditionsSet(param) {
 // get default for immersion chiller
 
 function get_immersionDecayFactor_default() {
+  var A = 0.0;
+  var C = 0.0;
   var immersionDefault = 0.0;
   var postBoilVolume = 0.0;
+  var requiredTime = 0.0;
+  var targetT = 0.0;
 
   postBoilVolume = get_postBoilVolume();
   immersionDefault = 0.6075 * Math.exp(-0.0704 * postBoilVolume);
-  if (immersionDefault < 1.0e-10) {
-    immersionDefault = 1.0e-10;
+
+  // make sure the default decay factor yields a reasonable cooling time.
+  if (ibu.tempExpParamA && ibu.tempExpParamC &&
+      ibu.tempExpParamA.value && ibu.tempExpParamC.value) {
+    A = ibu.tempExpParamA.value;
+    C = ibu.tempExpParamC.value;
+    // Get the time required to reach target temperature.
+    // If using hold temperature, check for that; else, set target temp to
+    // maximum of 50'C or baseline temp (param C) + 1.
+    if (ibu.holdTempCheckbox && ibu.holdTemp &&
+        ibu.holdTempCheckbox.value && ibu.holdTemp.value) {
+      targetT = ibu.holdTemp.value;
+    } else {
+      targetT = 50.0;
+      if (targetT <= C) {
+        targetT = C + 1.0;
+      }
+    }
+    // check for lower bound on decay factor
+    if (immersionDefault < 1.0e-10) {
+      immersionDefault = 1.0e-10;
+    }
+    requiredTime = Math.log((targetT - C) / A) / (-1.0 * immersionDefault);
+    // if time required to reach specified temp is greater than 2 hrs, limit it
+    if (requiredTime > 120.0) {
+      immersionDefault = Math.log((targetT - C) / A) / (-1.0 * 120.01);
+    }
   }
+
   return immersionDefault;
 }
 

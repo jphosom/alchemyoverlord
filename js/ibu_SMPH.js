@@ -16,6 +16,7 @@
 //                                pass in "SMPH" when building hops table
 // Version 1.0.4 : Jan. 25, 2023: print out how long it takes to reach whirlpool
 //                                "hold" temperature
+// Version 1.0.5 : Jan. 29, 2023: bug fix in temp decay; indicate if max time
 //
 // -----------------------------------------------------------------------------
 
@@ -87,6 +88,7 @@ this.initialize_SMPH = function() {
   // set parameters of the SMPH model here:
   this.verbose            = 5;
   this.integrationTime    = 0.01;  // minutes
+  this.maxCoolTime        = 120.0; // max time to cool to target, in minutes
 
   this.AA_limit_minLimit  = 200.0; // ppm of alpha acids, from SEARCH
   this.AA_limit_maxLimit  = 580.0; // ppm of alpha acids, from SEARCH
@@ -94,11 +96,10 @@ this.initialize_SMPH = function() {
   this.scale_AA           = 0.885; // from Maye, MBAA TQ v.53, n.3, 2016, p. 135
 
   this.hop_nonExtract     = 1.0;
-  this.hop_baggingFactor  = 1.00;  // from "Four Experiments on AA Util."
+  this.hop_baggingFactor  = 1.00;   // from "Four Experiments on AA Util."
 
-  this.icebathBaseTemp    = 314.00;       // 314.00'K = 40.85'C = 105.53'F
-  this.immersionChillerBaseTemp = 293.15; // 293.15'K = 20'C = 68'F = room temp
-  this.immersionMinTempC  = 50.0;         // must be > immersionChillerBaseTemp
+  this.icebathBaseTemp    = 314.00; // 314.00'K = 40.85'C = 105.53'F
+  this.immersionMinTempC  = 50.0;
 
   this.IAA_LF_boil        = 0.51;   // SEARCH
   this.fermentationFactor = 0.85;   // from lit., e.g. Garetz, Fix, Nielsen
@@ -391,9 +392,16 @@ this.computeIBU_SMPH = function() {
 
   if (ibu.holdTempCheckbox.value) {
     if (document.getElementById("forcedCoolingTimeHT")) {
-      document.getElementById("forcedCoolingTimeHT").innerHTML =
-         "Wort Forced-Cooling Time: " + ibu.FCT_HT.toFixed(1) +
-         " minutes to reach hold temperature"
+      if (ibu.FCT_HT < SMPH.maxCoolTime && ibu.FCT_HT >= 0) {
+        document.getElementById("forcedCoolingTimeHT").innerHTML =
+           "Wort Forced-Cooling Time: " + ibu.FCT_HT.toFixed(1) +
+           " minutes to reach hold temperature";
+      } else if (ibu.FCT_HT >= 0) {
+        document.getElementById("forcedCoolingTimeHT").innerHTML =
+           "<b>WARNING:</b> Wort never reaches hold temperature! " +
+           "Maximum cooling period is 2 hours. " +
+           "Increase immersion chiller decay factor.";
+      }
     }
   } else {
     if (document.getElementById("forcedCoolingTimeHT")) {
@@ -404,13 +412,27 @@ this.computeIBU_SMPH = function() {
   if (ibu.forcedDecayType.value != "forcedDecayCounterflow") {
     if (document.getElementById("forcedCoolingTime")) {
       if (ibu.units.value == "metric") {
-        document.getElementById("forcedCoolingTime").innerHTML =
-           "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
-           " minutes to reach 60&deg;C"
+        if (ibu.FCT60 < SMPH.maxCoolTime) {
+          document.getElementById("forcedCoolingTime").innerHTML =
+             "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
+             " minutes to reach 60&deg;C"
+        } else {
+          document.getElementById("forcedCoolingTime").innerHTML =
+             "<b>WARNING:</b> Wort never reaches 60&deg;C! " +
+             "Maximum cooling period is 2 hours. " +
+             "Increase immersion chiller decay factor.";
+        }
       } else {
-        document.getElementById("forcedCoolingTime").innerHTML =
-           "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
-           " minutes to reach 140&deg;F"
+        if (ibu.FCT60 < SMPH.maxCoolTime) {
+          document.getElementById("forcedCoolingTime").innerHTML =
+             "Wort Forced-Cooling Time: " + ibu.FCT60.toFixed(1) +
+             " minutes to reach 140&deg;F"
+        } else {
+          document.getElementById("forcedCoolingTime").innerHTML =
+             "<b>WARNING:</b> Wort never reaches 140&deg;F! " +
+             "Maximum cooling period is 2 hours. " +
+             "Increase immersion chiller decay factor.";
+        }
       }
     }
   } else {
@@ -682,7 +704,7 @@ function compute_concent_wort(ibu) {
   AA_xfer_mg  = 0.0; // mg of AA transferred (and cooled) via counterflow
   IAA_xfer_mg = 0.0; // mg of IAA transferred via counterflow
   FCT60 = -1.0;    // use negative number to indicate not yet post-whirlpool
-  FCT_HT = -1.0;   // use negative number to indicate not yet post-whirlpool
+  FCT_HT = 1.0;    // use positive number to indicate not yet post-whirlpool
 
   if (SMPH.verbose > 1) {
     console.log("\nStarting processing of each time point:");
@@ -721,9 +743,9 @@ function compute_concent_wort(ibu) {
       // temp with new function
       if (coolingMethod == "forcedDecayImmersion" &&
           postBoilTime >= whirlpoolTime) {
-        tempNoBase = tempK - SMPH.immersionChillerBaseTemp;
+        tempNoBase = tempK - expParamC_Kelvin;
         tempNoBase = tempNoBase + (-1.0*decayRate*tempNoBase*integrationTime);
-        tempK = tempNoBase + SMPH.immersionChillerBaseTemp;
+        tempK = tempNoBase + expParamC_Kelvin;
       }
       if (coolingMethod == "forcedDecayIcebath" &&
           postBoilTime >= whirlpoolTime) {
@@ -739,16 +761,20 @@ function compute_concent_wort(ibu) {
       if (holdTempCheckbox && tempK > holdTempK && !doneHoldTemp) {
         // if cool to target, use immersion chiller decay factor
         // regardless of the post-whirlpool cooling method
-        tempNoBase = tempK - SMPH.immersionChillerBaseTemp;
+        tempNoBase = tempK - expParamC_Kelvin;
         tempNoBase = tempNoBase + (-1.0*decayRate*tempNoBase*integrationTime);
-        tempK = tempNoBase + SMPH.immersionChillerBaseTemp;
+        tempK = tempNoBase + expParamC_Kelvin;
         // however, if tempExpParamA = 0 and C < holdTemp('C), this
         // means to instantaneously cool the wort to the target temperature
         if (ibu.tempExpParamA.value==0 && ibu.tempExpParamC.value < holdTemp) {
           tempK = holdTempK;
         }
-        whirlpoolTime += integrationTime;
-        whirlpoolTime = Number(whirlpoolTime.toFixed(4));
+        if (whirlpoolTime < origWhirlpoolTime + SMPH.maxCoolTime) {
+          whirlpoolTime += integrationTime;
+          whirlpoolTime = Number(whirlpoolTime.toFixed(4));
+        } else {
+          console.log("WARNING: wort never reaches hold temperature!");
+        }
         // console.log("POST-BOIL quickly cool to target " +
                     // (holdTempK-273.15).toFixed(2) +
                     // ", current temp = " + (tempK-273.15).toFixed(2) +
@@ -774,13 +800,15 @@ function compute_concent_wort(ibu) {
       if (FCT60 >= 0.0 && tempC >= 60.0) {
         FCT60 += integrationTime;
       }
-      if (tempC < SMPH.immersionMinTempC) {
+      // tempC will never reach tempExpParamC in finite time, so add 1
+      if (tempC < SMPH.immersionMinTempC ||
+          tempC < ibu.tempExpParamC.value+1.0) {
         finished = true;
       }
 
       // limit to whirlpool time plus two hours, just to prevent infinite loop
       // (after 2 hours, almost no increase in utilization anyway)
-      if (postBoilTime > whirlpoolTime + 120.0) {
+      if (postBoilTime > origWhirlpoolTime + SMPH.maxCoolTime) {
         finished = true;
       }
 
