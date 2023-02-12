@@ -41,6 +41,7 @@
 // Version 1.2.13: Nov 25, 2021 : change href targets from _parent to _blank
 // Version 1.2.14: May 18, 2022 : storage duration of 0 months is valid
 // Version 1.2.15: Jan 29, 2023 : limit default immersion decay factor
+// Version 1.2.16: Feb 12, 2023 : better defaults for forced cooling
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -140,8 +141,9 @@ ibu._construct = function() {
   "use strict";
   var idx = 0;
 
-  // color options
+  // color option and maximum forced-cooling time
   this.defaultColor = "#94476b"; // greyish red
+  this.maxCoolTime  = 180.0;   // max time to cool to target temp with immersion
 
   //----------------------------------------------------------------------------
   // declare objects that are input variables
@@ -206,7 +208,7 @@ ibu._construct = function() {
     if (keys[idx] == "_construct") {
       continue;
     }
-    if (keys[idx] == "defaultColor") {
+    if (keys[idx] == "defaultColor" || keys[idx] == "maxCoolTime") {
       continue;
     }
     this[keys[idx]].parent = "ibu";
@@ -495,7 +497,7 @@ ibu._construct = function() {
   this.whirlpoolTime.minPrecision = 0;
   this.whirlpoolTime.display = "";
   this.whirlpoolTime.min = 0.0;
-  this.whirlpoolTime.max = 120.0;
+  this.whirlpoolTime.max = 180.0;
   this.whirlpoolTime.description = "whirlpool time";
   this.whirlpoolTime.defaultValue = 0.0;
 
@@ -534,7 +536,7 @@ ibu._construct = function() {
   this.immersionDecayFactor.precision = -4;
   this.immersionDecayFactor.minPrecision = -4;
   this.immersionDecayFactor.display = "";
-  this.immersionDecayFactor.min = 0.00001;
+  this.immersionDecayFactor.min = 1.0e-8;
   this.immersionDecayFactor.max = 200.0;
   this.immersionDecayFactor.description = "immersion chiller rate constant";
   this.immersionDecayFactor.defaultColor = this.defaultColor;
@@ -555,7 +557,8 @@ ibu._construct = function() {
   this.counterflowRate.max = 500.0;
   this.counterflowRate.description = "counterflow chiller flow rate";
   this.counterflowRate.defaultColor = this.defaultColor;
-  this.counterflowRate.defaultValue = 2.082;
+  this.counterflowRate.defaultFunction = get_counterflowRate_default;
+  this.counterflowRate.defaultArgs = "";
 
   // icebathDecayFactor
   this.icebathDecayFactor.id = "ibu.icebathDecayFactor";
@@ -565,7 +568,7 @@ ibu._construct = function() {
   this.icebathDecayFactor.precision = -3;
   this.icebathDecayFactor.minPrecision = -3;
   this.icebathDecayFactor.display = "";
-  this.icebathDecayFactor.min = 0.00001;
+  this.icebathDecayFactor.min = 1.0e-8;
   this.icebathDecayFactor.max = 200.0;
   this.icebathDecayFactor.description = "ice bath rate constant";
   this.icebathDecayFactor.defaultColor = this.defaultColor;
@@ -2672,49 +2675,85 @@ function get_immersionDecayFactor_default() {
   postBoilVolume = get_postBoilVolume();
   immersionDefault = 0.6075 * Math.exp(-0.0704 * postBoilVolume);
 
+  // check for lower bound on decay factor
+  if (immersionDefault < 1.0e-8) {
+    immersionDefault = 1.0e-8;
+  }
+
   // make sure the default decay factor yields a reasonable cooling time.
-  if (ibu.tempExpParamA && ibu.tempExpParamC &&
-      ibu.tempExpParamA.value && ibu.tempExpParamC.value) {
-    A = ibu.tempExpParamA.value;
-    C = ibu.tempExpParamC.value;
-    // Get the time required to reach target temperature.
-    // If using hold temperature, check for that; else, set target temp to
-    // maximum of 50'C or baseline temp (param C) + 1.
-    if (ibu.holdTempCheckbox && ibu.holdTemp &&
-        ibu.holdTempCheckbox.value && ibu.holdTemp.value) {
-      targetT = ibu.holdTemp.value;
-    } else {
-      targetT = 50.0;
-      if (targetT <= C) {
-        targetT = C + 1.0;
-      }
-    }
-    // check for lower bound on decay factor
-    if (immersionDefault < 1.0e-10) {
-      immersionDefault = 1.0e-10;
-    }
-    requiredTime = Math.log((targetT - C) / A) / (-1.0 * immersionDefault);
-    // if time required to reach specified temp is greater than 2 hrs, limit it
-    if (requiredTime > 120.0) {
-      immersionDefault = Math.log((targetT - C) / A) / (-1.0 * 120.01);
-    }
+  // Use "standard" values for the immersion-chiller decay function parameters
+  // A and C, where A is (boiling - C) and C is 20'C.  It doesn't matter
+  // if these are not the same values used elsewhere, this is just a check.
+  C = 20.0;
+  A = 100.0 - C;
+  // Get the time required to reach target temperature.
+  // If using hold temperature, check for that; else, set target temp to 60'C
+  if (ibu.holdTempCheckbox && ibu.holdTemp &&
+      ibu.holdTempCheckbox.value && ibu.holdTemp.value) {
+    targetT = ibu.holdTemp.value;
+  } else {
+    targetT = 60.0;
+  }
+  requiredTime = Math.log((targetT - C) / A) / (-1.0 * immersionDefault);
+  // if time required to reach target temp is greater than maxCoolTime, limit it
+  if (requiredTime > ibu.maxCoolTime) {
+    immersionDefault = Math.log((targetT - C) / A) /
+                       (-1.0 * (ibu.maxCoolTime + .01));
   }
 
   return immersionDefault;
 }
 
 //------------------------------------------------------------------------------
+// get default for counterflow chiller
+
+function get_counterflowRate_default() {
+  var counterflowRateDefault = 0.0;
+
+  counterflowRateDefault = 2.082;
+
+  // make sure that the approximate time is less than maxCoolTime
+  if (get_postBoilVolume() / counterflowRateDefault > ibu.maxCoolTime) {
+    counterflowRateDefault = get_postBoilVolume() / ibu.maxCoolTime;
+  }
+
+  return counterflowRateDefault;
+}
+
+//------------------------------------------------------------------------------
 // get default for ice bath
 
 function get_icebathDecayFactor_default() {
+  var A = 0.0;
+  var C = 0.0;
   var icebathDefault = 0.0;
   var postBoilVolume = 0.0;
+  var requiredTime = 0.0;
+  var targetT = 0.0;
 
   postBoilVolume = get_postBoilVolume();
   icebathDefault = 0.4071 * Math.exp(-0.0754 * postBoilVolume);
-  if (icebathDefault < 1.0e-10) {
-    icebathDefault = 1.0e-10;
+
+  // check for lower bound on decay factor
+  if (icebathDefault < 1.0e-8) {
+    icebathDefault = 1.0e-8;
   }
+
+  // make sure the default decay factor yields a reasonable cooling time.
+  // Use "standard" values for the icebath decay function parameters
+  // A and C, where A is (boiling - C) and C is 40'C.  It doesn't matter
+  // if these are not the same values used elsewhere, this is just a check.
+  C = 40.0;
+  A = 100.0 - C;
+  targetT = 60.0;
+  requiredTime = Math.log((targetT - C) / A) / (-1.0 * icebathDefault);
+  // if time required to reach target temp is greater than twice maxCoolTime,
+  // limit it
+  if (requiredTime > 2.0 * ibu.maxCoolTime) {
+    icebathDefault = Math.log((targetT - C) / A) /
+                       (-1.0 * (2.0 * ibu.maxCoolTime + .01));
+  }
+
   return icebathDefault;
 }
 

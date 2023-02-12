@@ -14,6 +14,7 @@ Version 1.0.5 : May  18, 2022 : Storage duration of 0 months is valid
 Version 1.0.6 : Dec. 10, 2022 : Put introductory text into FAQ document
 Version 1.0.7 : Jan. 25, 2023 : Print how long it takes to reach "hold" temp
 Version 1.0.8 : Jan. 29, 2023 : Bug fix in temp. decay, indicate max cool time
+Version 1.0.9 : Feb. 12, 2023 : Fix the bug fix.  Better timing info
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -174,9 +175,9 @@ Version 1.0.8 : Jan. 29, 2023 : Bug fix in temp. decay, indicate max cool time
   </p>
 
   <p style="margin-left:3em">Forced Cooling Method:<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayImmersion" value="forcedDecayImmersion" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.immersionDecayFactor" onchange="common.set(ibu.immersionDecayFactor,1)"></span>)<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayCounterflow" value="forcedDecayCounterflow" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.counterflowRate" onchange="common.set(ibu.counterflowRate,1)"></span> <span id="rateUnits">gallons/min</span>)<br>
-  &emsp;&emsp;<input type="radio" id="forcedDecayIcebath" value="forcedDecayIcebath" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=4 autocomplete="off" id="ibu.icebathDecayFactor" onchange="common.set(ibu.icebathDecayFactor,1)"></span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayImmersion" value="forcedDecayImmersion" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off" checked>immersion chiller (exponential decay factor: <span id="forcedDecayImmersionFactor"><input type="text" STYLE="text-align:right" size=5 autocomplete="off" id="ibu.immersionDecayFactor" onchange="common.set(ibu.immersionDecayFactor,1)"></span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayCounterflow" value="forcedDecayCounterflow" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">counterflow chiller (wort flow rate: <span id="forcedDecayCounterflowRate"><input type="text" STYLE="text-align:right" size=5 autocomplete="off" id="ibu.counterflowRate" onchange="common.set(ibu.counterflowRate,1)"></span> <span id="rateUnits">gallons/min</span>)<br>
+  &emsp;&emsp;<input type="radio" id="forcedDecayIcebath" value="forcedDecayIcebath" name="ibu.forcedDecayType" onclick="common.set(ibu.forcedDecayType,1)" autocomplete="off">ice bath (exponential decay factor: <span id="forcedDecayIcebathFactor"><input type="text" STYLE="text-align:right" size=5 autocomplete="off" id="ibu.icebathDecayFactor" onchange="common.set(ibu.icebathDecayFactor,1)"></span>)<br>
   </p>
 
   <p>
@@ -294,6 +295,7 @@ SMPH.initialize_SMPH();
 <b>1.0.6</b>: (2022-Dec-10)  Put introductory text into FAQ.<br>
 <b>1.0.7</b>: (2023-Jan-25)  Print how long it takes to reach hold temp.<br>
 <b>1.0.8</b>: (2023-Jan-29)  Bug fix in temp. decay, indicate max cool time.<br>
+<b>1.0.9</b>: (2023-Feb-12)  Fix the bug fix, better timing information.<br>
 </small>
 
 <p>
