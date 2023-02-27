@@ -5,6 +5,8 @@
 //
 // Version 1.0.0 : September 3, 2022
 //         Initial version.
+// Version 1.0.1 : February 26, 2023
+//         Yeast decay rate is 4% annually (refrigerated), not 4% per month
 //
 // -----------------------------------------------------------------------------
 
@@ -189,7 +191,8 @@ this.compute_yeastAlcohol = function() {
   var ABV = 0.0;
   var ABW = 0.0;
   var AE = 0.0;
-  var attrition = 0.04; // loss of yeast cells per month
+  var attritionPerYear = 0.04; // loss of yeast cells per *year*
+  var attritionPerMonth = 0.0; // loss of yeast cells per *month*
   var billionCells = 0.0;
   var cellsPerGram = 20.0; // billion cells per gram
   var FG = yeastAlcohol.FG.value;
@@ -229,7 +232,8 @@ this.compute_yeastAlcohol = function() {
   }
   billionCells = numCellsRecommended / 1000000000.0;
 
-  viabilityBase = 1.0 - attrition;
+  attritionPerMonth = attritionPerYear / 12.0;
+  viabilityBase = 1.0 - attritionPerMonth;
   viability = Math.pow(viabilityBase, yeastAge);
   viableCellsPerGram = cellsPerGram * viability;
   yeastWeightGrams = billionCells / viableCellsPerGram;
