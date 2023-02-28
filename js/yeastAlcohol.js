@@ -7,6 +7,8 @@
 //         Initial version.
 // Version 1.0.1 : February 26, 2023
 //         Yeast decay rate is 4% annually (refrigerated), not 4% per month
+// Version 1.1.0 : February 28, 2023
+//         Add storage temperature, affecting yeast decay rate
 //
 // -----------------------------------------------------------------------------
 
@@ -101,6 +103,22 @@ this.initialize_yeastAlcohol = function() {
   this.yeastAge.defaultColor = this.defaultColor;
   this.yeastAge.updateFunction = yeastAlcohol.compute_yeastAlcohol;
 
+  this.storageTemp = new Object;
+  this.storageTemp.id = "yeastAlcohol.storageTemp";
+  this.storageTemp.inputType = "float";
+  this.storageTemp.userSet = 0;
+  this.storageTemp.convertToMetric = common.convertFahrenheitToCelsius;
+  this.storageTemp.convertToImperial = common.convertCelsiusToFahrenheit;
+  this.storageTemp.precision = 1;
+  this.storageTemp.minPrecision = 0;
+  this.storageTemp.display = "2.5";
+  this.storageTemp.min = 0.0;
+  this.storageTemp.max = 104.0;
+  this.storageTemp.description = "storage temperature";
+  this.storageTemp.defaultValue = 2.5;
+  this.storageTemp.defaultColor = this.defaultColor;
+  this.storageTemp.updateFunction = yeastAlcohol.compute_yeastAlcohol;
+
   this.OG = new Object;
   this.OG.id = "yeastAlcohol.OG";
   this.OG.inputType = "float";
@@ -142,13 +160,14 @@ this.initialize_yeastAlcohol = function() {
 
   //----------------------------------------------------------------------------
   // set variables
-  common.set(yeastAlcohol.units,    0);
-  common.set(yeastAlcohol.type,     0);
-  common.set(yeastAlcohol.SG,       0);
-  common.set(yeastAlcohol.volume,   0);
-  common.set(yeastAlcohol.yeastAge, 0);
-  common.set(yeastAlcohol.OG,       0);
-  common.set(yeastAlcohol.FG,       0);
+  common.set(yeastAlcohol.units,      0);
+  common.set(yeastAlcohol.type,       0);
+  common.set(yeastAlcohol.SG,         0);
+  common.set(yeastAlcohol.volume,     0);
+  common.set(yeastAlcohol.yeastAge,   0);
+  common.set(yeastAlcohol.storageTemp, 0);
+  common.set(yeastAlcohol.OG,         0);
+  common.set(yeastAlcohol.FG,         0);
 
   //----------------------------------------------------------------------------
   // set verbosity and compute (initial) results
@@ -168,15 +187,23 @@ function setUnits() {
     if (document.getElementById('yeastAlcohol.volumeUnits')) {
       document.getElementById('yeastAlcohol.volumeUnits').innerHTML = "litres";
     }
+    if (document.getElementById('yeastAlcohol.tempUnits')) {
+      document.getElementById('yeastAlcohol.tempUnits').innerHTML = "C";
+    }
     // update variables
     common.set(yeastAlcohol.volume, 0);
+    common.set(yeastAlcohol.storageTemp, 0);
   } else {
     // update displayed units
     if (document.getElementById('yeastAlcohol.volumeUnits')) {
       document.getElementById('yeastAlcohol.volumeUnits').innerHTML = "gallons";
      }
+    if (document.getElementById('yeastAlcohol.tempUnits')) {
+      document.getElementById('yeastAlcohol.tempUnits').innerHTML = "F";
+     }
     // update variables
     common.set(yeastAlcohol.volume, 0);
+    common.set(yeastAlcohol.storageTemp, 0);
   }
 
   return true;
@@ -191,8 +218,8 @@ this.compute_yeastAlcohol = function() {
   var ABV = 0.0;
   var ABW = 0.0;
   var AE = 0.0;
-  var attritionPerYear = 0.04; // loss of yeast cells per *year*
   var attritionPerMonth = 0.0; // loss of yeast cells per *month*
+  var attritionPerYear = 0.0;  // loss of yeast cells per *year*
   var billionCells = 0.0;
   var cellsPerGram = 20.0; // billion cells per gram
   var FG = yeastAlcohol.FG.value;
@@ -203,6 +230,7 @@ this.compute_yeastAlcohol = function() {
   // var q = 0.0;
   // var RE = 0.0;
   var SG = yeastAlcohol.SG.value;
+  var storageTemp = yeastAlcohol.storageTemp.value;
   var type = yeastAlcohol.type.value;
   var viability = 0.0;
   var viabilityBase = 0.0;
@@ -218,34 +246,53 @@ this.compute_yeastAlcohol = function() {
     console.log("yeast OG   = " + SG);
     console.log("yeast vol. = " + volume);
     console.log("yeast age  = " + yeastAge);
+    console.log("storage temp  = " + storageTemp);
     console.log("alcohol OG = " + OG);
     console.log("alcohol FG = " + FG);
   }
 
-  // convert from SG to degress Plato using formula from DeClerck
-  plato = 668.72 * SG - 463.37 - 205.347 * SG * SG;
-  volumeMl = volume * 1000.0;
-  // Fix and Fix: for ales, 0.75 x 10^6 per ml and degree plato, 2x for lagers
-  numCellsRecommended = 750000.0 * plato * volumeMl;
-  if (type == "lager") {
-    numCellsRecommended *= 2.0;
-  }
-  billionCells = numCellsRecommended / 1000000000.0;
-
-  attritionPerMonth = attritionPerYear / 12.0;
-  viabilityBase = 1.0 - attritionPerMonth;
-  viability = Math.pow(viabilityBase, yeastAge);
-  viableCellsPerGram = cellsPerGram * viability;
-  yeastWeightGrams = billionCells / viableCellsPerGram;
-
-  if (yeastAlcohol.verbose > 0) {
-    console.log("recommended cells = " + numCellsRecommended.toFixed(2));
-    console.log("yeast viability   = " + viability.toFixed(4));
-    console.log("viable cells/gram = " + viableCellsPerGram.toFixed(4));
-  }
-
-  document.getElementById('yeastAlcohol.yeastWeight').innerHTML = 
-                          yeastWeightGrams.toFixed(2);
+  if (storageTemp <= 40.0) {
+    // limit the storage temp to not below freezing.
+    if (storageTemp < 0.0) {
+      storageTemp = 0.0;
+    }
+    // convert from SG to degress Plato using formula from DeClerck
+    plato = 668.72 * SG - 463.37 - 205.347 * SG * SG;
+    volumeMl = volume * 1000.0;
+    // Fix and Fix: for ales, 0.75 x 10^6 per ml and degree plato, 2x for lagers
+    numCellsRecommended = 750000.0 * plato * volumeMl;
+    if (type == "lager") {
+      numCellsRecommended *= 2.0;
+    }
+    billionCells = numCellsRecommended / 1000000000.0;
+  
+    // Attrition is 4% per year at refrigeration temperatures (e.g. 2.5'C)
+    // and 20% per year at 75'F or 23.89'C.  Source:
+    // https://koehlerbeer.wordpress.com/2008/06/07/rehydrating-dry-yeast-with-dr-clayton-cone/
+    // Assume that if stored at 40'C (104'F) for one year, none of the yeast
+    // remain viable.  This can be modeled with an exponential increase
+    // in attrition.  The parameters were fit to the data points
+    // (2.5, 0.04), (23.89, 0.20), (40.0, 1.0).
+    attritionPerYear = 0.0143362 * Math.exp(0.1055835 * storageTemp) + 0.0214;
+    attritionPerMonth = attritionPerYear / 12.0;
+    viabilityBase = 1.0 - attritionPerMonth;
+    viability = Math.pow(viabilityBase, yeastAge);
+    viableCellsPerGram = cellsPerGram * viability;
+    yeastWeightGrams = billionCells / viableCellsPerGram;
+  
+    if (yeastAlcohol.verbose > 0) {
+      console.log("Attrition per year = " + attritionPerYear.toFixed(2));
+      console.log("recommended cells = " + numCellsRecommended.toFixed(2));
+      console.log("yeast viability   = " + viability.toFixed(4));
+      console.log("viable cells/gram = " + viableCellsPerGram.toFixed(4));
+    }
+  
+    document.getElementById('yeastAlcohol.yeastWeight').innerHTML = 
+                            yeastWeightGrams.toFixed(2) + " grams";
+    } else {
+    document.getElementById('yeastAlcohol.yeastWeight').innerHTML = 
+        "no viable yeast when stored at this temperature";
+    }
 
   // compute original extract and apparent extract using formulae from DeClerck
   OE = 668.72 * OG - 463.37 - 205.347 * OG * OG;

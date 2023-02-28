@@ -6,7 +6,8 @@ sg_vol_time.html : HTML for AlchemyOverlord web page, yeast/alcohol sub-page
 Written by John-Paul Hosom
 Copyright © 2022 by John-Paul Hosom, all rights reserved.
 Version 1.0.0 : September 3, 2022. Initial version.
-Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
+Version 1.0.1 : February 26, 2023. Decay rate is 4% annually, not 4% per month
+Version 1.1.0 : February 28, 2023. Add yeast storage temperature parameter
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -20,8 +21,9 @@ Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
   <div id="content">
 
   <h2>Dry-Yeast Pitching Calculator</h2>
-  <p>Enter the original gravity, wort volume, and age of yeast to
-  estimate the grams of dry yeast to pitch for ales or lagers:
+  <p>Enter the original gravity, wort volume, age of yeast, and
+  approximate storage temperature in order to estimate the grams 
+  of dry yeast to pitch for ales or lagers:
   </p>
 
   <p>
@@ -52,15 +54,20 @@ Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
     <td>wort volume:</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="yeastAlcohol.volume" onchange="common.set(yeastAlcohol.volume,1)"> <span id="yeastAlcohol.volumeUnits">XX</span></td>
   </tr>
-  <tr>
 
   <tr>
       <td>age of yeast:</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="yeastAlcohol.yeastAge" onchange="common.set(yeastAlcohol.yeastAge,1)"> months</td>
   </tr>
 
+  <tr>
+      <td>storage temperature:</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="yeastAlcohol.storageTemp" onchange="common.set(yeastAlcohol.storageTemp,1)"> &deg;<span id="yeastAlcohol.tempUnits">XX</span></td>
+  </tr>
+
+  <tr>
     <td>weight of dry yeast:</td>
-    <td><small><span id="yeastAlcohol.yeastWeight">0.0</span> grams</small></td>
+    <td><small><span id="yeastAlcohol.yeastWeight">0.0</span></small></td>
   </tr>
   </tbody>
   </table>
@@ -77,10 +84,17 @@ Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
   (An Analysis of Brewing Techniques, page 68) of 1.5x10^6 cells per ml 
   and degree Plato for lagers, and half that for ales.  
   It assumes that the 
-  <a href="http://seanterrill.com/2011/04/01/dry-yeast-viability/">dry yeast has 20 billion cells per gram</a> 
+  <a href="http://seanterrill.com/2011/04/01/dry-yeast-viability/" target="_blank">dry yeast has 20 billion cells per gram</a> 
   at packaging, and that 
-  <a href="https://koehlerbeer.wordpress.com/2008/06/07/rehydrating-dry-yeast-with-dr-clayton-cone/">every year 4% of the currently-viable cells become unviable</a>
-  when the yeast are stored in a refrigerator (as they should be).
+  <a href="https://koehlerbeer.wordpress.com/2008/06/07/rehydrating-dry-yeast-with-dr-clayton-cone/" target="_blank">4% of the currently-viable cells become unviable every year when stored in a refrigerator (as they should be).  When stored at room temperature, 20% of the currently-viable cells become unviable every year.</a>  It also assumes (based on very meager evidence) an exponential reduction in viability with temperature, and no viable cells after storage for one year at 40&deg;C (104&deg;F).
+  </p>
+  <p>
+  Since you're here, I found the following article about rehydrating yeast 
+  very interesting: 
+  <a href="https://draymans.com/dry-yeast-rehydration-its-critical/" target="_blank">Drayman's Recommendations on Yeast Rehydration</a>.
+  While rehydration may not be necessary for low- or 
+  medium-gravity worts, sometimes you want to be sure that you're treating
+  your yeast in the best way possible.
   </p>
   <br>
 
@@ -110,15 +124,15 @@ Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
   <p>
   This calculator uses an equation from Jan DeClerck (provided by Jester Goldman in
   <em>Beer and Brewing</em> (2016)) to 
-  <a href="https://beerandbrewing.com/specific-gravity-or-just-a-matter-of-degree/">
+  <a href="https://beerandbrewing.com/specific-gravity-or-just-a-matter-of-degree/" target="_blank">
   convert from specific gravity to degrees Plato</a>, 
   equation 3b from Anthony Cutaia, Anna-Jean Reid, and R. Alex Speers in
   <em>Journal of the Institute of Brewing</em> (2009) to
-  <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2050-0416.2009.tb00387.x">
+  <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/j.2050-0416.2009.tb00387.x" target="_blank">
   convert from original and apparent extract (original and final gravity, in degress 
   Plato) to alcohol by weight</a>,
   and an equation from Michael Hall in <em>Zymurgy</em> (1995) to 
-  <a href="https://www.homebrewersassociation.org/attachments/0000/2497/Math_in_Mash_SummerZym95.pdf">
+  <a href="https://www.homebrewersassociation.org/attachments/0000/2497/Math_in_Mash_SummerZym95.pdf" target="_blank">
   convert from alcohol by weight (ABW) to alcohol by volume (ABV)</a>.  In particular:
   <table style="margin-left:3em">
   <tbody>
@@ -170,7 +184,8 @@ Version 1.0.1 : September 3, 2022. Decay rate is 4% annually, not 4% per month
   <a name="versions"></a>
   <h4>Versions:</h4>
   <b>1.0.0</b>: (2022-Sep-03)  Initial version.<br>
-  <b>1.0.1</b>: (2023-Feb-26)  Yeast decay rate is 4% per year, not 4% per month.  Thank you Tony Martinez for pointing out this mistake!.<br>
+  <b>1.0.1</b>: (2023-Feb-26)  Yeast decay rate is 4% per year, not 4% per month.  Thank you Tony Martinez for pointing out this mistake!<br>
+  <b>1.1.0</b>: (2023-Feb-28)  Add yeast storage temperature parameter.<br>
   </small>
 
   <p>
