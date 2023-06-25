@@ -128,31 +128,32 @@ There is one more group of factors that aren't in the SMPH model because I don't
 <p>
 
 <span id="heading1">5. SMPH Parameter Estimation</span><br>
-For most parameters in the SMPH model, estimated values could be obtained from the literature, direct experimentation, or reasonable assumptions. For a few parameters, though, there was no good estimate: (a) the loss of IAAs to trub during the boil, (b) what percent of the available alpha acids are quickly oxidized when added to hot wort, and (c) what percent of the alpha acids that oxidize during storage are dissolved when added to wort. In addition, I wanted to use all available data to get better estimates of the two parameters used in a hopping-rate correction model. A set of 347 measured IBU and IAA values were used to estimate values for these five parameters. (Four IBU and four IAA values were taken from Val Peacock's reported numbers <a href="#references_SMPH">[Peacock, p. 162]</a>. The other values came from my experiments.)
+  For most parameters in the SMPH model, estimated values could be obtained from the literature, direct experimentation, or reasonable assumptions. For a few parameters, though, there was no good estimate: (a) the loss of IAAs to trub during the boil, (b) what percent of the available alpha acids are quickly oxidized when added to hot wort, and (c) what percent of the alpha acids that oxidize during storage are dissolved when added to wort. In addition, I wanted to use all available data to get better estimates of the two parameters used in a hopping-rate correction model. A set of 347 measured IBU and IAA values were used to estimate values for these five parameters. (Four IBU and four IAA values were taken from Val Peacock's reported numbers <a href="#references_SMPH">[Peacock, p. 162]</a>. The other values came from my experiments.)
 
-<p>
-While this may seem like a lot of data for estimating five parameters, the estimation was complicated by the fact that I often didn't have precise estimates of the alpha-acid content on brew day and/or how the hops had degraded during storage. Each measured value was therefore associated with a small parameter search for these experiment-specific values as well as the five common values.
+  <p>
+  While this may seem like a lot of data for estimating five parameters, the estimation was complicated by the fact that I often didn't have precise estimates of the alpha-acid content on brew day and/or how the hops had degraded during storage. Each measured value was therefore associated with a small parameter search for these experiment-specific values as well as the five common values.
 
-<p>
-Optimizing the parameter values to fit the data resulted in a root-mean-square (RMS) error of 1.6 IBUs and a maximum difference of 7.1 IBUs (for a condition that had 81 measured IBUs). The estimated loss factor for IAAs during the boil is 0.51. The percent of available alpha acids that quickly oxidize when added to hot wort is estimated at 11%. The percent of storage-generated oxidized alpha acids that dissolve in the wort is estimated at 33%. The solubility of alpha acids (for hopping-rate correction) is estimated to have a minimum limit of 200 ppm (below which all alpha acids are dissolved) and a maximum of 580 ppm.
+  <p>
+  Optimizing the parameter values to fit the data resulted in a root-mean-square (RMS) error of 1.6 IBUs and a maximum difference of 7.1 IBUs (for a condition that had 81 measured IBUs). The estimated loss factor for IAAs during the boil is 0.51. The percent of available alpha acids that quickly oxidize when added to hot wort is estimated at 11%. The percent of storage-generated oxidized alpha acids that dissolve in the wort is estimated at 33%. The solubility of alpha acids (for hopping-rate correction) is estimated to have a minimum limit of 200 ppm (below which all alpha acids are dissolved) and a maximum of 580 ppm.
 
-<p>
+  <p>
 
-<span id="heading1">6. Test Results</span><br>
-To evaluate and compare different IBU models, I collected an additional set of 18 IBU values that were not used in parameter estimation or for cross-validation of the SMPH model. These values ranged from 20.2 to 70.0 IBUs, including a variety of ale styles (two stouts, one ESB, one Kölsch, an English IPA, a West-Coast IPA, and twelve single-malt-and-single-hops (SMASH) beers with different timings of the hop additions).  All IBU values were measured from finished beer.
+  <span id="heading1">6. Test Results</span><br>
+  To evaluate and compare different IBU models, I collected an additional set of 18 IBU values that were not used in parameter estimation or for cross-validation of the SMPH model. These values ranged from 20.2 to 70.0 IBUs, including a variety of ale styles (two stouts, one ESB, one Kölsch, an English IPA, a West-Coast IPA, and twelve single-malt-and-single-hops (SMASH) beers with different timings of the hop additions).  All IBU values were measured from finished beer.
 
-<p>
-The table below shows, for five IBU models, the RMS error and maximum difference between a measured and modeled IBU value on this set of 18 data points. 
+  <p>
+  The table below shows, for five IBU models, the RMS error and maximum difference between a measured and modeled IBU value on this set of 18 data points. 
 
-<table class="table"  style="margin-left: 3em;">
-<tbody>
-<tr>
-<td><strong>Model</strong></td>
-<td><strong>RMS Error (IBUs)</strong>
-</td>
-<td><strong>Max. Error (IBUs)</strong>
-</td>
-</tr>
+  <table class="table"  style="margin-left: 3em;">
+  <caption style="caption-side:bottom"> <em>Table 1. A numerical comparison of measured and predicted values for five IBU models.</em></caption>
+  <tbody>
+  <tr>
+  <td><strong>Model</strong></td>
+  <td><strong>RMS Error (IBUs)</strong>
+  </td>
+  <td><strong>Max. Error (IBUs)</strong>
+  </td>
+  </tr>
 <tr>
 <td>SMPH</td>
 <td>2.5</td>
@@ -182,10 +183,83 @@ The table below shows, for five IBU models, the RMS error and maximum difference
 </table>
 
 <p>
-Figure 2 compares measured IBUs and predicted IBUs for the five models, with measured IBUs on the horizontal axis and predicted IBUs on the vertical axis.  The straight dashed line from lower left to middle right indicates where predicted and measured IBUs are equal.  It can be seen that on this set of data, the Tinseth, Rager, and mIBU models all have very large predicted IBUs for the higher-IBU beers. The Garetz model has a good fit with the higher-IBU samples, but predicts values about 50% too low in the range of 20 to 25 IBUs.
+Figure 2 compares measured IBUs and predicted IBUs for the five models, with measured IBUs on the horizontal axis and predicted IBUs on the vertical axis.  The straight dashed line from lower left to middle right indicates where predicted and measured IBUs are equal.  It can be seen that on this set of data, the Tinseth, Rager, and mIBU models all have very large predicted IBUs for the higher-IBU beers. The Garetz model has a good fit with the higher-IBU samples, but predicts values about 50% too low in the range of 20 to 25 IBUs.  The SMPH model has an RMS error 4.5 times lower than the next-best model (Garetz) and 12 times lower than the Tinseth model.
 
 <p>
-<img src="testResults.png"/> <span id="caption"> Figure 2. A comparison of measured and predicted values for five IBU models.</span>
+<img src="testResults.png"/> <span id="caption"> Figure 2. A visual comparison of measured and predicted values for five IBU models.</span>
+
+<p>
+
+When I conducted the analysis for Table 1 and Figure 2, I believed that all 
+of these models predict IBUs in beer.  I have since found that when developing
+his model, Prof. Tinseth measured IBUs from samples of wort, not beer, and 
+so the Tinseth model may be better suited for predicting IBUs in wort.  
+(He also collected "data ...  that small breweries provided" 
+<a href="#references_SMPH">[Hieronymous, p. 185]</a>, and it's unknown if 
+this data was for wort or beer, or to what degree his model was developed 
+from his samples of wort or the data from other breweries.  Therefore, it's 
+not entirely clear if it's appropriate to apply his model to the prediction 
+of IBUs in beer, even though that is how his model is used.) 
+I've been unable to find out if the Rager model was based 
+on data from wort or beer, but the general similarity of the utilization curves 
+implies that it was based on the same type of data as the Tinseth model.  
+The Garetz model was developed for finished beer, not wort 
+<a href="#references_SMPH">[Garetz, p. 124]</a>.
+<p>
+
+There is a significant difference between IBUs measured from wort and IBUs
+measured from beer.  Not only does fermentation reduce the IBU level
+through a reduction of isomerized alpha acids (by about 15%), but alpha 
+acids that are present in the wort (having not yet undergone isomerization) 
+are not present in the finished beer 
+<a href="#references_SMPH">[Lewis and Young, p. 259]</a>.  These alpha acids 
+are not bitter <a href="#references_SMPH">[Shellhammer, p. 169]</a>, but 
+they do add to the measured IBU value by absorbing light at 275 nm.  
+The concentration of these alpha acids at the end of the boil will vary 
+greatly, depending on the hop schedule and how much isomerization has 
+occurred up until flameout.  The IBUs of wort can be 30% to 50% higher than 
+the IBUs of beer <a href="#references_SMPH">[Justus, p. 72]</a>, with this 
+wide variation possibly explained by different concentrations of alpha 
+acids in the wort.  The IBU was designed to be correlated with the bitterness 
+of finished beer <a href="#references_SMPH">[Peacock, pp. 157-161]</a>, and 
+the presence of alpha acids in unfermented wort will make IBUs measured 
+from wort less reliable as a predictor of bitterness than IBUs measured 
+from beer.
+<p>
+
+If you use the (unmodified) Tinseth, Rager, or mIBU models to predict IBUs in 
+your beer (which is the standard use of these models), 
+then Table 1 and Figure 2 provide an accurate evaluation of the prediction 
+results.  If you consider these models to be better suited for wort
+and not beer, and you modify these models to account for losses of alpha acids 
+and the reduction in isomerized alpha acids that occurs during fermentation, 
+then Figure 3 may provide a better comparison of the Tinseth, 
+Rager, and mIBU models with measured IBU values.  In this example, I've 
+reduced the Tinseth, Rager, and mIBU utilization by 40%, providing a better 
+fit with measured IBU values.  If you use a different scaling factor, 
+your results may differ.
+<p>
+
+After modifying the Tinseth formula to reduce predicted IBUs by 40%, this 
+model has an RMS error of 7.9 IBUs and a maximum error of 14.3 IBUs, and 
+the Rager model has an RMS error of 15.4 IBUs and a maximum error of 54.8 IBUs.
+The mIBU model, which is based on the Tinseth model, has an RMS error of 
+7.5 IBUs and a maximum error of 12.7 IBUs.
+Figure 3 shows a much better overall fit for these models with measured IBUs, 
+implying that these models should be modified in order to predict IBUs in beer.
+However, at IBUs less than 30 the Tinseth model now consistently underpredicts
+IBUs by an average of 6.6 IBUs, Rager underpredicts by 5.2 IBUs, and 
+mIBU underpredicts by 7.3 IBUs.  At IBUs greater than 30, the Tinseth model 
+now overpredicts by an average of 7.5 IBUs, Rager overpredicts by 17.5 IBUs, 
+and mIBU underpredicts by 6.1 IBU.  
+The RMS error of the SMPH model is still three times lower than that of 
+the Tinseth model (2.5 vs 7.9 IBUs, respectively), and the SMPH model 
+underpredicts at all IBUs by an average of only 1.7 IBUs, demonstrating 
+that the SMPH model has significant advantages over other models even after
+modifying other models to predict IBUs in beer and not wort.
+<p>
+
+<img src="testResults-modifyTinseth.jpg"/> <span id="caption"> Figure 3. A visual comparison of measured and predicted values for three IBU models after reducing the predicted IBUs for these models by 40%.</span>
 
 <p>
 
@@ -230,13 +304,17 @@ The SMPH model would not have been possible without the excellent research and p
 <li>G. J. Fix and L. A. Fix, <em>An Analysis of Brewing Techniques</em>. Brewers Publications, 1997.</li>
 <li>M. Garetz, <em>Using Hops: The Complete Guide to Hops for the Craft Brewer</em>. HopTech, 1st edition, 1994.</li>
 <li>C. D. Hahn, <a href="https://ir.library.oregonstate.edu/downloads/7p88cn389" target="_blank"><em>A Comprehensive Evaluation of the Nonvolatile Chemistry Affecting the Sensory BItterness Intensity of Highly Hopped Beers</em></a>.  Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2017.</li>
+<li>S. Hieronymus, <em>For the Love of Hops: The Practical Guide to Aroma, Bitterness, and the Culture of Hops</em>. Brewers Publications, 2012.</li>
 <li>J. S. Hough, D. E. Briggs, R. Stevens, and T. W. Young, <em>Malting and Brewing Science. Volume 2: Hopped Wort and Beer</em>. Springer-Science+Business Media, B. V., 2nd edition, 1982.</li>
+<li>A. Justus, "Tracking IBU Through the Brewing Process: The Quest for Consistency", in <em>MBAA Technical Quarterly</em>, vol. 55, no. 3, pp. 67-74, 2018.</li>
+<li>M. J. Lewis and T. W. Young, <em>Brewing</em>. Springer Science+Business Media, 2nd edition, 2001.</li>
 <li>M. G. Malowicki, <a href="https://ir.library.oregonstate.edu/downloads/bz60d000z" target="_blank"><em>Hop Bitter Acid Isomerization and Degradation Kinetics in a Model Wort-Boiling System</em></a>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2005.</li>
 <li>J. P. Maye, R. Smith, and J. Leker, "Humulinone Formation in Hops and Hop Pellets and Its Implications for Dry Hopped Beers", in <em>MBAA Technical Quarterly</em>, vol. 51, no. 1, pp. 23-27, 2016.</li>
 <li>J. P. Maye and R. Smith, "Dry Hopping and Its Effects on the International Bitterness Unit Test and Beer Bitterness", in <em>MBAA Technical Quarterly</em> vol. 53, no. 3, pp. 134-136, 2016.</li>
 <li>E. J. Parkin, <a href="https://ir.library.oregonstate.edu/downloads/ht24wn23n" target="_blank"><em>The Influence of Polyphenols and Humulinones on Bitterness in Dry-Hopped Beer</em></a>, Master of Science thesis (advisor: T. H. Shellhammer), Oregon State University, 2014.</li>
 <li>V. Peacock, "The International Bitterness Unit, its Creation and What it Measures", in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
 <li>D. R. Reed, T. Tanaka, and A. H. McDaniel. "Diverse Tastes: Genetics of Sweet and Bitter Perception", in <em>Physiology &amp; Behavior</em>, vol. 88, no. 3, pp. 215-226, 2006.</li>
+<li>T. H. Shellhammer, "Hop Components and Their Impact on the Bitterness Quality of Beer," in <em>Hop Flavor and Aroma: Proceedings of the 1st International Brewers Symposium</em>, ed. Thomas H. Shellhammer, Master Brewers Association of the Americas, 2009.</li>
 <li>Thermoscientific, "Beer Analysis -- Bitterness". <a href="https://assets.thermofisher.com/TFS-Assets/MSD/Application-Notes/SN53084-analyze-beer-bitterness.pdf" target="_blank">https://assets.thermofisher.com/TFS-Assets/MSD/Application-Notes/SN53084-analyze-beer-bitterness.pdf</a>. Accessed Oct. 2, 2021.</li>
 <li>K. Troester, "Should the Kraeusen fall back into the beer?". <a href="http://braukaiser.com/blog/blog/2010/02/14/should-the-kraeusen-fall-back-into-the-beer/" target="_blank">http://braukaiser.com/blog/blog/2010/02/14/should-the-kraeusen-fall-back-into-the-beer/</a>. Accessed Oct. 2, 2021.</li>
 </ul>
