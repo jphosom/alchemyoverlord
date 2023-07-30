@@ -42,6 +42,7 @@
 // Version 1.2.14: May 18, 2022 : storage duration of 0 months is valid
 // Version 1.2.15: Jan 29, 2023 : limit default immersion decay factor
 // Version 1.2.16: Feb 12, 2023 : better defaults for forced cooling
+// Version 1.2.17: Jul 30, 2023 : change storageDuration maximum to 120 months
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -2329,7 +2330,7 @@ function hopAdditionsSet(param) {
     ibu.add[arrayIdx].storageDuration.minPrecision = 0;
     ibu.add[arrayIdx].storageDuration.display = "";
     ibu.add[arrayIdx].storageDuration.min = 0.0;
-    ibu.add[arrayIdx].storageDuration.max = 60.0;
+    ibu.add[arrayIdx].storageDuration.max = 120.0;
     ibu.add[arrayIdx].storageDuration.description = "storage duration (months)";
     ibu.add[arrayIdx].storageDuration.defaultFunction = get_storageDuration_default;
     ibu.add[arrayIdx].storageDuration.defaultArgs = arrayIdx;
