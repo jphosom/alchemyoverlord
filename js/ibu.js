@@ -2178,7 +2178,7 @@ function hopAdditionsSet(param) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".hopForm";
     if (constructInputTable && ibu.hopTableSize >= 4) {
-      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopForm,1)'> <option value='cones'>cones</option> <option value='pellets'>pellets</option> <option value='(default)'>(default)</option></td> "
+      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].hopForm,1)'> <option value='cones'>cones</option> <option value='pellets'>pellets</option> <option value='(default)'>(default)</option></td> "
     }
     ibu.add[arrayIdx].hopForm = new Object;
     ibu.add[arrayIdx].hopForm.id = tableID;
@@ -2292,7 +2292,7 @@ function hopAdditionsSet(param) {
     tableID = "ibu.add"+idx+".hopPackaging";
     if (constructInputTable && ibu.hopTableSize >= 8 &&
         hopDecayMethod == "decaySpecify") {
-      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].hopPackaging,1)'> <option value='pro. nitrogen'>pro. nitrogen</option> <option value='inert flush'>inert flush</option> <option value='vacuum seal'>vacuum seal</option> <option value='wrapped'>wrapped</option> <option value='loose'>loose</option> <option value='(default)'>(default)</option></td> "
+      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].hopPackaging,1)'> <option value='pro. nitrogen'>pro. nitrogen</option> <option value='inert flush'>inert flush</option> <option value='vacuum seal'>vacuum seal</option> <option value='wrapped'>wrapped</option> <option value='loose'>loose</option> <option value='(default)'>(default)</option></td> "
     }
     ibu.add[arrayIdx].hopPackaging = new Object;
     ibu.add[arrayIdx].hopPackaging.id = tableID;
@@ -2352,7 +2352,7 @@ function hopAdditionsSet(param) {
     tableID = "ibu.add"+idx+".storageTemp";
     if (constructInputTable && ibu.hopTableSize >= 10 &&
         hopDecayMethod == "decaySpecify") {
-      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].storageTemp,1)'> <option value='room temp'>room temp</option> <option value='refrigerator'>refrigerator</option> <option value='freezer'>freezer</option></td> "
+      table += "<td> <select style='width:8.4em;' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].storageTemp,1)'> <option value='room temp'>room temp</option> <option value='refrigerator'>refrigerator</option> <option value='freezer'>freezer</option></td> "
     }
     ibu.add[arrayIdx].storageTemp = new Object;
     ibu.add[arrayIdx].storageTemp.id = tableID;
@@ -2463,7 +2463,7 @@ function hopAdditionsSet(param) {
     arrayIdx = Number(idx-1);
     tableID = "ibu.add"+idx+".kettleOrDryHop";
     if (constructInputTable && ibu.hopTableSize >= 12) {
-      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onclick='common.set(ibu.add["+arrayIdx+"].kettleOrDryHop,1)'> <option value='kettle'>kettle</option> <option value='dryHop'>dry hop</option></td> "
+      table += "<td> <select style='width:7.4em;' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].kettleOrDryHop,1)'> <option value='kettle'>kettle</option> <option value='dryHop'>dry hop</option></td> "
     }
     arrayIdx = Number(idx-1);
     ibu.add[arrayIdx].kettleOrDryHop = new Object;
