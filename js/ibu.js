@@ -2320,7 +2320,7 @@ function hopAdditionsSet(param) {
     tableID = "ibu.add"+idx+".storageDuration";
     if (constructInputTable && ibu.hopTableSize >= 9 &&
         hopDecayMethod == "decaySpecify") {
-      table += "<td> <input type='text' size='1.8' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].storageDuration,1)'> <small>months</small></td> "
+      table += "<td> <input type='text' size='3.0' value='' autocomplete='off' id='"+tableID+"' onchange='common.set(ibu.add["+arrayIdx+"].storageDuration,1)'> <small>months</small></td> "
     }
     ibu.add[arrayIdx].storageDuration = new Object;
     ibu.add[arrayIdx].storageDuration.id = tableID;

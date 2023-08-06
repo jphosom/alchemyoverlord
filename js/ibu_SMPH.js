@@ -933,7 +933,8 @@ function compute_concent_wort(ibu) {
         if (SMPH.verbose > 1) {
           console.log("ADDING HOPS ADDITION " + hopIdx + " at " + t + "min :");
           console.log("  AA=" + ibu.add[hopIdx].AA.value + "%, weight=" +
-                      ibu.add[hopIdx].weight.value.toFixed(3) + " grams " +
+                      ibu.add[hopIdx].weight.value.toFixed(3) + " grams, " +
+                      " vol="+currVolume.toFixed(3) +
                       " and [AA]_init = " + AA_init.toFixed(2));
           console.log("  at time " + t.toFixed(2) +
                     " with volume " + currVolume.toFixed(3) +

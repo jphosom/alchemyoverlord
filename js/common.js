@@ -93,6 +93,10 @@ validate = function(variable, input) {
     check.value = inputValue;
   }
 
+  if (variable.inputType == "string") {
+    check.value = input;
+  }
+
   if (!check.valid) {
     window.alert("For " + variable.description + ", input '" + input +
                  "' is not valid.");
@@ -130,7 +134,7 @@ validateFloatOrString = function(variable, input) {
     if (inputValue < variable.min || inputValue > variable.max) {
       check.valid = false;
     }
-    check.value = inputValue;
+    check.value = input;
   } else {
     for (idx = 0; idx < variable.inputStrings.length; idx++) {
       // console.log("checking " + variable.inputStrings[idx]);
@@ -150,15 +154,128 @@ validateFloatOrString = function(variable, input) {
 }
 
 //------------------------------------------------------------------------------
+// validate user input as a time.
+// A time can be either the normal HH[:|.]MM [AM|PM], or it can be minutes only
+// (in which case minutes less than 10 must be preceded by a 0)
+// The output 'check' contains:
+//    - valid : true if the input is a valid value, else false
+//    - useDefaultValue : true if we explicitly want to go back to default value
+//    - value : the (numeric or other) value of the (string) input
 
-this.getPrecision = function(valueString) {
-  var dotIndex = valueString.indexOf(".");
+validateTime = function(variable, input) {
+  var check = new Object();
+  var found = [];
+  var hour = 0;
+  var timePattern = "^(0?[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]) ?([AaPp][Mm])?$";
+  var timePatternMin = "^([0-5][0-9])$";
+
+  // if 'd' for default, then don't change a saved value; if no saved
+  // value, then generate an error (no saved value should never occur)
+  if (input == "D" || input == "d" || input == "'D'" || input == "'d'") {
+    check.valid = false;
+    check.value = "";
+    return check;
+  }
+
+  if (input == "") {
+    check.valid = false;
+    check.useDefaultValue = true;
+    check.value = "";
+  }
+
+  check.useDefaultValue = false;
+  check.valid = false;
+
+  found = input.match(timePattern);
+  if (found) {
+    hour = parseInt(found[1]);
+    if (found[4]) {
+      if (hour < 12 && found[4].toUpperCase() == "PM") {
+        hour += 12;
+      }
+      if (hour == 12 && found[4].toUpperCase() == "AM") {
+        hour -= 12;
+      }
+    } else {
+    }
+    if (hour < 24) {
+      check.valid = true;
+      check.value = input;
+    }
+  } else {
+    found = input.match(timePatternMin);
+    if (found) {
+      check.valid = true;
+      check.value = input;
+    }
+  }
+
+  if (!check.valid) {
+    window.alert("For " + variable.description + ", input '" + input +
+                 "' is not valid.");
+  }
+
+  return check;
+}
+
+//------------------------------------------------------------------------------
+// parse a (valid) time into hours
+
+this.parseTime = function(timeStr) {
+  var found = [];
+  var hour = 0;
+  var min = 0;
+  var timePattern = "^([0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]) ?([AaPp][Mm])?$";
+  var HHMM = 0;
+
+  if (!timeStr || timeStr == "" || timeStr == "--:--" || 
+      Number(timeStr) < 0.0) {
+    return -1;
+  }
+  found = timeStr.match(timePattern);
+  if (!found) {
+    console.log("CAN'T PARSE TIME " + timeStr);
+    return -1;
+  }
+
+  // console.log("hour: " + found[1]);
+  // console.log("min: " + found[3]);
+  // console.log("ampm: " + found[4]);
+  hour = parseInt(found[1]);
+  min = parseInt(found[3]);
+  if (found[4]) {
+    if (hour < 12 && found[4].toUpperCase() == "PM") {
+      hour += 12;
+    }
+    if (hour == 12 && found[4].toUpperCase() == "AM") {
+      hour -= 12;
+    }
+  }
+  if (hour >= 24) {
+    console.log("CAN'T PARSE TIME " + timeStr);
+    return 0;
+  }
+
+  // console.log("HOUR: " + hour);
+  // console.log("MIN:  " + min);
+  HHMM = hour + min/60.0;
+
+  return HHMM;
+}
+
+//------------------------------------------------------------------------------
+
+this.getPrecision = function(value) {
+  var valueString = "";
+  var dotIndex = 0;
   var precision = 0;
 
+  valueString = value.toString();  // make sure it's a string
+  dotIndex = valueString.indexOf(".");
   if (dotIndex >= 0) {
     precision = valueString.length - dotIndex - 1;
-    if (precision > 6) {
-      precision = 6;
+    if (precision > 8) {
+      precision = 8;
     }
     return precision;
   } else {
@@ -177,7 +294,8 @@ this.set = function(variable, haveUserInput) {
   var savedValueExists;
 
   console.log("\n");
-  console.log("------------------- SET " + variable.id + " ------------------");
+  console.log("-------------- SET " + variable.id +
+              " ---- (user input " + haveUserInput + ") ----");
 
   if (haveUserInput) {
     if (variable.inputType == "radioButton") {
@@ -198,9 +316,16 @@ this.set = function(variable, haveUserInput) {
       console.log("SELECT VALUE : " + check.value);
     } else if (variable.inputType == "floatOrString") {
       inputString = document.getElementById(variable.id).value;
-      console.log("  input = " + inputString);
+      // console.log("  input = " + inputString);
       check = validateFloatOrString(variable, inputString);
       // console.log("  validate = "+check.valid+", " +check.useDefaultValue);
+      if (!check.valid || check.useDefaultValue) {
+        console.log("  input is not valid, or we want the default");
+      }
+    } else if (variable.inputType == "time") {
+      inputString = document.getElementById(variable.id).value;
+      console.log("TIME = " + inputString);
+      check = validateTime(variable, inputString);
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
@@ -208,7 +333,7 @@ this.set = function(variable, haveUserInput) {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
       check = validate(variable, inputString);
-      // console.log("  validate = "+check.valid + ", "+check.useDefaultValue);
+      console.log("  validate = "+check.valid + ", "+check.useDefaultValue);
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
@@ -244,7 +369,7 @@ this.set = function(variable, haveUserInput) {
     }
   } else {
     variable.value = check.value;
-    // console.log("set value to input: " + variable.value);
+    console.log("set value to input: " + variable.value);
     // get and set the precision
     if ("precision" in variable) {
       variable.precision = common.getPrecision(inputString);
@@ -252,12 +377,14 @@ this.set = function(variable, haveUserInput) {
         variable.precision = variable.minPrecision;
       }
     }
-    // convert to metric, so that 'value' is always in metric
-    if (("convertToMetric" in variable) &&
-        window[variable.parent]["units"].value == "imperial") {
-      // console.log("  converting " + variable.value + " to metric");
-      variable.value = variable.convertToMetric(variable.value);
-      console.log("  metric value is " + variable.value);
+    if (!isNaN(variable.value) && variable.value != "") {
+      // convert to metric, so that 'value' is always in metric
+      if (("convertToMetric" in variable) &&
+          window[variable.parent]["units"].value == "imperial") {
+        // console.log("  converting " + variable.value + " to metric");
+        variable.value = variable.convertToMetric(variable.value);
+        console.log("  metric value is " + variable.value);
+      }
     }
     variable.userSet = 1;
   }
@@ -319,6 +446,7 @@ this.set = function(variable, haveUserInput) {
 
   // save or unset value
   if (variable.userSet) {
+    console.log("SETTING " + variable.id);
     common.setSavedValue(variable, haveUserInput);
   } else {
     common.unsetSavedValue(variable, haveUserInput);
@@ -390,6 +518,17 @@ this.updateHTML = function(variable) {
                   // variable.display);
   } else if (variable.inputType == "int") {
     variable.display = outputNumber.toFixed(0);
+  } else if (variable.inputType == "string") {
+    variable.display = variable.value;
+  } else if (variable.inputType == "time") {
+    if (window[variable.parent]["timeUnits"]) {
+      variable.display = common.convertTimeToStr(variable.value, 
+                             window[variable.parent]["timeUnits"].value,
+                             variable.timeFormat);
+    } else {
+      variable.display = common.convertTimeToStr(variable.value, "24",
+                             variable.timeFormat);
+    }
   } else {
     variable.display = outputNumber.toString();
   }
@@ -416,6 +555,77 @@ this.updateHTML = function(variable) {
   return true;
 }
 
+
+//------------------------------------------------------------------------------
+// TIME CONVERSION
+// JPH TODO : implement 24hour conversion
+
+this.convertTimeToStr = function(timeFloat, timeUnits, timeFormatOverride) {
+  var timeStr = "";
+  var ampm = "";
+  var precision = 0;
+  var timePatternMin = "^([0-5][0-9])$";
+
+  // console.log("in convertTimeToStr(" + timeFloat + ", " + timeUnits + 
+              // ", " + timeFormatOverride + ")");
+  if (timeFloat < 0.0 || timeFloat == "") {
+    return "";
+  }
+
+  // if it's not a number or only 2 digits, assume it's already in time format.
+  if (isNaN(timeFloat) || timeFloat.toString().match(timePatternMin)) {
+    return timeFloat;
+  }
+
+  timeStr = timeFloat.toString();
+  precision = common.getPrecision(timeStr);
+  // if there are only 2 places past the decimal, assume already in time format
+  if (precision == 2) {
+    return timeFloat;
+  }
+
+  // if there aren't 8 places past the decimal, something went wrong
+  if (precision != 8) {
+    window.alert("Time is in unknown format: precision neither 2 nor 8");
+    return timeFloat;
+  }
+
+  // override time format if needed
+  if (timeFormatOverride == "24") {
+    timeUnits = "24";
+  }
+  if (timeFormatOverride == "12") {
+    timeUnits = "12";
+  }
+
+  var hrs = Math.floor(timeFloat);
+  var min = Math.round((timeFloat - hrs) * 60.0);
+  if (min < 10) {
+    min = "0" + min;
+  }
+  if (timeUnits == "24" && timeFormatOverride != "noAMPM") {
+    if (hrs < 10) {
+      hrs = "0" + hrs;
+    }
+    timeStr = hrs + ":" + min;
+  } else {
+    ampm = "am";
+    if (hrs == 12) {
+      ampm = "pm";
+    }
+    if (hrs >= 13) {
+      hrs -= 12;
+      ampm = "pm";
+    }
+    if (timeFormatOverride == "noAMPM") {
+      ampm = "";
+    }
+    timeStr = hrs + ":" + min + " " + ampm;
+  }
+  // console.log("leaving convertTimeToStr() with " + timeStr);
+  return timeStr;
+}
+
 //------------------------------------------------------------------------------
 // UNIT CONVERSION
 
@@ -439,6 +649,11 @@ this.convertInchesToCm = function(input) {
   return output;
 }
 
+this.convertLitersToOunces = function(input) {
+  var output = 128.0 * input / 3.78541;
+  return output;
+}
+
 this.convertLitersToGallons = function(input) {
   var output = input / 3.78541;
   return output;
@@ -446,6 +661,11 @@ this.convertLitersToGallons = function(input) {
 
 this.convertGallonsToLiters = function(input) {
   var output = input * 3.78541;
+  return output;
+}
+
+this.convertOuncesToLiters = function(input) {
+  var output = (input/128.0) * 3.78541;
   return output;
 }
 
@@ -466,6 +686,11 @@ this.convertFahrenheitToCelsius = function(input) {
 
 this.convertCelsiusToFahrenheit = function(input) {
   var output = (input * 1.8) + 32.0;
+  return output;
+}
+
+this.convertFahrenheitToCelsius = function(input) {
+  var output = (input - 32.0) * 5.0/9.0;
   return output;
 }
 
@@ -500,6 +725,16 @@ this.convertPlatoToSG = function(input) {
   // the inverse of De Clerck's formula
   var output = (-668.72 + Math.sqrt(447186.438 + (821.388*(-463.37-input)))) /
                -410.694;
+  return output;
+}
+
+this.convertOzToMl = function(input) {
+  var output = input * 29.5735;
+  return output;
+}
+
+this.convertMlToOz = function(input) {
+  var output = input / 29.5735;
   return output;
 }
 
@@ -673,9 +908,14 @@ this.loadFromFile = function(files) {
       // replace any 'boilTimeTable' with 'steepTimeTable' (backward compatible)
       key = key.replace(/boilTimeTable/, "steepTimeTable");
       if (key.length > 0) {
-        formattedValue = keyValue.split("=")[1].trim();
+        formattedValue = keyValue.split(/=(.+)/)[1].trim();
+        console.log("FORMATTED VALUE: " + formattedValue);
         // get whatever is between " and "; and put it in 'value'
-        value = formattedValue.match(/(")(.+)(";)/)[2];
+        if (formattedValue != "\"\";") {
+          value = formattedValue.match(/(")(.+)(";)/)[2];
+        } else {
+          value = "";
+        }
         console.log("  setting " + key + " = '" + value + "'");
         localStorage.setItem(key, value);
       }

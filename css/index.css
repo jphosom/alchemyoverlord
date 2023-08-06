@@ -169,6 +169,10 @@ body {
 	max-width:11em;
 }
 
+.smallInput {
+  width: 5em;
+}
+
 /*----------------------------------------------------------------------------*/
 /* define table of hops additions */
 
