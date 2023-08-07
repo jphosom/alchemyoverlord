@@ -43,6 +43,9 @@
 // Version 1.2.15: Jan 29, 2023 : limit default immersion decay factor
 // Version 1.2.16: Feb 12, 2023 : better defaults for forced cooling
 // Version 1.2.17: Jul 30, 2023 : change storageDuration maximum to 120 months
+// Version 1.2.18: Aug  6, 2023 : change 'onclick' to 'onchange' because
+//                                onclick has been overloaded and doesn't
+//                                behave the same way on Firefox,Chrome,Safari
 // -----------------------------------------------------------------------------
 
 //==============================================================================
