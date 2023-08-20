@@ -20,29 +20,25 @@ Version 1.0.1 : Dec. 10, 2022 : initial version.
   <ul>
   <li>
   <b>What is the SMPH model?</b><br>
-  The SMPH model is a method for estimating IBUs. This method accounts for
-  the contributions to the IBU from both isomerized alpha acids (IAAs) and
-  auxiliary bittering compounds (ABCs).
+  The SMPH model is a method for estimating IBUs in finished beer.
+  This method accounts for the contributions to the IBU from both
+  isomerized alpha acids (IAAs) and auxiliary bittering compounds (ABCs).
+  It also accounts for changes to IBUs from the
+  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html"> hopping rate</a>,
+  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html"> hop form (cones or pellets)</a>,
+  a hop stand or whirlpool,
+  wort cooling time,
+  wort gravity,
+  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html"> wort clarity</a>,
+  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html"> wort pH</a>,
+  fermentation,
+  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html"> krausen loss</a>,
+  and dry hopping.
   The techniques used in this method are described in the blog posts
   <a href="blog/11-a-summary-of-factors-affecting-ibus/alchemyoverlord-blog-content11.html">
   "A Summary of Factors Affecting IBUs"</a> and
   <a href="blog/31-ibus-and-the-smph-model/alchemyoverlord-blog-content31.html">
   "IBUs and the SMPH Model"</a>.
-  This calculator takes into account utilization from any hop stand or
-  whirlpool, as well as the time it takes to cool the wort using an immersion
-  chiller, counterflow chiller, or ice bath.  Other optional adjustments include
-  <a href="blog/14-hopping-rate-correction-based-on-alpha-acid-solubility/alchemyoverlord-blog-content14.html">
-  an alpha-acid solubility limit</a>,
-  <a href="blog/19-the-effect-of-ph-on-utilization-and-ibus/alchemyoverlord-blog-content19.html">
-  adjustment of IBUs based on wort pH</a>,
-  adjustment of IBUs based on
-  <a href="blog/27-how-lautering-and-wort-clarity-affect-ibus/alchemyoverlord-blog-content27.html">
-  wort clarity</a> and
-  <a href="blog/22-the-impact-of-krausen-loss-on-ibus/alchemyoverlord-blog-content22.html">
-  krausen loss</a>,
-  <a href="blog/28-hop-cones-vs-pellets-ibu-differences/alchemyoverlord-blog-content28.html">
-  adjustment based on the use of hop pellets instead of whole cones</a>, and
-  IBUs from dry-hopping.
   This model is based on my own experiments (including more than 300 measured
   IBU values) and work previously published by Val Peacock, Tom Shellhammer,
   and Mark Malowicki.  While this model would not have been possible without
@@ -50,6 +46,7 @@ Version 1.0.1 : Dec. 10, 2022 : initial version.
   and so the name SMPH is not an acronym but simply a sequence of four letters.
   </li>
   <br>
+
   <li>
   <b>How accurate is this model?</b><br>
   On a test set of 18 measured IBU values from finished beer, the SMPH
@@ -60,6 +57,34 @@ Version 1.0.1 : Dec. 10, 2022 : initial version.
   "IBUs and the SMPH Model"</a>.
   </li>
   <br>
+
+  <li>
+  <b>I'm used to the Tinseth model.  How does SMPH compare?</b><br>
+  The Tinseth model was developed using IBUs from pre-fermentation wort,
+  not beer.  Fermentation will reduce IBUs, and so the Tinseth model
+  will generally predict values that are larger than SMPH values and
+  also larger than IBUs in finished beer.  There are many other factors that
+  are accounted for in the SMPH model but not in the Tinseth model.
+  In particular, other IBU models only account for alpha-acid isomerization;
+  they do not account for the auxiliary bittering compounds that influence
+  both bitterness and measured IBU values.  Therefore,
+  there is no good way to translate or convert between IBUs predicted
+  by the Tinseth model and IBUs predicted by SMPH.
+  </li>
+  <br>
+
+  <li>
+  <b>I'm using a recipe that says the beer will have 50 IBUs.  Where did that number come from?</b><br>
+  Many recipes provide IBU estimates from the Tinseth formula because it is
+  widely known.  Other recipes might give estimates from the Rager or
+  Garetz models, perhaps the SMPH model, or (ideally) IBUs measured by
+  a laboratory on a beer produced by this recipe.  If the recipe doesn't
+  specify where the IBU number came from, there is no way to know.
+  It would be very helpful if recipes put the model name next to the IBU
+  value, e.g. <code>"50 IBUs (Tinseth)"</code>.
+  </li>
+  </br>
+
   <li>
   <b>Is this calculator free? Are you tracking any data?</b><br>
   The calculators on this site are (and always will be) completely free to use.
@@ -69,6 +94,7 @@ Version 1.0.1 : Dec. 10, 2022 : initial version.
   from this website.
   </li>
   <br>
+
   <li>
   <b>How can I save or load a recipe?</b><br>
   To save settings to a text file or load them from a file, use the "Save"
@@ -346,7 +372,7 @@ Version 1.0.1 : Dec. 10, 2022 : initial version.
   <p>
   </center>
   <p>
-  <small>Copyright &copy; 2018-2022 John-Paul Hosom, all rights reserved.
+  <small>Copyright &copy; 2018-2023 John-Paul Hosom, all rights reserved.
   All product and company names are trademarks&trade; or registered&reg;
   trademarks of their respective holders. Use of these names does not imply
   any affiliation with, endorsement of, or endorsement by them.

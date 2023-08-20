@@ -16,6 +16,7 @@ Version 1.0.7 : Jan. 25, 2023 : Print how long it takes to reach "hold" temp
 Version 1.0.8 : Jan. 29, 2023 : Bug fix in temp. decay, indicate max cool time
 Version 1.0.9 : Feb. 12, 2023 : Fix the bug fix.  Better timing info
 Version 1.0.10: Aug.  6, 2023 : Fix hop selection buttons in Safari
+Version 1.0.11: Aug. 19, 2023 : Add note and FAQ about comparing models
 ------------------------------------------------------------------------- --!>
 
 <html>
@@ -28,6 +29,11 @@ Version 1.0.10: Aug.  6, 2023 : Fix hop selection buttons in Safari
  <a name="top_SMPH"></a>
 <div id="content">
   <h2>IBU Calculator Using the SMPH Method</h2>
+  NOTE: This method has been calibrated with measured IBUs from finished beer.
+  For this and <a href="ibu_SMPH_FAQ.html">other reasons</a>, it may predict
+  values that are quite different from other models (such as the Tinseth
+  model).<br>
+  <p>
   <a href="ibu_SMPH_FAQ.html">Frequently Asked Questions (FAQ) and documentation.</a>
   </p>
 
@@ -298,6 +304,7 @@ SMPH.initialize_SMPH();
 <b>1.0.8</b>: (2023-Jan-29)  Bug fix in temp. decay, indicate max cool time.<br>
 <b>1.0.9</b>: (2023-Feb-12)  Fix the bug fix, better timing information.<br>
 <b>1.0.10</b>: (2023-Aug-06)  Fix hop selection buttons in Safari.  Thanks to David Barrow for pointing this out!<br>
+<b>1.0.11</b>: (2023-Aug-29)  Add note and FAQ about comparing models, from suggestions by David Barrow.<br>
 </small>
 
 <p>
@@ -312,7 +319,7 @@ Reset:
 <button type="button" onclick="common.clearSavedValues()"> clear all saved IBU inputs </button>
 </center>
 <p>
-<small>Copyright &copy; 2018-2022 John-Paul Hosom, all rights reserved.
+<small>Copyright &copy; 2018-2023 John-Paul Hosom, all rights reserved.
 All product and company names are trademarks&trade; or registered&reg;
 trademarks of their respective holders. Use of these names does not imply
 any affiliation with, endorsement of, or endorsement by them.

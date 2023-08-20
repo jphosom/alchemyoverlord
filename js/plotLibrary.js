@@ -43,7 +43,7 @@ function createPlotObject() {
                xAxisWidthPx: 1, xAxisColor: "rgb(0,0,0,0.4)",
                xGridWidthPx: 1, xGridColor: "rgb(32,32,32,0.25)",
                yMin: 0.0, yMax: 10.0, yMinor: undefined, yMajor: undefined,
-               yPrecision: 1, yLabel: "Y axis",
+               yPrecision: 1, yLabel: "Y axis", yRotate: 1,
                yAxisWidthPx: 1, yAxisColor: "rgb(0,0,0,0.4)",
                yGridWidthPx: 1, yGridColor: "rgb(32,32,32,0.25)",
                defaultColor: "black", font: "16px Arial",
@@ -112,6 +112,7 @@ function mapY(plot, y) {
 //   plot.yMajor = 0.5;
 //   plot.yPrecision = 2;
 //   plot.yLabel = "Y axis";
+//   plot.yRotate = 1;
 //
 //   plot.yAxisWidthPx = 1;
 //   plot.yAxisColor = "rgb(0,0,0,0.8)";
@@ -170,16 +171,22 @@ function createPlot(ctx, plot) {
   xStr = plot.xMax.toFixed(plot.xPrecision);
   textWidthPx = ctx.measureText(xStr).width;
   extraPaddingPx = textWidthPx / 2 - paddingPx + 0.5;
-  yStr = plot.yMax.toFixed(plot.yPrecision);
-  textWidthPx = ctx.measureText(yStr).width;
-  if (textWidthPx / 2 - paddingPx > extraPaddingPx) {
-    extraPaddingPx = textWidthPx / 2 - paddingPx + 0.5;
+  if (plot.yRotate) {
+    yStr = plot.yMax.toFixed(plot.yPrecision);
+    textWidthPx = ctx.measureText(yStr).width;
+    if (textWidthPx / 2 - paddingPx > extraPaddingPx) {
+      extraPaddingPx = textWidthPx / 2 - paddingPx + 0.5;
+    }
   }
 
   // compute width and height of plotting area, in pixels
   plot.widthOffsetPx = paddingPx;  // left-most padding
   if (plot.yLabel && plot.yLabel.length > 0) {
     plot.widthOffsetPx += plot.fontHeightPx + paddingPx;
+  }
+  if (!plot.yRotate) {
+    yStr = plot.yMax.toFixed(plot.yPrecision);
+    plot.widthOffsetPx += ctx.measureText(yStr).width;
   }
   if (plot.yMajor > 0) {
     plot.widthOffsetPx += plot.fontHeightPx + plot.ticSizePx;
@@ -1144,6 +1151,7 @@ function plotMajorX(ctx, plot, x, tics, grid, values) {
 function plotMajorY(ctx, plot, y, tics, grid, values) {
   var posXpx = 0;
   var posYpx = 0;
+  var textHeightPx = 0.0;
   var textWidthPx = 0.0;
   var valueYpx = 0.0;
   var yStr = "";
@@ -1177,11 +1185,19 @@ function plotMajorY(ctx, plot, y, tics, grid, values) {
     valueYpx = mapY(plot, y);
     yStr = y.toFixed(plot.yPrecision);
     textWidthPx = ctx.measureText(yStr).width;
+    textHeightPx = plot.fontHeightPx;
     posXpx = plot.widthOffsetPx - plot.ticSizePx - plot.paddingPx;
-    posYpx = valueYpx + textWidthPx/2.0;
+    if (plot.yRotate) {
+      posYpx = valueYpx + textWidthPx/2.0;
+    } else {
+      posYpx = valueYpx + textHeightPx/2.0 - 2;
+      posXpx -= ctx.measureText(yStr).width;
+    }
     ctx.save();
     ctx.translate(posXpx, posYpx);
-    ctx.rotate(-Math.PI/2.0);
+    if (plot.yRotate) {
+      ctx.rotate(-Math.PI/2.0);
+    }
     ctx.fillStyle = plot.defaultColor;
     ctx.fillText(yStr, 0, 0);
     ctx.restore();  // revert to pre-rotated axes
