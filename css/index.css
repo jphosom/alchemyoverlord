@@ -10,10 +10,12 @@
 
 html {
   color: black;
+  height: 100%;
 }
 
 body {
   margin: 1ex;
+  height: 100%;
   font-size: 100%;
   font-family: sans-serif;
   line-height: 120%;
@@ -171,6 +173,9 @@ body {
 
 .smallInput {
   width: 5em;
+}
+.mediumInput {
+  width: 8em;
 }
 
 /*----------------------------------------------------------------------------*/
