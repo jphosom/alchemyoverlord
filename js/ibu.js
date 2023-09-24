@@ -46,6 +46,8 @@
 // Version 1.2.18: Aug  6, 2023 : change 'onclick' to 'onchange' because
 //                                onclick has been overloaded and doesn't
 //                                behave the same way on Firefox,Chrome,Safari
+// Version 1.3.0 : Sep 24, 2023 : change beta acid default to scale with
+//                                the alpha-acid value set by the user.
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -1514,7 +1516,11 @@ function get_AA_default(arrayIdx) {
 // get default beta-acid rating (either general or variety-specific)
 
 function get_BA_default(arrayIdx) {
+  var AA = 0.0;
+  var defaultAA = 0.0;
   var defaultValue = 5.0;  // approximate value over many varieties
+  var scaling = 0.0;
+  var userSetAA = 0;
   var value = 0.0;
   var variety = "";
 
@@ -1522,7 +1528,17 @@ function get_BA_default(arrayIdx) {
   value = defaultValue;
   if (variety != "(unspecified)") {
     if (hops[variety].BA) {
-      value = hops[variety].BA;
+      userSetAA = ibu.add[arrayIdx].AA.userSet;
+      if (userSetAA && hops[variety].AA) {
+        // The beta-acid percent varies with the alpha-acid percent.
+        // If the user has set the AA%, adjust the default BA by the known AA%.
+        defaultAA = hops[variety].AA;
+        AA = ibu.add[arrayIdx].AA.value;
+        scaling = AA / defaultAA;
+        value = scaling * hops[variety].BA;
+      } else {
+        value = hops[variety].BA;
+      }
     }
   }
 
@@ -2221,6 +2237,8 @@ function hopAdditionsSet(param) {
     ibu.add[arrayIdx].AA.defaultArgs = arrayIdx;
     ibu.add[arrayIdx].AA.defaultColor = ibu.defaultColor;
     ibu.add[arrayIdx].AA.updateFunction = updateFunction;
+    ibu.add[arrayIdx].AA.additionalFunction = get_BA_default;
+    ibu.add[arrayIdx].AA.additionalFunctionArgs = arrayIdx;
     ibu.add[arrayIdx].AA.parent = "ibu";
   }
 
@@ -2887,7 +2905,6 @@ function get_fermentorVolume_default() {
 
   return value;
 }
-
 
 }
 ibu._construct();

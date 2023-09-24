@@ -9,6 +9,9 @@
 //         However, re-writing ibu.js to be more modular is too daunting.
 //         If there is a bug in ibu.js, it may need to be fixed here,
 //         and vice-versa.
+// Version 1.1.0 : September 24, 2023
+//          change beta acid default to scale with the alpha-acid value
+//          that has been set by the user. Also, storage duration of 0 is valid.
 //
 // -----------------------------------------------------------------------------
 
@@ -89,6 +92,8 @@ this.initialize_hopFresh = function() {
   this.AA.defaultFunction = get_AA_default;
   this.AA.defaultArgs = "";
   this.AA.defaultColor = defaultColor;
+  // this.AA.additionalFunction = get_BA_default;
+  // this.AA.additionalFunctionArgs = "";
 
   this.BA = new Object;
   this.BA.id = "hopFresh.BA";
@@ -101,7 +106,6 @@ this.initialize_hopFresh = function() {
   this.BA.max = 100.0;
   this.BA.description = "hops beta acid rating";
   this.BA.defaultFunction = get_BA_default;
-  this.BA.defaultArgs = "";
   this.BA.defaultColor = defaultColor;
 
   this.k = new Object;
@@ -248,7 +252,11 @@ function get_AA_default() {
 // get default beta-acid rating (either general or variety-specific)
 
 function get_BA_default() {
+  var AA = 0.0;
+  var defaultAA = 0.0;
   var defaultValue = 5.0;  // approximate value over many varieties
+  var scaling = 0.0;
+  var userSetAA = 0;
   var value = 0.0;
   var variety = "";
 
@@ -256,7 +264,20 @@ function get_BA_default() {
   value = defaultValue;
   if (variety != "(unspecified)") {
     if (hops[variety].BA) {
-      value = hops[variety].BA;
+      userSetAA = hopFresh.AA.userSet;
+      if (userSetAA && hops[variety].AA) {
+        // The beta-acid percent varies with the alpha-acid percent.
+        // If the user has set the AA%, adjust the default BA by the known AA%
+        defaultAA = hops[variety].AA;
+        AA = hopFresh.AA.value;
+        scaling = AA / defaultAA;
+        value = scaling * hops[variety].BA;
+        // console.log("orig BA = " + hops[variety].BA + "; with AA set to " +
+                  // AA + " and default AA of " + defaultAA + ", scaling is " +
+                  // scaling);
+      } else {
+        value = hops[variety].BA;
+      }
     }
   }
 
@@ -324,7 +345,7 @@ function computeFreshnessFactor() {
   var TF = 0.0;
 
   // if we haven't defined some variable(s) (yet), just return some value
-  if (!k || !hopPackaging || !storageDuration_months || !storageTemp) {
+  if (!k || !hopPackaging || storageDuration_months < 0) {
     return 0.90;
   }
 
@@ -704,6 +725,9 @@ this.compute_hopFresh = function() {
   if (hopFresh.verbose > 0) {
     console.log("============================================================");
   }
+
+  // if the user sets AA, the BA default might change.  Need to update HTML
+  common.set(hopFresh.BA, 0)
 
   if (!hopFresh.HSI.userSet) {
     freshnessFactor =  computeFreshnessFactor();
