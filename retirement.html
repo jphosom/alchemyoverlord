@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+retirement.html: HTML for retirement planning. No warranties express or implied.
+Written by John-Paul Hosom
+Copyright © 2023 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : Aug. 12, 2023. Initial version
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+    <style>
+      .paneTable {
+        border-spacing: 10px;
+        padding: 10px 10px 10px 10px;
+        border: 1px solid grey;
+      }
+    </style>
+  </head>
+  <body>
+
+  <a name="top_retire"></a>
+  <h2>Retirement Calculator</h2>
+
+  <p>This page provides a calculator for planning for expenses
+  and income during (semi-)retirement years.
+  It does not account for unexpected expenses or big-budget items.
+  Because it is better to die with money in the bank than to be
+  very old and have no money, the default values below are
+  fairly conservative.  Feel free to change the values to be
+  more optimistic or even more pessimistic, and see how that
+  impacts the results.
+  </p>
+
+  <p>
+  The values you enter here are stored on your local computer.
+  They are not transmitted beyond your computer. This site
+  does not use any of your personal information for any 
+  reason whatsoever, other than to provide you with the calculated
+  results.  If you wish your inputs to be removed from your 
+  computer, click on the "clear all saved inputs" button at the 
+  bottom of this page.  This will reset everything to default values.
+  </p>
+
+  <p>
+  If you want to revert to the default value for an input, type 'd'
+  or 'D' in that field.
+  </p>
+
+  <table height="1100px" width="95%" border="0">
+  <tr>
+  <td class="paneTable">
+  <div style="height:500px;overflow:scroll">
+
+  <h3>Inputs:</h3>
+  <p>
+  Initial Settings:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Starting year for (semi-)retirement: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.startYear" onchange="common.set(retire.startYear, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Show results in: <input type="radio" value="beginYear" name="retire.showDollars" id="beginYear" onclick="common.set(retire.showDollars, 1)" checked><span class="initYear">initial year</span> dollars or
+                       <input type="radio" value="eachYear" name="retire.showDollars" id="eachYear" onclick="common.set(retire.showDollars, 1)">current-year dollars
+  </td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  Individuals: <small>(delete either name for single-user case)</small>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Name 1: <input type="text" autocomplete="off" STYLE="text-align:left" id="retire.name1" onchange="common.set(retire.name1, 1)"></td>
+  <td>birth year:</td>
+  <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.birthYear1" onchange="common.set(retire.birthYear1, 1)"></td>
+  <td>; stop calculations at age:</td>
+  <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stopAge1" onchange="common.set(retire.stopAge1, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Name 2: <input type="text" autocomplete="off" STYLE="text-align:left" id="retire.name2" onchange="common.set(retire.name2, 1)"></td>
+  <td>birth year:</td>
+  <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.birthYear2" onchange="common.set(retire.birthYear2, 1)"></td>
+  <td>; stop calculations at age:</td>
+  <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stopAge2" onchange="common.set(retire.stopAge2, 1)"></td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  Combined Expenses:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td><span class="initYear">2023</span> annual expenses (excluding healthcare and taxes, including housing costs)<sup><a href="#basicExpensesStart">1</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.basicExpensesStart" onchange="common.set(retire.basicExpensesStart, 1)"></td>
+  </tr>
+  <tr>
+  <td>Annual expenses when the younger person reaches <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.expensesFinishAge" onchange="common.set(retire.expensesFinishAge, 1)">, in <span class="initYear">2023</span> dollars: <sup><a href="#basicExpensesFinish">2</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.basicExpensesFinish" onchange="common.set(retire.basicExpensesFinish, 1)"></td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  Healthcare:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td><span class="initYear">2023</span> open-market healthcare <em>monthly</em> cost, per person<sup><a href="#openMarket">3</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.preMedicare" onchange="common.set(retire.preMedicare, 1)"></td>
+  </tr>
+
+  <tr>
+  <td><span class="initYear">2023</span> estimated healthcare before reaching deductible limit, <em>annual</em> cost, per person<sup><a href="#openMarketOOP">4</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.preMedicareDeductible" onchange="common.set(retire.preMedicareDeductible, 1)"></td>
+  </tr>
+
+  <tr>
+  <td><span class="initYear">2023</span> Medicare Part B or Medicare Advantage initial <em>monthly</em> cost, per person<sup><a href="#medicare">5</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.medicareB" onchange="common.set(retire.medicareB, 1)"></td>
+  </tr>
+
+  <tr>
+  <td><span class="initYear">2023</span> age 65+ additional <small>(e.g. dental, vision, drugs, long-term care)</small> <em>annual</em> cost, per person<sup><a href="#medicareDVD">6</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.medicareDVD" onchange="common.set(retire.medicareDVD, 1)"></td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  Taxes:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Expected federal income tax rate<sup><a href="#federalTaxRateIncome">7</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.federalTaxRate_income" onchange="common.set(retire.federalTaxRate_income, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected federal short-term capital gains tax rate<sup><a href="#federalTaxRateCapitalGains">8</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.federalTaxRate_capitalGains" onchange="common.set(retire.federalTaxRate_capitalGains, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected state income tax rate<sup><a href="#stateTaxRateIncome">9</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stateTaxRate_income" onchange="common.set(retire.stateTaxRate_income, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected state short-term capital gains tax rate<sup><a href="#stateTaxRateCapitalGains">10</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stateTaxRate_capitalGains" onchange="common.set(retire.stateTaxRate_capitalGains, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected social-security &amp; medicare tax on earnings (during part-time employment)<sup><a href="#SStax">11</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SStaxRate" onchange="common.set(retire.SStaxRate, 1)">%</td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+
+  <p>
+  Inflation and Adjusted Spending Power:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Expected average annual inflation<sup><a href="#inflationRate">12</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.inflation" onchange="common.set(retire.inflation, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected average annual healthcare-related inflation<sup><a href="#healthcareInflation">13</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.healthInsuranceIncrease" onchange="common.set(retire.healthInsuranceIncrease, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected average Social-Security COLA<sup><a href="#COLA">14</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_COLA" onchange="common.set(retire.SS_COLA, 1)">%</td>
+  </tr>
+
+  <tr>
+  <td>Expected Social-Security payout percentage, starting 2033 (due to insolvency)<sup><a href="#SSpayout">15</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_actualPercent" onchange="common.set(retire.SS_actualPercent, 1)">%</td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  Combined Investments:
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>Estimated <span class="initYear">2023</span> total post-tax investments (cash, stocks, bonds, Roth IRAs)<sup><a href="#totalInvestments">16</a></sup>: $<input type="text" class="mediumInput" autocomplete="off" STYLE="text-align:left" id="retire.savings" onchange="common.set(retire.savings, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Expected average annual yield<sup><a href="#investmentYield">17</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.investmentYield" onchange="common.set(retire.investmentYield, 1)">%</td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <div class="NAME1INFO">
+  <p>
+  <span id=name1>Name1</span>:
+  <table style="margin-left:3em">
+  <tr>
+  <td>Part-Time Employment:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Part-time employment income per <em>year</em>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.jobIncome1" onchange="common.set(retire.jobIncome1, 1)"> : <input type="checkbox" id="retire.jobPaysHealthcare1" onchange="common.set(retire.jobPaysHealthcare1, 1)"> Job pays for healthcare costs</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Part-time employment annual cost-of-living adjustment and/or raise: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.jobCOLA1" onchange="common.set(retire.jobCOLA1, 1)">%</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when stop part-time employment: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stopJobAge1" onchange="common.set(retire.stopJobAge1, 1)"></td>
+  </tr>
+
+
+  <tr>
+  <td>Social Security:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;If retire at age 67, estimated Social Security benefits per <em>month</em><sup><a href="#SSbenefits">18</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_income1" onchange="common.set(retire.SS_income1, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start Social Security: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_age1" onchange="common.set(retire.SS_age1, 1)"> (Get <span id="SSfactor1"></span>% of full benefits relative to age 67)</td>
+  </tr>
+
+  <tr>
+  <td>Traditional IRA or 401K Plan:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated <span class="initYear">2023</span> traditional IRA and 401K balance<sup><a href="#traditionalIRAs">19</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.tradIRA401K1" onchange="common.set(retire.tradIRA401K1, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start to withdraw IRA/401K<sup><a href="#traditionalIRAage">20</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.tradIRA401Kage1" onchange="common.set(retire.tradIRA401Kage1, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Pension:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated pension income per <em>month</em> (in <span class="pensionYear1">XXXX</span> dollars)<sup><a href="#other">21</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.pension_income1" onchange="common.set(retire.pension_income1, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start pension income: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.pension_age1" onchange="common.set(retire.pension_age1, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Other:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated one-time, post-tax financial gain<sup><a href="#other">22</a></sup>: $<input type="text" class="mediumInput" autocomplete="off" STYLE="text-align:left" id="retire.oneTimeGain1" onchange="common.set(retire.oneTimeGain1, 1)"> (in <span class="initYear">2023</span> dollars)</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when receive one-time gain: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.oneTimeGainAge1" onchange="common.set(retire.oneTimeGainAge1, 1)"</td>
+  </tr>
+  </table>
+  </p>
+  </div>
+
+  <div class="NAME2INFO">
+  <p>
+  <span id=name2>Name2</span>:
+  <table style="margin-left:3em">
+  <tr>
+  <td>Part-Time Employment:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Part-time employment income per <em>year</em>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.jobIncome2" onchange="common.set(retire.jobIncome2, 1)"> : <input type="checkbox" id="retire.jobPaysHealthcare2" onchange="common.set(retire.jobPaysHealthcare2, 1)"> Job pays for healthcare costs</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Part-time employment annual cost-of-living adjustment and/or raise: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.jobCOLA2" onchange="common.set(retire.jobCOLA2, 1)">%</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when stop part-time employment: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.stopJobAge2" onchange="common.set(retire.stopJobAge2, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Social Security:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;If retire at age 67, estimated Social Security benefits per <em>month</em><sup><a href="#SSbenefits">18</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_income2" onchange="common.set(retire.SS_income2, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start Social Security: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.SS_age2" onchange="common.set(retire.SS_age2, 1)"> (Get <span id="SSfactor2"></span>% of full benefits relative to age 67)</td>
+  </tr>
+
+  <tr>
+  <td>Traditional IRA or 401K Plan:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated <span class="initYear">2023</span> traditional IRA and 401K balance<sup><a href="#traditionalIRAs">19</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.tradIRA401K2" onchange="common.set(retire.tradIRA401K2, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start to withdraw IRA/401K<sup><a href="#traditionalIRAage">20</a></sup>: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.tradIRA401Kage2" onchange="common.set(retire.tradIRA401Kage2, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Pension:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated pension income per <em>month</em> (in <span class="pensionYear2">XXXX</span> dollars)<sup><a href="#pension">21</a></sup>: $<input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.pension_income2" onchange="common.set(retire.pension_income2, 1)"></td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when start pension income: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.pension_age2" onchange="common.set(retire.pension_age2, 1)"></td>
+  </tr>
+
+  <tr>
+  <td>Other:</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Estimated one-time, post-tax financial gain<sup><a href="#other">22</a></sup>: $<input type="text" class="mediumInput" autocomplete="off" STYLE="text-align:left" id="retire.oneTimeGain2" onchange="common.set(retire.oneTimeGain2, 1)"> (in <span class="initYear">2023</span> dollars)</td>
+  </tr>
+  <tr>
+  <td>&nbsp;&nbsp;&nbsp;&nbsp;Age when receive one-time gain: <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="retire.oneTimeGainAge2" onchange="common.set(retire.oneTimeGainAge2, 1)"</td>
+  </tr>
+  </table>
+  </p>
+  </div>
+
+  </div>
+  </td>
+  </tr>
+  <tr>
+  <td class="paneTable">
+  <div style="height:570px;overflow:scroll">
+
+  <h3>Results:</h3>
+  <span id=moneyRunOutInfo></span>
+
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td><canvas id="income" width="400" height="300"></canvas>
+    </td>
+    <td><canvas id="expenses" width="400" height="300"></canvas>
+    </td>
+  </tr>
+  <tr>
+    <td><canvas id="savings" width="400" height="300"></canvas>
+    </td>
+    <td><canvas id="inflation" width="400" height="300"></canvas>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <p>
+  <span id="outputTable"></span>
+  </p>
+
+
+  </div>
+  </td>
+  </tr>
+  </table>
+
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/plotLibrary.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/retirement.js" charset="utf-8"></script>
+
+  <script>
+  retire.initialize_retire();
+  </script>
+
+  <br>
+  <hr>
+  <h2>Footnotes</h2>
+  <ol>
+  <li id="basicExpensesStart">
+      Non-healthcare expenses are usually higher just after retirement 
+      and lower in later years.  This calculator assumes a constant
+      decrease in expenses until a certain point in time, after which
+      expeneses are constant.  For this input, estimate the expenses
+      when starting retirement (which may be higher than your typical
+      retirement expenses.)
+  <li id="basicExpensesFinish">
+      At a certain age, retirement expeneses are assumed to become more 
+      constant, with less travel and splurging.  Estimate both (a) the age 
+      of the younger person when expenses become constant and (b) the amount
+      of expenses, without worrying about how inflation will impact these
+      expenses.
+  <li id="openMarket">
+      The specified rate of healthcare-related inflation (under "Inflation
+      and Adjusted Spending Power") is used to adjust the cost of
+      open-market healthcare that is specified here.
+  <li id="openMarketOOP">
+      The open-market deductables can be quite high, possibly higher than
+      one expects to spend on healthcare in one year.  Here, enter the
+      estimated out-of-pocket healthcare cost per year and per person, 
+      or if this amount is higher then the expected deductable, enter 
+      the deductable amount.
+  <li id="medicare">
+      This calculator applies the expected rate of healthcare inflation 
+      to the cost of Medicare Part B or Medicare Advantage that is entered 
+      here.  This may be a conservative estimate, as Medicare costs may 
+      not increase as quickly as private medical costs.
+  <li id="medicareDVD">
+      Medicare Part B does not currently include dental, vision, drugs,
+      or long-term care costs.  If not choosing Medicare Advantage,
+      estimate the annual costs of these items.
+      Current out-of-pocket dental cleanings can be $100 to $200,
+      and vision exams between $50 and $200.  The price of drugs and
+      long-term care may vary widely.
+  <li id="federalTaxRateIncome">
+      While one's federal tax rate will change with income, this calculator 
+      simplifies things with a single tax rate for all years.  
+      For a more conservative estimate, enter the average expected tax 
+      bracket during the initial years of retirement.  For a less conservative
+      estimate, enter the effective tax rate over all retirement years.
+  <li id="federalTaxRateCapitalGains">
+      This calculator asks for the short-term capital gains tax rate only
+      to give a more conservative estimate.  The actual tax rate will be
+      a combination of short-term gains (with profits on assests re-invested) 
+      and long-term gains.
+  <li id="stateTaxRateIncome">
+      While one's state tax rate will change with income, this calculator 
+      simplifies things with a single tax rate for all years.  
+      For a more conservative estimate, enter the average expected tax 
+      bracket during the initial years of retirement.  For a less conservative
+      estimate, enter the effective tax rate over all retirement years.
+  <li id="stateTaxRateCapitalGains">
+      Different states tax capital gains differently.  In Oregon, captial
+      gains are taxed at the same rate as ordinary income.  In
+      Massachusetts, long-term capital gains are taxed at 5% and
+      short-term capital gains are taxed at 12%.  This calculator asks 
+      for the short-term capital gains tax rate only to give a more 
+      conservative estimate.  The actual tax rate will be a combination 
+      of short-term gains (with profits on assests re-invested) 
+      and long-term gains.
+  <li id="SStax">
+      When working part-time during the initial years, one's income is
+      subject to the social-security and medicare tax on earnings.  
+      If one has an employer, usually this rate is 7.65% by the employee 
+      and 7.65% by the employer.  If one is self-employed, this rate
+      is 15.30%.
+  <li id="inflationRate">
+      The Federal Reserve claims to target an average 2% annual inflation rate.
+      If you believe they will succeed in that goal, change the value to 2.0%.
+  <li id="healthcareInflation">
+      The default assumes that healthcare expenses will increase twice as
+      fast as general inflation.
+  <li id="COLA">
+      While the Social Security cost-of-living adjustment (COLA) is currently
+      approximately the same as the rate of inflation, the default value here
+      assumes that the COLA will not be maintained at this rate, but become
+      lower.  For a less conservative estimate, you can set the COLA
+      value to be the same as the average expected rate of inflation.
+  <li id="SSpayout">
+      Social Security is expected to run out of money in 2033.  There are
+      several scenarios for handling this.  One option is a reduced payout.
+      The default assumes a 70% payout starting in 2033.
+  <li id="totalInvestments">
+      This calculator assumes that any year in which income is greater than
+      expenses, that difference is added back in to the total post-tax
+      investments.  Total post-tax investments include cash, stocks, bonds, 
+      and Roth IRAs.  While the investment earnings on Roth IRAs are not taxed,
+      this calculator includes Roth IRAs as a taxed investment for simplicity.
+  <li id="investmentYield">
+      This is the overall yield from all types of assets.  "Cash" (i.e. 
+      money market, high-yield savings) will have very little yield (maybe 2%).
+      Stocks will have on average the highest yield (maybe 10%), but one 
+      will generally want to have a portfolio with fewer and fewer stocks as 
+      one gets older, to minimize risk.  The default value assumes a mix 
+      of assets and a fairly conservative yield.
+  <li id="SSbenefits">
+      One can look up expected social-security benefits by logging in to 
+      the social-security website.  Do *not* adjust the value from this
+      website by the expected payout percentage due to insolvency, above.
+      The calculator will do this for you.  One complicating factor is that 
+      the social-security website assumes that you will continue working until 
+      you start taking social security.  If you stop working before taking 
+      social security payments, that will probably reduce your benefits.
+      A very conservative estimate would be to assume that your benefits
+      will be reduced by the fraction of years actually worked divided by the
+      number of years that social-security uses in its model (35).
+      So, if the website predicts that you will get $3000 per month at
+      age 67, and you do not contribute to social security in a meaningful
+      way beginning at age 60, your estimated benefit might be 3000 &times;
+      (35 - (67 - 60))/35, or 80% of $3000, or $2400 per month.
+  <li id="traditionalIRAs">
+      Traditional IRAs and 401K accounts are treated the same for
+      tax purposes: the amount added to the account is not taxed, and
+      investment gains on that account are not taxed.  When you
+      start withdrawing money, that withdrawl is taxed as income.
+      Because of this, it makes sense to hold off on withdrawing from
+      these accounts as long as possible (when one's income tax bracket
+      is lower).  There are required minimum distributions, however,
+      starting at age 72.  By default, this calculator withdraws money 
+      from IRAs and 401K plans at the minimum amount until post-tax savings 
+      are nearing depletion, at which point it withdraws the amount needed
+      to pay expenses.  You can enter an age at which to start withdrawls,
+      in which case it will withdraw amounts spread out as evenly
+      as possible over time.
+  <li id="traditionalIRAage">
+      If the default value, "wait", is used, the calculator will wait
+      as long as possible to withdraw money from IRA or 401K accounts,
+      while respecting required minimum distributions.  If an age
+      is specified, then the calculator will try to withdraw an 
+      approximately equal amount each year.
+  <li id="pension">
+      This calculator assumes that pension payments are not adjusted for
+      inflation, and that they are taxed as regular income.  If you
+      expect to receive a pension, the estimated amount is assumed to be
+      in dollars as of the year you start taking payments.
+  <li id="other">
+      One may expect to receive a significant one-time financial gain,
+      for example from selling a house or inheriting an estate.  The
+      amount here is the expected gain <em>after</em> paying any taxes.
+  </ol>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2023-Aug-12 to 2023-Oct-4)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_retire">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord home page</a>
+  <p>
+  <p>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  </center>
+  <p>
+  <small>Copyright &copy; 2023 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no claims about
+  the accuracy or suitability of the results.  This calculator comes
+  with no warranties, express or implied.  <em>Caveat emptor</em> and 
+  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>
