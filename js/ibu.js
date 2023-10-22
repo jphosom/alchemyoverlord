@@ -48,6 +48,7 @@
 //                                behave the same way on Firefox,Chrome,Safari
 // Version 1.3.0 : Sep 24, 2023 : change beta acid default to scale with
 //                                the alpha-acid value set by the user.
+// Version 1.3.1 : Oct 22, 2023 : debug scaling beta acid default
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -1515,12 +1516,13 @@ function get_AA_default(arrayIdx) {
 //------------------------------------------------------------------------------
 // get default beta-acid rating (either general or variety-specific)
 
-function get_BA_default(arrayIdx) {
+function get_BA_default(param) {
   var AA = 0.0;
+  var arrayIdx = param[0];
   var defaultAA = 0.0;
   var defaultValue = 5.0;  // approximate value over many varieties
   var scaling = 0.0;
-  var userSetAA = 0;
+  var source = param[1];
   var value = 0.0;
   var variety = "";
 
@@ -1528,18 +1530,24 @@ function get_BA_default(arrayIdx) {
   value = defaultValue;
   if (variety != "(unspecified)") {
     if (hops[variety].BA) {
-      userSetAA = ibu.add[arrayIdx].AA.userSet;
-      if (userSetAA && hops[variety].AA) {
+      if (hops[variety].AA) {
         // The beta-acid percent varies with the alpha-acid percent.
-        // If the user has set the AA%, adjust the default BA by the known AA%.
+        // Adjust the default BA by the known AA%.
         defaultAA = hops[variety].AA;
         AA = ibu.add[arrayIdx].AA.value;
         scaling = AA / defaultAA;
         value = scaling * hops[variety].BA;
+        console.log(">>> orig BA = " + hops[variety].BA + "; with AA set to " +
+                  AA + " and default AA of " + defaultAA + ", scaling is " +
+                  scaling);
       } else {
         value = hops[variety].BA;
       }
     }
+  }
+
+  if (source == "AA") {
+    common.set(ibu.add[arrayIdx].BA, 0);
   }
 
   return value;
@@ -2238,7 +2246,7 @@ function hopAdditionsSet(param) {
     ibu.add[arrayIdx].AA.defaultColor = ibu.defaultColor;
     ibu.add[arrayIdx].AA.updateFunction = updateFunction;
     ibu.add[arrayIdx].AA.additionalFunction = get_BA_default;
-    ibu.add[arrayIdx].AA.additionalFunctionArgs = arrayIdx;
+    ibu.add[arrayIdx].AA.additionalFunctionArgs = [arrayIdx, "AA"];
     ibu.add[arrayIdx].AA.parent = "ibu";
   }
 
@@ -2264,7 +2272,7 @@ function hopAdditionsSet(param) {
     ibu.add[arrayIdx].BA.max = 100.0;
     ibu.add[arrayIdx].BA.description = "hops beta acid rating";
     ibu.add[arrayIdx].BA.defaultFunction = get_BA_default;
-    ibu.add[arrayIdx].BA.defaultArgs = arrayIdx;
+    ibu.add[arrayIdx].BA.defaultArgs = [arrayIdx, "BA"];
     ibu.add[arrayIdx].BA.defaultColor = ibu.defaultColor;
     ibu.add[arrayIdx].BA.updateFunction = updateFunction;
     ibu.add[arrayIdx].BA.parent = "ibu";

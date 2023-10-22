@@ -1544,7 +1544,8 @@ this.compute_retire = function() {
     savings = savings - totalExpenses + totalIncome;
 
     // if we've run out of money, stop looping
-    if (savings <= 0) {
+    // the check for expenses > income is, I think, redundant.
+    if (savings <= 0 && totalExpenses > totalIncome) {
       break;
     }
 
