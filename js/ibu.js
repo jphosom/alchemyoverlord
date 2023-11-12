@@ -49,6 +49,7 @@
 // Version 1.3.0 : Sep 24, 2023 : change beta acid default to scale with
 //                                the alpha-acid value set by the user.
 // Version 1.3.1 : Oct 22, 2023 : debug scaling beta acid default
+// Version 1.3.2 : Nov  9, 2023 : bug fix: check if fermentorVolume is saved val
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -968,7 +969,8 @@ function checkWortLossVolumeAndColor() {
     common.updateHTML(lossVariable);
     common.setSavedValue(lossVariable, 0);
   }
-  if (!fermentorVariable.userSet) {
+  if (!fermentorVariable.userSet &&
+      !common.existsSavedValue(fermentorVariable)) {
     fermentorVariable.value = get_fermentorVolume_default();
     fermentorVariable.userSet = 0;
     common.updateHTML(fermentorVariable);
