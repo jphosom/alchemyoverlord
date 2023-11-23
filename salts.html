@@ -1,0 +1,234 @@
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+salts.html : HTML for AlchemyOverlord web page, salts sub-page
+Written by John-Paul Hosom
+Copyright © 2023 by John-Paul Hosom, all rights reserved.
+Version 1.0.0 : Jun. 24, 2023 to Nov. 23, 2023. Initial version
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <a name="top_salts"></a>
+  <div id="content">
+  <h2>Salts Calculator</h2>
+  <p>This page provides a calculator for estimating the amount of calcium
+  sulfate and calcium chloride that should be added to the mash or brewing
+  liquor (water), based on volume of water, the desired ratio of sulfate
+  to chloride ions, the target concentration of calcium ions, ion
+  concentrations in the unadjusted water, and recommended limits of each ion.
+  The conversion from grams to teaspoons is based on my blog post
+  "<a href="blog/02-numbers/alchemyoverlord-blog-content02.html">numbers</a>".
+  </p>
+  <p>
+  An output concentration in <font color="darkred">red</font> indicates that
+  (a) the ion has not reached its target concentration (for calcium),
+  (b) the specified ratio can not be reached (for sulfate or chloride), or
+  (c) the ion has reached or exceeded its maximium concentration with the
+  specified amount of salt (for sulfate or chloride).
+  </p>
+
+  <h3>General Parameters:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Input Units:</td>
+    <td colspan="4">
+    <input type="radio" value="metric" id="metric" name="salts.units" onclick="common.set(salts.units,1)" autocomplete="off">metric or
+    <input type="radio" value="imperial" id="imperial" name="salts.units" onclick="common.set(salts.units,1)" autocomplete="off" checked>U.S. customary (e.g. gallons, ounces)
+    </td>
+  </tr>
+
+  <tr>
+    <td>Output Units:</td>
+    <td colspan="4">
+    <input type="radio" value="tsp" id="tsp" name="salts.outputs" onclick="common.set(salts.outputs,1)" autocomplete="off">teaspoons or
+    <input type="radio" value="g" id="grams" name="salts.outputs" onclick="common.set(salts.outputs,1)" autocomplete="off" checked>grams
+    </td>
+  </tr>
+
+  <tr>
+  <td>Water Volume:</td>
+  <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.waterVolume" onchange="common.set(salts.waterVolume, 1)"> <span id="waterVolumeUnits">XX</span></td>
+  </tr>
+
+  <tr>
+    <td>Calcium Chloride:</td>
+    <td colspan="4">
+    <input type="radio" value="anhydrous" id="anhydrous" name="salts.CaCl2form" onclick="common.set(salts.CaCl2form,1)" autocomplete="off">anhydrous (CaCl<sub>2</sub>)&nbsp;&nbsp; or &nbsp;
+    <input type="radio" value="dihydrate" id="dihydrate" name="salts.CaCl2form" onclick="common.set(salts.CaCl2form,1)" autocomplete="off">dihydrate (CaCl<sub>2</sub>&middot;2H<sub>2</sub>O)
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Sulfate-to-Chloride Ratio:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+  <td>
+  <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.ratioSO" onchange="common.set(salts.ratioSO, 1)"> parts SO<sub>4</sub><sup>-2</sup>
+  &nbsp; to &nbsp;
+  <input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.ratioCl" onchange="common.set(salts.ratioCl, 1)"></td><td> parts Cl<sup>&minus;</sup>
+  </td>
+  </tr>
+
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Current, Target, and Maximum Concentrations:</h3>
+  <p>
+  <table style="margin-left:3em">
+  <tbody>
+  <tr>
+    <td>Calcium (Ca<sup>+2</sup>):</td>
+    <td>current = </td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.currentCa" onchange="common.set(salts.currentCa, 1)"> ppm, &nbsp;</td>
+    <td>target =</td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.targetCa" onchange="common.set(salts.targetCa, 1)"> ppm</td>
+  </tr>
+  <tr>
+    <td>Sulfate (SO<sub>4</sub><sup>&minus;2</sup>):</td>
+    <td>current = </td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.currentSO4" onchange="common.set(salts.currentSO4, 1)"> ppm, &nbsp;</td>
+    <td>maximum = </td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.maxSO4" onchange="common.set(salts.maxSO4, 1)"> ppm</td>
+  </tr>
+  <tr>
+    <td>Chloride (Cl<sup>&minus;</sup>):</td>
+    <td>current = </td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.currentCl" onchange="common.set(salts.currentCl, 1)"> ppm, &nbsp;</td>
+    <td>maximum = </td>
+    <td><input type="text" class="smallInput" autocomplete="off" STYLE="text-align:left" id="salts.maxCl" onchange="common.set(salts.maxCl, 1)"> ppm</td>
+  </tr>
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Results:</h3>
+  <p>
+  <table style="margin-left:3em;">
+  <tbody>
+
+  <tr>
+    <td>Calcium Sulfate (Dihydrate) (CaSO<sub>4</sub>&middot;2H<sub>2</sub>O):</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:1em;">
+    <table style="margin-left:6em; width:32em">
+    <tbody>
+    <tr><td><b><span id="salts.CaSO4_2H2O_tsp">xxx</span> <span class="outputUnits">tsp</span></b> yields<sup> </sup><sub> </sub></td>
+        <td><span id="salts.CaSO4_2H2O_Ca_ppm">yyy</span> ppm of Ca<sup>+2</sup><sub> </sub> and</td>
+        <td><span id="salts.CaSO4_2H2O_SO4_ppm">zzz</span> ppm of SO<sub>4</sub><sup>&minus;2</sup></td>
+    </tr>
+    </tbody>
+    </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Calcium Chloride <span id="salts.CaCl2formEnglish">Anhydrous</span> (<span id="salts.CaCl2formFormula">CaCl<sub>2</sub></span>):</td>
+  </tr>
+  <tr>
+    <td style="padding-bottom:1em;">
+    <table style="margin-left:6em; width:32em">
+    <tbody>
+    <tr><td><b><span id="salts.CaCl2_tsp">xxx</span> <span class="outputUnits">tsp</span></b> yields<sup> </sup></td>
+        <td><span id="salts.CaCl2_Ca_ppm">yyy</span> ppm of Ca<sup>+2</sup> and</td>
+        <td><span id="salts.CaCl2_Cl_ppm">zzz</span> ppm of Cl<sup>&minus;</sup></td>
+    </tr>
+    </tbody>
+    </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Total Ion Concentration:</td>
+  <tr>
+    <td style="padding-bottom:1em;">
+    <table style="margin-left:6em; width:32em">
+    <tbody>
+    <tr><td>Ca<sup>+2</sup> = <span id="salts.totalPPM_Ca">xxx</span> ppm</td>
+        <td>SO<sub>4</sub><sup>&minus;2</sup> = <span id="salts.totalPPM_SO4">yyy</span> ppm</td>
+        <td>Cl<sup>&minus;</sup> = <span id="salts.totalPPM_Cl">zzz</span> ppm</td>
+    </tr>
+    </tbody>
+    </table>
+    </td>
+  </tr>
+  </tr>
+
+
+
+  </tbody>
+  </table>
+  </p>
+
+  <h3>Ion Targets and Limits:</h3>
+  <ul>
+  <li> The recommended amount of calcium for brewing is 50 to 150 ppm
+  (Palmer and Kaminski, <em>Water: A Comprehensive Guide for Brewers</em>,
+  p. 45).  The authors state that "beer can be successfully brewed with
+  more or less calcium than this suggested range," but that a concentration
+  exceeding 250 ppm can impair fermentation performance (ibid., p. 45).
+  <li> The recommended limit for the sulfate ion in brewing is 250 ppm
+  (Palmer and Kaminski, p. 43).  The authors note that "at concentrations
+  over 400 ppm ... the resulting bitterness can become astringent and
+  unpleasant." (ibid., p. 43).
+  <li> The recommended limit for the chloride ion in brewing is 100 ppm
+  (Palmer and Kaminski, p. 42).  The authors note that "levels greater
+  than 250 ppm in most beers tastes pasty or salty.  Levels greater than
+  300 ppm are said to affect yeast health" (ibid., p. 42).  Because of
+  (a) the large difference between 100 ppm and 250 ppm and (b) my own
+  positive experience when using more than 100 ppm, the default maximum
+  in this calculator is set at 175 ppm.
+  </ul>
+
+
+  </div>
+
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/hops.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/salts.js" charset="utf-8"></script>
+
+  <script>
+  salts.initialize_salts();
+  </script>
+
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>1.0.0</b>: (2023-Jun-24 to 2023-Nov-23)  Initial version.<br>
+  </small>
+
+  <p>
+  <center>
+  Navigate to:<br>
+  <a href="#top_salts">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord home page</a>
+  <p>
+  <p>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  </center>
+  <p>
+  <small>Copyright &copy; 2023 John-Paul Hosom, all rights reserved.
+  While I hope that you find this page useful, I make no guarantees about
+  the accuracy or suitability of the results.  Cheers!</small>
+  </p>
+  </center>
+
+  </body>
+</html>

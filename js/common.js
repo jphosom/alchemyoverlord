@@ -98,8 +98,13 @@ validate = function(variable, input) {
   }
 
   if (!check.valid) {
-    window.alert("For " + variable.description + ", input '" + input +
+    if (variable.inputType != "int") {
+      window.alert("For " + variable.description + ", input '" + input +
                  "' is not valid.");
+    } else {
+      window.alert("For " + variable.description + ", input '" + input +
+                 "' is not valid. Only integer values are allowed.");
+    }
   }
 
   return check;
