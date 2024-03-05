@@ -52,6 +52,7 @@ function createPlotObject() {
                canvasColor: "white", plotAreaColor: "white",
                legend: [], legendPosition: [0.0, 10.0], legendBorderPx: 0,
                x2function: undefined, x2Precision: 1, x2Label: "",
+               y2function: undefined, y2Precision: 1,
                data: []};
   return plot;
 }
@@ -190,6 +191,9 @@ function createPlot(ctx, plot) {
   }
   if (plot.yMajor > 0) {
     plot.widthOffsetPx += plot.fontHeightPx + plot.ticSizePx;
+  }
+  if (plot.y2function != undefined) {
+    plot.widthOffsetPx += plot.fontHeightPx + paddingPx;
   }
   plot.widthPx = ctx.canvas.width - plot.widthOffsetPx -
                  (paddingPx + extraPaddingPx);
@@ -1201,6 +1205,33 @@ function plotMajorY(ctx, plot, y, tics, grid, values) {
     ctx.fillStyle = plot.defaultColor;
     ctx.fillText(yStr, 0, 0);
     ctx.restore();  // revert to pre-rotated axes
+
+    if (plot.y2function != undefined) {
+      valueYpx = mapY(plot, y);
+      var y2 = plot.y2function(y);
+      yStr = y2.toFixed(plot.y2Precision);
+      textWidthPx = ctx.measureText(yStr).width;
+      textHeightPx = plot.fontHeightPx;
+
+      posXpx = plot.widthOffsetPx - plot.ticSizePx - plot.paddingPx;
+      if (plot.yRotate) {
+        posYpx = valueYpx + textWidthPx/2.0;
+        posXpx -= textHeightPx;
+      } else {
+        posYpx = valueYpx + textHeightPx/2.0 - 2;
+        posXpx -= ctx.measureText(yStr).width;
+        posXpx -= ctx.measureText(yStr).width + plot.paddingPx;
+      }
+
+      ctx.save();
+      ctx.translate(posXpx, posYpx);
+      if (plot.yRotate) {
+        ctx.rotate(-Math.PI/2.0);
+      }
+      ctx.fillStyle = plot.defaultColor;
+      ctx.fillText(yStr, 0, 0);
+      ctx.restore();  // revert to pre-rotated axes
+    }
   }
 
   return;

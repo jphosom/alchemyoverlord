@@ -50,6 +50,7 @@
 //                                the alpha-acid value set by the user.
 // Version 1.3.1 : Oct 22, 2023 : debug scaling beta acid default
 // Version 1.3.2 : Nov  9, 2023 : bug fix: check if fermentorVolume is saved val
+// Version 1.3.3 : Mar  4, 2024 : increase topoffVolume max to 10,000 liters
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -398,7 +399,7 @@ ibu._construct = function() {
   this.topoffVolume.minPrecision = 2;
   this.topoffVolume.display = "";
   this.topoffVolume.min = 0.0;
-  this.topoffVolume.max = 500.0;
+  this.topoffVolume.max = 10000.0;
   this.topoffVolume.description = "added water";
   this.topoffVolume.defaultValue = 0.0;
   this.topoffVolume.additionalFunction = checkWortLossVolumeAndColor;
