@@ -36,6 +36,13 @@ var lineStyleList = [ [0], [8, 4], [4, 3], [2, 2], [6, 3, 1, 3] ];
 
 //------------------------------------------------------------------------------
 // createPlotObject(): create a plot object with all default values
+// note: x2function and y2funtion define functions to compute
+//       alternate values for the X and Y axis, respectively.
+//       For example, the plot might show units in both 'F and 'C.
+//       if y2function is "", then the plot will be shifted as if there
+//       was a set of alternate values, but none will be plotted.  This
+//       is useful in order to get a sequence of plots to line up,
+//       where some have alternate values and others do not.
 
 function createPlotObject() {
   var plot = { xMin: 0.0, xMax: 10.0, xMinor: undefined, xMajor: undefined,
@@ -160,9 +167,11 @@ function createPlot(ctx, plot) {
 
   // compute tic size (based on overall plot size)
   plotSize = Math.sqrt(ctx.canvas.width * ctx.canvas.height);
-  plot.ticSizePx = plotSize / 70;
+  // plot.ticSizePx = plotSize / 70;
+  plot.ticSizePx = ctx.canvas.width / 100;
   if (plot.ticSizePx < 4) plot.ticSizePx = 4;
-  if (plot.ticSizePx > 12) plot.ticSizePx = 12;
+  if (plot.ticSizePx > 8) plot.ticSizePx = 8;
+  // if (plot.ticSizePx > 12) plot.ticSizePx = 12;
 
   // get font height from font specification string
   ctx.font = plot.font;
@@ -187,7 +196,7 @@ function createPlot(ctx, plot) {
   }
   if (!plot.yRotate) {
     yStr = plot.yMax.toFixed(plot.yPrecision);
-    plot.widthOffsetPx += ctx.measureText(yStr).width;
+    plot.widthOffsetPx += ctx.measureText(yStr).width - 5;
   }
   if (plot.yMajor > 0) {
     plot.widthOffsetPx += plot.fontHeightPx + plot.ticSizePx;
@@ -1206,7 +1215,7 @@ function plotMajorY(ctx, plot, y, tics, grid, values) {
     ctx.fillText(yStr, 0, 0);
     ctx.restore();  // revert to pre-rotated axes
 
-    if (plot.y2function != undefined) {
+    if (plot.y2function != undefined && plot.y2function != "") {
       valueYpx = mapY(plot, y);
       var y2 = plot.y2function(y);
       yStr = y2.toFixed(plot.y2Precision);
