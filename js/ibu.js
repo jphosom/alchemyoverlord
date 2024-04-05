@@ -1012,15 +1012,15 @@ function checkBoilTime() {
         kettleHops = false;
       }
     }
-    if (kettleHops &&
-        ibu.add[idx].steepTime.value > ibu.boilTime.value && !doneAlert) {
+    if (kettleHops && ibu.add[idx].steepTime.value > 
+        (ibu.boilTime.value + ibu.whirlpoolTime.value) && !doneAlert) {
       window.alert("Hop steep time must be less than or equal to " +
                    "wort boil time.  Setting hop steep time to " +
                    "wort boil time as needed.");
       doneAlert = true;
     }
-    if (kettleHops &&
-      ibu.add[idx].steepTime.value > ibu.boilTime.value) {
+    if (kettleHops && ibu.add[idx].steepTime.value > 
+        ibu.boilTime.value + ibu.whirlpoolTime.value) {
       ibu.add[idx].steepTime.value = ibu.boilTime.value;
       ibu.add[idx].steepTime.userSet = 1;
       common.updateHTML(ibu.add[idx].steepTime);
