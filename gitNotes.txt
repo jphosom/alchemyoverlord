@@ -3,7 +3,8 @@ git add
 git commit
 git push
   username: jphosom
-  token:    (or generate a new token)
+  token:    (USE REGENERATED TOKEN FOR "jph github project1 v2" or generate new)
+
   https://ginnyfahs.medium.com/github-error-authentication-failed-from-command-line-3a545bfd0ca8
 
 git checkout gh-pages
@@ -11,3 +12,5 @@ git merge master
 git push
 
 git checkout master
+
+

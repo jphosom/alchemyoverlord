@@ -18,6 +18,7 @@
 //                                "hold" temperature
 // Version 1.0.5 : Jan. 29, 2023: bug fix in temp decay; indicate if max time
 // Version 1.0.6 : Feb. 12, 2023: fix the bug fix, better timing information
+// Version 1.0.7 : Apr.  5, 2024: prevent negative loss factor with low pH
 //
 // -----------------------------------------------------------------------------
 
@@ -1373,6 +1374,10 @@ function compute_LF_IAA_pH(ibu) {
 
     // formula from blog post 'The Effect of pH on Utilization and IBUs'
     LF_pH = (0.071 * pH) + 0.592;
+    // if pH is low enough for a negative loss factor, set it to zero
+    if (LF_pH < 0.0) {
+      LF_pH = 0.0;
+    }
     if (SMPH.verbose > 5) {
       console.log("pH = " + pH + ", LF for IAA = " + LF_pH.toFixed(4));
     }
@@ -1557,6 +1562,10 @@ function compute_LF_oAA_pH(ibu) {
 
     // formula from blog post 'The Effect of pH on Utilization and IBUs'
     LF_pH = (1.178506 * pH) - 5.776411
+    // if pH is low enough for a negative loss factor, set it to zero
+    if (LF_pH < 0.0) {
+      LF_pH = 0.0;
+    }
     if (SMPH.verbose > 5) {
       console.log("pH = " + pH + ", LF for nonIAA = " + LF_pH.toFixed(4));
     }
