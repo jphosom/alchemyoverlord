@@ -41,6 +41,8 @@ this.initialize_tempCorrect = function() {
   var keys;
   var updateFunction = this.compute_tempCorrect;
 
+  this.defaultColor = "#94476b"; // greyish red
+
   //----------------------------------------------------------------------------
   // create data for all variables
 
@@ -310,11 +312,47 @@ this.initialize_tempCorrect = function() {
   this.acorr2.updateFunction = tempCorrect.compute_tempCorrect;
   this.acorr2.updateFunctionArgs = this.acorr2.id;
 
+  this.WPA = common.createFloat("tempCorrect.WPA", 8.0, "W (%)",
+                                0.0, 100.0, 1, 1, "", "",
+                                "", "", this.defaultColor, "", "",
+                                "", tempCorrect.compute_tempCorrect, "");
+  this.WPA.updateFunctionArgs = this.WPA.id;
+
+  this.BPT = common.createFloat("tempCorrect.BPT", 94.0, "B temperature",
+                                0.0, 212.0, 1, 1,
+                                common.convertFahrenheitToCelsius,
+                                common.convertCelsiusToFahrenheit,
+                                "", "", this.defaultColor, "", "",
+                                "", tempCorrect.compute_tempCorrect, "");
+  this.BPT.updateFunctionArgs = this.BPT.id;
+
+  this.deltaT = common.createFloat("tempCorrect.deltaT", 0.0, "delta temp.",
+                                0.0, 212.0, 1, 1,
+                                common.convertFahrenheitToCelsiusSlope,
+                                common.convertCelsiusToFahrenheitSlope,
+                                "", "", this.defaultColor, "", "",
+                                "", tempCorrect.compute_tempCorrect, "");
+  this.deltaT.updateFunctionArgs = this.deltaT.id;
+
+  this.HT = common.createFloat("tempCorrect.HT", 94.0, "H temp.",
+                                0.0, 212.0, 1, 1,
+                                common.convertFahrenheitToCelsius,
+                                common.convertCelsiusToFahrenheit,
+                                "", "", this.defaultColor, "", "",
+                                "", tempCorrect.compute_tempCorrect, "");
+  this.HT.updateFunctionArgs = this.HT.id;
+
+  this.VPA = common.createFloat("tempCorrect.VPA", 49.0, "A (%)",
+                                0.0, 100.0, 1, 1, "", "",
+                                "", "", this.defaultColor, "", "",
+                                "", tempCorrect.compute_tempCorrect, "");
+  this.VPA.updateFunctionArgs = this.VPA.id;
+
   //----------------------------------------------------------------------------
   // add name of parent to all variables, so we can access 'units' as needed
   keys = Object.keys(this);
   for (idx = 0; idx < keys.length; idx++) {
-    if (keys[idx] == "_construct") {
+    if (keys[idx] == "_construct" || keys[idx] == "defaultColor") {
       continue;
     }
     this[keys[idx]].parent = "tempCorrect";
@@ -347,6 +385,12 @@ this.initialize_tempCorrect = function() {
   common.set(tempCorrect.acorrT,  0);
   common.set(tempCorrect.acorr2,  0);
 
+  common.set(tempCorrect.WPA,  0);
+  common.set(tempCorrect.BPT,  0);
+  common.set(tempCorrect.deltaT,  0);
+  common.set(tempCorrect.HT,  0);
+  common.set(tempCorrect.VPA,  0);
+
   this.verbose = 1;
   this.compute_tempCorrect();
 
@@ -361,31 +405,18 @@ this.initialize_tempCorrect = function() {
 
 function setUnits() {
   var vol2G = 0.0;
+  var uIdx = 0;
 
   if (tempCorrect.units.value == "metric") {
     // update displayed units
-    if (document.getElementById('tempCorrectSGtemp1Units')) {
-      document.getElementById('tempCorrectSGtemp1Units').innerHTML = "&deg;C";
+    if (document.getElementsByClassName("tempCorrectTUnits")) {
+      var uList = document.getElementsByClassName("tempCorrectTUnits");
+      for (uIdx = 0; uIdx < uList.length; uIdx++) {
+        uList[uIdx].innerHTML = "&deg;C";
+      }
     }
-    if (document.getElementById('tempCorrectSGtemp2Units')) {
-      document.getElementById('tempCorrectSGtemp2Units').innerHTML = "&deg;C";
-    }
-
-    if (document.getElementById('tempCorrectpHtemp1Units')) {
-      document.getElementById('tempCorrectpHtemp1Units').innerHTML = "&deg;C";
-    }
-    if (document.getElementById('tempCorrectpHtemp2Units')) {
-      document.getElementById('tempCorrectpHtemp2Units').innerHTML = "&deg;C";
-    }
-
     if (document.getElementById('tempCorrectvol1Units')) {
       document.getElementById('tempCorrectvol1Units').innerHTML = "L";
-    }
-    if (document.getElementById('tempCorrectvoltemp1Units')) {
-      document.getElementById('tempCorrectvoltemp1Units').innerHTML = "&deg;C";
-    }
-    if (document.getElementById('tempCorrectvoltemp2Units')) {
-      document.getElementById('tempCorrectvoltemp2Units').innerHTML = "&deg;C";
     }
     if (document.getElementById('tempCorrectvol2Units')) {
       document.getElementById('tempCorrectvol2Units').innerHTML = "L";
@@ -393,13 +424,6 @@ function setUnits() {
     if (document.getElementById("tempCorrect.vol2")) {
       document.getElementById("tempCorrect.vol2").innerHTML =
                tempCorrect.vol2.toFixed(tempCorrect.vol1.precision);
-    }
-
-    if (document.getElementById('tempCorrectDebugUnits')) {
-      document.getElementById('tempCorrectDebugUnits').innerHTML = "&deg;C";
-    }
-    if (document.getElementById('tempCorrectAcorrUnits')) {
-      document.getElementById('tempCorrectAcorrUnits').innerHTML = "&deg;C";
     }
 
     // update variables
@@ -417,44 +441,23 @@ function setUnits() {
     common.set(tempCorrect.acorrT, 0);
   } else {
     // update displayed units
-    if (document.getElementById('tempCorrectSGtemp1Units')) {
-      document.getElementById('tempCorrectSGtemp1Units').innerHTML = "&deg;F";
-     }
-    if (document.getElementById('tempCorrectSGtemp2Units')) {
-      document.getElementById('tempCorrectSGtemp2Units').innerHTML = "&deg;F";
-     }
-
-    if (document.getElementById('tempCorrectpHtemp1Units')) {
-      document.getElementById('tempCorrectpHtemp1Units').innerHTML = "&deg;F";
-     }
-    if (document.getElementById('tempCorrectpHtemp2Units')) {
-      document.getElementById('tempCorrectpHtemp2Units').innerHTML = "&deg;F";
-     }
-
+    if (document.getElementsByClassName("tempCorrectTUnits")) {
+      var uList = document.getElementsByClassName("tempCorrectTUnits");
+      console.log(uList);
+      for (uIdx = 0; uIdx < uList.length; uIdx++) {
+        uList[uIdx].innerHTML = "&deg;F";
+      }
+    }
     if (document.getElementById('tempCorrectvol1Units')) {
       document.getElementById('tempCorrectvol1Units').innerHTML = "G";
-     }
-    if (document.getElementById('tempCorrectvoltemp1Units')) {
-      document.getElementById('tempCorrectvoltemp1Units').innerHTML = "&deg;F";
-     }
-    if (document.getElementById('tempCorrectvoltemp2Units')) {
-      document.getElementById('tempCorrectvoltemp2Units').innerHTML = "&deg;F";
      }
     if (document.getElementById('tempCorrectvol2Units')) {
       document.getElementById('tempCorrectvol2Units').innerHTML = "G";
      }
-
     if (document.getElementById("tempCorrect.vol2")) {
       vol2G = common.convertLitersToGallons(tempCorrect.vol2);
       document.getElementById("tempCorrect.vol2").innerHTML =
                vol2G.toFixed(tempCorrect.vol1.precision);
-    }
-
-    if (document.getElementById('tempCorrectDebugUnits')) {
-      document.getElementById('tempCorrectDebugUnits').innerHTML = "&deg;F";
-    }
-    if (document.getElementById('tempCorrectAcorrUnits')) {
-      document.getElementById('tempCorrectAcorrUnits').innerHTML = "&deg;F";
     }
 
     // update variables
@@ -656,6 +659,96 @@ function compute_aCorrect(T, meas) {
 }
 
 //------------------------------------------------------------------------------
+
+this.estimateWPA = function(T) {
+  var WPA = 0.0;
+  if (T >= 99.7) {
+    WPA = 0.0;
+  } else if (T <= 78.5) {
+    WPA = 100.0;
+  } else {
+    WPA   =  -1.1798566592889689e+006 +
+             ( 5.0011149714910774e+004 * T) +
+             (-5.5361274735162806e+002 * T*T) +
+             (-2.8171538989168141e+000 * T*T*T) +
+             ( 5.8894583361128475e-002 * T*T*T*T) +
+             ( 3.9079532520632084e-004 * T*T*T*T*T) +
+             (-5.2114851839856001e-006 * T*T*T*T*T*T) +
+             (-5.7551273078304644e-008 * T*T*T*T*T*T*T) +
+             ( 8.3314787992185959e-010 * T*T*T*T*T*T*T*T) +
+             (-2.6302555900004212e-012 * T*T*T*T*T*T*T*T*T);
+    console.log("T = " + T + "; WPA = " + WPA);
+  }
+  return WPA;
+}
+
+//------------------------------------------------------------------------------
+
+this.estimateBPT = function(A) {
+  var BPT = 0.0;
+  if (A == 0.0) {
+    BPT = 100.0;
+  } else if (A >= 95.5) {
+    BPT = 78.5;
+  } else {
+    BPT =      9.9990575876521433e+001 +
+             (-9.1622304249828423e-001 * A) +
+             ( 2.4976194717428804e-002 * A*A) +
+             (-4.9268049580643595e-004 * A*A*A) +
+             ( 6.5338038083050965e-006 * A*A*A*A) +
+             (-5.0282221862797098e-008 * A*A*A*A*A) +
+             ( 1.6246657152458864e-010 * A*A*A*A*A*A);
+    console.log("A = " + A + "; BPT = " + BPT);
+  }
+  return BPT;
+}
+
+//------------------------------------------------------------------------------
+
+this.estimateVPA = function(T) {
+  var VPA = 0.0;
+  if (T <= 78.5) {
+    VPA = 95.5;
+  } else if (T >= 99.7) {
+    VPA = 0.0;
+  } else {
+    VPA =      3.5880716227093292e+005 +
+             (-2.0094118621463876e+004 * T) +
+             ( 4.5032567463419122e+002 * T*T) +
+             (-5.0477834554506273e+000 * T*T*T) +
+             ( 2.8306979154056434e-002 * T*T*T*T) +
+             (-6.3556658386130282e-005 * T*T*T*T*T);
+  }
+  return VPA;
+}
+
+//------------------------------------------------------------------------------
+
+this.estimateHT = function(A) {
+  var HT = 0.0;
+  if (A >= 95.5) {
+    HT = 78.5;
+  } else if (A == 0.0) {
+    HT = 100.0;
+  } else {
+    HT  =      1.0000017907045650e+002 +
+             (-7.1727749530836299e-002 * A) +
+             (-1.2311646094928311e-003 * A*A) +
+             (-1.1683658027684778e-004 * A*A*A) +
+             ( 2.2117763322910839e-005 * A*A*A*A) +
+             (-1.4700757046191325e-006 * A*A*A*A*A) +
+             ( 4.7174444752591413e-008 * A*A*A*A*A*A) +
+             (-6.6028464356410093e-010 * A*A*A*A*A*A*A) +
+             (-2.2783675539481851e-012 * A*A*A*A*A*A*A*A) +
+             ( 2.1907147843731818e-013 * A*A*A*A*A*A*A*A*A) +
+             (-3.1941801439132346e-015 * A*A*A*A*A*A*A*A*A*A) +
+             ( 2.0620970136148595e-017 * A*A*A*A*A*A*A*A*A*A*A) +
+             (-5.1625440200858505e-020 * A*A*A*A*A*A*A*A*A*A*A*A);
+  }
+  return HT;
+}
+
+//------------------------------------------------------------------------------
 // compute correction(s) based on temperature
 
 this.compute_tempCorrect = function(changeID) {
@@ -675,6 +768,7 @@ this.compute_tempCorrect = function(changeID) {
   var SG = 0.0;
   var SG2 = 0.0;
   var slope = 0.0;
+  var T = 0.0;
   var T1 = 0.0;
   var T2 = 0.0;
   var T1F = 0.0;
@@ -686,10 +780,13 @@ this.compute_tempCorrect = function(changeID) {
   var thresh = 0.0;
   var a = 0.0;
   var b = 0.0;
-
+  var updateBPT = false;
 
   if (tempCorrect.verbose > 0) {
     console.log("============== " + changeID + " ====================");
+    if (!changeID) {
+      console.log("changeID is undefined; updating ALL");
+    }
   }
 
   if (!changeID ||
@@ -830,6 +927,120 @@ this.compute_tempCorrect = function(changeID) {
     }
   }
 
+
+  if (!changeID || changeID == "tempCorrect.WPA" ||
+      changeID == "tempCorrect.BPT" || changeID == "tempCorrect.deltaT" ||
+      changeID == "tempCorrect.HT" || changeID == "tempCorrect.VPA") {
+    console.log("computing WPA, BPT, deltaT, HT, and/or VPA");
+    if (!changeID || changeID == "tempCorrect.WPA") {
+      tempCorrect.BPT.defaultValue =
+          tempCorrect.estimateBPT(tempCorrect.WPA.value);
+      tempCorrect.BPT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.BPT,  0);
+      common.set(tempCorrect.BPT,  0);
+
+      tempCorrect.HT.defaultValue = tempCorrect.BPT.value -
+                                    tempCorrect.deltaT.value;
+      tempCorrect.HT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.HT, 0);
+      common.set(tempCorrect.HT, 0);
+
+      tempCorrect.VPA.defaultValue =
+          tempCorrect.estimateVPA(tempCorrect.HT.value);
+      tempCorrect.VPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.VPA,  0);
+      common.set(tempCorrect.VPA,  0);
+    }
+
+    if (changeID == "tempCorrect.BPT") {
+      tempCorrect.WPA.defaultValue =
+          tempCorrect.estimateWPA(tempCorrect.BPT.value);
+      tempCorrect.WPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.WPA,  0);
+      common.set(tempCorrect.WPA,  0);
+
+      tempCorrect.HT.defaultValue = tempCorrect.BPT.value -
+                                    tempCorrect.deltaT.value;
+      tempCorrect.HT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.HT, 0);
+      common.set(tempCorrect.HT, 0);
+
+      tempCorrect.VPA.defaultValue =
+          tempCorrect.estimateVPA(tempCorrect.HT.value);
+      tempCorrect.VPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.VPA,  0);
+      common.set(tempCorrect.VPA,  0);
+    }
+
+    if (changeID == "tempCorrect.deltaT") {
+      tempCorrect.HT.defaultValue = tempCorrect.BPT.value -
+                                    tempCorrect.deltaT.value;
+      tempCorrect.HT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.HT, 0);
+      common.set(tempCorrect.HT, 0);
+
+      tempCorrect.VPA.defaultValue =
+          tempCorrect.estimateVPA(tempCorrect.HT.value);
+      tempCorrect.VPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.VPA,  0);
+      common.set(tempCorrect.VPA,  0);
+    }
+
+    if (changeID == "tempCorrect.HT") {
+      tempCorrect.deltaT.defaultValue = tempCorrect.BPT.value -
+                                        tempCorrect.HT.value;
+      updateBPT = false;
+      if (tempCorrect.deltaT.defaultValue < 0.0) {
+        updateBPT = true;
+        tempCorrect.BPT.defaultValue = tempCorrect.HT.value;
+        tempCorrect.deltaT.defaultValue = 0.0;
+      }
+      tempCorrect.deltaT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.deltaT, 0);
+      common.set(tempCorrect.deltaT, 0);
+
+      if (updateBPT) {
+        tempCorrect.BPT.userSet = 0;
+        common.unsetSavedValue(tempCorrect.BPT, 0);
+        common.set(tempCorrect.BPT, 0);
+
+        tempCorrect.WPA.defaultValue =
+            tempCorrect.estimateWPA(tempCorrect.BPT.value);
+        tempCorrect.WPA.userSet = 0;
+        common.unsetSavedValue(tempCorrect.WPA,  0);
+        common.set(tempCorrect.WPA,  0);
+      }
+
+      tempCorrect.VPA.defaultValue =
+          tempCorrect.estimateVPA(tempCorrect.HT.value);
+      tempCorrect.VPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.VPA,  0);
+      common.set(tempCorrect.VPA,  0);
+    }
+
+    if (changeID == "tempCorrect.VPA") {
+      tempCorrect.HT.defaultValue =
+          tempCorrect.estimateHT(tempCorrect.VPA.value);
+      tempCorrect.HT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.HT, 0);
+      common.set(tempCorrect.HT, 0);
+
+      tempCorrect.BPT.defaultValue =
+          tempCorrect.HT.value + tempCorrect.delta.value;
+      if (tempCorrect.BPT.defaultValue >= 100.0) {
+        tempCorrect.BPT.defaultValue = 100.0;
+      }
+      tempCorrect.BPT.userSet = 0;
+      common.unsetSavedValue(tempCorrect.BPT,  0);
+      common.set(tempCorrect.BPT,  0);
+
+      tempCorrect.WPA.defaultValue =
+          tempCorrect.estimateWPA(tempCorrect.BPT.value);
+      tempCorrect.WPA.userSet = 0;
+      common.unsetSavedValue(tempCorrect.WPA,  0);
+      common.set(tempCorrect.WPA,  0);
+    }
+  }
 
   return;
 }

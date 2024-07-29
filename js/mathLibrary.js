@@ -441,6 +441,15 @@ this.backwardSubstitution = function(matrix) {
 }
 
 //------------------------------------------------------------------------------
+// linear interpolation
+
+this.interpolate = function(x1, y1, x2, y2, x) {
+  var y = 0.0;
+  y = y1 + (x - x1)*(y2 - y1)/(x2 - x1);
+  return y;
+}
+
+//------------------------------------------------------------------------------
 // polynomial regression algorithm based on explanation from P. Lutus at
 //    https://arachnoid.com/sage/polynomial.html
 
@@ -471,9 +480,38 @@ this.polynomialRegression = function(data, order, verbose = false) {
   }
   for (row = 0; row < data.length; row++) {
     if (data[row].length != 2) {
+      console.log("ROW " + row + " LENGTH = " + data[row].length);
       window.alert("in mathLibrary.polynomialRegression, data must be Nx2");
       return res;
     }
+  }
+
+  // check for (and solve) simple cases first
+  if (data.length == 2 && order == 1) {
+    var a = (data[1][1] - data[0][1]) / (data[1][0] - data[0][0]);
+    var b = data[0][1] - a * data[0][0];
+    res.push(b);
+    res.push(a);
+    // console.log("y = " + a + " * x + " + b);
+    return res;
+  }
+  if (data.length == 3 && order == 2) {
+    var x1 = data[0][0];
+    var y1 = data[0][1];
+    var x2 = data[1][0];
+    var y2 = data[1][1];
+    var x3 = data[2][0];
+    var y3 = data[2][1];
+    var b_s = ((x2*x2) - (x1*x1)) / (x1 - x2);
+    var b_o = (y1 - y2) / (x1 - x2);
+    var a = (b_o*x3 - b_o*x2 + y2 - y3) / (x2*x2 + b_s*x2 - x3*x3 - b_s*x3);
+    var b = a * b_s + b_o;
+    var c = y1 - a*x1*x1 - b*x1;
+    res.push(c);
+    res.push(b);
+    res.push(a);
+    // console.log("y = " + a + " * x^2 + " + b + " * x + " + c);
+    return res;
   }
 
   // create empty matrix with correct dimensions (rows=order+1 cols=order+2)

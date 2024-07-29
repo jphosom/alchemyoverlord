@@ -58,6 +58,280 @@ var common = common || {};
 common._construct = function() {
 
 //------------------------------------------------------------------------------
+// create various types of input fields
+
+this.createInt = function(id, value, description, minValue, maxValue,
+                        defaultFunction, defaultFunctionArgs, defaultColor,
+                        additionalFunction, additionalFunctionArgs,
+                        dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "int";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (defaultColor != "") {
+    entry.defaultColor = defaultColor;
+  }
+  entry.min = minValue;
+  entry.max = maxValue;
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+this.createFloat = function(id, value, description, minValue, maxValue,
+                        precision, minPrecision,
+                        convertToMetricFunction, convertToImperialFunction,
+                        defaultFunction, defaultFunctionArgs, defaultColor,
+                        additionalFunction, additionalFunctionArgs,
+                        dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "float";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (defaultColor != "") {
+    entry.defaultColor = defaultColor;
+  }
+  entry.min = minValue;
+  entry.max = maxValue;
+  entry.precision = precision;
+  entry.minPrecision = minPrecision;
+  if (convertToMetricFunction != "") {
+    entry.convertToMetric = convertToMetricFunction;
+  }
+  if (convertToImperialFunction != "") {
+    entry.convertToImperial = convertToImperialFunction;
+  }
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+
+this.createFloatOrString = function(id, value, description, minValue, maxValue,
+                        precision, minPrecision, inputStrings,
+                        convertToMetricFunction, convertToImperialFunction,
+                        defaultFunction, defaultFunctionArgs, defaultColor,
+                        additionalFunction, additionalFunctionArgs,
+                        dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "floatOrString";
+  entry.inputStrings = inputStrings;
+  entry.value = value;
+  entry.userSet = 0;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (defaultColor != "") {
+    entry.defaultColor = defaultColor;
+  }
+  entry.min = minValue;
+  entry.max = maxValue;
+  entry.precision = precision;
+  entry.minPrecision = minPrecision;
+  if (convertToMetricFunction != "") {
+    entry.convertToMetric = convertToMetricFunction;
+  }
+  if (convertToImperialFunction != "") {
+    entry.convertToImperial = convertToImperialFunction;
+  }
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+
+
+
+this.createRadioButton = function(id, value,
+                             defaultFunction, defaultFunctionArgs,
+                             additionalFunction, additionalFunctionArgs,
+                             dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "radioButton";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+this.createString = function(id, value, description, defaultFunction,
+                        defaultFunctionArgs, additionalFunction,
+                        additionalFunctionArgs, dependents,
+                        updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "string";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.display = value;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  entry.description = description;
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+this.createSelection = function(id, value, description, defaultFunction,
+                        defaultFunctionArgs, additionalFunction,
+                        additionalFunctionArgs, dependents,
+                        updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "select";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.display = value;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  entry.description = description;
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+this.createTime = function(id, value, overrideTimeFormat, description,
+                        defaultFunction, defaultFunctionArgs,
+                        additionalFunction, additionalFunctionArgs,
+                        dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "time";
+  if (overrideTimeFormat != "noAMPM" && overrideTimeFormat != "12" &&
+      overrideTimeFormat != "24" && overrideTimeFormat != "") {
+    window.alert("For input " + id + ", overrideTimeFormat '" +
+                 overrideTimeFormat +
+                 "' is not valid; must be one of {noAMPM, 12, 24}.");
+    overrideTimeFormat = 24;
+  }
+  entry.overrideTimeFormat = overrideTimeFormat;
+  entry.value = value;
+  entry.userSet = 0;
+  entry.display = value;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  entry.description = description;
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+  return entry;
+}
+
+//------------------------------------------------------------------------------
 // validate user input.
 // The output 'check' contains:
 //    - valid : true if the input is a valid value, else false
@@ -162,6 +436,8 @@ validateFloatOrString = function(variable, input) {
 // validate user input as a time.
 // A time can be either the normal HH[:|.]MM [AM|PM], or it can be minutes only
 // (in which case minutes less than 10 must be preceded by a 0)
+// This validation is simple and won't catch things like 18:32am; further
+// validation and processing should be done by the parent script.
 // The output 'check' contains:
 //    - valid : true if the input is a valid value, else false
 //    - useDefaultValue : true if we explicitly want to go back to default value
@@ -233,7 +509,7 @@ this.parseTime = function(timeStr) {
   var timePattern = "^([0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]) ?([AaPp][Mm])?$";
   var HHMM = 0;
 
-  if (!timeStr || timeStr == "" || timeStr == "--:--" || 
+  if (!timeStr || timeStr == "" || timeStr == "--:--" ||
       Number(timeStr) < 0.0) {
     return -1;
   }
@@ -477,6 +753,11 @@ this.set = function(variable, haveUserInput) {
       variable.updateFunction(variable.updateFunctionArgs);
     }
   }
+
+  // if input wasn't valid, focus on this input window
+  if (haveUserInput && !check.valid && document.getElementById(variable.id)) {
+    document.getElementById(variable.id).focus();
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -527,12 +808,12 @@ this.updateHTML = function(variable) {
     variable.display = variable.value;
   } else if (variable.inputType == "time") {
     if (window[variable.parent]["timeUnits"]) {
-      variable.display = common.convertTimeToStr(variable.value, 
+      variable.display = common.convertTimeToStr(variable.value,
                              window[variable.parent]["timeUnits"].value,
-                             variable.timeFormat);
+                             variable.overrideTimeFormat);
     } else {
       variable.display = common.convertTimeToStr(variable.value, "24",
-                             variable.timeFormat);
+                             variable.overrideTimeFormat);
     }
   } else {
     variable.display = outputNumber.toString();
@@ -565,14 +846,14 @@ this.updateHTML = function(variable) {
 // TIME CONVERSION
 // JPH TODO : implement 24hour conversion
 
-this.convertTimeToStr = function(timeFloat, timeUnits, timeFormatOverride) {
+this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
   var timeStr = "";
   var ampm = "";
   var precision = 0;
   var timePatternMin = "^([0-5][0-9])$";
 
-  // console.log("in convertTimeToStr(" + timeFloat + ", " + timeUnits + 
-              // ", " + timeFormatOverride + ")");
+  // console.log("in convertTimeToStr(" + timeFloat + ", " + timeUnits +
+              // ", " + overrideTimeFormat + ")");
   if (timeFloat < 0.0 || timeFloat == "") {
     return "";
   }
@@ -591,15 +872,16 @@ this.convertTimeToStr = function(timeFloat, timeUnits, timeFormatOverride) {
 
   // if there aren't 8 places past the decimal, something went wrong
   if (precision != 8) {
+    console.log("Time string = '" + timeStr + "', precision = " + precision);
     window.alert("Time is in unknown format: precision neither 2 nor 8");
     return timeFloat;
   }
 
   // override time format if needed
-  if (timeFormatOverride == "24") {
+  if (overrideTimeFormat == "24") {
     timeUnits = "24";
   }
-  if (timeFormatOverride == "12") {
+  if (overrideTimeFormat == "12") {
     timeUnits = "12";
   }
 
@@ -608,7 +890,7 @@ this.convertTimeToStr = function(timeFloat, timeUnits, timeFormatOverride) {
   if (min < 10) {
     min = "0" + min;
   }
-  if (timeUnits == "24" && timeFormatOverride != "noAMPM") {
+  if (timeUnits == "24" && overrideTimeFormat != "noAMPM") {
     if (hrs < 10) {
       hrs = "0" + hrs;
     }
@@ -622,7 +904,7 @@ this.convertTimeToStr = function(timeFloat, timeUnits, timeFormatOverride) {
       hrs -= 12;
       ampm = "pm";
     }
-    if (timeFormatOverride == "noAMPM") {
+    if (overrideTimeFormat == "noAMPM") {
       ampm = "";
     }
     timeStr = hrs + ":" + min + " " + ampm;

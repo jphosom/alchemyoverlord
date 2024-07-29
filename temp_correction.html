@@ -45,25 +45,25 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   <tr>
     <td>SG:</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SG1" onchange="common.set(tempCorrect.SG1,1)">&nbsp; at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp1" onchange="common.set(tempCorrect.SGtemp1,1)"><span id="tempCorrectSGtemp1Units">X</span> </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp1" onchange="common.set(tempCorrect.SGtemp1,1)"><span class="tempCorrectTUnits">X</span> </td>
     <td>,&nbsp; when at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp2" onchange="common.set(tempCorrect.SGtemp2,1)"><span id="tempCorrectSGtemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.SGtemp2" onchange="common.set(tempCorrect.SGtemp2,1)"><span class="tempCorrectTUnits">X</span>&nbsp; = &nbsp;</td>
     <td><span id="tempCorrect.SG2"></span>
   </tr>
   <tr>
     <td>pH:</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pH1" onchange="common.set(tempCorrect.pH1,1)">&nbsp; at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp1" onchange="common.set(tempCorrect.pHtemp1,1)"><span id="tempCorrectpHtemp1Units">X</span> </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp1" onchange="common.set(tempCorrect.pHtemp1,1)"><span class="tempCorrectTUnits">X</span> </td>
     <td>,&nbsp; when at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp2" onchange="common.set(tempCorrect.pHtemp2,1)"><span id="tempCorrectpHtemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.pHtemp2" onchange="common.set(tempCorrect.pHtemp2,1)"><span class="tempCorrectTUnits">X</span>&nbsp; = &nbsp;</td>
     <td><span id="tempCorrect.pH2"></span>
   </tr>
   <tr>
     <td>volume:</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.vol1" onchange="common.set(tempCorrect.vol1,1)"> <span id="tempCorrectvol1Units">U</span>&nbsp; at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp1" onchange="common.set(tempCorrect.voltemp1,1)"><span id="tempCorrectvoltemp1Units">X</span> </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp1" onchange="common.set(tempCorrect.voltemp1,1)"><span class="tempCorrectTUnits">X</span> </td>
     <td>,&nbsp; when at &nbsp;</td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp2" onchange="common.set(tempCorrect.voltemp2,1)"><span id="tempCorrectvoltemp2Units">X</span>&nbsp; = &nbsp;</td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.voltemp2" onchange="common.set(tempCorrect.voltemp2,1)"><span class="tempCorrectTUnits">X</span>&nbsp; = &nbsp;</td>
     <td><span id="tempCorrect.vol2"></span> <span id="tempCorrectvol2Units"</span>
   </tr>
   </tbody>
@@ -90,18 +90,25 @@ Version 1.0.1 : November 25, 2021. Minor updates.
   <tr>
     <td>R.corr: measured</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug1" onchange="common.set(tempCorrect.debug1,1)">%</td>
-  <td>&nbsp; at temperature </td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debugT" onchange="common.set(tempCorrect.debugT,1)"><span id="tempCorrectDebugUnits">X</span></td>
+  <td>at temperature </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debugT" onchange="common.set(tempCorrect.debugT,1)"><span class="tempCorrectTUnits">X</span></td>
   <td>, actual = &nbsp;</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.debug2" onchange="common.set(tempCorrect.debug2,1)">%</td>
   </tr>
   <tr>
     <td>A.corr: measured</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorr1" onchange="common.set(tempCorrect.acorr1,1)">%</td>
-  <td>&nbsp; at temperature </td>
-    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorrT" onchange="common.set(tempCorrect.acorrT,1)"><span id="tempCorrectAcorrUnits">X</span></td>
+  <td>at temperature </td>
+    <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorrT" onchange="common.set(tempCorrect.acorrT,1)"><span class="tempCorrectTUnits">X</span></td>
   <td>, actual = &nbsp;</td>
     <td><input style="width: 6em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.acorr2" onchange="common.set(tempCorrect.acorr2,1)">%</td>
+  </tr>
+  <tr>
+    <td>W : <input style="width: 4em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.WPA" onchange="common.set(tempCorrect.WPA,1)">%,&nbsp;</td>
+    <td>B : <input style="width: 4em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.BPT" onchange="common.set(tempCorrect.BPT,1)"><span class="tempCorrectTUnits">X</span>&nbsp;&minus;&nbsp;</td>
+    <td>&Delta; : <input style="width: 4em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.deltaT" onchange="common.set(tempCorrect.deltaT,1)"><span class="tempCorrectTUnits">X</span>&nbsp;=</td>
+    <td>H : <input style="width: 4em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.HT" onchange="common.set(tempCorrect.HT,1)"><span class="tempCorrectTUnits">X</span>,&nbsp;</td>
+    <td>V : <input style="width: 4em" type="text" value="" autocomplete="off" STYLE="text-align:left" id="tempCorrect.VPA" onchange="common.set(tempCorrect.VPA,1)">%</td>
   </tr>
   </tbody>
   </table>
