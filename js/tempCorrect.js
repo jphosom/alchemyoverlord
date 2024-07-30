@@ -439,6 +439,10 @@ function setUnits() {
 
     common.set(tempCorrect.debugT, 0);
     common.set(tempCorrect.acorrT, 0);
+
+    common.set(tempCorrect.BPT, 0);
+    common.set(tempCorrect.deltaT, 0);
+    common.set(tempCorrect.HT, 0);
   } else {
     // update displayed units
     if (document.getElementsByClassName("tempCorrectTUnits")) {
@@ -473,6 +477,10 @@ function setUnits() {
 
     common.set(tempCorrect.debugT, 0);
     common.set(tempCorrect.acorrT, 0);
+
+    common.set(tempCorrect.BPT, 0);
+    common.set(tempCorrect.deltaT, 0);
+    common.set(tempCorrect.HT, 0);
   }
 
   return true;
