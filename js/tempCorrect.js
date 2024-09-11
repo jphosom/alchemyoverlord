@@ -790,6 +790,8 @@ function compute_aCorrect(T, Tref, meas) {
   density_app = computeDensityFromA(meas, Tref);
   density_true = density_app / (1 + (alpha * (T - Tref)));
   A_true = computeAfromDensityAndTemp(density_true, T, Tref);
+  if (A_true < 0.0) A_true = 0.0;
+  if (A_true > 100.0) A_true = 100.0;
 
   return A_true;
 }
