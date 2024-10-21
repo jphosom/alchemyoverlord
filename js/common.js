@@ -54,6 +54,11 @@ var common = common || {};
 //   . existsSavedValue()
 //   . saveToFile()
 //   . loadFromFile()
+//
+//   MISCELLANEOUS FUNCTIONS:
+//   . getPressureAndAltitudeFromBoilingPoint()
+//   . getPressureAndBoilingPointFromAltitude()
+//
 
 common._construct = function() {
 
@@ -69,6 +74,7 @@ this.createInt = function(id, value, description, minValue, maxValue,
   entry.inputType = "int";
   entry.value = value;
   entry.userSet = 0;
+  entry.description = description;
   entry.defaultValue = value;
   if (defaultFunction != "") {
     entry.defaultFunction = defaultFunction;
@@ -106,6 +112,7 @@ this.createFloat = function(id, value, description, minValue, maxValue,
   entry.id = id;
   entry.inputType = "float";
   entry.value = value;
+  entry.description = description;
   entry.userSet = 0;
   entry.defaultValue = value;
   if (defaultFunction != "") {
@@ -155,6 +162,7 @@ this.createFloatOrString = function(id, value, description, minValue, maxValue,
   entry.inputStrings = inputStrings;
   entry.value = value;
   entry.userSet = 0;
+  entry.description = description;
   entry.defaultValue = value;
   if (defaultFunction != "") {
     entry.defaultFunction = defaultFunction;
@@ -766,8 +774,8 @@ this.updateHTML = function(variable) {
   var isNumber = true;
   var outputNumber = 0.0;
 
-  // console.log("UPDATING HTML for " + variable.id +
-               // " with value " + variable.value);
+  console.log("UPDATING HTML for " + variable.id +
+               " with value " + variable.value);
   isNumber = false;
   outputNumber = variable.value;
   if (!isNaN(outputNumber) && outputNumber != "") {
@@ -1212,6 +1220,71 @@ this.loadFromFile = function(files) {
 
   return true;
 }
+
+//------------------------------------------------------------------------------
+
+this.getPressureAndAltitudeFromBoilingPoint = function(boilTemp) {
+  var altitude = 0.0;
+  var T1 = 0.0;         // boiling point, in Kelvin
+  var P1 = 0.0;         // atmospheric pressure, in atmospheres
+  var Ptorr = 0.0;      // atmospheric pressure, in Torr
+
+  // define constants
+  var deltaHv = 40.66;            // kJ/mol
+  var T0      = 373.15;           // 'K
+  var P0      = 101.325;          // kPa
+  var g0      = 9.80665;          // gravitational constant (m / s^2)
+  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
+  var hb      = 0.0;              // reference height (m)
+  var Tmb     = 288.15;           // reference temperature ('K)
+  var R       = 8.31446261815324; // universal gas constant, J/(K mol)
+  var R_kJ    = R / 1000.0;       // universal gas constant, kJ/(K mol)
+
+  // get atmospheric pressure from boiling point using Clausius-Clapeyron eqn
+  T1     = boilTemp + 273.15;     // convert 'C to 'K
+  P1     = Math.exp((deltaHv / R_kJ) * ((1.0/T0) - (1.0/T1))) * P0;
+  Ptorr  = 1000.0 * P1 / 133.3223684211;  // convert atm to Torr
+
+  // calculate altitude from atmospheric pressure, assuming reference altitude=0
+  altitude = -1.0 * Math.log(P1 / P0) * (R * Tmb) / (g0 * M);
+
+  P = Ptorr;
+  return [Ptorr, altitude];
+}
+
+//------------------------------------------------------------------------------
+
+this.getPressureAndBoilingPointFromAltitude = function(altitude) {
+  var P1 = 0.0;
+  var Ptorr = 0.0;
+  var Tb = 0.0;
+  var TbC = 0.0;
+
+  // define constants
+  var deltaHv = 40.66;            // kJ/mol
+  var T0      = 373.15;           // 'K
+  var P0      = 101.325;          // kPa
+  var g0      = 9.80665;          // gravitational constant (m / s^2)
+  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
+  var hb      = 0.0;              // reference height (m)
+  var Tmb     = 288.15;           // reference temperature ('K)
+  var R       = 8.31446261815324; // universal gas constant, J/(K mol)
+  var R_kJ    = R / 1000.0;       // universal gas constant, kJ/(K mol)
+
+  // atmospheric pressure as function of altitude
+  //   formula from https://en.wikipedia.org/wiki/Barometric_formula
+  // boiling point as a function of pressure using the Clausis-Clapeyron Eqn:
+  //   https://socratic.org/questions/how-do-you-calculate-boiling-point-at-different-pressures
+  //   https://www.omnicalculator.com/chemistry/boiling-point
+  P1    = P0 * Math.exp((-1.0 * g0 * M * (altitude - hb))/(R * Tmb));  // kPa
+  Ptorr = 1000.0 * P1 / 133.3223684211;   // convert atm to Torr
+
+  Tb    = 1.0 / ((1.0/T0) - (R_kJ * Math.log(P1 / P0) / deltaHv));
+  TbC   = Tb - 273.15;  // convert 'K to 'C
+
+  return [Ptorr, TbC];
+}
+
 
 //------------------------------------------------------------------------------
 
