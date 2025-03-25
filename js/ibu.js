@@ -2,7 +2,12 @@
 // ibu.js : JavaScript for AlchemyOverlord web page, IBU-related functions
 //          but not specific estimation methods.
 // Written by John-Paul Hosom
-// Copyright © 2018-2020 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018-2025 by John-Paul Hosom, all rights reserved.
+// To license this software, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
+// In many cases (at the sole discretion of John-Paul Hosom) a license
+// is provided free of charge, but a written license is required for
+// legal use of this code.
 //
 // Version 1.0.0 : January 30, 2017
 // Version 1.0.1 : May 6, 2018
@@ -78,6 +83,7 @@ var ibu = ibu || {};
 //    . description = description of variable if fail validation check
 //    . defaultValue = the default value if user clears all saved values
 //    . defaultColor = color to use if value is the default
+//    . userColor = color to use if user has set the value (default black)
 //    . defaultFunction = function to use to compute the default value
 //    . defaultArgs = arguments to pass in to defaultFunction
 //    . dependents = array of variables that have defaults that depend on this

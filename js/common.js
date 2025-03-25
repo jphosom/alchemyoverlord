@@ -1,7 +1,12 @@
 // -----------------------------------------------------------------------------
 // common.js : JavaScript for AlchemyOverlord web page, common functions
 // Written by John-Paul Hosom
-// Copyright © 2018-2020 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018-2025 by John-Paul Hosom, all rights reserved.
+// To license this software, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
+// In many cases (at the sole discretion of John-Paul Hosom) a license
+// is provided free of charge, but a written license is required for
+// legal use of this code.
 //
 // Version 1.2.0 : Jul 15, 2018 : complete re-write under hood; add save/load
 // Version 1.2.1 : Jul 18, 2018 : add support for checkbox
@@ -9,6 +14,7 @@
 // Version 1.3.2 : Feb 20, 2020 : add support for saving/loading files
 // Version 1.3.3 : Nov 22, 2020 : add tsp/ml conversion; minor cleanup
 // Version 1.3.4 : Aug 22, 2021 : add meters/feet, Plato conversion; cleanup
+// Version 1.4.0 : Nov 12, 2024 : lots of updates, new functions, cleanup
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -21,12 +27,26 @@ var common = common || {};
 //
 //   public functions:
 //
-//   HTML-RELATED FUNCTIONS:
+//   VARIABLE-CREATION FUNCTIONS:
+//   . createInt()
+//   . createFloat()
+//   . createFloatOrString()
+//   . createRadioButton()
+//   . createString()
+//   . createSelection()
+//   . createTime()
+//
+//   VARIABLE-RELATED FUNCTIONS:
+//   . parseTimeAsFloat()
 //   . getPrecision()
 //   . set()
 //   . updateHTML()
 //
-//   UNIT CONVERSION FUNCTIONS:
+//   FOCUS FUNCTIONS:
+//   . initFocus()
+//
+//   CONVERSION FUNCTIONS:
+//   . convertTimeToString()
 //   . convertMetersToFeet()
 //   . convertFeetToMeters()
 //   . convertCmToInches()
@@ -46,7 +66,7 @@ var common = common || {};
 //   . convertTspToMl()
 //   . convertMlToTsp()
 //
-//   FUNCTIONS FOR SAVING AND LOADING PARAMETERS:
+//   SAVING AND LOADING PARAMETERS:
 //   . clearSavedValues()
 //   . setSavedValue()
 //   . unsetSavedValue()
@@ -61,6 +81,9 @@ var common = common || {};
 //
 
 common._construct = function() {
+
+//==============================================================================
+//   VARIABLE-CREATION FUNCTIONS:
 
 //------------------------------------------------------------------------------
 // create various types of input fields
@@ -101,6 +124,8 @@ this.createInt = function(id, value, description, minValue, maxValue,
   entry.parent = id.split(".")[0];
   return entry;
 }
+
+//------------------------------------------------------------------------------
 
 this.createFloat = function(id, value, description, minValue, maxValue,
                         precision, minPrecision,
@@ -149,6 +174,7 @@ this.createFloat = function(id, value, description, minValue, maxValue,
   return entry;
 }
 
+//------------------------------------------------------------------------------
 
 this.createFloatOrString = function(id, value, description, minValue, maxValue,
                         precision, minPrecision, inputStrings,
@@ -198,8 +224,41 @@ this.createFloatOrString = function(id, value, description, minValue, maxValue,
   return entry;
 }
 
+//------------------------------------------------------------------------------
+
+this.createCheckbox = function(id, value, defaultFunction, defaultFunctionArgs,
+                               additionalFunction, additionalFunctionArgs,
+                               dependents, updateFunction, updateFunctionArgs) {
+  entry = new Object();
+  entry.id = id;
+  entry.inputType = "checkbox";
+  entry.value = value;
+  entry.userSet = 0;
+  entry.defaultValue = value;
+  if (defaultFunction != "") {
+    entry.defaultFunction = defaultFunction;
+    entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (additionalFunction != "") {
+    entry.additionalFunction = additionalFunction;
+    entry.additionalFunctionArgs = additionalFunctionArgs;
+  }
+  if (dependents != "") {
+    entry.dependents = dependents;
+  }
+  if (updateFunction != "") {
+    entry.updateFunction = updateFunction;
+  }
+  if (updateFunctionArgs != "") {
+    entry.updateFunctionArgs = updateFunctionArgs;
+  }
+  entry.parent = id.split(".")[0];
+
+  return entry;
+}
 
 
+//------------------------------------------------------------------------------
 
 this.createRadioButton = function(id, value,
                              defaultFunction, defaultFunctionArgs,
@@ -231,6 +290,8 @@ this.createRadioButton = function(id, value,
   entry.parent = id.split(".")[0];
   return entry;
 }
+
+//------------------------------------------------------------------------------
 
 this.createString = function(id, value, description, defaultFunction,
                         defaultFunctionArgs, additionalFunction,
@@ -265,6 +326,8 @@ this.createString = function(id, value, description, defaultFunction,
   return entry;
 }
 
+//------------------------------------------------------------------------------
+
 this.createSelection = function(id, value, description, defaultFunction,
                         defaultFunctionArgs, additionalFunction,
                         additionalFunctionArgs, dependents,
@@ -298,18 +361,28 @@ this.createSelection = function(id, value, description, defaultFunction,
   return entry;
 }
 
-this.createTime = function(id, value, overrideTimeFormat, description,
-                        defaultFunction, defaultFunctionArgs,
-                        additionalFunction, additionalFunctionArgs,
-                        dependents, updateFunction, updateFunctionArgs) {
+//------------------------------------------------------------------------------
+
+this.createTime = function(id, value, timeUnitsVariable, timeDivisionVariable,
+                        previousEntry, mustBeLater, emptyTimeOK,
+                        overrideTimeFormat, description, defaultFunction,
+                        defaultFunctionArgs, additionalFunction,
+                        additionalFunctionArgs, dependents, updateFunction,
+                        updateFunctionArgs) {
   entry = new Object();
   entry.id = id;
   entry.inputType = "time";
-  if (overrideTimeFormat != "noAMPM" && overrideTimeFormat != "12" &&
-      overrideTimeFormat != "24" && overrideTimeFormat != "") {
+  entry.timeUnitsVariable = timeUnitsVariable;
+  entry.timeDivisionVariable = timeDivisionVariable;
+  entry.previousEntry = previousEntry;
+  entry.mustBeLater = mustBeLater;
+  entry.emptyTimeOK = emptyTimeOK;
+  if (overrideTimeFormat != "noAMPM" && overrideTimeFormat != "onlyAM" &&
+      overrideTimeFormat != "12" && overrideTimeFormat != "24" &&
+      overrideTimeFormat != "") {
     window.alert("For input " + id + ", overrideTimeFormat '" +
                  overrideTimeFormat +
-                 "' is not valid; must be one of {noAMPM, 12, 24}.");
+                 "' is not valid; must be one of {noAMPM, onlyAM, 12, 24}.");
     overrideTimeFormat = 24;
   }
   entry.overrideTimeFormat = overrideTimeFormat;
@@ -339,6 +412,9 @@ this.createTime = function(id, value, overrideTimeFormat, description,
   return entry;
 }
 
+//==============================================================================
+// (PRIVATE) INPUT VALIDATION FUNCTIONS
+
 //------------------------------------------------------------------------------
 // validate user input.
 // The output 'check' contains:
@@ -349,12 +425,12 @@ this.createTime = function(id, value, overrideTimeFormat, description,
 validate = function(variable, input) {
   var check = new Object();
   var inputValue;
+  var metricValue;
 
   check.useDefaultValue = false;
   check.valid = true;
 
   if (input == "D" || input == "d" || input == "'D'" || input == "'d'") {
-    check.valid = false;
     check.useDefaultValue = true;
     check.value = "";
     return check;
@@ -366,7 +442,15 @@ validate = function(variable, input) {
       check.valid = false;
     }
     inputValue = Number(input);
-    if (inputValue < variable.min || inputValue > variable.max) {
+    // if needed, convert to metric, so min/max check is against metric value
+    metricValue = inputValue;
+    if (!isNaN(metricValue) && metricValue != "") {
+      if (("convertToMetric" in variable) &&
+          window[variable.parent]["units"].value == "imperial") {
+        metricValue = variable.convertToMetric(metricValue);
+      }
+    }
+    if (metricValue < variable.min || metricValue > variable.max) {
       check.valid = false;
     }
     if (variable.inputType == "int" && !Number.isInteger(inputValue)) {
@@ -403,12 +487,12 @@ validateFloatOrString = function(variable, input) {
   var check = new Object();
   var idx;
   var inputValue;
+  var metricValue;
 
   check.useDefaultValue = false;
   check.valid = true;
 
   if (input == "D" || input == "d" || input == "'D'" || input == "'d'") {
-    check.valid = false;
     check.useDefaultValue = true;
     check.value = "";
     return check;
@@ -418,13 +502,21 @@ validateFloatOrString = function(variable, input) {
   if (!isNaN(input) && input.length != 0) {
     inputValue = Number(input);
     check.valid = true;
-    if (inputValue < variable.min || inputValue > variable.max) {
+    // if needed, convert to metric, so min/max check is against metric value
+    metricValue = inputValue;
+    if (!isNaN(metricValue) && metricValue != "") {
+      if (("convertToMetric" in variable) &&
+          window[variable.parent]["units"].value == "imperial") {
+        metricValue = variable.convertToMetric(metricValue);
+      }
+    }
+    if (metricValue < variable.min || metricValue > variable.max) {
       check.valid = false;
     }
     check.value = input;
   } else {
     for (idx = 0; idx < variable.inputStrings.length; idx++) {
-      // console.log("checking " + variable.inputStrings[idx]);
+      console.log("checking " + variable.inputStrings[idx]);
       if (variable.inputStrings[idx] == input.toLowerCase()) {
         check.valid = true;
         check.value = input;
@@ -442,60 +534,168 @@ validateFloatOrString = function(variable, input) {
 
 //------------------------------------------------------------------------------
 // validate user input as a time.
-// A time can be either the normal HH[:|.]MM [AM|PM], or it can be minutes only
-// (in which case minutes less than 10 must be preceded by a 0)
-// This validation is simple and won't catch things like 18:32am; further
-// validation and processing should be done by the parent script.
+// An input time can be either the normal HH[:|.]MM [AM|PM], or it can be
+// minutes only (in which case, the hour is determined from the previousEntry
+// variable).  The input can be in 24-hour or 12-hour format, as specified
+// in the timeUnitsVariable variable.
 // The output 'check' contains:
 //    - valid : true if the input is a valid value, else false
 //    - useDefaultValue : true if we explicitly want to go back to default value
-//    - value : the (numeric or other) value of the (string) input
+//    - value : the properly-formatted time value of the input, if validated
 
 validateTime = function(variable, input) {
+  var ampm = "";
   var check = new Object();
+  var formattedTime = "";
   var found = [];
   var hour = 0;
-  var timePattern = "^(0?[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]) ?([AaPp][Mm])?$";
+  var min = 0;
+  var previousTime = 0.0;
+  var previousTimeHHMM = "";
+  var timeUnits = "";
+  var timePattern24 = "^(0?[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9])$";
+  var timePattern12 = "^([0-9]|1[0-2])(:|\.)([0-5][0-9]) ?([AaPp][Mm])?$";
   var timePatternMin = "^([0-5][0-9])$";
+  var timeH = 0.0;
+  var userMin = "";
+
+  check.useDefaultValue = false;
+  check.valid = false;
+  check.value = "";
 
   // if 'd' for default, then don't change a saved value; if no saved
   // value, then generate an error (no saved value should never occur)
   if (input == "D" || input == "d" || input == "'D'" || input == "'d'") {
-    check.valid = false;
-    check.value = "";
+    if (variable.emptyTimeOK) {
+      check.valid = true;
+    }
+    check.useDefaultValue = true;
     return check;
   }
-
+  console.log("input = '" + input + "'");
+  console.log("emptyOK = " + variable.emptyTimeOK);
   if (input == "") {
-    check.valid = false;
-    check.useDefaultValue = true;
-    check.value = "";
+    if (variable.emptyTimeOK) {
+      check.valid = true;
+      check.value = "";
+      return check;
+    } else {
+      window.alert("Entered time '' is not valid");
+      return check;
+    }
   }
 
-  check.useDefaultValue = false;
-  check.valid = false;
-
-  found = input.match(timePattern);
+  // if user entered only minutes, process it if possible
+  found = input.match(timePatternMin);
   if (found) {
+    if (variable.previousEntry == "") {
+      window.alert("For " + variable.description + ", input '" + input +
+                   "' can't be only minutes.");
+      return check;
+    } else {
+    // if we have a previous entry on which to base the current time,
+    // set the input to that value and keep a record of the user's
+    // current minutes input.
+    userMin = input;
+    input = common.convertTimeToStr(variable.previousEntry.value,
+                                    variable.timeUnitsVariable.value, "");
+    console.log("  minutes = " + userMin + "; previous time = " + input);
+    }
+  }
+
+  timeUnits = "24";
+  if (variable.timeUnitsVariable) {
+    timeUnits = variable.timeUnitsVariable.value;
+  }
+  if (timeUnits == "24") {
+    found = input.toString().match(timePattern24);
+    if (!found) {
+      window.alert("Entered time " + input + " is not valid");
+      return check;
+    }
     hour = parseInt(found[1]);
-    if (found[4]) {
-      if (hour < 12 && found[4].toUpperCase() == "PM") {
-        hour += 12;
+    min = parseInt(found[3]);
+    if (hour < 24 && min < 60) {
+      check.valid = true;
+    }
+    if (min < 10) {
+      min = "0" + min;
+    }
+    console.log("  FOUND (24) " + hour + found[2] + min);
+    if (userMin != "") {
+      if (userMin < parseInt(found[3])) {
+        hour += 1;
       }
-      if (hour == 12 && found[4].toUpperCase() == "AM") {
-        hour -= 12;
+      min = userMin;
+    }
+    formattedTime = hour + found[2] + min;
+    input = formattedTime;
+    check.value = formattedTime;
+  } else {
+    found = input.toString().match(timePattern12);
+    if (!found) {
+      window.alert("Entered time " + input + " is not valid");
+      return check;
+    }
+    hour = parseInt(found[1]);
+    min = parseInt(found[3]);
+    if (hour <= 12 && min < 60) {
+      check.valid = true;
+    }
+    if (min < 10) {
+      min = "0" + min;
+    }
+    if (found && found[4]) {
+      ampm = found[4].toLowerCase();
+      if (variable.overrideTimeFormat == "onlyAM" && ampm == "pm") {
+        check.valid = false;
       }
     } else {
+      timeH = common.parseTimeAsFloat(input);
+      if (timeH < 0.0) {
+        check.valid = false;
+        return check;
+      }
+      var TD = 0.0;
+      if (variable.timeDivisionVariable &&
+          variable.timeDivisionVariable.value != "") {
+        TD = variable.timeDivisionVariable.value;
+      }
+      if (timeH >= TD && timeH < 12.0) {
+        ampm = "am"
+      } else {
+        ampm = "pm"
+      }
     }
-    if (hour < 24) {
-      check.valid = true;
-      check.value = input;
+    if (userMin != "") {
+      if (userMin < parseInt(found[3])) {
+        hour += 1;
+        if (hour == 12) {
+          ampm = "pm";
+        } else if (hour == 13) {
+          hour = 1;
+        }
+      }
+      min = userMin;
     }
-  } else {
-    found = input.match(timePatternMin);
-    if (found) {
-      check.valid = true;
-      check.value = input;
+    formattedTime = hour + ":" + min + " " + ampm;
+    input = formattedTime;
+    console.log("   FOUND (12) " + hour + ":" + min + " " + ampm);
+    check.value = formattedTime;
+  }
+
+  if (variable.previousEntry != "" && variable.mustBeLater == 1) {
+    timeH = common.parseTimeAsFloat(input).toFixed(8);
+    previousTime = Number(variable.previousEntry.value);
+    if (timeH < previousTime) {
+      check.valid = false;
+      previousTimeHHMM = common.convertTimeToStr(variable.previousEntry.value,
+                                         variable.timeUnitsVariable.value, "");
+      window.alert("For " + variable.description + ", input '" + input +
+                   "' should be later than or equal to " +
+                   variable.previousEntry.description + " (with time " +
+                   previousTimeHHMM + ")");
+      return check;
     }
   }
 
@@ -507,10 +707,13 @@ validateTime = function(variable, input) {
   return check;
 }
 
-//------------------------------------------------------------------------------
-// parse a (valid) time into hours
+//==============================================================================
+//   VARIABLE-RELATED FUNCTIONS:
 
-this.parseTime = function(timeStr) {
+//------------------------------------------------------------------------------
+// parse a (valid) time in standard format (e.g. 8:00am) into floating-point
+
+this.parseTimeAsFloat = function(timeStr) {
   var found = [];
   var hour = 0;
   var min = 0;
@@ -527,9 +730,6 @@ this.parseTime = function(timeStr) {
     return -1;
   }
 
-  // console.log("hour: " + found[1]);
-  // console.log("min: " + found[3]);
-  // console.log("ampm: " + found[4]);
   hour = parseInt(found[1]);
   min = parseInt(found[3]);
   if (found[4]) {
@@ -542,11 +742,9 @@ this.parseTime = function(timeStr) {
   }
   if (hour >= 24) {
     console.log("CAN'T PARSE TIME " + timeStr);
-    return 0;
+    return -1;
   }
 
-  // console.log("HOUR: " + hour);
-  // console.log("MIN:  " + min);
   HHMM = hour + min/60.0;
 
   return HHMM;
@@ -607,7 +805,7 @@ this.set = function(variable, haveUserInput) {
       inputString = document.getElementById(variable.id).value;
       // console.log("  input = " + inputString);
       check = validateFloatOrString(variable, inputString);
-      // console.log("  validate = "+check.valid+", " +check.useDefaultValue);
+      //console.log(" >>> validate = "+check.valid+", " +check.useDefaultValue);
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
@@ -618,6 +816,7 @@ this.set = function(variable, haveUserInput) {
       if (!check.valid || check.useDefaultValue) {
         console.log("  input is not valid, or we want the default");
       }
+      check.value = common.parseTimeAsFloat(check.value).toFixed(8);
     } else {
       inputString = document.getElementById(variable.id).value;
       console.log("  input = " + inputString);
@@ -634,8 +833,11 @@ this.set = function(variable, haveUserInput) {
       (haveUserInput && !check.valid && !check.useDefaultValue))) {
     saved = common.getSavedValue(variable);
     variable.value = saved.value;
-    if ("precision" in variable) {
+    if ("precision" in variable && "precision" in saved && saved.precision != null) {
       variable.precision = saved.precision;
+      if (variable.minPrecision && variable.precision < variable.minPrecision) {
+        variable.precision = variable.minPrecision;
+      }
     }
     variable.userSet = 1;
     console.log("setting value to saved value: " + variable.value);
@@ -703,19 +905,19 @@ this.set = function(variable, haveUserInput) {
 
   // update HTML
   if (variable.inputType == "radioButton") {
-    console.log("setting radiobutton " + variable.id + " to be " +
+    console.log("setting radiobutton " + variable.id + " to have value " +
                 variable.value);
     if (document.getElementById(variable.value)) {
       document.getElementById(variable.value).checked = true;
     }
   } else if (variable.inputType == "checkbox") {
-    console.log("setting checkbox " + variable.id + " to be " +
+    console.log("setting checkbox " + variable.id + " to have value " +
                 variable.value);
     if (document.getElementById(variable.id)) {
       document.getElementById(variable.id).checked = variable.value;
     }
   } else if (variable.inputType == "select") {
-    console.log("setting select " + variable.id + " to be " +
+    console.log("setting select " + variable.id + " to have value " +
                 variable.value);
     if (document.getElementById(variable.id)) {
       document.getElementById(variable.id).value = variable.value;
@@ -726,7 +928,11 @@ this.set = function(variable, haveUserInput) {
         console.log("  setting color to default for " + variable.id);
         document.getElementById(variable.id).style.color=variable.defaultColor;
       } else {
-        document.getElementById(variable.id).style.color = "black";
+        if ("userColor" in variable) {
+          document.getElementById(variable.id).style.color = variable.userColor;
+        } else {
+          document.getElementById(variable.id).style.color = "black";
+        }
       }
     }
   } else {
@@ -764,8 +970,13 @@ this.set = function(variable, haveUserInput) {
 
   // if input wasn't valid, focus on this input window
   if (haveUserInput && !check.valid && document.getElementById(variable.id)) {
-    document.getElementById(variable.id).focus();
+    // set a timeout of 0 to make the focus happen after rendering.
+    // (timeout of 0 delays the function until call stack is cleared)
+    window.setTimeout(function () {
+      document.getElementById(variable.id).focus();
+    }, 0);
   }
+  return;
 }
 
 //------------------------------------------------------------------------------
@@ -774,8 +985,8 @@ this.updateHTML = function(variable) {
   var isNumber = true;
   var outputNumber = 0.0;
 
-  console.log("UPDATING HTML for " + variable.id +
-               " with value " + variable.value);
+  // console.log("UPDATING HTML for " + variable.id +
+               // " with value " + variable.value);
   isNumber = false;
   outputNumber = variable.value;
   if (!isNaN(outputNumber) && outputNumber != "") {
@@ -815,14 +1026,9 @@ this.updateHTML = function(variable) {
   } else if (variable.inputType == "string") {
     variable.display = variable.value;
   } else if (variable.inputType == "time") {
-    if (window[variable.parent]["timeUnits"]) {
-      variable.display = common.convertTimeToStr(variable.value,
-                             window[variable.parent]["timeUnits"].value,
-                             variable.overrideTimeFormat);
-    } else {
-      variable.display = common.convertTimeToStr(variable.value, "24",
-                             variable.overrideTimeFormat);
-    }
+    variable.display = common.convertTimeToStr(variable.value,
+                           variable.timeUnitsVariable.value,
+                           variable.overrideTimeFormat);
   } else {
     variable.display = outputNumber.toString();
   }
@@ -842,25 +1048,174 @@ this.updateHTML = function(variable) {
         // console.log("  setting color to default for " + variable.id);
         document.getElementById(variable.id).style.color=variable.defaultColor;
       } else {
-        document.getElementById(variable.id).style.color = "black";
+        if ("userColor" in variable) {
+          document.getElementById(variable.id).style.color = variable.userColor;
+        } else {
+          document.getElementById(variable.id).style.color = "black";
+        }
       }
     }
   }
   return true;
 }
 
+//==============================================================================
+// FOCUS FUNCTIONS
 
-//------------------------------------------------------------------------------
-// TIME CONVERSION
-// JPH TODO : implement 24hour conversion
+common.doFocus = function(functionName, updateFocusFunction, activeElementName) {
+  if (functionName) {
+    // console.log("doFocus: " + functionName.id);
+    window.setTimeout(functionName.focus(), 0);
+  } else {
+    console.log("doFocus: function name is undefind; calling UFF");
+    updateFocusFunction(activeElementName);
+  }
+  return;
+}
 
-this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
-  var timeStr = "";
+this.initFocus = function(namespace, updateFocusFunction) {
+  // record key presses and mouse clicks.  If key press and the
+  // user enters <tab>, <enter>, or <down>, focus on the next item.
+  // If the user enters <shift-tab> or <up> focus on the previous item.
+  // If the user does a mouse click, then don't set the focus elsewhere.
+  // namespace.action:
+  //     0 = no action
+  //    -1 = mouse click
+  //    -2 = shift-tab
+  //    -3 = up arrow
+  //    -4 = down arrow
+  //    other values = the ID of the key, e.g. <tab> or letter
+  //        9 = tab
+  //       13 = enter
+  namespace.action = 0;
+  namespace.mouseX = -1;
+  namespace.mouseY = -1;
+
+  function checkKeyPress(e) {
+    e = e || event;
+    namespace.action = e.keyCode;
+    namespace.activeElementName = "";
+    if (document.activeElement.id) {
+      namespace.activeElementName = document.activeElement.id;
+    }
+    console.log("ACTION = " + namespace.action + ", " + e.key);
+    // if shift-tab, identify it in namespace.action
+    if (e.shiftKey && e.key === "Tab") {
+      namespace.action = -2;
+    }
+    // if up arrow (38) or down arrow (40), set the focus
+    if (namespace.action == 38 || namespace.action == 40) {
+      if (namespace.activeElementName != "") {
+        console.log("updating up/dn focus for " + namespace.activeElementName);
+        var activeElement = eval(namespace.activeElementName);
+        // prevent the default action, which in a menu is to select
+        e.preventDefault();
+        if (namespace.action == 38) {
+          namespace.action = -3;
+          // if there is a specific 'up' focus, do that; otherwise, do 'prev'.
+          // if there should be an 'up' but not in document, keep going up.
+          if (activeElement.upFocus) {
+            var prevFocus = activeElement.upFocus;
+            while (activeElement.upFocus &&
+                   !document.getElementById(activeElement.upFocus)) {
+              prevFocus = activeElement.upFocus;
+              activeElement = eval(activeElement.upFocus);
+              if (!activeElement || activeElement.upFocus == prevFocus) {
+                break;
+              }
+            }
+            common.doFocus(document.getElementById(activeElement.upFocus),
+                           updateFocusFunction, namespace.activeElementName);
+          } else {
+            console.log("  prev: " + activeElement.prevFocus);
+            common.doFocus(document.getElementById(activeElement.prevFocus),
+                           updateFocusFunction, namespace.activeElementName);
+          }
+        } else {
+          // if there is a specific 'down' focus, do that; otherwise, do 'next'
+          // if there should be a 'down' but not in document, keep going down.
+          namespace.action = -4;
+          if (activeElement.downFocus) {
+            var prevFocus = activeElement.downFocus;
+            console.log("  down: " + activeElement.downFocus);
+            while (activeElement.downFocus &&
+                   !document.getElementById(activeElement.downFocus)) {
+              prevFocus = activeElement.downFocus;
+              activeElement = eval(activeElement.downFocus);
+              if (!activeElement || activeElement.downFocus == prevFocus) {
+                break;
+              }
+            }
+            common.doFocus(document.getElementById(activeElement.downFocus),
+                           updateFocusFunction, namespace.activeElementName);
+          } else {
+            console.log("  next: " + activeElement.nextFocus);
+            common.doFocus(document.getElementById(activeElement.nextFocus),
+                           updateFocusFunction, namespace.activeElementName);
+          }
+        }
+      }
+    }
+    else if (namespace.action == -2 || e.key === "Tab" || e.key === "Enter") {
+      if (namespace.activeElementName != "") {
+        console.log("updating focus for " + namespace.activeElementName +
+                    " with action " + namespace.action);
+        var activeElement = eval(namespace.activeElementName);
+        console.log("  prev = " + activeElement.prevFocus);
+        console.log("  next = " + activeElement.nextFocus);
+        // override the default action of 'next' or 'previous'
+        e.preventDefault();
+        if (namespace.action == -2 && activeElement.prevFocus) {
+          // if action is backward and there is a backward focus, do that
+          console.log("setting - focus to " + activeElement.prevFocus);
+          common.doFocus(document.getElementById(activeElement.prevFocus),
+                         updateFocusFunction, namespace.activeElementName);
+        } else if ((namespace.action == 9 || namespace.action == 13) &&
+                    activeElement.nextFocus) {
+          // if action is forward and there is a forward focus, do that
+          console.log("setting + focus to " + activeElement.nextFocus);
+          common.doFocus(document.getElementById(activeElement.nextFocus),
+                         updateFocusFunction, namespace.activeElementName);
+        }
+        console.log("done updating focus");
+      }
+    }
+    // indicate that this input is not a mouse click
+    namespace.mouseX = -1;
+    namespace.mouseY = -1;
+  }
+
+  function checkMouse(e) {
+    console.log("updating focus for mouse click");
+    if (e.clientX > 0 && e.clientY > 0) {
+      namespace.action = -1;
+      namespace.mouseX = e.clientX;
+      namespace.mouseY = e.clientY;
+      namespace.activeElementName = "";
+      if (document.activeElement.id) {
+        namespace.activeElementName = document.activeElement.id;
+      }
+      console.log("SET MOUSE: " + namespace.mouseX + ", " + namespace.mouseY);
+    }
+  }
+  document.addEventListener('keydown', checkKeyPress);
+  document.addEventListener('mousedown', checkMouse);
+
+  return;
+}
+
+//==============================================================================
+// CONVERSION FUNCTIONS
+
+// XX=Variable
+this.convertTimeToStr = function(timeFloat, timeUnitsDefault,
+                                 overrideTimeFormat) {
   var ampm = "";
   var precision = 0;
   var timePatternMin = "^([0-5][0-9])$";
+  var timeStr = "";
 
-  // console.log("in convertTimeToStr(" + timeFloat + ", " + timeUnits +
+  // console.log("in convertTimeToStr(" + timeFloat + ", " + timeUnitsDefault +
               // ", " + overrideTimeFormat + ")");
   if (timeFloat < 0.0 || timeFloat == "") {
     return "";
@@ -885,6 +1240,10 @@ this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
     return timeFloat;
   }
 
+  timeUnits = "24";
+  if (timeUnitsDefault && timeUnitsDefault != "") {
+    timeUnits = timeUnitsDefault;
+  }
   // override time format if needed
   if (overrideTimeFormat == "24") {
     timeUnits = "24";
@@ -898,7 +1257,7 @@ this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
   if (min < 10) {
     min = "0" + min;
   }
-  if (timeUnits == "24" && overrideTimeFormat != "noAMPM") {
+  if (timeUnits == "24") {
     if (hrs < 10) {
       hrs = "0" + hrs;
     }
@@ -912,7 +1271,7 @@ this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
       hrs -= 12;
       ampm = "pm";
     }
-    if (overrideTimeFormat == "noAMPM") {
+    if (overrideTimeFormat == "noAMPM" || overrideTimeFormat == "onlyAM") {
       ampm = "";
     }
     timeStr = hrs + ":" + min + " " + ampm;
@@ -920,9 +1279,6 @@ this.convertTimeToStr = function(timeFloat, timeUnits, overrideTimeFormat) {
   // console.log("leaving convertTimeToStr() with " + timeStr);
   return timeStr;
 }
-
-//------------------------------------------------------------------------------
-// UNIT CONVERSION
 
 this.convertMetersToFeet = function(input) {
   var output = input * 3.280839895;
@@ -1043,6 +1399,9 @@ this.convertMlToTsp = function(input) {
   return output;
 }
 
+//==============================================================================
+//   SAVING AND LOADING PARAMETERS:
+
 //------------------------------------------------------------------------------
 // SAVE AND LOAD VALUES (without filesystem)
 
@@ -1110,7 +1469,9 @@ this.getSavedValue = function(variable) {
   }
   if ("precision" in variable) {
     saved.precision = localStorage.getItem(variable.id + ".precision");
-    saved.precision = Number(saved.precision);
+    if (saved.precision && saved.precision != null) {
+      saved.precision = Number(saved.precision);
+    }
   }
 
   return saved;
@@ -1221,24 +1582,27 @@ this.loadFromFile = function(files) {
   return true;
 }
 
+//==============================================================================
+//   MISCELLANEOUS FUNCTIONS:
+
 //------------------------------------------------------------------------------
 
 this.getPressureAndAltitudeFromBoilingPoint = function(boilTemp) {
   var altitude = 0.0;
-  var T1 = 0.0;         // boiling point, in Kelvin
   var P1 = 0.0;         // atmospheric pressure, in atmospheres
   var Ptorr = 0.0;      // atmospheric pressure, in Torr
+  var T1 = 0.0;         // boiling point, in Kelvin
 
   // define constants
   var deltaHv = 40.66;            // kJ/mol
-  var T0      = 373.15;           // 'K
-  var P0      = 101.325;          // kPa
   var g0      = 9.80665;          // gravitational constant (m / s^2)
-  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
   var hb      = 0.0;              // reference height (m)
-  var Tmb     = 288.15;           // reference temperature ('K)
+  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
+  var P0      = 101.325;          // kPa
   var R       = 8.31446261815324; // universal gas constant, J/(K mol)
   var R_kJ    = R / 1000.0;       // universal gas constant, kJ/(K mol)
+  var T0      = 373.15;           // 'K
+  var Tmb     = 288.15;           // reference temperature ('K)
 
   // get atmospheric pressure from boiling point using Clausius-Clapeyron eqn
   T1     = boilTemp + 273.15;     // convert 'C to 'K
@@ -1262,14 +1626,14 @@ this.getPressureAndBoilingPointFromAltitude = function(altitude) {
 
   // define constants
   var deltaHv = 40.66;            // kJ/mol
-  var T0      = 373.15;           // 'K
-  var P0      = 101.325;          // kPa
   var g0      = 9.80665;          // gravitational constant (m / s^2)
-  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
   var hb      = 0.0;              // reference height (m)
-  var Tmb     = 288.15;           // reference temperature ('K)
+  var M       = 0.0289644;        // molar mass of Earth's air (kg/mol)
+  var P0      = 101.325;          // kPa
   var R       = 8.31446261815324; // universal gas constant, J/(K mol)
   var R_kJ    = R / 1000.0;       // universal gas constant, kJ/(K mol)
+  var T0      = 373.15;           // 'K
+  var Tmb     = 288.15;           // reference temperature ('K)
 
   // atmospheric pressure as function of altitude
   //   formula from https://en.wikipedia.org/wiki/Barometric_formula

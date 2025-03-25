@@ -3,8 +3,13 @@
 // diffTest.js : code for illustrating same/different comparison
 //               perceptual testing, significance, likelihood ratios, etc.
 //
-// Copyright (C) 2021  John-Paul Hosom, all rights reserved.
-// Contact information: alchemyoverlord © yahoo · com
+// Copyright (C) 2021-2025  John-Paul Hosom, all rights reserved.
+// To license this software, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
+// In many cases (at the sole discretion of John-Paul Hosom) a license
+// is provided free of charge, but a written license is required for
+// legal use of this code.
+//
 //
 // Version 1.0.1 : January 10, 2021 -- April 11, 2021  (JPH)
 //                 Initial version.

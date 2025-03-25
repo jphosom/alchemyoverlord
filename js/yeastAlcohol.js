@@ -1,7 +1,12 @@
 // -----------------------------------------------------------------------------
 // yeastAlcohol.js : JavaScript for AlchemyOverlord web page, yeast/ABV sub-page
 // Written by John-Paul Hosom
-// Copyright © 2022 by John-Paul Hosom, all rights reserved.
+// Copyright © 2022-2025 by John-Paul Hosom, all rights reserved.
+// To license this software, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
+// In many cases (at the sole discretion of John-Paul Hosom) a license
+// is provided free of charge, but a written license is required for
+// legal use of this code.
 //
 // Version 1.0.0 : September 3, 2022
 //         Initial version.

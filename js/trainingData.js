@@ -3,6 +3,7 @@
 // This file contains data for the experiments used to tune parameters of the SMPH model of IBUs.
 // All data except for the 'Peacock' experiment were collected
 // by John-Paul Hosom from June 9, 2015 to March 16, 2021.
+//
 // Note: Util. Exp. #2 didn't use any hops, to estimate the contribution of malt polyphenols to IBUs.
 // Note: If kettleDiameter and kettleOpening not specified, small samples were taken and cooled, and
 //       so post-boil temperature decrease that is determined by kettle size/opening is not relevant.

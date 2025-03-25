@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+pasteurization.html : HTML for AlchemyOverlord web page, 
+                       pasteurization sub-page
+Written by John-Paul Hosom
+Copyright © 2024-2025 by John-Paul Hosom, all rights reserved.
+To license this software, please contact John-Paul Hosom, for example at
+   alchemyoverlord © yahoo · com
+In many cases (at the sole discretion of John-Paul Hosom) a license 
+is provided free of charge, but a written license is required for
+legal use of this code.
+
+Version 0.0.0 : Nov 10, 2024 -- Mar 16, 2025 Initial version
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <a name="top_pasteurization"></a>
+  <div id="content">
+  <center>
+  <h3>Pasteurization Calculator</h3>
+  </center>
+  <center>
+  <small>
+  <p>
+  <b>This is an alpha version and subject to change.<br>
+  Feedback will be appreciated; see contact info in the FAQ.</b>
+  </p>
+  </small>
+  </center>
+
+  <center>
+  <small>View:
+    <input type="radio" value="dataEntry" id="dataEntry" name="pasteurization.view" onclick="common.set(pasteurization.view,1)" checked>data entry or
+    <input type="radio" value="printing" id="printing" name="pasteurization.view" onclick="common.set(pasteurization.view,1)">printer/PDF friendly</small><br>
+   </center>
+
+<div class="DATAENTRY">
+  <center><small><a href="pasteurization_FAQ.html">Documentation and FAQ</a></small><br></center>
+  <center><small><a href="pasteurization_explanation.html">An Explanation of Pasteurization</a></small><br></center>
+  <center><small><a href="pasteurization_method.html">A Process for Cider Making and Pateurization</a></small><br></center>
+  <center><small><a href="pasteurization_instructions.html">Pasteurization One-Page Instructions</a></small><br></center>
+</div>
+
+<br>
+
+<div class="DATAENTRY">
+  <center>
+Description: <input type="text" autocomplete="off" style="width:30em;text-align:center" id="pasteurization.title" onchange="common.set(pasteurization.title, 1)">
+<br>
+<input type="text" autocomplete="off" style="width:2em;text-align:center" id="pasteurization.day" onchange="common.set(pasteurization.day, 1)">
+<select style="width:7em;text-align:center" id="pasteurization.month" onchange="common.set(pasteurization.month,1)">
+          <option value="Jan">January</option>
+          <option value="Feb">February</option>
+          <option value="Mar">March</option>
+          <option value="Apr">April</option>
+          <option value="May">May</option>
+          <option value="Jun">June</option>
+          <option value="Jul">July</option>
+          <option value="Aug">August</option>
+          <option value="Sep">September</option>
+          <option value="Oct">October</option>
+          <option value="Nov">November</option>
+          <option value="Dec">December</option>
+          </select>,
+<small>20 </small><input type="text" autocomplete="off" style="width:2em;text-align:center" id="pasteurization.year" onchange="common.set(pasteurization.year, 1)"><br>
+  </center>
+
+  <small>
+  <center>
+  <p style="margin-left:3em">Input Units:
+  <input type="radio" value="metric" id="metric" name="pasteurization.units" onclick="common.set(pasteurization.units,1)" autocomplete="off">metric (Celsius) or
+  <input type="radio" value="imperial" id="imperial" name="pasteurization.units" onclick="common.set(pasteurization.units,1)" autocomplete="off" checked>U.S. customary (Fahrenheit)<br>
+  Use
+<input type="radio" value="24" id="24" name="pasteurization.timeUnits" onclick="common.set(pasteurization.timeUnits,1)">24-hour format or
+<input type="radio" value="12" id="12" name="pasteurization.timeUnits" onclick="common.set(pasteurization.timeUnits,1)">12-hour format (AM/PM) (times between <input type="text" autocomplete="off" style="width:3em;text-align:center" id="pasteurization.timeDivision" onchange="common.set(pasteurization.timeDivision, 1)"> and 11:59 are assumed to be AM if not specified)<br>
+Temperature model: <input type="radio" value="smart" id="smart" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">"smart" or <input type="radio" value="linear" id="linear" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">linear interpolation
+  </p>
+  </center>
+  </small>
+
+  <table style="margin-left:0em">
+  <tbody>
+  <tr>
+  <td><small>Reference temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.refTemp" onchange="common.set(pasteurization.refTemp,1)">&deg;C</td>
+  <td><small>&nbsp;&nbsp;&nbsp;Minimum effective temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.minTemp" onchange="common.set(pasteurization.minTemp,1)"><span class="pasteurization.TUnits">X</span></td>
+  </tr>
+  <tr>
+  <td><small><em>z</em> value:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.zValue" onchange="common.set(pasteurization.zValue,1)">&deg;C</td>
+  <td><small>&nbsp;&nbsp;&nbsp;<em>D</em> value, if known:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.DValue" onchange="common.set(pasteurization.DValue,1)"> <small>minutes</small></td>
+  </tr>
+  <tr>
+  <td><small>Number of batches:</small></td><td><input type="text" id="pasteurization.numBatches" style="width:4em;text-align:center" onchange="common.set(pasteurization.numBatches, 1)"></td>
+  </tr>
+  <tr>
+  <td><small>Target temperature of warm-water bath:</small></td><td><input type="text" id="pasteurization.warmTemp" style="width:4em;text-align:center" onchange="common.set(pasteurization.warmTemp, 1)"><span class="pasteurization.TUnits">X</span></td>
+  </tr>
+  <tr>
+  <td><small>Target temperature of hot-water bath:</small></td><td><input type="text" id="pasteurization.hotTemp" style="width:4em;text-align:center" onchange="common.set(pasteurization.hotTemp, 1)"><span class="pasteurization.TUnits">X</span></td>
+  </tr>
+  <tr>
+  <td><small>Start prep work:</small></td> <td><input type="text" id="pasteurization.startTime" style="width:6em;text-align:center" onchange="common.set(pasteurization.startTime, 1)" placeholder="--:--"></td>
+  </tr>
+  <tr>
+  <td><small>Start heating water:</small></td> <td><input type="text" id="pasteurization.heatWaterTime" style="width:6em;text-align:center" onchange="common.set(pasteurization.heatWaterTime, 1)" placeholder="--:--"></td>
+  </tr>
+  </tbody>
+  </table>
+  <br>
+
+  <div id="batchInfo"></div>
+
+  <br>
+  <table style="margin-left:0em">
+  <tbody>
+  <tr>
+  <td><small>Finish cleanup</small></td> <td><input type="text" id="pasteurization.finishTime" style="width:6em;text-align:center" onchange="common.set(pasteurization.finishTime, 1)" placeholder="--:--"></td>
+  </tr>
+  <tr>
+  <td><small>Total time</small></td> <td><small><span id="pasteurization.totalHours">0 hours and</span> <span id="pasteurization.totalMinutes">0 minutes</span></small></td>
+  </tr>
+  </tbody>
+  </table>
+</div>
+<div class="PRINTING">
+<center>
+<small>
+<b><span id="pasteurization.print.title">description</span></b><br>
+
+<b><span id="pasteurization.print.day">day</span> <span id="pasteurization.print.month">month</span>, 20<span id="pasteurization.print.year">year</span></b><br>
+</center>
+
+<br>
+<table style="margin-left:3em;">
+<tbody>
+<tr>
+<td>Temperature model:</td><td><span id="pasteurization.print.model">X</span></td>
+</tr>
+<tr>
+<td>Number of Batches:</td><td><span id="pasteurization.print.numBatches">0</span></td>
+</tr>
+<tr>
+<td>Target temperature of warm-water bath:</td><td><span id="pasteurization.print.warmTemp">0</span><span class="pasteurization.TUnits">units</span></td>
+</tr>
+<tr>
+<td>Target temperature of hot-water bath:</td><td><span id="pasteurization.print.hotTemp">0</span><span class="pasteurization.TUnits">units</span></td>
+</tr>
+<tr>
+<td>Start prep work:</td><td><span id="pasteurization.print.startTime">xx:xx</span></td>
+</tr>
+<tr>
+<td>Start heating water:</td><td><span id="pasteurization.print.heatWaterTime">xx:xx</span></td>
+</tr>
+</tbody>
+</table>
+<div id="pasteurization.print.table"></div>
+
+
+<br>
+<table style="margin-left:0em">
+<tbody>
+<tr>
+<td>Finish cleanup:</td><td><span id="pasteurization.print.finishTime">xx:xx</span></td>
+</tr>
+<tr>
+<td>Total time:</td> <td><span id="pasteurization.print.totalHours">0 hours and</span> <span id="pasteurization.print.totalMinutes">0 minutes</span></td>
+</tr>
+</tbody>
+</table>
+
+</small>
+</div>
+
+  <br>
+  <table style="margin-left:0em">
+  <tbody>
+  <tr>
+  <td>
+  <small><b>Plots:</b></small>
+  </tr>
+  </td>
+  <tr>
+  <td>
+  <span id="plotTemperature">
+  </span>
+  </td>
+  </tr>
+  <tr>
+  <td>
+  <span id="plotPUperMinute">
+  </span>
+  </td>
+  </tr>
+  <tr>
+  <td>
+  <span id="plotTotalPU">
+  </span>
+  </td>
+  </tr>
+  </tbody>
+  </table>
+  <br>
+
+
+  <script type="text/javascript" src="js/mathLibrary.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/plotLibrary.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/common.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/pasteurization.js" charset="utf-8"></script>
+
+  <div class="DATAENTRY">
+  <br>
+  <hr>
+  <h4>Save and Load:</h4>
+  <table style="margin-left:3em">
+    <tbody>
+    <tr>
+    <td>Save to File:</td>
+    <td><button type="button" onclick="common.saveToFile('pasteurization.txt')">Browse... </button></td>
+    </tr>
+    <tr>
+    <td>Load from File:</td>
+    <td><input type="file" accept=".txt" id="files" onchange="common.loadFromFile(this.files)"/></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  
+  <br>
+  <hr>
+  <small>
+  <a name="versions"></a>
+  <h4>Versions:</h4>
+  <b>0.0.0</b>: (2024-Nov-10 to 2025-Mar-16)  Initial version.<br>
+  </small>
+
+  <p>
+  <div class="DATAENTRY">
+  <center>
+  Navigate to:<br>
+  <a href="#top_pasteurizationion">top of page</a>
+  <br>
+  <a href="index.html" target="_top">AlchemyOverlord home page</a>
+  <p>
+  <p>
+  Reset:
+  <button type="button" onclick="common.clearSavedValues()"> clear all saved inputs </button>
+  </center>
+  <p>
+  </div>
+  <small>
+  <b>Important Disclaimer:</b>
+  I hope that you find this page useful, but I make no guarantees about
+  the accuracy or suitability of the results.
+  While I have pasteurized hundreds of bottles of carbonated and sweetened hard
+  cider for years without incident, there are always risks when pasteurizing
+  at home.
+  There is the definite risk that during the pasteurization process an exploding
+  bottle will send shards of sharp and burning-hot glass into your body,
+  possibly even into your eye.
+  Very hot glass bottles may cause burns even when they're intact.
+  The hot water may scald or burn your flesh.
+  The hot stove may burn your flesh or your clothing.
+  Bottles full of hot cider may break due to a sudden change in temperature
+  or a manufacturing defect.
+  You might drop a bottle, sending burning hot liquid and sharp shards
+  of hot glass all over your floor.
+  The computed pasteurization units on this web page, while based on the
+  best information available to me, are only an approximation. 
+  The computed values might also be incorrect due to temperature readings 
+  that are not taken at the coolest region within the bottle or 
+  possible bugs in the code.
+  <a href="https://www.thedrinksbusiness.com/2014/07/brewery-recalls-exploding-beer-bottles/" target="_top">Bottles that have not been sufficiently pasteurized may explode at any time</a>.
+  This is by no means an exhaustive list of things that might go wrong,
+  even under the assumption that you know what you're doing.
+  Please prepare well, use great caution,
+  always assume that anything might go wrong at any time, and
+  accept responsibility for the consequences of your actions.
+  Nothing on this website absolves you of that responsibility or transfers
+  any of that responsibility to me or this site.  Use the information
+  provided here at your own risk.  
+  With all of that said, I hope that you have the best of luck, many years
+  of safe and incident-free pasteurization, and many delicious 
+  pasteurized beverages!
+  </p>
+  </small>
+  <br>
+  <p>
+  <small>Copyright &copy; 2024 - 2025 John-Paul Hosom, all rights reserved.
+  Please feel free to contact me with comments, questions, suggestions, 
+  and/or bug reports.
+  </small>
+  </p>
+   
+  <script>
+  pasteurization.initialize_pasteurization();
+  </script>
+
+
+  </body>
+</html>

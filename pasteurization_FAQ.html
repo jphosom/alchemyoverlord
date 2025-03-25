@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+pasteurization_FAQ.html : HTML for AlchemyOverlord web page, 
+                                   documentation and FAQ sub-page
+Written by John-Paul Hosom
+Copyright © 2024 - 2025 by John-Paul Hosom, all rights reserved.
+Version 0.0.0 : Nov 10, 2024 -- Mar 16, 2025 Initial version
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <center>
+  <h3>Pasteurization Calculator: Documentation and FAQ</h3>
+  <small>
+  John-Paul Hosom<br>
+  alchemyoverlord@yah&#959;o.c&#959;m<br>
+  March 16, 2025<br>
+  Version 0.0.0 : alpha version, subject to change! Feedback appreciated,
+  but please type the email address rather than using copy-and-paste.<br>
+  </small>
+  </center>
+
+  <center><small><a href="pasteurization_explanation.html">An Explanation of Pasteurization</a></small><br></center>
+  <center><small><a href="pasteurization_method.html">A Process for Cider Making and Pasteurization</a></small><br></center>
+  <center><small><a href="pasteurization_instructions.html">Pasteurization One-Page Instructions</a></small><br></center>
+  <center><small><a href="pasteurization.html">Pasteurization Calculator</a></small><br></center>
+
+<small>
+  <h4>Background:</h4>
+  <ul>
+  <li>
+  <b>What is this?</b>
+  <p>
+  This <a href="pasteurization.html">calculator</a> provides a written 
+  record, visual summary, and Pasteurization-Units calculation for 
+  a session of batch pasteurization.  
+  It is designed for home use of up to 50 bottles per session,
+  divided into five batches of 10 bottles each.
+  A description of the <a href="pasteurization_method.html">method</a> I use,
+  and of the <a href="pasteurization_explanation.html">technical aspects</a>
+  of pasteurization, are given in the links above.
+  </p>
+  <p>
+  It can be very valuable to have a saved record of information from 
+  pasteurization, because it allows you to go back and see how 
+  different parameters (such as warm- and hot-water temperatures and
+  pasteurization times) affect the resulting Pasteurization
+  Units (PUs) value.  It can also be helpful to look back at a
+  record in order to duplicate a previous year's efforts.
+  It's up to you to decide whether the amount of 
+  record keeping that is required is worth the effort.
+  </p>
+  <p>
+  This calculator assumes that you have up to 50 bottles of cider, beer,
+  or other beverage that you want to pasteurize, and that you're familiar
+  with the equipment, process, and <a href="#disclaimer">risks</a>.  
+  The recorded times and temperatures
+  are fit to a model of increasing temperature (as the bottles are
+  held in hot water) and decreasing temperature (as the bottles cool
+  off after heat treatment).  The number of PUs is determind from this
+  model.  If the model doesn't provide a good fit to the measured data, 
+  a linear-interpolation model is also available.
+  These options are described in more detail below.
+  </p>
+  </li>
+  </ul>
+
+  <h4>Usage:</h4>
+  <ul>
+  <li>
+  <b>Is this site and software free? Are you tracking any data?</b><br>
+  <p>
+  All of the calculators on this site are (and always will be) completely free 
+  to use.  No data (e.g. IP address or other identifying information, usage, 
+  history, or clicks) is tracked.  There is no advertising, thanks to no-cost 
+  hosting by <a href="https://github.com" target="_top">GitHub</a>.  
+  I earn no money from this website.  My motivation is to develop software
+  tools that I find useful or interesting, and I'm happy to provide them 
+  to others who may also benefit from them.
+  </p>
+  </li>
+  <br>
+
+  <li>
+  <b>How can I save or load data?</b><br>
+  <p>
+  To save settings to a text file or load them from a file, use the "Save"
+  and "Load" buttons near the bottom of the page.
+  Saved data is only stored on your local computer or device.
+  </p>
+  </li>
+  <br>
+
+  <li>
+  <b>Data-entry and printer-friendly views</b><br>
+  <p>
+  At the top of the page, there are two options for viewing the data:
+  (1) "data entry" or (2) "printer/PDF friendly".  The data-entry view
+  is used to enter all of the data from a pasteurization session and see
+  the summary.  
+  The printer/PDF-friendly view displays the same information but without 
+  any input fields or button selections.  You can select this view and 
+  then print the page to either a printer or PDF file.
+  </p>
+  </li>
+  </ul>
+
+  <h4>Inputs:</h4>
+  <ul>
+  <li>
+  <b>Do I have to enter values in all fields?</b><br>
+  <p>
+  It's fine to leave a field blank.  Also, if you're unsure of anything,
+  the default value is probably fine.
+  </p>
+  <b>How can I navigate the input fields?</b><br>
+  <p>
+  Other than the mouse, there are a few ways to navigate through
+  the input fields.
+  The &lt;tab&gt; key will take you to the next item and &lt;shift+tab&gt;
+  will take you to the previous item.  The &lt;down arrow&gt; key behaves
+  the same as &lt;tab&gt; in the initial section, but in the times
+  and temperatures section it will go down within the same column.  
+  Likewise, the &lt;up arrow&gt; key behaves the same as &lt;shift+tab&gt; 
+  in the initial section, but in the times and temperatures section it will 
+  go up within the same column.
+  The &lt;enter&gt; key will also take you to the next item.
+  </p>
+  </li>
+  <li>
+  <b>What formats can I use for time?</b><br>
+  <p>
+  Times can be entered using a 24-hour format or 12-hour format (with AM/PM).
+  This selection is made below the selection for input units.  If using
+  the 12-hour format, you can also specify which times before noon are
+  assumed to be AM.  For example, if you say that times before 8:30 are
+  assumed to be AM, and if you enter 8:00, it will record as 8:00 PM.
+  Times can also be entered using a colon (8:00) or a period (8.00).
+  </p>
+  <p>
+  When entering a time, if you enter only the minutes value (e.g. 10),
+  the calculator will guess, if possible, the hour associated with this
+  time, based on a previously-entered time.  If the previous time was
+  8:05, then entering 10 will result in 8:10.  If the previous time
+  was 8:55, then entering 10 will result in 9:10.  For times less than
+  10, enter a leading 0, for example "03" might represent 9:03.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>Which model should I select, "smart" or linear interpolation?</b><br>
+  <p>
+  See below for a description of both models.
+  The choice of which model to use depends entirely on your preference.
+  I always use the "smart" model, and I often find that an imperfect fit
+  is due to a data-entry error on my part.  If you hold the bottles in
+  the hot-water bath so long that they start to cool down, then this
+  model might not provide the best fit, since it assumes that the
+  temperatures in the hot-water bath always increase.  In this case,
+  the linear-interpolation model may make more sense.  The linear-interpolation
+  model is also there as a backup method or if you're uncomfortable with the
+  extrapolation performed by the smart model.
+  </li>
+  <br>
+  <li>
+  <b>What should I enter for the reference temperature, minimum effective
+  temperature, <em>z</em> value, and <em>D</em> value?</b><br>
+  <p>
+  If you're unsure of what is meant by the reference temperature,
+  the minimum effective temperature, <em>z</em> value, and/or <em>D</em>
+  value, please see the <a href="pasteurization_explanation.html">
+  technical explanation of pasteurization</a>.  If you know the
+  target PU value but don't what values were used to derive this target,
+  the defaults on this page are probably reasonable.  The reference
+  temperature of 60&deg;C is quite common, and the default
+  minimum effective temperature is a fairly conservative value.
+  The <em>z</em> value is the most important, and the default
+  value is commonly used for beer and cider.  The <em>D</em> value
+  is optional and the input field is only used to keep a record of this value.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>What does "+1 (meas)" mean for the number of bottles in a batch?</b><br>
+  <p>
+  The input field "bottles:" specifies the number of bottles of product 
+  (e.g. cider or beer) that are being pasteurized in this batch.
+  The "+1 (meas)" indicates that there is one additional bottle in the
+  batch, namely the bottle used to measure temperature.  So an input
+  of 10 means that heat treatment is applied to 10 bottles of product 
+  and one measurement bottle, for a total of 11 bottles.
+  </p>
+  </li>
+  <br>
+  <br>
+  <li>
+  <b>What is meant by "when add", "pre mix", and "post mix"?</b><br>
+  <p>
+  The "when add" input field is the temperature of the warm-water bath
+  just before bottles are added to this water.  The "pre mix" input field
+  is the temperature of the warm-water bath before mixing in the
+  3.5 quarts (3.5 L) of boiling water.  The "post mix" input field
+  is the temperature of this water bath after mixing in the boiling
+  water and just before adding the bottles.  The "when add" and
+  "post mix" values will hopefully be close to the value of the
+  "target temperature of warm-water bath".
+  These inputs don't affect the output and they are only provided for 
+  recording purposes.  Feel free to leave them blank.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>What does 'xfer' mean?</b><br>
+  <p>
+  The word "xfer" is an abbreviation of the word "transfer", and
+  these inputs refer to the times when bottles are transferred
+  into the warm-water bath, the hot-water bath, or to the cooling rack.
+  The "xfer to warm" input has no effect on the output (being there
+  only for recording purposes), but the "xfter to warm" and "xfter to
+  cool" are used by the "smart" model to compute pasteurization
+  units before the first recorded "hot" temperature and to know
+  when to switch the model from heating to cooling.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>How are the 'warm' times and temperatures used?</b><br>
+  <p>
+  The times and temperatures of the test bottle in the warm-water bath
+  are only for recording purposes.  They have no effect on the output
+  and can be left blank.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>How often should I record times and temperatures?</b><br>
+  <p>
+  The more often you record times and temperatures, the better your
+  esimate of pasteurization units will be.  Recording is not needed
+  as often when using the "smart" model.  I try to record times
+  and temperatures every two to three minutes.
+  </p>
+  </li>
+  <br>
+  <li>
+  <b>How do I get back to a default value?</b><br>
+  <p>
+  To get back to a default value, enter 'd'.
+  To clear all inputs and reset the page to default values,
+  use the "clear" button at the bottom of the page.
+  </p>
+  </li>
+  <br>
+  </ul>
+
+  <h4>Models:</h4>
+  <ul>
+  <li>
+  <b>The "smart" model</b><br>
+  <p>
+  The "smart" model fits the time and temperature points of the test bottle 
+  as it's getting hotter to one or two exponential functions, and it fits 
+  the points of the test bottle as it cools down to a different exponential 
+  function.  If the temperatures in the hot-water bath are all increasing
+  over time (the peak temperature is the last value), then a single
+  exponential function is used to model this increase in temperature.
+  If the bottles start to slowly cool down while in this hot-water bath,
+  then a second exponential function is used to model this flat or
+  slightly decreasing set of temperatures.
+  This set of functions gives a good fit to the pasteurization data I've seen.
+  This model has two advantages: (1) it can construct a reasonable
+  plot of time and temperature from very few data points, and (2) it
+  can provide a reasonable extrapoation at times that weren't recorded.
+  The more data points that it's given, the more confident one can be
+  in the model, but one doesn't need to record times and temperatures
+  at every minute.  As the bottle cools down over a period of 30 minutes
+  or more, only a few data points at the beginning are needed to
+  estimate the temperature function as it drops to the minimum
+  pasteurization temperature.
+  </p>
+  </li>
+  <li>
+  <b>The linear-interpolation model</b><br>
+  <p>
+  I put the "smart" model in quotes because it's smart until something goes 
+  wrong, and then it's not so smart after all.  The linear-interpolation
+  model can be used when the output from the  smart model doesn't give a
+  good fit to the data.  The linear-interpolation model doesn't extrapolate 
+  beyond the recorded times, and so it will give a lower PU estimate than 
+  the smart model.
+  </p>
+  </p>
+  </li>
+  <br>
+  </ul>
+
+  <h4>Outputs:</h4>
+  <ul>
+  <li>
+  <b>Total PU</b><br>
+  <p>
+  The "Total PU" output shows the total number of pasteurization
+  units computed from the data using the specified model.
+  </p>
+  </li>
+  <li>
+  <b>Total time</b><br>
+  <p>
+  The "Total time" output shows the duration of the pasteurization
+  session over all batches.
+  </p>
+  </li>
+  <li>
+  <b>Plots</b><br>
+  <p>
+  There are three output plots.  The first plot shows the recorded times
+  and temperatures from each batch (as single points) as well as the
+  times and temperatures according to the specified model.  The 
+  pasteurization units are computed from the model, not from the
+  recorded values.
+  </p>
+  <p>
+  The second plot shows the number of pasteurization units that are applied
+  at each moment of time.  This value increases while the bottles are 
+  becoming hotter, and then it decreases when the bottles are transferred 
+  to the cooling rack.
+  </p>
+  <p>
+  The third plot shows the total number of pasteurization units that
+  accumulate during the heat treatment, as a function of time.  The
+  "Total PUs" value for a batch is the same as the highest value from 
+  the third plot.
+  </p>
+  </li>
+  <br>
+  </ul>
+
+  <a name="disclaimer"></a>
+  <h4>Important Disclaimers</h4>
+  <p>
+  I hope that you find this page useful, but I make no guarantees about
+  the accuracy or suitability of the results.
+  While I have pasteurized hundreds of bottles of carbonated and sweetened hard
+  cider for years without incident, there are always risks when pasteurizing
+  at home.
+  There is the definite risk that during the pasteurization process an exploding
+  bottle will send shards of sharp and burning-hot glass into your body,
+  possibly even into your eye.
+  Very hot glass bottles may cause burns even when they're intact.
+  The hot water may scald or burn your flesh.
+  The hot stove may burn your flesh or your clothing.
+  Bottles full of hot cider may break due to a sudden change in temperature
+  or a manufacturing defect.
+  You might drop a bottle, sending burning hot liquid and sharp shards
+  of hot glass all over your floor.
+  The computed pasteurization units on this web page, while based on the
+  best information available to me, are only an approximation. 
+  The computed values might also be incorrect due to temperature readings 
+  that are not taken at the coolest region within the bottle or 
+  possible bugs in the code.
+  <a href="https://www.thedrinksbusiness.com/2014/07/brewery-recalls-exploding-beer-bottles/" target="_top">Bottles that have not been sufficiently pasteurized may explode at any time</a>.
+  This is by no means an exhaustive list of things that might go wrong,
+  even under the assumption that you know what you're doing.
+  Please prepare well, use great caution,
+  always assume that anything might go wrong at any time, and
+  accept responsibility for the consequences of your actions.
+  Nothing on this website absolves you of that responsibility or transfers
+  any of that responsibility to me or this site.  Use the information
+  provided here at your own risk.  
+  With all of that said, I hope that you have the best of luck, many years
+  of safe and incident-free pasteurization, and many delicious 
+  pasteurized beverages!
+  </p>
+  <br>
+  <p>
+  Copyright &copy; 2024-2025 John-Paul Hosom, all rights reserved.
+  Please feel free to contact me with comments, questions, suggestions, 
+  and/or bug reports.
+  </p>
+   
+</small>
+</body>
+</html>

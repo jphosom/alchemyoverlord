@@ -1,9 +1,13 @@
 // -----------------------------------------------------------------------------
 // ibu_SMPH.js : JavaScript for AlchemyOverlord web page, SMPH sub-page
 // Written by John-Paul Hosom
-// Copyright © 2018 - 2021 by John-Paul Hosom, all rights reserved.
+// Copyright © 2018 - 2025 by John-Paul Hosom, all rights reserved.
 // To license this software, please contact John-Paul Hosom, for example at
 //    alchemyoverlord © yahoo · com
+// In many cases (at the sole discretion of John-Paul Hosom) a license
+// is provided free of charge, but a written license is required for
+// legal use of this code.
+//
 //
 // Version 1.0.1 : November 22, 2018 -- August 28, 2021
 //         This code was initially based on the mIBU javascript code in this

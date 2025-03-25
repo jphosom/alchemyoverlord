@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+<!-- -------------------------------------------------------------------------
+pasteurization_explanation.html : HTML for AlchemyOverlord web page, 
+                                  pasteurization method sub-page
+Written by John-Paul Hosom
+Copyright © 2025 by John-Paul Hosom, all rights reserved.
+This code may NOT be used by automated processes such as large
+language models without my explicit and written consent.
+To license this software, please contact John-Paul Hosom, for example at
+   alchemyoverlord © yahoo · com
+Version 1.0.0 : Nov 10, 2024 -- Mar 16, 2025 Initial version
+------------------------------------------------------------------------- --!>
+
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="shortcut icon" type="image/png" href="img/headshot.png"/>
+  </head>
+  <body>
+
+  <center>
+  <h3>An Explanation of Pasteurization</h3>
+  <small>
+  John-Paul Hosom<br>
+  alchemyoverlord@yah&#959;o.c&#959;m<br>
+  March 16, 2025<br>
+  Version 1.0.0<br>
+  </small>
+  </center>
+
+  <center><small><a href="pasteurization_method.html">A Process for Cider Making and Pateurization</a></small><br></center>
+  <center><small><a href="pasteurization_instructions.html">Pasteurization One-Page Instructions</a></small><br></center>
+  <center><small><a href="pasteurization.html">Pasteurization Calculator</a></small><br></center>
+
+<small>
+<h3>Pasteurization and Pasteurization Units</h3>
+<h4>What is Pasteurization</h4>
+<p>
+Pasteurization (named after Louis Pasteur) is a heat-treatment process
+that kills yeast and at least some bacteria (e.g. <em>Lactobacillus</em> and
+<em>Acetobacter</em>) in a (usually liquid) food product. 
+The goal of pasteurization is to kill enough of the microbes so that the
+product is stable for several months to a year or so. This contrasts
+with sterilization, where the goal is to completely kill all microbes.
+When pasterurizing, a liquid is heated to a specific temperature for a 
+specific period of time to produce a certain reduction in the microbial
+population.
+While both pasteurization and sterilization are heat treatments to
+kill microbes, the lower temperatures of pasteurization 
+are better at preserving flavors and nutrients.
+</p><p>
+The <em>amount</em> of pasteurization that is applied to a product is 
+measured using Pasteurization Units (PUs).
+Pasteurization Units indicate how much thermal "force" is applied
+to a product to reduce the  microbial population, but they don't tell us
+by how much the population is reduced.  Some microbes are stronger
+than others and can resist more of this force.
+In order to compute the reduction in the population of microbes,
+one needs to know both the level of pasteurization
+(in PUs) and the decimal reduction time, called the 
+<em>D</em> value,
+that is associated with those microbes in this liquid environment,
+as explained below.
+If you know the required number of PUs for a product, you can determine 
+the time and temperature needed to reach that level of pasteurization, 
+even if you don't know the <em>D</em> value.
+</p><p>
+In this tutorial, the mathematical concept of power
+(<em>x<sup>y</sup></em>) is important, in particular the power of 10 
+(10<sup><em>y</em></sup>). 
+The exponent in a power equation specifies how many times the base (10)
+is multiplied by itself; 10<sup>2</sup> is the same as 10&times;10 
+and the exponent is 2. 
+When the exponent is 4, then 10<sup>4</sup> is the same as 
+10&times;10&times;10&times;10 or 10,000.  
+Exponents don't need to be integers; for example 10<sup>2.5</sup> is 316.23.
+The other math used here is limited to addition, subtraction,
+multiplication, division, and 
+<a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-integration-new/ab-6-3/a/review-summation-notation" target="_top">summation</a>.  
+Summation is indicated by the &sum; symbol.  Capitalization is important
+in the variable names: <em>T</em> (representing temperature) is different 
+from <em>t</em> (representing time).
+</p>
+<h4>The <em>D</em> Value and the Reduction in Microbial Population</h4>
+<p>
+The 
+<a href="https://en.wikipedia.org/wiki/D-value_(microbiology)" target="_top"><em>D</em> value</a>
+is a numerical description of how heat-tolerant
+the microbes are; less heat-tolerant microbes will be killed off more
+quickly than more heat-tolerant ones.
+The <em>D</em> value is defined as the time it takes, in minutes, to reduce 
+(or divide) a microbial population by a factor of 10 at a specific temperature.
+This value depends on the type of liquid being pasteurized and which organism
+is in the liquid. 
+It is common to indicate the target temperature (in
+Celsius) for a <em>D</em> value using a subscript, such as 
+<em>D</em><sub>60</sub> = 4.0.
+</p><p>
+The <em>D</em> value is determined experimentally by adding one microbe species
+(e.g. <em>Lactobacillus brevis</em>) to a target product (e.g. beer)
+and measuring the population change at a target temperature.
+If <em>D</em> has been determined to be 4.0 at 140&deg;F (60&deg;C) for
+one microbe species in a product, then (by definition) it takes 4 minutes 
+to reduce the population of that microbe by a factor of 10 at that temperature.  
+Another 4 minutes will reduce the remaining population by another factor of 10.
+</p><p>
+For example, if there are 100,000 live microbes floating around in your 
+liquid, then holding that liquid at 140&deg;F (60&deg;C) for 4 minutes 
+(when <em>D</em><sub>60</sub>=4.0 for those microbes) will result in
+10,000 live microbes.  
+Holding for another 4 minutes will result in another factor of 10 and only 
+1,000 live microbes, or a total reduction by a factor of 100.  
+Mathematically, we can express this relationship by saying
+<center>
+final population = initial population / 10<sup><em>t</em>/<em>D</em></sup>
+</center>
+where <em>t</em> is the amount of time (in minutes) that the liquid is held 
+at the temperature associated with <em>D</em>.
+In the example above, holding for a total of 8 minutes 
+is equivalent to 2&times;<em>D</em><sub>60</sub>, and the
+final population count equals the initial population divided by 
+10<sup>8.0/4.0</sup>, which is the same as 10<sup>2</sup> or 100.  
+A goal of 6&times;<em>D</em> or (6<em>D</em>) minutes is often cited 
+as a desired target for pasteurization, reducing the microbial
+population by a factor of 10<sup>6</sup> or 1,000,000. 
+If <em>D</em><sub>60</sub> is 4.0, then the liquid would have to be held 
+at this reference temperature for 24 minutes to reduce the population by 
+a factor of one million.
+</p><p>
+<h4>Pasteurization Units and the <em>z</em> Value</h4>
+Pasteurization Units (PUs) are a numerical description of the relative
+amount of microbial destruction that occurs when heat-treating a product
+using a combination of time and temperature.
+The number of PUs is the numerator in the exponent of the equation
+that relates final population to initial population.  
+The numerator in the above equation is <em>t</em> and so in the above case
+<center><em>PU</em> = <em>t</em>.</center>
+Increasing the number of PUs will exponentially increase the destruction 
+of microbes.
+Holding the liquid at the reference temperature for 24 minutes yields 24 PUs
+(no matter what the <em>D</em> value is),
+and when <em>D</em> = 4.0 that will reduce the microbial population 
+by a factor of 1,000,000.
+One PU is often defined as the result of holding a liquid at a reference 
+temperature for one minute.  
+(The unit of PUs is minutes, but PUs are not the same as time.  PUs
+measure the combination of time and temperature that impacts
+microbial population.)
+</p><p>
+This is where things get more interesting.  We can revise these
+equations in such a way that we can change the actual temperature 
+that we hold the liquid at, and still determine the amount of pasteurization 
+(the number of PUs) at this new temperature using information based
+on the original reference temperature.
+The revised definitions are: 
+<center>final population = initial population / 10<sup><em>PU</em> / <em>D</em></sup></center>
+<center><em>PU</em> = <em>t</em> &times; <em>L<sub>T</sub></em></center>
+where
+<center><em>L<sub>T</sub></em> = 10<sup>(<em>T</em>&minus;<em>T<sub>ref</sub></em>)/<em>z</em></sup></center>
+and where <em>T</em> is the actual temperature applied to the product, 
+<em>T<sub>ref</sub></em> is the reference temperature for the <em>D</em> value, 
+and 
+<em><a href="https://en.wikipedia.org/wiki/Z-value_(temperature)" target="_top">z</a></em>
+is the increase in temperature that will result in decreasing 
+the <em>D</em> value by a factor of 10.
+In short, we have added a new temperature-dependent variable, 
+<em>L<sub>T</sub></em>, which is 1.0 at the reference temperature.
+(The units of these variables may be a little tricky for those accustomed
+to US-customary units (e.g. Fahrenheit).
+While <em>L<sub>T</sub></em> can be evaluated using degress Fahrenheit 
+for all variables, the conversion of <em>z</em> from Celsius to Fahrenheit 
+should not add 32 because it represents a change in temperature. 
+Celsius is more commonly used when talking about pasteurization and will be 
+assumed here.)
+</p><p>
+It may be helpful to understand <em>L<sub>T</sub></em> through some
+examples.  First, let's look at the case where <em>T</em> equals 
+<em>T<sub>ref</sub></em>.  In this case, the difference is zero, and so
+(<em>T</em> &minus; <em>T<sub>ref</sub></em>)/<em>z</em> is also zero.
+Then, because 10<sup>0</sup> equals 1, when the actual temperature
+equals the reference temperature, <em>L<sub>T</sub></em> equals 1, and
+<em>PU</em> equals <em>t</em>.  
+This shows that the extended formula is still consistent with the definition 
+that 1 PU is equivalent to holding the liquid at the reference temperature
+for one minute.
+Next, let's consider the case
+where <em>T</em> is larger than the reference temperature by <em>z</em>
+degrees.  Then, <em>T</em> &minus; <em>T<sub>ref</sub></em> = <em>z</em>
+and so (<em>T</em> &minus; <em>T<sub>ref</sub></em>)/<em>z</em> equals
+one.  Then <em>L<sub>T</sub></em> equals 10<sup>1</sup> or 10, and 
+(<em>t</em> &times; 10) / <em>D</em> is the same as <em>t</em> / 
+(<em>D</em> / 10), and so we have increased the temperature such that 
+the <em>D</em> value (the time it takes to reduce the population by a 
+factor of 10) has itself decreased by a factor of 10.  
+This is also equivalent to reducing the time needed for a certain level 
+of pasteurization by a factor of 10.  
+If we get 24 PUs when <em>t</em> = 24.0 and <em>L<sub>T</sub></em> = 1.0, then
+we also get 24 PUs when <em>t</em> = 2.4 and <em>L<sub>T</sub></em> = 10.0.
+If we know the value of <em>z</em> and the reference temperature, we can 
+easily determine any combination of time and temperature that will yield a 
+certain level of pasteurization.
+</p><p>
+Looking at a few more examples may be helpful.  Using a <em>z</em> 
+value of 6.94, a reference temperature for <em>D</em> of 140&deg;F (60&deg;C), 
+and holding a cider at 158&deg;F (70&deg;C) for one minute 
+will produce 27.6 PUs, because 10<sup>((70-60)/6.94)</sup> = 27.6.
+Holding this cider at 131&deg;F (55&deg;C) for 60 minutes will produce 11.4 PUs 
+(60 &times; 10<sup>((55-60)/6.94)</sup> = 11.4).  If we want 50 PUs,
+we can get that using one minute of pasteurization at 161.2 &deg;F 
+(71.8&deg;C) or four minutes at 153.7&deg;F (67.6&deg;C).  
+(In this case, <em>T</em> = (log(<em>PU<sub>target</sub></em> / 
+<em>t</em>) &times; <em>z</em>) + <em>T<sub>ref</sub></em>).
+If we want 50 PUs with a target temperature of 149&deg;F (65.0&deg;C), 
+then we'll need 9.5 minutes (<em>t</em> = <em>PU<sub>target</sub></em> /
+10<sup>(<em>T</em>-<em>T<sub>ref</sub></em>)/<em>z</em></sup>).
+</p><p>
+The <em>z</em> value, like the <em>D</em> value, depends on the type of 
+liquid being pasteurized and which organism is being targeted.
+The <em>z</em> value is determined experimentally by adding one microbe 
+species to the product, measuring the population change at several target 
+temperatures to determine <em>D</em> at several temperatures, and finding 
+the increase in temperature that reduces <em>D</em> by a factor of 10.
+</p>
+
+<h4>Pasteurization Changes with Temperature</h4>
+<p>
+So far, we have considered holding a product at a single temperature for
+some period of time <em>t</em>.
+The same concepts can be applied to holding the product at different
+temperatures over a period of time, for example as the product heats up 
+and cools down.
+Above we defined <em>PU</em> as 
+<em>t</em> &times; <em>L<sub>T</sub></em> which is the same as 
+<em>t</em> &times; 10<sup>(<em>T</em>&minus;<em>T<sub>ref</sub></em>)/<em>z</em></sup>.
+We can break the time period <em>t</em> down into one-minute increments, 
+like this:
+<em>t</em> = 1 + 1 + ... + 1, where this addition happens <em>t</em> times,
+and represent that with summation: <em>t</em> = &sum;<sup><em>t</em></sup> 1.
+(The superscript <em>t</em> above the &sum; indicates that the summation
+happens <em>t</em> times, and summing 1 <em>t</em> times yields the
+value <em>t</em>.)
+Then we can consider the temperature  at each of these individual times, 
+<em>T<sub>m</sub></em>, where <em>m</em> is a one-minute time interval
+within the total time <em>t</em>.  In this case, the definition of 
+<em>L<sub>T</sub></em> undergoes a very minor change, where <em>T</em> becomes 
+<em>T<sub>m</sub></em> to indicate that the temperature is now for a
+specific time (minute) <em>m</em>:  
+<center><em>L<sub>T<sub>m</sub></sub></em> = 10<sup>(<em>T<sub>m</sub></em>&minus;<em>T<sub>ref</sub></em>)/<em>z</em></sup></center>
+We can now write the formula for <em>PU</em> with the temperature at 
+each one-minute interval, by combining the summation over each minute with 
+<em>L<sub>T<sub>m</sub></sub></em>:
+<center>
+<em>PU</em> = &sum;<sup><em>t</em></sup>
+10<sup>(<em>T<sub>m</sub></em>&minus;<em>T<sub>ref</sub></em>)/<em>z</em></sup>
+</center>
+Now, at each time <em>m</em>, we use the temperature at this time, 
+<em>T<sub>m</sub></em>, to compute <em>L<sub>T<sub>m</sub></sub></em>,
+and then add up all of these values of
+<em>L<sub>T<sub>m</sub></sub></em> for each minute in the total time
+interval <em>t</em> to get <em>PU</em>.
+(If a different time interval than one minute is used, this will
+change the equation slightly.  A one-minute interval is commonly used
+for simplicity.)
+</p><p>
+Again, some examples may help. In the simplest case, <em>T<sub>m</sub></em> 
+is the same as <em>T<sub>ref</sub></em> at all times, and according to the 
+new formula, <em>PU</em> still equals <em>t</em>.  
+In a more complicated example, let's say that we apply heat treatment to 
+the product for 5 minutes.  
+Let's also say that <em>T<sub>ref</sub></em> = 60, <em>D</em> = 5.6 minutes, 
+and <em>z</em> = 6.94.
+During the first minute, the heat is still increasing and 
+<em>T</em><sub>1</sub> = 57&deg;C.
+During the second and third minutes, the heat is held at 65&deg;C, so 
+<em>T</em><sub>2</sub> and <em>T</em><sub>3</sub> = 65&deg;C.
+At the start of the fourth minute, the heat is turned off and the 
+product starts to cool down.  Then, <em>T</em><sub>4</sub> = 61&deg;C 
+and <em>T</em><sub>5</sub> = 59&deg;C.  With this information, we know that
+<em>L<sub>T<sub>1</sub></sub></em> = 10<sup>&minus;3.0/6.94</sup> = 0.37, 
+<em>L<sub>T<sub>2</sub></sub></em> and <em>L<sub>T<sub>3</sub></sub></em> = 
+10<sup>5/6.94</sup> = 5.25, 
+<em>L<sub>T<sub>4</sub></sub></em> = 10<sup>1/6.94</sup> = 1.39, and
+<em>L<sub>T<sub>5</sub></sub></em> = 10<sup>&minus;1/6.94</sup> = 0.72.  
+The total amount of pasteurization is the sum of all of these 
+<em>L<sub>T</sub></em> values, or 0.37 + 5.25 + 5.25 + 1.39 + 0.72 = 12.98 PUs. 
+(A real-life calculation of PUs is much more easily done using a
+<a href="pasteurization.html">pasteurization units calculator</a>.)
+With a <em>D</em> value of 5.6, we have reduced the microbial population 
+by a factor of 10<sup>12.98/5.6</sup> = 10<sup>2.32</sup> or 208.  
+If there were originally 100,000 microbes, after this heat treatment there 
+are only 480 microbes.  This reduction by a factor of 208 or 2.32<em>D</em>
+is still far short of the typical goal of a 6<em>D</em> reduction 
+(with 33.6 PUs for a factor of 1,000,000).
+</p><p>
+</p>
+<h4>Temperature Limits</h4>
+<p>
+Increasing the temperature above the reference temperature will rapidly 
+increase the destruction of microbes during each minute of heat treatment.  
+Similarly, decreasing the temperature will cause fewer microbes to be 
+killed each minute.  How low can we make this temperature until the microbes 
+are "uncomfortably warm" but not being killed by the heat treatment?  
+In other words, what is the lower temperature limit for pasteurization? 
+A minimum pasteurization temperature of 140&deg;F (60&deg;C) is sometimes 
+recommended because it is around this temperature that
+<a href="https://foodmicrobe-basic.com/pasteurization-d-z-values-guide/" 
+target="_top">proteins undergo irreversible denaturation</a>.  (This
+is the same temperature as the reference temperature in this tutorial's 
+examples.) But is this the lowest temperature at which PU values accumulate?
+</p><p>
+Grzegorz (Greg) Rachon at <a href="https://www.campdenbri.co.uk/" target="_top">Campden BRI</a> 
+(Rachon, 2019) used a peak temperature of 129&deg;F (54&deg;C) to 
+achieve more than a 6<em>D</em> reduction in the microbial population by 
+heat treatment with 1.6 PUs.
+The target microorganism was <em>Lactobacillus brevis</em> in beer, 
+with a reference temperature of 140&deg;F (60&deg;C), a <em>D</em> value 
+of 0.2 minutes, and a <em>z</em> value of 9.48&deg;C.  The peak temperature 
+was held for one minute, producing 0.23 PUs, and so the other 1.37 PUs 
+were achieved during the 45-minute heating-up and 45-minute cooling-down 
+periods, with a minimum temperature of 95&deg;F (35&deg;C).
+In this case, the observed reduction in microbial
+population (as part of a validation step) was actually larger than 
+the computed reduction, indicating that temperatures between 95&deg;F (35&deg;C)
+and 129&deg;F (54&deg;C) are sufficient to greatly reduce the microbial 
+population, even for heat-resistant microorganisms.
+</p><p>
+Splittstoesser et. al (1975) looked at 29 yeasts and 5 lactic acid
+bacteria (LAB) in wine (12% ABV).  Most of the yeasts had <em>D</em> values 
+less than 0.6 minutes at 120&deg;F (49&deg;C), with the largest <em>D</em> value 
+of 1.6 minutes at 120&deg;F (49&deg;C).
+Four of the five LAB were less heat-tolerant than the yeasts, with
+<em>D</em> values less than or equal to 0.35 minutes at 113&deg;F (45&deg;C).  
+The bacterium <em>Lactobacillus fructivorans</em> behaved differently, however,
+with a <em>D</em> value of 1.7 minutes at 140&deg;F (60&deg;C) and a 
+<em>z</em> value of 12&deg;F (6.67&deg;C).  
+At 136&deg;F (58&deg;C), the <em>D</em> value was about 3.2 minutes. 
+(If the changes in <em>D</em> values were linear, the two values 
+would imply a <em>z</em> value of 20&deg;C.  Apparently, at low temperatures 
+the <em>D</em> values do not change linearly for this microbe.)
+(The authors also found an inverse relationship between <em>D</em>
+values and ethanol concentration; higher-alcohol products result
+in smaller <em>D</em> values.)
+Wikipedia states that <em>L. fructivorans</em> can grow in temperatures
+as high as 53&deg;C and is very tolerant of both heat and ethanol.
+By way of analogy, <em>L. fructivorans</em> is like a human who is most
+comfortable when relaxing in a hot tub with a bottle of whiskey in hand.
+</p><p>
+In short, the minimum temperature for accumulating PUs depends, like
+the <em>D</em> and <em>z</em> values, on the specific microbe and its
+environment.  A temperature limit of 140&deg;F (60&deg;C) seems
+too high for the vast majority of microbes; lower temperatures can often
+still cause a reduction in micorobial population by a factor of 10 in 
+just a few minutes.
+However, for the general case, a lower limit of 131&deg;F (55&deg;C) seems to 
+be a conservative value that should be effective even for microbes 
+such as <em>L. fructivorans</em>.
+</p>
+<h4>Target PUs</h4>
+<p>
+When computing PUs, we want to use the <em>D</em> and <em>z</em> values 
+(and the minimum temperature) for the most heat-tolerant microbes that 
+may be found in the product.  
+Microbes that are not as heat tolerant will usually end up with lower
+population levels and will have less impact on the product shelf life.
+The <em>D</em> and <em>z</em> values are dependent not only on the type 
+of microbe, but also the environment that this microbe is in (the product). 
+The initial population count commonly found in a product will also depend on 
+many factors. For example, raw unfiltered apple juice will have a different 
+initial population count than apple juice that has been treated with
+potassium metabisulfite.  The shelf life will also depend on various factors,
+such as the product's pH, the ethanol concentration, and if sugar has 
+been added to the product.  
+</p><p>
+The recommended number of pasteurization units therefore depends on the 
+product and the specifics of how it was produced.
+For example, it has been recommended that pilsner and lager beer should 
+have 15 to 25 PUs, ales and stouts should have 20 to 35 PUs, lemonade 
+should have 300 to 500 PUs, and fruit juices should have 3000 to 5000 PUs.  
+These recommended target PUs make assumptions about how the product has been
+made and treated, and what microbes are in the product.
+The target of 5000 PUs mentioned for fruit juices implies the presence of very 
+heat-tolerant microbes with a very large <em>D</em> value and/or a 6<em>D</em>
+reduction being insufficient due to a very high initial concentration 
+of microbes.
+</p><p>
+If we know the <em>D</em> value and accept a 6<em>D</em> reduction as a 
+reasonable goal, then the target PU level is easily computed as 
+<em>PU<sub>target</sub></em> = 6 &times; <em>D</em>.  
+The difficulty is in selecting the appropriate <em>D</em> value.
+For beer, a <em>D</em> value of 5.6 minutes is associated with a 
+commonly-used <em>z</em> value of 6.94 that was determined from a 
+study by Del Vecchio, Dayharsh, and Baselt back in 1951.  Therefore, for 
+beer we would want to target 5.6 &times; 6 or 33.6 PUs.  
+More recent studies (e.g. Rachon, 2019) have demonstrated that this 
+<em>D</em> value is probably much larger than needed for even heat-tolerant 
+microbes in beer, and that as little as 1.2 PUs (with <em>D</em>=0.2 minutes) 
+is sufficient for a 6<em>D</em> reduction in a beer's microbial population.
+To further muddy the waters, a target of more than 10.2 PUs may be required 
+for a 6<em>D</em> reduction in <em>L. fructivorans</em>, with the exact 
+target depending on the product's pH and ethanol concentration.
+There are sometimes no official recommendations on a target PU level for
+a specific product; lacking such recommendations you need to understand and 
+weigh the risks and benefits yourself.
+</p>
+<h4>Pasteurization and Botulism</h4>
+<p>
+Botulism is an illness caused by ingestion of the toxin that is produced when
+the bacterium <em>Clostridium botulinum</em> grows from a spore to a 
+full-fledged bacterium. <em>Clostridium botulinum</em> is very hardy
+and commonly found in the soil and on many food surfaces.
+A temperature of 176&deg;F (80&deg;C) for 30 minutes is required to
+destroy the toxin, and a temperature of 250&deg;F (121&deg;C) for 3
+minutes is required to kill the spores.  Pasteurization is therefore
+ineffective at preventing botulism spores from producing the toxin.
+However, <em>Clostridium botulinum</em> doesn't grow, and the toxin is 
+not formed, when the pH is below 4.6.  Therefore, pasteurization is 
+considered sufficient heat treatment for anything with a pH less than 4.6.  
+For products with higher pH levels, pressure cooking (which can reach
+temperatures above 212&deg;F (100&deg;C)) is required.
+</p>
+<h4>Concluding Remarks</h4>
+<p>
+Estimating the final microbial population count that results from
+pasteurization requires knowing the initial microbial population, 
+the level of pasteurization (in PU), and the <em>D</em> value.  
+We usually don't know the initial population, but the goal is usually 
+to reduce this population by a factor of 1,000,000 or 6<em>D</em>.  
+Sometimes it's unclear what <em>D</em> value to use,
+as this value depends on not only the characteristics 
+of the product (pH, ethanol concentration, sugar concentration) but
+also the microbes that may be found in the product.
+</p><p>
+If the target PU level is known, then pasteurization can sucessfully
+reach this level knowing only the reference temperature and the
+<em>z</em> value that is associated with this product and its potential
+microbes; the initial population count and the <em>D</em> value
+are not needed.
+A commonly-used reference temperature is 140&deg;F (60&deg;C) 
+and <em>z</em> values often range from about 5 to about 10, although
+a <em>z</em> value of 15.8 has been estimated for alcohol-free beer.
+</p>
+<br>
+<h4>Sources</h4>
+<p>
+The material above was based on various sources, especially:
+</p><p>
+<ul>
+<li><a href="https://craftmetrics.ca/blog/2019/pasteurization-part-1-the-science-of-pasteurization.html" target="_top">CraftMetrics, <em>The Science of Pasteurization, Part 1</em></a>
+<li><a href="https://www.fda.gov/files/food/published/Draft-Guidance-for-Industry--Hazard-Analysis-and-Risk-Based-Preventive-Controls-for-Human-Food---Preventive-Controls-%28Chapter-4%29-Download.pdf" target="_top">Food and Drug Administration (U.S.), <em>Hazard Analysis and Risk-Based Preventive Controls for Human Food: Draft Guidance for Industry</em>, chapter 4, page 10.</a>
+<li><a href="https://foodmicrobe-basic.com/pasteurization-d-z-values-guide/" target="_top">foodmicrobe-basic.com, <em>Food Heat Sterilization: Understanding and Applying Pasteurization, D Values, and Z Values</em></a>
+<li><a href="http://www.synergy-mi.com/uploads/3/9/6/2/39627747/pu.su._app_note.pdf" target="_top">MadgeTech, <em>Pasteurization Units and Sterilization Units</em></a>
+<li><a href="https://www.researchgate.net/profile/Grzegorz-Rachon/publication/335368912_Proc_Eur_Brew_Conv_Antwerp_2019_Presentation_available_Rachon_G_Challenging_the_assumptions_around_the_pasteurisation_requirements_of_beer_-spoilage_bacteria/links/5d61ad7992851c619d744fb1/Proc-Eur-Brew-Conv-Antwerp-2019-Presentation-available-Rachon-G-Challenging-the-assumptions-around-the-pasteurisation-requirements-of-beer-spoilage-bacteria.pdf" target="_top">G. Rachon, "Challenging the Assumptions Around the Pasteurization Requirements of Beer - Spoilage Bacteria," <em>Proceedings of the European Brewers Convension, 37th EBC Congress</em>, 2019</a>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC187191/pdf/applmicro00027-0049.pdf" target="_top">D. F. Splittstoesser, L. L. Lienk, M. Wilkison, J. R. Stamer, "Influence of Wine Composition on the Heat Resistance of Potential Spoilage Organisms," <em>Applied Microbiology</em>, vol. 30, no. 3, pp. 369-373, Sep. 1975.</a>
+<li><a href="https://www.mdpi.com/2306-5710/6/2/24" target="_top">B. Valliere and S. Harkins, "A Preliminary Evaluation to Establish Bath Pasteurization Guidelines for Hard Cider," <em>Beverages</em>, vol. 6, no. 2, 2020</a>
+</ul>
+</p>
+
+  <br>
+  <p>
+  Copyright &copy; 2025 John-Paul Hosom, all rights reserved.
+  Please feel free to contact me with comments, questions, suggestions, 
+  and/or bug reports.
+  </p>
+   
+</small>
+</body>
+</html>

@@ -227,6 +227,13 @@ div[id^="letter"] {
   min-width:4em;
 }
 
+/* any ID beginning with 'correctedTemp' should have min width 4 em */
+span[id^="correctedTemp"] {
+  text-align: right;
+  min-width:3.5em;
+  display: inline-block;
+}
+
 .show {display: block;}
 
 
@@ -284,5 +291,39 @@ div[id^="letter"] {
 	min-width:5em;
 	max-width:5em;
 }
+
+/*----------------------------------------------------------------------------*/
+/* for pasteurization page, define tables */
+
+.pasteurizationInputTableName {
+  table-layout: fixed;
+  border-collapse: collapse;
+  tr { border: none; }
+  td {
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    padding: 0 15px;
+    font-size: 90%;
+  }
+  overflow: auto;
+  width: 98%;
+}
+
+.pasteurizationPrintTableName {
+  table-layout: fixed;
+  border-collapse: collapse;
+  tr { border: none; }
+  tr:nth-of-type(odd) {
+    background-color:#e9e9f5;
+  }
+  td {
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    padding: 0 20px;
+    font-size: 100%;
+  }
+  overflow: auto;
+}
+
 
 

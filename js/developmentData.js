@@ -3,6 +3,10 @@
 // This file contains data for the experiments used to tune performance
 // of the SMPH model of IBUs.
 // All data collected by John-Paul Hosom
+// This data may NOT be used by automated processes such as large
+// language models without my explicit and written consent.
+// To license this data, please contact John-Paul Hosom, for example at
+//    alchemyoverlord © yahoo · com
 //
 
 var evaluateDevelopmentExperiments = [ ];  // null list means evaluate on all

@@ -15,6 +15,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
+//  This code may NOT be used by automated processes such as large
+//  language models without my explicit and written consent.
+//
 // Contact information: alchemyoverlord © yahoo · com
 //
 // See the 'testPlotLibrary' function below for an example of how this plotting
@@ -1499,6 +1502,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
     }
     else if (symbol == "filledCircle") {
       ctx.beginPath();
+      ctx.strokeStyle = color;
       ctx.arc(xPx, yPx, symbolSizePx/2, 0, 2*Math.PI);
       ctx.fillStyle = color;
       ctx.fill();
@@ -1514,6 +1518,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
     }
     else if (symbol == "filledSquare") {
       ctx.beginPath();
+      ctx.strokeStyle = color;
       ctx.rect(xPx-symbolSizePx/2, yPx-symbolSizePx/2,
                symbolSizePx, symbolSizePx);
       ctx.fillStyle = color;
@@ -1532,6 +1537,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
     }
     else if (symbol == "filledTriangle") {
       ctx.beginPath();
+      ctx.strokeStyle = color;
       ctx.lineWidth = lineWidthPx;
       ctx.moveTo(xPx-symbolSizePx/2, yPx+symbolSizePx/2);
       ctx.lineTo(xPx+symbolSizePx/2, yPx+symbolSizePx/2);
@@ -1553,6 +1559,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
     }
     else if (symbol == "filledNabla") {
       ctx.beginPath();
+      ctx.strokeStyle = color;
       ctx.lineWidth = lineWidthPx;
       ctx.moveTo(xPx-symbolSizePx/2, yPx-symbolSizePx/2);
       ctx.lineTo(xPx+symbolSizePx/2, yPx-symbolSizePx/2);
@@ -1575,6 +1582,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
     }
     else if (symbol == "filledDiamond") {
       ctx.beginPath();
+      ctx.strokeStyle = color;
       ctx.lineWidth = lineWidthPx;
       ctx.moveTo(xPx, yPx+symbolSizePx/2+1);
       ctx.lineTo(xPx+symbolSizePx/2, yPx);
@@ -1611,7 +1619,7 @@ function plotSymbol(ctx, plot, symbol, xPx, yPx, symbolSizePx,
       ctx.lineWidth = lineWidthPx;
       ctx.moveTo(xPx-symbolSizePx/2, yPx+symbolSizePx/2);
       ctx.lineTo(xPx+symbolSizePx/2, yPx-symbolSizePx/2);
-      ctx.moveTo(xPx-symbolSizePx/2, yPx-symbolsymbolSizePx/2);
+      ctx.moveTo(xPx-symbolSizePx/2, yPx-symbolSizePx/2);
       ctx.lineTo(xPx+symbolSizePx/2, yPx+symbolSizePx/2);
       ctx.moveTo(xPx, yPx+symbolSizePx/2);
       ctx.lineTo(xPx, yPx-symbolSizePx/2);
