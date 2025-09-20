@@ -1,0 +1,4 @@
+License: https://jphosom.github.io/alchemyoverlord/license.xml
+User-agent: *
+Disallow: /login
+

@@ -1,0 +1,11 @@
+<rsl xmlns="https://rslstandard.org/rsl">
+  <content url="/">
+    <license>
+      <permits type="usage">ai-train</permits>
+      <payment type="subscription">
+        <!-- Using content for AI training requires custom license -->
+        <custom>https://jphosom.github.io/alchemyoverlord/contact-form.html</custom>
+      </payment>
+    </license>
+  </content>
+</rsl>
