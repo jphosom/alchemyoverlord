@@ -80,8 +80,7 @@ Description: <input type="text" autocomplete="off" style="width:30em;text-align:
   <input type="radio" value="imperial" id="imperial" name="pasteurization.units" onclick="common.set(pasteurization.units,1)" autocomplete="off" checked>U.S. customary (Fahrenheit)<br>
   Use
 <input type="radio" value="24" id="24" name="pasteurization.timeUnits" onclick="common.set(pasteurization.timeUnits,1)">24-hour format or
-<input type="radio" value="12" id="12" name="pasteurization.timeUnits" onclick="common.set(pasteurization.timeUnits,1)">12-hour format (AM/PM) (times between <input type="text" autocomplete="off" style="width:3em;text-align:center" id="pasteurization.timeDivision" onchange="common.set(pasteurization.timeDivision, 1)"> and 11:59 are assumed to be AM if not specified)<br>
-Temperature model: <input type="radio" value="smart" id="smart" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">"smart" or <input type="radio" value="linear" id="linear" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">linear interpolation
+<input type="radio" value="12" id="12" name="pasteurization.timeUnits" onclick="common.set(pasteurization.timeUnits,1)">12-hour format (AM/PM) (times between <input type="text" autocomplete="off" style="width:3em;text-align:center" id="pasteurization.timeDivision" onchange="common.set(pasteurization.timeDivision, 1)"> and 11:59 are assumed to be AM if not specified)
   </p>
   </center>
   </small>
@@ -89,27 +88,29 @@ Temperature model: <input type="radio" value="smart" id="smart" name="pasteuriza
   <table style="margin-left:0em">
   <tbody>
   <tr>
-  <td><small>Reference temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.refTemp" onchange="common.set(pasteurization.refTemp,1)">&deg;C</td>
-  <td><small>&nbsp;&nbsp;&nbsp;Minimum effective temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.minTemp" onchange="common.set(pasteurization.minTemp,1)"><span class="pasteurization.TUnits">X</span></td>
-  </tr>
-  <tr>
-  <td><small><em>z</em> value:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.zValue" onchange="common.set(pasteurization.zValue,1)">&deg;C</td>
-  <td><small>&nbsp;&nbsp;&nbsp;<em>D</em> value, if known:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.DValue" onchange="common.set(pasteurization.DValue,1)"> <small>minutes</small></td>
-  </tr>
-  <tr>
   <td><small>Number of batches:</small></td><td><input type="text" id="pasteurization.numBatches" style="width:4em;text-align:center" onchange="common.set(pasteurization.numBatches, 1)"></td>
+  <td width="100"></td>
+  <td><small>Temperature model:</small></td><td><small><input type="radio" value="smart" id="smart" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">"smart" or <input type="radio" value="linear" id="linear" name="pasteurization.model" onchange="common.set(pasteurization.model,1)" autocomplete="off">linear interpolation</small></td>
   </tr>
   <tr>
   <td><small>Target temperature of warm-water bath:</small></td><td><input type="text" id="pasteurization.warmTemp" style="width:4em;text-align:center" onchange="common.set(pasteurization.warmTemp, 1)"><span class="pasteurization.TUnits">X</span></td>
+  <td width="100"></td>
+  <td><small><em>z</em> reference temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.refTemp" onchange="common.set(pasteurization.refTemp,1)">&deg;C</td>
   </tr>
   <tr>
   <td><small>Target temperature of hot-water bath:</small></td><td><input type="text" id="pasteurization.hotTemp" style="width:4em;text-align:center" onchange="common.set(pasteurization.hotTemp, 1)"><span class="pasteurization.TUnits">X</span></td>
+  <td width="100"></td>
+  <td><small><em>z</em> value:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.zValue" onchange="common.set(pasteurization.zValue,1)">&deg;C</td>
   </tr>
   <tr>
   <td><small>Start prep work:</small></td> <td><input type="text" id="pasteurization.startTime" style="width:6em;text-align:center" onchange="common.set(pasteurization.startTime, 1)" placeholder="--:--"></td>
+  <td width="100"></td>
+  <td><small>Minimum effective temperature:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.minTemp" onchange="common.set(pasteurization.minTemp,1)"><span class="pasteurization.TUnits">X</span></td>
   </tr>
   <tr>
   <td><small>Start heating water:</small></td> <td><input type="text" id="pasteurization.heatWaterTime" style="width:6em;text-align:center" onchange="common.set(pasteurization.heatWaterTime, 1)" placeholder="--:--"></td>
+  <td width="100"></td>
+  <td><small><em>D</em> value, if known:</small></td><td><input type="text" autocomplete="off" style="width:4em;text-align:center" id="pasteurization.DValue" onchange="common.set(pasteurization.DValue,1)"> <small>minutes</small></td>
   </tr>
   </tbody>
   </table>
@@ -141,22 +142,29 @@ Temperature model: <input type="radio" value="smart" id="smart" name="pasteuriza
 <table style="margin-left:3em;">
 <tbody>
 <tr>
+<td>Number of Batches:</td><td><span id="pasteurization.print.numBatches">0</span></td>
+<td width="100"></td>
 <td>Temperature model:</td><td><span id="pasteurization.print.model">X</span></td>
 </tr>
 <tr>
-<td>Number of Batches:</td><td><span id="pasteurization.print.numBatches">0</span></td>
-</tr>
-<tr>
 <td>Target temperature of warm-water bath:</td><td><span id="pasteurization.print.warmTemp">0</span><span class="pasteurization.TUnits">units</span></td>
+<td width="100"></td>
+<td><em>z</em> reference temperature:</td><td><span id="pasteurization.print.refTemp">X</span>&deg;C</td>
 </tr>
 <tr>
 <td>Target temperature of hot-water bath:</td><td><span id="pasteurization.print.hotTemp">0</span><span class="pasteurization.TUnits">units</span></td>
+<td width="100"></td>
+<td><em>z</em> value:</td><td><span id="pasteurization.print.zValue">X</span>&deg;C</td>
 </tr>
 <tr>
 <td>Start prep work:</td><td><span id="pasteurization.print.startTime">xx:xx</span></td>
+<td width="100"></td>
+<td>Minimum effective temperature:&nbsp;</td><td><span id="pasteurization.print.minTemp">X</span><span class="pasteurization.TUnits">X</span></td>
 </tr>
 <tr>
 <td>Start heating water:</td><td><span id="pasteurization.print.heatWaterTime">xx:xx</span></td>
+<td width="100"></td>
+<td><em>D</em> value, if known:</td><td><span id="pasteurization.print.DValue">X</span></td>
 </tr>
 </tbody>
 </table>

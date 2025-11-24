@@ -10,7 +10,7 @@
 // legal use of this code.
 //
 //
-// Version 0.0.0 : Nov. 10, 2024 -- Mar. 16, 2025 : Initial version.
+// Version 0.0.0 : Nov. 10, 2024 -- Nov. 15, 2025 : Initial version.
 //
 // -----------------------------------------------------------------------------
 
@@ -300,27 +300,27 @@ this.initialize_pasteurization = function() {
   this.year.prevFocus = this.month.id;
   this.year.nextFocus = this.timeDivision.id;
   this.timeDivision.prevFocus = this.year.id;
-  this.timeDivision.nextFocus = this.refTemp.id;
+  this.timeDivision.nextFocus = this.numBatches.id;
 
-  this.refTemp.prevFocus = this.timeDivision.id;
-  this.refTemp.nextFocus = this.minTemp.id;
-  this.minTemp.prevFocus = this.refTemp.id;
-  this.minTemp.nextFocus = this.zValue.id;
-  this.zValue.prevFocus  = this.minTemp.id;
-  this.zValue.nextFocus  = this.DValue.id;
-  this.DValue.prevFocus  = this.zValue.id;
-  this.DValue.nextFocus  = this.numBatches.id;
-
-  this.numBatches.prevFocus = this.DValue.id;
-  this.numBatches.nextFocus = this.warmTemp.id;
-  this.warmTemp.prevFocus = this.numBatches.id;
-  this.warmTemp.nextFocus = this.hotTemp.id;
-  this.hotTemp.prevFocus = this.warmTemp.id;
-  this.hotTemp.nextFocus = this.startTime.id;
-  this.startTime.prevFocus = this.hotTemp.id;
-  this.startTime.nextFocus = this.heatWaterTime.id;
+  this.numBatches.prevFocus    = this.timeDivision.id;
+  this.numBatches.nextFocus    = this.warmTemp.id
+  this.warmTemp.prevFocus      = this.numBatches.id;
+  this.warmTemp.nextFocus      = this.hotTemp.id;
+  this.hotTemp.prevFocus       = this.warmTemp.id;
+  this.hotTemp.nextFocus       = this.startTime.id;
+  this.startTime.prevFocus     = this.hotTemp.id;
+  this.startTime.nextFocus     = this.heatWaterTime.id;
   this.heatWaterTime.prevFocus = this.startTime.id;
-  this.heatWaterTime.nextFocus = this.batchInfo[0].numBottles.id;
+  this.heatWaterTime.nextFocus = this.refTemp.id;
+
+  this.refTemp.prevFocus       = this.heatWaterTime.id;
+  this.refTemp.nextFocus       = this.zValue.id;
+  this.zValue.prevFocus        = this.refTemp.id;
+  this.zValue.nextFocus        = this.minTemp.id;
+  this.minTemp.prevFocus       = this.zValue.id;
+  this.minTemp.nextFocus       = this.DValue.id;
+  this.DValue.prevFocus        = this.minTemp.id;
+  this.DValue.nextFocus        = this.batchInfo[0].numBottles.id;
 
   // initialize for focus
   common.initFocus(this, this.updateFocus);
@@ -570,7 +570,7 @@ function fitModel(timeTempList, whichPhase, peakTime, peakTemp) {
     maxB = 0.50;
     incB = 0.01;
 
-    minC = guessC - 10.0;
+    minC = guessC - 20.0;
     maxC = guessC + 10.0;
     incC = 0.5;
   } else if (whichPhase == "hotWater-cooling") {
@@ -820,10 +820,10 @@ function computePU(batchInfo, bIdx) {
   }
 
   // compute the model of heating temperature as a function of time,
-  hotModelHeating = fitModel(hotTimeTempList, "hotWater-heating", 
+  hotModelHeating = fitModel(hotTimeTempList, "hotWater-heating",
                              peakTime, peakTemp);
   if (peakTime != 1.0e10) {
-    hotModelCooling = fitModel(hotTimeTempList, "hotWater-cooling", 
+    hotModelCooling = fitModel(hotTimeTempList, "hotWater-cooling",
                              peakTime, peakTemp);
   }
 
@@ -848,7 +848,7 @@ function computePU(batchInfo, bIdx) {
                 Math.exp(-1.0*hotModelCooling[1]*(heatOffTime-peakTime)) +
                 hotModelCooling[2];
   } else if (hotModelHeating.length == 3 && heatOffTime >= 0) {
-    modelTemp = hotModelHeating[0] * 
+    modelTemp = hotModelHeating[0] *
                 (1.0-Math.exp(-1.0*hotModelHeating[1]*heatOffTime)) +
                 hotModelHeating[2];
   }
@@ -1878,7 +1878,7 @@ this.updateAll = function(changeID) {
   for (bIdx = 0; bIdx < numBatches; bIdx++) {
     if (bIdx == 0) {
       pasteurization.batchInfo[bIdx].numBottles.prevFocus =
-          pasteurization.heatWaterTime.id;
+          pasteurization.DValue.id;
       pasteurization.batchInfo[bIdx].numBottles.nextFocus =
           pasteurization.batchInfo[bIdx].postMix.id;
     } else {
@@ -2094,6 +2094,7 @@ this.switchView = function() {
   var divIdx = 0;
   var hotTemp = 0.0;
   var maxRows = 0;
+  var minTemp = 0.0;
   var month = "";
   var monthMap = {
        "Jan": "January",
@@ -2151,8 +2152,14 @@ this.switchView = function() {
       document.getElementById("pasteurization.print.model").innerHTML =
           "linear interpolation";
     }
+
+    document.getElementById("pasteurization.print.refTemp").innerHTML =
+        pasteurization.refTemp.value;
+
     document.getElementById("pasteurization.print.numBatches").innerHTML =
         numBatches;
+    document.getElementById("pasteurization.print.zValue").innerHTML =
+        pasteurization.zValue.value;
 
     warmTemp = pasteurization.warmTemp.value;
     if (pasteurization.units.value != "metric") {
@@ -2160,6 +2167,12 @@ this.switchView = function() {
     }
     document.getElementById("pasteurization.print.warmTemp").innerHTML =
         warmTemp.toFixed(pasteurization.warmTemp.precision);
+    minTemp = pasteurization.minTemp.value;
+    if (pasteurization.units.value != "metric") {
+      minTemp = common.convertCelsiusToFahrenheit(minTemp);
+    }
+    document.getElementById("pasteurization.print.minTemp").innerHTML =
+        minTemp.toFixed(pasteurization.minTemp.precision);
 
     hotTemp = pasteurization.hotTemp.value;
     if (pasteurization.units.value != "metric") {
@@ -2167,6 +2180,12 @@ this.switchView = function() {
     }
     document.getElementById("pasteurization.print.hotTemp").innerHTML =
         hotTemp.toFixed(pasteurization.hotTemp.precision);
+    if (pasteurization.DValue.value != "") {
+      document.getElementById("pasteurization.print.DValue").innerHTML =
+          pasteurization.DValue.value + " minutes";
+    } else {
+      document.getElementById("pasteurization.print.DValue").innerHTML = "";
+    }
 
     document.getElementById("pasteurization.print.startTime").innerHTML =
         common.convertTimeToStr(pasteurization.startTime.value,

@@ -1,4 +1,6 @@
 License: https://jphosom.github.io/alchemyoverlord/license.xml
 User-agent: *
-Disallow: /login
+
+# Sitemaps
+Sitemap: https://jphosom.github.io/alchemyoverlord/sitemap.xml
 
