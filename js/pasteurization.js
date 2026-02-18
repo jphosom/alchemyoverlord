@@ -11,6 +11,7 @@
 //
 //
 // Version 0.0.0 : Nov. 10, 2024 -- Nov. 15, 2025 : Initial version.
+// Version 1.0.1 : Feb. 16, 2026 : current year is default, if not set by user
 //
 // -----------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ this.initialize_pasteurization = function() {
   var prevTime = {};
   var rIdx = 0;
   var timeTempOb = {};
+  var currYear = new Date().getFullYear() - 2000;
 
   //----------------------------------------------------------------------------
   // create and set initial variables
@@ -62,7 +64,7 @@ this.initialize_pasteurization = function() {
                                 "", "", "", "", "", "", "", "");
   this.month = common.createSelection("pasteurization.month", "Jan",
                                       "month", "", "", "", "", "", "", "");
-  this.year = common.createInt("pasteurization.year", 25, "year",
+  this.year = common.createInt("pasteurization.year", currYear, "year",
                                 0, 99,
                                 "", "", "", "", "", "", "", "");
 
@@ -127,7 +129,12 @@ this.initialize_pasteurization = function() {
   common.set(pasteurization.title,  0);
   common.set(pasteurization.day,  0);
   common.set(pasteurization.month,  0);
-  common.set(pasteurization.year,  0);
+  if (!common.existsSavedValue(pasteurization.year)) {
+    document.getElementById("pasteurization.year").value = currYear;
+    common.set(pasteurization.year,  1);
+  } else {
+    common.set(pasteurization.year,  0);
+  }
 
   common.set(pasteurization.units,  0);
   common.set(pasteurization.model,  0);

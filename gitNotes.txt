@@ -1,6 +1,7 @@
 git checkout master
+update sitemap.xml
 git add
-git commit
+git commit -m "message"
 git push
   username: jphosom
   token:    (USE REGENERATED TOKEN FOR "jph github project1 v2" or generate new)
