@@ -12,6 +12,7 @@
 //
 // Version 0.0.0 : Nov. 10, 2024 -- Nov. 15, 2025 : Initial version.
 // Version 1.0.1 : Feb. 16, 2026 : current year is default, if not set by user
+// Version 1.0.2 : Apr. 20, 2026 : update time default behavior
 //
 // -----------------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ this.initialize_pasteurization = function() {
                              "", "", "", "", "", pasteurization.switchView, "");
   this.title = common.createString("pasteurization.title", "",
                              "description of this pasteurization session",
-                             "", "", "", "", "", "", "");
+                             "", "", "", "", "", "", "", "");
   this.day = common.createInt("pasteurization.day", 1, "day of the month",
                                 1, 31,
                                 "", "", "", "", "", "", "", "");
@@ -79,7 +80,8 @@ this.initialize_pasteurization = function() {
                              pasteurization.updateAll, "");
   this.timeDivision = common.createTime("pasteurization.timeDivision",
                          "8.50000000", pasteurization.timeUnits, "", "", "", 0,
-                         "onlyAM", "time division", "", "", "", "", "", "", "");
+                         "onlyAM", "time division", "", "", defaultColor,
+                         "", "", "", "", "");
 
   this.refTemp = common.createFloat("pasteurization.refTemp", 60.0,
                          "reference temperature for z value", 20.0, 100.0,
@@ -111,19 +113,19 @@ this.initialize_pasteurization = function() {
 
   this.startTime = common.createTime("pasteurization.startTime", "",
                          pasteurization.timeUnits, pasteurization.timeDivision,
-                         "", "", 1, "", "start time", "", "", "", "", "",
-                         pasteurization.updateAll, "");
+                         "", "", 1, "", "start time", "", "", defaultColor,
+                         "", "", "", pasteurization.updateAll, "");
   this.heatWaterTime = common.createTime("pasteurization.heatWaterTime", "",
                          pasteurization.timeUnits, pasteurization.timeDivision,
                          pasteurization.startTime, 1, 1, "",
                          "time at which start heating water",
-                         "", "", "", "", "",
+                         "", "", defaultColor, "", "", "",
                          pasteurization.updateAll, "");
   this.finishTime = common.createTime("pasteurization.finishTime", "",
                          pasteurization.timeUnits, pasteurization.timeDivision,
                          pasteurization.heatWaterTime, 1, 1, "",
-                         "finish cleanup time", "", "", "", "", "",
-                         pasteurization.updateAll, "");
+                         "finish cleanup time", "", "", defaultColor, "", "", 
+                         "", pasteurization.updateAll, "");
 
   common.set(pasteurization.view,  0);
   common.set(pasteurization.title,  0);
@@ -205,7 +207,7 @@ this.initialize_pasteurization = function() {
          -1.0, pasteurization.timeUnits, pasteurization.timeDivision,
          prevTime, 1, 1, "",
          "time when transfer bottles into warm water",
-         "", "", "", "", "", pasteurization.updateAll, "");
+         "", "", defaultColor, "", "", "", pasteurization.updateAll, "");
     common.set(pasteurization.batchInfo[bIdx].xferWarm, 0);
 
     // create entries for list of "warm" times and temperatures
@@ -227,7 +229,7 @@ this.initialize_pasteurization = function() {
          -1.0, pasteurization.timeUnits, pasteurization.timeDivision,
          pasteurization.batchInfo[bIdx].xferWarm, 1, 1, "",
          "time when transfer bottles into warm water",
-         "", "", "", "", "", pasteurization.updateAll, "");
+         "", "", defaultColor, "", "", "", pasteurization.updateAll, "");
     common.set(pasteurization.batchInfo[bIdx].xferHot, 0);
 
     // create entries for list of "hot" times and temperatures
@@ -249,7 +251,7 @@ this.initialize_pasteurization = function() {
          -1.0, pasteurization.timeUnits, pasteurization.timeDivision,
          pasteurization.batchInfo[bIdx].xferHot, 1, 1, "",
          "time when transfer bottles to room-temperature air",
-         "", "", "", "", "", pasteurization.updateAll, "");
+         "", "", defaultColor, "", "", "", pasteurization.updateAll, "");
     common.set(pasteurization.batchInfo[bIdx].xferCool, 0);
 
     // create entries for list of "cool" times and temperatures
@@ -350,12 +352,13 @@ this.initialize_pasteurization = function() {
 function createTimeTempOb(bIdx, tIdx, category, time, temp, previousEntry) {
   var batchInfoStr = "pasteurization.batchInfo";
   var timeTempOb = new Object();
+  var defaultColor = "#94476b"; // greyish red
 
   timeTempOb.time =
     common.createTime(batchInfoStr+"["+bIdx+"]."+category+"["+tIdx+"].time",
          time, pasteurization.timeUnits, pasteurization.timeDivision,
          previousEntry, 1, 1, "", "time at which temperature is recorded",
-         "", "", "", "", "", pasteurization.updateAll, "");
+         "", "", defaultColor, "", "", "", pasteurization.updateAll, "");
 
   timeTempOb.temp =
     common.createFloatOrString(batchInfoStr+"["+bIdx+"]."+category+"["+tIdx+"].temp",

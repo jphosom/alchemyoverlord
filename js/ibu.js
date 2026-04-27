@@ -56,6 +56,7 @@
 // Version 1.3.1 : Oct 22, 2023 : debug scaling beta acid default
 // Version 1.3.2 : Nov  9, 2023 : bug fix: check if fermentorVolume is saved val
 // Version 1.3.3 : Mar  4, 2024 : increase topoffVolume max to 10,000 liters
+// Version 1.3.4 : Apr 27, 2026 : default storage for cones now nitrogen flush
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -1597,7 +1598,8 @@ function get_hopPackaging_default(arrayIdx) {
   var tableID = "";
 
   if (ibu.add[arrayIdx].hopForm.value == "cones") {
-    defaultValue = "vacuum seal";
+    // defaultValue = "vacuum seal";
+    defaultValue = "pro. nitrogen";  // as of Apr 27 2026 assume nitrogen
   } else {
     defaultValue = "pro. nitrogen";
   }

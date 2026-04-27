@@ -15,6 +15,7 @@
 // Version 1.3.3 : Nov 22, 2020 : add tsp/ml conversion; minor cleanup
 // Version 1.3.4 : Aug 22, 2021 : add meters/feet, Plato conversion; cleanup
 // Version 1.4.0 : Nov 12, 2024 : lots of updates, new functions, cleanup
+// Version 1.4.1 : Apr 20, 2026 : add default color to time variable
 // -----------------------------------------------------------------------------
 
 //==============================================================================
@@ -294,7 +295,7 @@ this.createRadioButton = function(id, value,
 //------------------------------------------------------------------------------
 
 this.createString = function(id, value, description, defaultFunction,
-                        defaultFunctionArgs, additionalFunction,
+                        defaultFunctionArgs, defaultColor, additionalFunction,
                         additionalFunctionArgs, dependents,
                         updateFunction, updateFunctionArgs) {
   entry = new Object();
@@ -307,6 +308,9 @@ this.createString = function(id, value, description, defaultFunction,
   if (defaultFunction != "") {
     entry.defaultFunction = defaultFunction;
     entry.defaultArgs = defaultFunctionArgs;
+  }
+  if (defaultColor != "") {
+    entry.defaultColor = defaultColor;
   }
   entry.description = description;
   if (additionalFunction != "") {
@@ -366,7 +370,7 @@ this.createSelection = function(id, value, description, defaultFunction,
 this.createTime = function(id, value, timeUnitsVariable, timeDivisionVariable,
                         previousEntry, mustBeLater, emptyTimeOK,
                         overrideTimeFormat, description, defaultFunction,
-                        defaultFunctionArgs, additionalFunction,
+                        defaultFunctionArgs, defaultColor, additionalFunction,
                         additionalFunctionArgs, dependents, updateFunction,
                         updateFunctionArgs) {
   entry = new Object();
@@ -389,6 +393,7 @@ this.createTime = function(id, value, timeUnitsVariable, timeDivisionVariable,
   entry.value = value;
   entry.userSet = 0;
   entry.display = value;
+  entry.defaultColor = defaultColor;
   entry.defaultValue = value;
   if (defaultFunction != "") {
     entry.defaultFunction = defaultFunction;
@@ -522,6 +527,11 @@ validateFloatOrString = function(variable, input) {
         check.value = input;
       }
     }
+    // if no list of valid input strings, anything is OK
+    if (variable.inputStrings.length == 0) {
+      check.valid = true;
+      check.value = input;
+    }
   }
 
   if (!check.valid) {
@@ -562,6 +572,9 @@ validateTime = function(variable, input) {
   check.useDefaultValue = false;
   check.valid = false;
   check.value = "";
+
+  // remove whitespace
+  input = input.trim();
 
   // if 'd' for default, then don't change a saved value; if no saved
   // value, then generate an error (no saved value should never occur)
@@ -935,6 +948,21 @@ this.set = function(variable, haveUserInput) {
         }
       }
     }
+  } else if (variable.inputType == "time") {
+    if (document.getElementById(variable.id) &&
+        document.getElementById(variable.id).style) {
+      if (!variable.userSet && ("defaultColor" in variable)) {
+        console.log("  setting color to default for " + variable.id);
+        document.getElementById(variable.id).style.color=variable.defaultColor;
+      } else {
+        if ("userColor" in variable) {
+          document.getElementById(variable.id).style.color = variable.userColor;
+        } else {
+          document.getElementById(variable.id).style.color = "black";
+        }
+      }
+    }
+    common.updateHTML(variable);
   } else {
     common.updateHTML(variable);
   }
@@ -1276,6 +1304,7 @@ this.convertTimeToStr = function(timeFloat, timeUnitsDefault,
     }
     timeStr = hrs + ":" + min + " " + ampm;
   }
+  timeStr = timeStr.trim();
   // console.log("leaving convertTimeToStr() with " + timeStr);
   return timeStr;
 }
@@ -1580,6 +1609,28 @@ this.loadFromFile = function(files) {
   }
 
   return true;
+}
+
+//==============================================================================
+
+this.addRowHTML = function(tableID, rowLocation, firstCellHTML) {
+  var tableRef = document.getElementById(tableID);
+  var newRow = tableRef.insertRow(rowLocation);
+  var newCell = newRow.insertCell(0);
+  var newText = document.createTextNode("");
+  newCell.appendChild(newText);
+  newCell.innerHTML = firstCellHTML;
+  return newRow;
+}
+
+this.addCellHTML = function(tableID, rowIdx, cellHTML) {
+  var tableRef = document.getElementById(tableID);
+  var rowRef = tableRef.rows[rowIdx];
+  var newCell = rowRef.insertCell();
+  var newText = document.createTextNode("");
+  newCell.appendChild(newText);
+  newCell.innerHTML = cellHTML;
+  return newCell;
 }
 
 //==============================================================================
