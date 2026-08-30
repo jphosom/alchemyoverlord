@@ -1850,35 +1850,35 @@ this.updateAll = function(changeID) {
   // now update the variables in the new HTML
   for (bIdx = 0; bIdx < numBatches; bIdx++) {
     if (pasteurization.batchInfo[bIdx]) {
-      common.updateHTML(pasteurization.batchInfo[bIdx].numBottles, 0);
-      common.updateHTML(pasteurization.batchInfo[bIdx].preMixBoil, 0);
-      common.updateHTML(pasteurization.batchInfo[bIdx].postMix, 0);
-      common.updateHTML(pasteurization.batchInfo[bIdx].xferWarm, 0);
-      common.updateHTML(pasteurization.batchInfo[bIdx].xferHot, 0);
-      common.updateHTML(pasteurization.batchInfo[bIdx].xferCool, 0);
+      common.updateHTML(pasteurization.batchInfo[bIdx].numBottles);
+      common.updateHTML(pasteurization.batchInfo[bIdx].preMixBoil);
+      common.updateHTML(pasteurization.batchInfo[bIdx].postMix);
+      common.updateHTML(pasteurization.batchInfo[bIdx].xferWarm);
+      common.updateHTML(pasteurization.batchInfo[bIdx].xferHot);
+      common.updateHTML(pasteurization.batchInfo[bIdx].xferCool);
     }
   }
   for (rIdx = 0; rIdx <= maxWarmRows + 1; rIdx++) {
     for (bIdx = 0; bIdx < numBatches; bIdx++) {
       if (pasteurization.batchInfo[bIdx]) {
-        common.updateHTML(pasteurization.batchInfo[bIdx].warm[rIdx].time, 0);
-        common.updateHTML(pasteurization.batchInfo[bIdx].warm[rIdx].temp, 0);
+        common.updateHTML(pasteurization.batchInfo[bIdx].warm[rIdx].time);
+        common.updateHTML(pasteurization.batchInfo[bIdx].warm[rIdx].temp);
       }
     }
   }
   for (rIdx = 0; rIdx <= maxHotRows + 1; rIdx++) {
     for (bIdx = 0; bIdx < numBatches; bIdx++) {
       if (pasteurization.batchInfo[bIdx]) {
-        common.updateHTML(pasteurization.batchInfo[bIdx].hot[rIdx].time, 0);
-        common.updateHTML(pasteurization.batchInfo[bIdx].hot[rIdx].temp, 0);
+        common.updateHTML(pasteurization.batchInfo[bIdx].hot[rIdx].time);
+        common.updateHTML(pasteurization.batchInfo[bIdx].hot[rIdx].temp);
       }
     }
   }
   for (rIdx = 0; rIdx <= maxCoolRows + 1; rIdx++) {
     for (bIdx = 0; bIdx < numBatches; bIdx++) {
       if (pasteurization.batchInfo[bIdx]) {
-        common.updateHTML(pasteurization.batchInfo[bIdx].cool[rIdx].time, 0);
-        common.updateHTML(pasteurization.batchInfo[bIdx].cool[rIdx].temp, 0);
+        common.updateHTML(pasteurization.batchInfo[bIdx].cool[rIdx].time);
+        common.updateHTML(pasteurization.batchInfo[bIdx].cool[rIdx].temp);
       }
     }
   }
