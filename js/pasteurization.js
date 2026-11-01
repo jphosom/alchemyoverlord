@@ -283,7 +283,7 @@ this.initialize_pasteurization = function() {
       dependentList.push(pasteurization.batchInfo[bIdx].postMix);
     }
   }
-  this.warmTemp = common.createFloat("pasteurization.warmTemp", 54.5,
+  this.warmTemp = common.createFloat("pasteurization.warmTemp", 55.5,
                          "temperature of warm-water bath", 0.0, 100.0, 0, 0,
                          common.convertFahrenheitToCelsius,
                          common.convertCelsiusToFahrenheit,
@@ -415,9 +415,9 @@ function setUnits() {
 
 function defaultPreMixBoil() {
   if (pasteurization.warmTemp) {
-    return pasteurization.warmTemp.value - 7.0;
+    return pasteurization.warmTemp.value - 12.0;
   } else {
-    return 54.5 - 7.0;
+    return 55.5 - 12.0;
   }
 }
 
@@ -425,7 +425,7 @@ function defaultPostMix() {
   if (pasteurization.warmTemp) {
     return pasteurization.warmTemp.value;
   } else {
-    return 54.5;
+    return 55.5;
   }
 }
 
@@ -1602,13 +1602,15 @@ this.updateAll = function(changeID) {
       }
     }
   }
-  if (pasteurization.finishTime.value > lastTime) {
+  if (pasteurization.finishTime.value != "" &&
+      pasteurization.finishTime.value > 0.0 &&
+      pasteurization.finishTime.value > lastTime) {
     lastTime = Number(pasteurization.finishTime.value);
   }
-  if (lastTime < 0 && pasteurization.heatWaterTime.value > 0.0) {
+  if (lastTime < 0 && pasteurization.heatWaterTime.value != "" &&
+      pasteurization.heatWaterTime.value > 0.0) {
     lastTime = pasteurization.heatWaterTime.value;
   }
-  console.log("LAST TIME = " + lastTime);
 
   // compute total duration between first time and last time.
   // make this variable available outside of this function.
@@ -1617,6 +1619,8 @@ this.updateAll = function(changeID) {
     pasteurization.durationH = Math.floor(pasteurization.duration);
     pasteurization.durationM =
         Math.round((pasteurization.duration - pasteurization.durationH) * 60.0);
+    console.log("DURATION = " + pasteurization.durationH + " and " +
+                pasteurization.durationM);
   }
 
 
@@ -1824,15 +1828,27 @@ this.updateAll = function(changeID) {
 
   // change HTML to show total duration
   if (document.getElementById("pasteurization.totalHours")) {
-    if (!pasteurization.durationH) {
-      document.getElementById("pasteurization.totalHours").innerHTML =
-        "N/A";
-    } else if (pasteurization.durationH != 1) {
-      document.getElementById("pasteurization.totalHours").innerHTML =
-         pasteurization.durationH + " hours and";
+    if (!pasteurization.durationM) {
+      if (!pasteurization.durationH) {
+        document.getElementById("pasteurization.totalHours").innerHTML =
+          "N/A";
+      } else if (pasteurization.durationH != 1) {
+        document.getElementById("pasteurization.totalHours").innerHTML =
+           pasteurization.durationH + " hours";
+      } else {
+        document.getElementById("pasteurization.totalHours").innerHTML =
+           pasteurization.durationH + " hour";
+      }
     } else {
-      document.getElementById("pasteurization.totalHours").innerHTML =
-         pasteurization.durationH + " hour and";
+      if (!pasteurization.durationH) {
+        document.getElementById("pasteurization.totalHours").innerHTML = "";
+      } else if (pasteurization.durationH != 1) {
+        document.getElementById("pasteurization.totalHours").innerHTML =
+           pasteurization.durationH + " hours and";
+      } else {
+        document.getElementById("pasteurization.totalHours").innerHTML =
+           pasteurization.durationH + " hour and";
+      }
     }
   }
   if (document.getElementById("pasteurization.totalMinutes")) {

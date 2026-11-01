@@ -535,6 +535,24 @@ Version 1.0.0 : Aug. 12, 2023. Initial version
       amount here is the expected gain <em>after</em> paying any taxes.
   </ol>
 
+  <div class="DATAENTRY">
+  <br>
+  <hr>
+  <h4>Save and Load:</h4>
+  <table style="margin-left:3em">
+    <tbody>
+    <tr>
+    <td>Save to File:</td>
+    <td><button type="button" onclick="common.saveToFile('pasteurization.txt')">Browse... </button></td>
+    </tr>
+    <tr>
+    <td>Load from File:</td>
+    <td><input type="file" accept=".txt" id="files" onchange="common.loadFromFile(this.files)"/></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+
   <br>
   <hr>
   <small>
